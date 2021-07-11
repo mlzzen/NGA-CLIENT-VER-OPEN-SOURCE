@@ -41,4 +41,9 @@
         <item name="android:backgroundDimEnabled">true</item>
     </style>
 
+    <style name="bold_text">
+        <item name="android:textColor">@color/night_link_color</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
 </resources>
