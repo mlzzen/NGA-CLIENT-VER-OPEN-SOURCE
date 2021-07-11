@@ -44,13 +44,13 @@ public class ActivityUtils {
 
     public static void showToast(Context context, int resId) {
         if (context != null) {
-            ToastUtils.showToast(resId);
+            ToastUtils.info(resId);
         }
     }
 
     public static void showToast(Context context, String res) {
         if (context != null) {
-            ToastUtils.showToast(res);
+            ToastUtils.info(res);
         }
     }
 

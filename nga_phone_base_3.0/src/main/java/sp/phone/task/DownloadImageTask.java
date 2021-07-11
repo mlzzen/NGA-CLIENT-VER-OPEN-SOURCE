@@ -2,7 +2,6 @@ package sp.phone.task;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.widget.Toast;
 
 import org.apache.commons.io.FilenameUtils;
 
@@ -13,7 +12,6 @@ import gov.anzong.androidnga.base.util.ToastUtils;
 import sp.phone.util.ImageUtils;
 import sp.phone.util.ActivityUtils;
 import sp.phone.util.HttpUtil;
-import sp.phone.util.ImageUtils;
 import sp.phone.util.StringUtils;
 
 import static android.media.MediaScannerConnection.scanFile;
@@ -43,7 +41,7 @@ public class DownloadImageTask extends AsyncTask<String, Integer, String> {
             description = result;
         else
             scanFile(context, new String[]{fullPath}, null, null);
-        ToastUtils.showToast(description);
+        ToastUtils.info(description);
         super.onPostExecute(result);
     }
 

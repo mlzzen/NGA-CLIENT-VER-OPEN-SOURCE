@@ -42,13 +42,7 @@ class BoardCategoryFragment : Fragment() {
         mListView = view.findViewById(R.id.list)
         mAdapter = BoardCategoryAdapter(activity, mBoardCategory)
         mListView?.adapter = mAdapter
-        val layoutManager:GridLayoutManager = getDefaultLayoutManager(context!!) as GridLayoutManager
-        layoutManager.spanSizeLookup = object : SpanSizeLookup() {
-            override fun getSpanSize(position: Int): Int {
-                return if (mAdapter!!.getItemViewType(position) == BoardCategoryAdapter.TITLE_ITEM) layoutManager.spanCount else 1
-            }
-        }
-        mListView?.layoutManager = layoutManager
+        setLayoutManager()
         if (mBoardCategory!!.isBookmarkCategory) {
             val touchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
                 ItemTouchHelper.UP or ItemTouchHelper.DOWN or ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT,
@@ -77,6 +71,16 @@ class BoardCategoryFragment : Fragment() {
         mListView?.adapter = mAdapter
     }
 
+    fun setLayoutManager(){
+        val layoutManager:GridLayoutManager = getDefaultLayoutManager(context!!) as GridLayoutManager
+        layoutManager.spanSizeLookup = object : SpanSizeLookup() {
+            override fun getSpanSize(position: Int): Int {
+                return if (mAdapter!!.getItemViewType(position) == BoardCategoryAdapter.TITLE_ITEM) layoutManager.spanCount else 1
+            }
+        }
+        mListView?.layoutManager = layoutManager
+    }
+
     companion object {
         private val TAG = BoardCategoryFragment::class.java.simpleName
         fun newInstance(category: BoardCategory?): Fragment {
@@ -93,7 +97,7 @@ class BoardCategoryFragment : Fragment() {
             val density = dm.density // 屏幕密度（0.75 / 1.0 / 1.5）
             // 屏幕宽度算法:屏幕宽度（像素）/屏幕密度
             val screenWidth = (width / density).toInt() // 屏幕宽度(dp)
-            return GridLayoutManager(context,  (screenWidth / 120).coerceAtLeast(1))
+            return GridLayoutManager(context,  (screenWidth / 110).coerceAtLeast(1))
         }
     }
 }

@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentManager;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 
+import gov.anzong.androidnga.Utils;
 import gov.anzong.androidnga.arouter.ARouterConstants;
 import gov.anzong.androidnga.common.PreferenceKey;
 import sp.phone.param.ArticleListParam;
@@ -91,5 +92,16 @@ public class ArticleListActivity extends BaseActivity implements PreferenceKey {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         getSupportFragmentManager().findFragmentById(android.R.id.content).onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    public String getUrl(){
+        StringBuilder builder = new StringBuilder();
+        builder.append(Utils.getNGAHost()).append("read.php?");
+        if (mRequestParam.pid != 0) {
+            builder.append("pid=").append(mRequestParam.pid);
+        } else {
+            builder.append("tid=").append(mRequestParam.tid);
+        }
+        return builder.toString();
     }
 }

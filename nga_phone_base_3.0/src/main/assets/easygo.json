@@ -13,6 +13,9 @@
           {
             "from": "gov.anzong.androidnga.activity.TopicListActivity",
             "to": "*"
+          },{
+            "from": "gov.anzong.androidnga.activity.MainActivity",
+            "to": "gov.anzong.androidnga.activity.TopicListActivity"
           }
         ],
         "UX": {

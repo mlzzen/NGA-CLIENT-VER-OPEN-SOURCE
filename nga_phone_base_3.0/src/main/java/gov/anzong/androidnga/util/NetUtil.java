@@ -22,7 +22,7 @@ public class NetUtil {
         return mInstance;
     }
 
-    private Context context;
+    private final Context context;
 
     private NetUtil(Context context) {
         this.context = context;

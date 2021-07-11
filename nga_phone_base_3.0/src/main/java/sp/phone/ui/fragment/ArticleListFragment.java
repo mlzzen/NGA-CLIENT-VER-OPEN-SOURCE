@@ -130,12 +130,6 @@ public class ArticleListFragment extends BaseMvpFragment<ArticleListPresenter> i
                             .withInt("fromreplyactivity", 1)
                             .navigation();
                     break;
-                case R.id.menu_support:
-                    mPresenter.postSupportTask(tid, row.getPid());
-                    break;
-                case R.id.menu_oppose:
-                    mPresenter.postOpposeTask(tid, row.getPid());
-                    break;
                 case R.id.menu_favorite:
                     BookmarkTask.execute(tidStr, pidStr);
                     break;
@@ -237,6 +231,16 @@ public class ArticleListFragment extends BaseMvpFragment<ArticleListPresenter> i
         ((BaseActivity) getActivity()).setupToolbar();
         mArticleAdapter = new ArticleListAdapter(getContext(),getActivity().getSupportFragmentManager());
         mArticleAdapter.setMenuTogglerListener(mMenuTogglerListener);
+        mArticleAdapter.setSupportListener((v)-> {
+            ThreadRowInfo row = (ThreadRowInfo) v.getTag();
+            int tid = row.getTid();
+            mPresenter.postSupportTask(tid, row.getPid());
+        });
+        mArticleAdapter.setOpposeListener((v)-> {
+            ThreadRowInfo row = (ThreadRowInfo) v.getTag();
+            int tid = row.getTid();
+            mPresenter.postOpposeTask(tid, row.getPid());
+        });
         mListView.setLayoutManager(new LinearLayoutManager(getContext()));
         mListView.setItemViewCacheSize(20);
         mListView.setAdapter(mArticleAdapter);

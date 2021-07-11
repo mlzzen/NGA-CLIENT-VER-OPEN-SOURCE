@@ -19,7 +19,7 @@ public class ToastUtils {
 //        sToast.setDuration(Toast.LENGTH_SHORT);
 //        sToast.setText(text);
 //        sToast.show();
-        gov.anzong.androidnga.base.util.ToastUtils.showToast(text);
+        gov.anzong.androidnga.base.util.ToastUtils.info(text);
     }
 
     public static void showShortToast(@StringRes int strId) {
@@ -28,7 +28,7 @@ public class ToastUtils {
 //        sToast.setText(strId);
 //        sToast.show();
 
-        gov.anzong.androidnga.base.util.ToastUtils.showToast(strId);
+        gov.anzong.androidnga.base.util.ToastUtils.info(strId);
     }
 
     public static void showToast(String text) {
@@ -39,11 +39,5 @@ public class ToastUtils {
         showShortToast(strId);
     }
 
-    @SuppressLint("ShowToast")
-    private static void initToast() {
-        if (sToast == null) {
-            sToast = Toast.makeText(ContextUtils.getContext(), "", Toast.LENGTH_SHORT);
-        }
-    }
 
 }

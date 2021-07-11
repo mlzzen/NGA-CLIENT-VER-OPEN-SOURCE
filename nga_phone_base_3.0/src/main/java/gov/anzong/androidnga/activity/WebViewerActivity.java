@@ -23,7 +23,7 @@ public class WebViewerActivity extends BaseActivity {
         mWebView = findViewById(R.id.webview);
         WebViewClient client = new WebViewClientEx(this);
         mWebView.setWebViewClient(client);
-        setTitle("查看内容");
+        setTitle(getIntent().getStringExtra("title"));
         load();
     }
 
@@ -46,7 +46,6 @@ public class WebViewerActivity extends BaseActivity {
             settings.setBuiltInZoomControls(true);
 //			settings.setUseWideViewPort(true); 
             settings.setLoadWithOverviewMode(true);
-            //settings.setUserAgentString(IPHONE_UA);
             mWebView.loadUrl(uri);
         }
 

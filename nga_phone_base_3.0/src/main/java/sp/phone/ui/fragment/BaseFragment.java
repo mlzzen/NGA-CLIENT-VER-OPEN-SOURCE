@@ -35,13 +35,11 @@ public abstract class BaseFragment extends Fragment {
 
     private ViewModelProvider mActivityViewModelProvider;
 
-    @Deprecated
     public void showToast(int res) {
         String str = getString(res);
         showToast(str);
     }
 
-    @Deprecated
     public void showToast(String res) {
         ToastUtils.info(res);
     }

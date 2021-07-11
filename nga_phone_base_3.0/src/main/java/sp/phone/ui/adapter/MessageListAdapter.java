@@ -81,7 +81,7 @@ public class MessageListAdapter extends RecyclerView.Adapter<MessageListAdapter.
         if (position + 1 == getItemCount()
                 && !hasNextPage()
                 && !mPrompted) {
-            ToastUtils.showShortToast(R.string.last_page_prompt_message);
+            ToastUtils.info(R.string.last_page_prompt_message);
             mPrompted = true;
         }
     }

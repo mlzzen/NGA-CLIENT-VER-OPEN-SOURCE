@@ -205,7 +205,7 @@ public class TopicListPresenter extends ViewModel implements LifecycleObserver {
 
             @Override
             public void onSuccess(String data) {
-                ToastUtils.showToast("删除成功！");
+                ToastUtils.info("删除成功！");
                 mRemovedTopic.postValue(info);
             }
         });

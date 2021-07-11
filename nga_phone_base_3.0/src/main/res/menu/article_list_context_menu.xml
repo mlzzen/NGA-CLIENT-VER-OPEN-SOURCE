@@ -8,13 +8,6 @@
         android:id="@+id/menu_edit"
         android:title="@string/edit"/>
 
-    <item
-        android:id="@+id/menu_support"
-        android:title="@string/menu_support"/>
-
-    <item
-        android:id="@+id/menu_oppose"
-        android:title="@string/menu_oppose"/>
 
     <item
         android:id="@+id/menu_report"

@@ -65,7 +65,7 @@ public class MessageContentAdapter extends BaseAppendableAdapterEx<MessageDetail
         if (position + 1 == getItemCount()
                 && !hasNextPage()
                 && !mPrompted) {
-            ToastUtils.showToast(R.string.last_page_prompt_message_detail);
+            ToastUtils.info(R.string.last_page_prompt_message_detail);
             mPrompted = true;
         }
     }

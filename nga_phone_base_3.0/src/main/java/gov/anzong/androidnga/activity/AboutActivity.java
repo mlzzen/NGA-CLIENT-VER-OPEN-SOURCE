@@ -76,6 +76,7 @@ public class AboutActivity extends MaterialAboutActivity {
                 .setOnClickAction(() -> {
                     Intent intent = new Intent(AboutActivity.this, WebViewerActivity.class);
                     intent.putExtra("path", "https://gitee.com/sjtuYricky/NGA-CLIENT-VER-OPEN-SOURCE/releases");
+                    intent.putExtra("title","更新");
                     startActivity(intent);
 
                 })
