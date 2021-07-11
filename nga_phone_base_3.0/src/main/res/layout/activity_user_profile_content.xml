@@ -146,15 +146,14 @@
 
                 <ImageView
                     android:id="@+id/iv_avatar_gold"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="8dp"
+                    android:layout_height="8dp"
                     android:layout_alignBottom="@+id/tv_user_money_gold"
                     android:layout_marginBottom="4dp"
                     android:layout_toEndOf="@+id/tv_user_money_gold"
                     android:clickable="false"
                     android:focusable="false"
                     android:longClickable="false"
-                    android:scaleType="center"
                     android:src="@drawable/gold"/>
 
                 <TextView
@@ -169,8 +168,8 @@
 
                 <ImageView
                     android:id="@+id/iv_avatar_silver"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="8dp"
+                    android:layout_height="8dp"
                     android:layout_alignBottom="@+id/tv_user_money_title"
                     android:layout_marginBottom="4dp"
                     android:layout_toEndOf="@+id/tv_user_money_silver"
@@ -191,8 +190,8 @@
 
                 <ImageView
                     android:id="@+id/iv_avatar_copper"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="8dp"
+                    android:layout_height="8dp"
                     android:layout_alignBottom="@+id/tv_user_money_title"
                     android:layout_marginBottom="4dp"
                     android:layout_toEndOf="@+id/tv_user_money_copper"
