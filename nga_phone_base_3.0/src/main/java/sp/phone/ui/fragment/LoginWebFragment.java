@@ -143,6 +143,7 @@ public class LoginWebFragment extends BaseFragment {
 //            Toast.makeText(mActivity, "登陆成功", Toast.LENGTH_SHORT).show();
             if (mActivity != null) {
                 mActivity.setResult(Activity.RESULT_OK);
+                mActivity.finish();
             }
         }
     }
