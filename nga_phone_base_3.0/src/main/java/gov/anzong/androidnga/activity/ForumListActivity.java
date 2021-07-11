@@ -1,7 +1,7 @@
 package gov.anzong.androidnga.activity;
 
 import android.os.Bundle;
-import androidx.recyclerview.widget.GridLayoutManager;
+
 import androidx.recyclerview.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -37,7 +37,7 @@ public class ForumListActivity extends BaseActivity {
         setContentView(R.layout.activity_forum_list);
 
         mListView = (RecyclerView) findViewById(R.id.list);
-        mListView.setLayoutManager(new GridLayoutManager(this, BoardCategoryFragment.COLUMN_NUMBER));
+        mListView.setLayoutManager(BoardCategoryFragment.Companion.getDefaultLayoutManager(this));
         mListView.setBackgroundResource(ThemeManager.getInstance().getBackgroundColor());
         mAdapter = new ForumListAdapter(this, mDataList);
         mListView.setAdapter(mAdapter);

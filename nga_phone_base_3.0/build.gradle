@@ -36,7 +36,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "gov.anzong.androidnga"
+        applicationId "gov.anzong.androidnga.y_ver"
         minSdkVersion project.minSdkVersion
         targetSdkVersion project.targetSdkVersion
         multiDexEnabled true
@@ -123,7 +123,7 @@ dependencies {
     implementation 'com.github.markzhai:blockcanary-no-op:1.5.0'
     implementation'com.github.daniel-stoneuk:material-about-library:2.3.0'
     implementation project(':lib_common')
-    implementation project(':lib_cloud')
+    //implementation project(':lib_cloud')
     implementation project(':lib_core')
     implementation project(":lib_http")
 

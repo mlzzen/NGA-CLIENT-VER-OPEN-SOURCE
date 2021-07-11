@@ -218,7 +218,6 @@ public class TopicListPresenter extends ViewModel implements LifecycleObserver {
             // preload pages
             twentyFourList.getThreadPageList().clear();
             pageQueriedCounter = 0;
-            mFirstTopicList.setValue(null);
             mBaseModel.loadTwentyFourList(requestInfo, mTwentyFourCallBack, twentyFourPageCount);
         } else {
             mBaseModel.loadTopicList(page, requestInfo, mCallBack);

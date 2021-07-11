@@ -1,7 +1,7 @@
 package sp.phone.mvp.model;
 
 import com.alibaba.fastjson.JSON;
-import com.justwen.androidnga.cloud.CloudServerManager;
+//import com.justwen.androidnga.cloud.CloudServerManager;
 import com.trello.rxlifecycle2.android.FragmentEvent;
 
 import org.apache.commons.io.FileUtils;
@@ -81,7 +81,7 @@ public class TopicListModel extends BaseModel implements TopicListContract.Model
                     String rawData = FileUtils.readFileToString(infoFile);
                     ThreadPageInfo pageInfo = JSON.parseObject(rawData, ThreadPageInfo.class);
                     if (pageInfo == null) {
-                        CloudServerManager.putCrashData(ContextUtils.getContext(),"rawData", rawData);
+                        //CloudServerManager.putCrashData(ContextUtils.getContext(),"rawData", rawData);
                     } else {
                         listInfo.addThreadPage(JSON.parseObject(rawData, ThreadPageInfo.class));
                     }

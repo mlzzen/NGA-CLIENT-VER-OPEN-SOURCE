@@ -31,13 +31,14 @@ public class AboutActivity extends MaterialAboutActivity {
     @NonNull
     @Override
     protected MaterialAboutList getMaterialAboutList(@NonNull Context context) {
-        return new MaterialAboutList(buildAppCard(), buildDevelopCard(), buildExtraCard());
+        return new MaterialAboutList(buildAppCard(), buildDevelopCard());
     }
 
     private MaterialAboutCard buildAppCard() {
         MaterialAboutCard.Builder builder = new MaterialAboutCard.Builder();
         builder.addItem(new MaterialAboutActionItem.Builder()
                 .text(R.string.start_title)
+                .subText("已经惨遭Yricky魔改")
                 .icon(R.mipmap.ic_launcher)
                 .setOnClickAction(() -> new VersionUpgradeDialogFragment().show(getSupportFragmentManager(), null))
                 .build());
@@ -71,22 +72,24 @@ public class AboutActivity extends MaterialAboutActivity {
                 .build());
 
         builder.addItem(new MaterialAboutActionItem.Builder()
-                .text("检测更新")
+                .text("来康康有没有更新")
                 .setOnClickAction(() -> {
                     Intent intent = new Intent(AboutActivity.this, WebViewerActivity.class);
-                    intent.putExtra("path", "https://github.com/Justwen/NGA-CLIENT-VER-OPEN-SOURCE/releases");
+                    intent.putExtra("path", "https://gitee.com/sjtuYricky/NGA-CLIENT-VER-OPEN-SOURCE/releases");
                     startActivity(intent);
 
                 })
                 .icon(R.drawable.ic_update_24dp)
                 .build());
 
+
+
         return builder.build();
     }
 
     private MaterialAboutCard buildDevelopCard() {
         MaterialAboutCard.Builder builder = new MaterialAboutCard.Builder();
-        builder.title("开发团队");
+        builder.title("原来的开源版");
         builder.addItem(new MaterialAboutActionItem.Builder()
                 .text("代码")
                 .subText("[@竹井詩織里]/[@cfan8]/[@jjimmys]\n[@Moandor]/[@Elrond]/[@Justwen]")
@@ -103,17 +106,9 @@ public class AboutActivity extends MaterialAboutActivity {
         builder.addItem(new MaterialAboutActionItem.Builder()
                 .text("Github")
                 .subText("bug & 建议")
-                .setOnClickAction(() -> FunctionUtils.openUrlByDefaultBrowser(AboutActivity.this, "https://github.com/Justwen/NGA-CLIENT-VER-OPEN-SOURCE/issues"))
+                .setOnClickAction(() -> FunctionUtils.openUrlByDefaultBrowser(AboutActivity.this, "https://github.com/Justwen/NGA-CLIENT-VER-OPEN-SOURCE"))
                 .icon(R.drawable.ic_github)
                 .build());
-
-        return builder.build();
-    }
-
-
-    private MaterialAboutCard buildExtraCard() {
-        MaterialAboutCard.Builder builder = new MaterialAboutCard.Builder();
-        builder.title("赞美片总!感谢[@force0119]");
         builder.addItem(new MaterialAboutActionItem.Builder()
                 .text("客户端吐槽QQ群,欢迎加入捡肥皂")
                 .subText("1065310118")
@@ -126,9 +121,19 @@ public class AboutActivity extends MaterialAboutActivity {
                 .setOnClickAction(() -> FunctionUtils.copyToClipboard(AboutActivity.this, "1077054628"))
                 .icon(R.drawable.ic_qq)
                 .build());
+        return builder.build();
+    }
+
+/*
+    private MaterialAboutCard buildExtraCard() {
+        MaterialAboutCard.Builder builder = new MaterialAboutCard.Builder();
+        builder.title("赞美片总!感谢[@force0119]");
+
 
         return builder.build();
     }
+
+ */
 
     @Nullable
     @Override

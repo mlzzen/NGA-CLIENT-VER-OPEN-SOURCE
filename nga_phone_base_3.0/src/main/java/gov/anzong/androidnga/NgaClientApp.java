@@ -5,7 +5,7 @@ import android.os.Process;
 import android.webkit.WebView;
 
 import com.alibaba.android.arouter.launcher.ARouter;
-import com.justwen.androidnga.cloud.CloudServerManager;
+//import com.justwen.androidnga.cloud.CloudServerManager;
 
 import gov.anzong.androidnga.base.util.ContextUtils;
 import gov.anzong.androidnga.base.util.PreferenceUtils;
@@ -33,7 +33,7 @@ public class NgaClientApp extends Application {
         super.onCreate();
 
         fixWebViewMultiProcessException();
-        CloudServerManager.init(this);
+        //CloudServerManager.init(this);
         Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandlerProxy(Thread.getDefaultUncaughtExceptionHandler()));
     }
 

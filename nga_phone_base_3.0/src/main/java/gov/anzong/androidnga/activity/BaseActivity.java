@@ -15,7 +15,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import com.justwen.androidnga.cloud.CloudServerManager;
+//import com.justwen.androidnga.cloud.CloudServerManager;
 
 import gov.anzong.androidnga.R;
 import gov.anzong.androidnga.base.common.SwipeBackHelper;
@@ -194,11 +194,12 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        checkUpgrade();
+        //checkUpgrade();
         NotificationController.getInstance().checkNotificationDelay();
         super.onResume();
     }
 
+    /*
     private void checkUpgrade() {
         if (PreferenceUtils.getData(PreferenceKey.KEY_CHECK_UPGRADE_STATE, true)) {
             long time = PreferenceUtils.getData(PreferenceKey.KEY_CHECK_UPGRADE_TIME, 0L);
@@ -208,6 +209,8 @@ public abstract class BaseActivity extends AppCompatActivity {
             }
         }
     }
+
+     */
 
     @Override
     public void startActivityForResult(Intent intent, int requestCode, @Nullable Bundle options) {
