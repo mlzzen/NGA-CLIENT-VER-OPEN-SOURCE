@@ -454,7 +454,7 @@ public class ArticleListAdapter extends RecyclerView.Adapter<ArticleListAdapter.
         holder.floorTv.setText(MessageFormat.format("[{0} 楼]", String.valueOf(row.getLou())));
         holder.postTimeTv.setText(row.getPostdate());
         holder.scoreTv.setText(MessageFormat.format("{0}", row.getScore()));
-
+        //todo 赞多加粗
         holder.detailTv.setText(String.format("级别：%s   威望：%s   发帖：%s", row.getMemberGroup(), row.getReputation(), row.getPostCount()));
 
     }
