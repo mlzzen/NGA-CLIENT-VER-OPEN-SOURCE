@@ -11,7 +11,7 @@ import gov.anzong.androidnga.core.decode.ForumDecoder;
 
 public class HtmlConvertFactory {
 
-    private volatile static String sHtmlTemplate;
+    private static final String sHtmlTemplate;
 
     static {
         sHtmlTemplate = FileUtils.readAssetToString("html/html_template.html");

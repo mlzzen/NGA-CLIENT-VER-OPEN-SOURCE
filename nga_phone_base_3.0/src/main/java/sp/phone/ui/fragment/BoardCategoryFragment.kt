@@ -1,6 +1,7 @@
 package sp.phone.ui.fragment
 
 import android.content.Context
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -79,6 +80,11 @@ class BoardCategoryFragment : Fragment() {
             }
         }
         mListView?.layoutManager = layoutManager
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        setLayoutManager()
     }
 
     companion object {

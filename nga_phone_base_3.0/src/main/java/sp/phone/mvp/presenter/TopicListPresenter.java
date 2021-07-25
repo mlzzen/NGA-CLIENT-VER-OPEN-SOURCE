@@ -190,7 +190,7 @@ public class TopicListPresenter extends ViewModel implements LifecycleObserver {
 
             @Override
             public void onSuccess(String data) {
-                ToastUtils.show(data);
+                ToastUtils.flat(data);
                 mRemovedTopic.setValue(info);
             }
         });

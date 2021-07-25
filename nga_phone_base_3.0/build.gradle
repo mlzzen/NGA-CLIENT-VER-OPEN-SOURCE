@@ -1,6 +1,5 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
 
 def static getDate() {
     def date = new Date()
@@ -68,8 +67,7 @@ android {
         }
         debug {
             debuggable true
-            minifyEnabled false
-        }
+            minifyEnabled false}
     }
 
     dexOptions {

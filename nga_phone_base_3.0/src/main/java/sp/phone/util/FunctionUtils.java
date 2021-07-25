@@ -41,7 +41,6 @@ import gov.anzong.androidnga.Utils;
 import gov.anzong.androidnga.base.util.ToastUtils;
 import gov.anzong.androidnga.core.data.HtmlData;
 import gov.anzong.androidnga.core.decode.ForumDecoder;
-import gov.anzong.androidnga.util.NetUtil;
 import sp.phone.http.bean.MessageArticlePageInfo;
 import sp.phone.http.bean.ThreadRowInfo;
 import sp.phone.common.PhoneConfiguration;

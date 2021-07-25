@@ -44,7 +44,7 @@ public class Debugger {
 
     public static void setDebugMode(boolean debugMode) {
         sDebugMode = debugMode;
-        ToastUtils.show(sDebugMode ? "调试模式开启" : "调试模式关闭");
+        ToastUtils.flat(sDebugMode ? "调试模式开启" : "调试模式关闭");
     }
 
     public static void toggleDebugMode() {

@@ -5,12 +5,8 @@ import android.app.Dialog;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 
-import java.lang.reflect.Field;
-
-import gov.anzong.androidnga.BuildConfig;
 import gov.anzong.androidnga.NgaClientApp;
 import gov.anzong.androidnga.R;
-import sp.phone.common.VersionUpgradeTips;
 
 
 public class VersionUpgradeDialogFragment extends BaseDialogFragment {
@@ -18,7 +14,7 @@ public class VersionUpgradeDialogFragment extends BaseDialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        String tip = getUpgradeTip();
+        String tip = null;
         if (tip == null) {
             dismiss();
         }
@@ -35,14 +31,4 @@ public class VersionUpgradeDialogFragment extends BaseDialogFragment {
         super.onDestroy();
     }
 
-    private String getUpgradeTip() {
-        try {
-            Class clz = VersionUpgradeTips.class;
-            Field field = clz.getDeclaredField("TIPS_" + BuildConfig.VERSION_CODE);
-            return (String) field.get(null);
-        } catch (Throwable e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
 }

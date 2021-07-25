@@ -15,7 +15,7 @@ public class ToastUtils {
 
 
 
-    public static void show(String text) {
+    public static void flat(String text) {
         ThreadUtils.runOnMainThread(() -> Toast.makeText(ContextUtils.getContext(), text, Toast.LENGTH_SHORT).show());
     }
 
