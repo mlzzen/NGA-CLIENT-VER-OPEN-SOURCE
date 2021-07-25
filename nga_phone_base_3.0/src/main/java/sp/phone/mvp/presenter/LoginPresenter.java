@@ -6,6 +6,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
 import gov.anzong.androidnga.R;
+import gov.anzong.androidnga.base.util.ToastUtils;
 import sp.phone.common.UserManagerImpl;
 import sp.phone.param.LoginParam;
 import sp.phone.ui.fragment.LoginFragment;
@@ -39,7 +40,7 @@ public class LoginPresenter extends BasePresenter<LoginFragment, LoginModel> imp
         mBaseModel.loadAuthCode(new OnHttpCallBack<LoginParam>() {
             @Override
             public void onError(String text) {
-                ActivityUtils.showToast("载入验证码失败");
+                ToastUtils.error("载入验证码失败");
             }
 
             @Override
@@ -53,7 +54,7 @@ public class LoginPresenter extends BasePresenter<LoginFragment, LoginModel> imp
     @Override
     public void login(String userName, String password, String authCode) {
         if (TextUtils.isEmpty(userName) || TextUtils.isEmpty(password) || TextUtils.isEmpty(authCode)) {
-            ActivityUtils.showToast("内容缺少，请检查后再试");
+            ToastUtils.warn("内容缺少，请检查后再试");
             return;
         }
 
@@ -64,7 +65,7 @@ public class LoginPresenter extends BasePresenter<LoginFragment, LoginModel> imp
         mBaseModel.login(mLoginParam, new OnHttpCallBack<String>() {
             @Override
             public void onError(String text) {
-                ActivityUtils.showToast(text);
+                ToastUtils.error(text);
                 loadAuthCode();
             }
 
@@ -77,9 +78,9 @@ public class LoginPresenter extends BasePresenter<LoginFragment, LoginModel> imp
 
 
     @Override
-    public void parseCookie(String cookies) {
+    public boolean parseCookie(String cookies) {
         if (!cookies.contains(TAG_UID)) {
-            return;
+            return false;
         }
         String uid = null;
         String cid = null;
@@ -106,7 +107,9 @@ public class LoginPresenter extends BasePresenter<LoginFragment, LoginModel> imp
                 && !StringUtils.isEmpty(uid)
                 && !StringUtils.isEmpty(userName)) {
             saveCookie(uid, cid, userName);
+            return true;
         }
+        return false;
 
     }
 

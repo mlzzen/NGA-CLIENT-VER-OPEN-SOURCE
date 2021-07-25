@@ -26,7 +26,7 @@ public class ActivityUtils {
     public static final String dialogTag = "saying";
     static final String TAG = ActivityUtils.class.getSimpleName();
     static ActivityUtils instance;
-    static Object lock = new Object();
+    static final Object lock = new Object();
     private DialogFragment df = null;
 
     public static final int REQUEST_CODE_LOGIN = 1;
@@ -42,26 +42,6 @@ public class ActivityUtils {
     private ActivityUtils() {
     }
 
-    public static void showToast(Context context, int resId) {
-        if (context != null) {
-            ToastUtils.info(resId);
-        }
-    }
-
-    public static void showToast(Context context, String res) {
-        if (context != null) {
-            ToastUtils.info(res);
-        }
-    }
-
-    public static void showToast(String res) {
-        showToast(ContextUtils.getContext(), res);
-    }
-
-    public static void showToast(int resId) {
-        showToast(ContextUtils.getContext(), resId);
-    }
-
 
     public static ActivityUtils getInstance() {
         if (instance == null) {
@@ -73,7 +53,7 @@ public class ActivityUtils {
 
     static public String getSaying() {
         String str = StringUtils.getSaying();
-        if (str.indexOf(";") != -1) {
+        if (str.contains(";")) {
             str = str.replace(";", "-----");
         }
 
@@ -84,7 +64,7 @@ public class ActivityUtils {
     public void noticeSaying(Context context) {
 
         String str = StringUtils.getSaying();
-        if (str.indexOf(";") != -1) {
+        if (str.contains(";")) {
             notice("", str.replace(";", "-----"), context);
         } else {
             notice("", str, context);
@@ -94,7 +74,7 @@ public class ActivityUtils {
     public void noticeSayingWithProgressBar(Context context) {
 
         String str = StringUtils.getSaying();
-        if (str.indexOf(";") != -1) {
+        if (str.contains(";")) {
             noticebar("", str.replace(";", "-----"), context);
         } else {
             noticebar("", str, context);
@@ -103,7 +83,7 @@ public class ActivityUtils {
 
     public void noticeSaying(String str, Context context) {
 
-        if (str.indexOf(";") != -1) {
+        if (str.contains(";")) {
             notice("", str.replace(";", "-----"), context);
         } else {
             notice("", str, context);

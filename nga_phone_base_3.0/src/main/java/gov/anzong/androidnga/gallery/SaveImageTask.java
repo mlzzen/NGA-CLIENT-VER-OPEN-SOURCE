@@ -13,6 +13,7 @@ import org.reactivestreams.Subscription;
 import java.io.File;
 
 import gov.anzong.androidnga.R;
+import gov.anzong.androidnga.base.util.ToastUtils;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -50,7 +51,7 @@ public class SaveImageTask {
     public void execute(OnSimpleHttpCallBack<DownloadResult> callBack, String... urls) {
 
         if (isRunning()) {
-            ActivityUtils.showToast("图片正在下载，防止风怒！！");
+            ToastUtils.info("图片正在下载，防止风怒！！");
             return;
         }
 
@@ -82,9 +83,9 @@ public class SaveImageTask {
                         mDownloadCount++;
                         if (mDownloadCount == urls.length) {
                             if (urls.length > 1) {
-                                ActivityUtils.showToast("所有图片已保存");
+                                ToastUtils.info("所有图片已保存");
                             } else {
-                                ActivityUtils.showToast(mContext.getString(R.string.file_saved) + result.file.getAbsolutePath());
+                                ToastUtils.info(mContext.getString(R.string.file_saved) + result.file.getAbsolutePath());
                             }
                         }
                         callBack.onResult(result);
@@ -104,7 +105,7 @@ public class SaveImageTask {
                     @Override
                     public void onError(Throwable throwable) {
                         mSubscription = null;
-                        ActivityUtils.showToast("下载失败");
+                        ToastUtils.error("下载失败");
                     }
 
                 });

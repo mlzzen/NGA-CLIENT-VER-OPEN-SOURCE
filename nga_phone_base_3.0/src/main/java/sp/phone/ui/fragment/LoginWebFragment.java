@@ -100,7 +100,7 @@ public class LoginWebFragment extends BaseFragment {
      */
     @Override
     public void onPause() {
-        setCookies();
+        //setCookies();
         super.onPause();
         mWebView.onPause();
     }

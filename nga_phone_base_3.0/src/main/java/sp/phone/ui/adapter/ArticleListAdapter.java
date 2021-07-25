@@ -28,6 +28,7 @@ import gov.anzong.androidnga.R;
 import gov.anzong.androidnga.arouter.ARouterConstants;
 import gov.anzong.androidnga.base.util.ContextUtils;
 import gov.anzong.androidnga.base.util.DeviceUtils;
+import gov.anzong.androidnga.base.util.ToastUtils;
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -179,7 +180,7 @@ public class ArticleListAdapter extends RecyclerView.Adapter<ArticleListAdapter.
                         }
                         break;
                 }
-                ActivityUtils.showToast(deviceInfo);
+                ToastUtils.info(deviceInfo);
             }
         }
     };
@@ -283,7 +284,7 @@ public class ArticleListAdapter extends RecyclerView.Adapter<ArticleListAdapter.
             ThreadRowInfo row = (ThreadRowInfo) view.getTag();
 
             if (row.getISANONYMOUS()) {
-                ActivityUtils.showToast("这白痴匿名了,神马都看不到");
+                ToastUtils.info("这白痴匿名了,神马都看不到");
             } else if (row.getAuthor() != null){
                 ARouter.getInstance()
                         .build(ARouterConstants.ACTIVITY_PROFILE)
@@ -299,7 +300,7 @@ public class ArticleListAdapter extends RecyclerView.Adapter<ArticleListAdapter.
         public void onClick(View view) {
             ThreadRowInfo row = (ThreadRowInfo) view.getTag();
             if (row.getISANONYMOUS()) {
-                ActivityUtils.showToast("这白痴匿名了,神马都看不到");
+                ToastUtils.info("这白痴匿名了,神马都看不到");
             } else {
                 Bundle bundle = new Bundle();
                 bundle.putString("name", row.getAuthor());

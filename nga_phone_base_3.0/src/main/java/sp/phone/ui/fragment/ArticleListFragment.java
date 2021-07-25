@@ -22,6 +22,7 @@ import butterknife.ButterKnife;
 import gov.anzong.androidnga.R;
 import gov.anzong.androidnga.activity.BaseActivity;
 import gov.anzong.androidnga.arouter.ARouterConstants;
+import gov.anzong.androidnga.base.util.ToastUtils;
 import sp.phone.mvp.viewmodel.ArticleShareViewModel;
 import io.reactivex.annotations.NonNull;
 import sp.phone.common.PhoneConfiguration;
@@ -109,7 +110,7 @@ public class ArticleListFragment extends BaseMvpFragment<ArticleListPresenter> i
                     break;
                 case R.id.menu_signature:
                     if (row.getISANONYMOUS()) {
-                        ActivityUtils.showToast("这白痴匿名了,神马都看不到");
+                        ToastUtils.info("这白痴匿名了,神马都看不到");
                     } else {
                         FunctionUtils.Create_Signature_Dialog(row, getActivity(),
                                 mListView);

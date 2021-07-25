@@ -101,7 +101,7 @@ public class TopicPostPresenter extends BasePresenter<TopicPostFragment, TopicPo
             @Override
             public void onError(String text) {
                 if (mBaseView != null) {
-                    ActivityUtils.showToast(text);
+                    ToastUtils.error(text);
                 }
             }
 
