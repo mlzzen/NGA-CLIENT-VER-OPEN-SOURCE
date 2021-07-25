@@ -6,7 +6,7 @@ public class User {
     private String nickName;
     private String cid;
     private String replyString;
-    private int replytotalnum;
+    private int totalReplyNum;
     private String blacklist = "";
 
     public String getBlackList() {
@@ -25,12 +25,12 @@ public class User {
         this.userId = userId;
     }
 
-    public int getReplyTotalNum() {
-        return replytotalnum;
+    public int getTotalReplyNum() {
+        return totalReplyNum;
     }
 
-    public void setReplyTotalNum(int replyTotalNum) {
-        this.replytotalnum = replyTotalNum;
+    public void setTotalReplyNum(int totalReplyNum) {
+        this.totalReplyNum = totalReplyNum;
     }
 
     public String getReplyString() {

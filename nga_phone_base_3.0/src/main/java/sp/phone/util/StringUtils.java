@@ -47,22 +47,14 @@ public class StringUtils {
         String pattern1 = "^([a-z0-9A-Z]+[-_|\\.]?)+[a-z0-9A-Z_]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$";
         Pattern pattern = Pattern.compile(pattern1);
         Matcher mat = pattern.matcher(email);
-        if (!mat.find()) {
-            return false;
-        } else {
-            return true;
-        }
+        return mat.find();
     }
 
     /**
      * 判断是否是 "" 或者 null
      */
     public static boolean isEmpty(String str) {
-        if (str != null && !"".equals(str)) {
-            return false;
-        } else {
-            return true;
-        }
+        return str == null || "".equals(str);
     }
 
     /* 给候总客户端乱码加适配 */
