@@ -466,6 +466,8 @@ public class ArticleListAdapter extends RecyclerView.Adapter<ArticleListAdapter.
         lp.setMarginStart(mContext.getResources().getDimensionPixelSize(R.dimen.material_standard_half));
         lp.setMarginEnd(mContext.getResources().getDimensionPixelSize(R.dimen.material_standard_half));
         localWebView.setLayoutParams(lp);
+        localWebView.setVerticalScrollBarEnabled(false);
+        localWebView.setHorizontalScrollBarEnabled(false);
         return localWebView;
     }
 

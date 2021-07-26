@@ -143,12 +143,9 @@ public class TopicSearchFragment extends BaseFragment implements View.OnClickLis
         mAdapter.setOnClickListener(this);
 
         mListView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mListView.setOnNextPageLoadListener(new RecyclerViewEx.OnNextPageLoadListener() {
-            @Override
-            public void loadNextPage() {
-                if (!isRefreshing()) {
-                    mPresenter.loadNextPage(mAdapter.getNextPage(), mRequestParam);
-                }
+        mListView.setOnNextPageLoadListener(() -> {
+            if (!isRefreshing()) {
+                mPresenter.loadNextPage(mAdapter.getNextPage(), mRequestParam);
             }
         });
         mListView.setEmptyView(view.findViewById(R.id.empty_view));
@@ -159,12 +156,7 @@ public class TopicSearchFragment extends BaseFragment implements View.OnClickLis
         }
 
         mSwipeRefreshLayout.setVisibility(View.GONE);
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                mPresenter.loadPage(1, mRequestParam);
-            }
-        });
+        mSwipeRefreshLayout.setOnRefreshListener(() -> mPresenter.loadPage(1, mRequestParam));
 
         TextView sayingView = (TextView) mLoadingView.findViewById(R.id.saying);
         sayingView.setText(ActivityUtils.getSaying());

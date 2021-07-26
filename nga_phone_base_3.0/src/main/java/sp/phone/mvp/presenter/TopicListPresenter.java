@@ -72,11 +72,11 @@ public class TopicListPresenter extends ViewModel implements LifecycleObserver {
 
     private MutableLiveData<Boolean> mRefreshingState = new MutableLiveData<>();
 
-    private MutableLiveData<ThreadPageInfo> mRemovedTopic = new MutableLiveData<>();
+    private final MutableLiveData<ThreadPageInfo> mRemovedTopic = new MutableLiveData<>();
 
     private TopicListModel mBaseModel;
 
-    private OnHttpCallBack<TopicListInfo> mCallBack = new OnHttpCallBack<TopicListInfo>() {
+    private final OnHttpCallBack<TopicListInfo> mCallBack = new OnHttpCallBack<TopicListInfo>() {
         @Override
         public void onError(String text) {
             mErrorMsg.setValue(text);
@@ -90,10 +90,13 @@ public class TopicListPresenter extends ViewModel implements LifecycleObserver {
         }
     };
 
-    private OnHttpCallBack<TopicListInfo> mNextPageCallBack = new OnHttpCallBack<TopicListInfo>() {
+    private final OnHttpCallBack<TopicListInfo> mNextPageCallBack = new OnHttpCallBack<TopicListInfo>() {
         @Override
         public void onError(String text) {
-            mErrorMsg.setValue(text);
+            if("HTTP 404 Not Found".equals(text))
+                ToastUtils.warn("已无更多");
+            else
+                mErrorMsg.setValue(text);
             mRefreshingState.setValue(false);
         }
 
@@ -105,7 +108,7 @@ public class TopicListPresenter extends ViewModel implements LifecycleObserver {
     };
 
     /* callback for the twenty four hour hot topic list */
-    private OnHttpCallBack<TopicListInfo> mTwentyFourCallBack = new OnHttpCallBack<TopicListInfo>() {
+    private final OnHttpCallBack<TopicListInfo> mTwentyFourCallBack = new OnHttpCallBack<TopicListInfo>() {
         @Override
         public void onError(String text) {
             mErrorMsg.setValue(text);

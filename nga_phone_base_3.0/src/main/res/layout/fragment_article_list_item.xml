@@ -46,7 +46,7 @@
             android:layout_alignParentEnd="true"
             android:textColor="@color/text_color_disabled"
             android:textIsSelectable="false"
-            android:textSize="14dp" />
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/tv_detail"
@@ -58,7 +58,7 @@
             android:layout_toStartOf="@id/tv_floor"
             android:layout_toEndOf="@+id/fl_avatar"
             android:textColor="@color/text_color_disabled"
-            android:textSize="14dp" />
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/tv_post_time"
@@ -68,7 +68,7 @@
             android:layout_alignParentEnd="true"
             android:textColor="@color/text_color_disabled"
             android:textIsSelectable="false"
-            android:textSize="14dp" />
+            android:textSize="14sp" />
 
 
         <ImageView
@@ -116,6 +116,7 @@
             android:layout_height="24dp"
             android:layout_marginEnd="4dp"
             android:padding="3dp"
+            android:background="?android:attr/selectableItemBackground"
             android:src="@drawable/ic_baseline_thumb_up_24" />
 
         <TextView
@@ -130,6 +131,7 @@
             android:layout_height="24dp"
             android:layout_marginStart="4dp"
             android:padding="3dp"
+            android:background="?android:attr/selectableItemBackground"
             android:src="@drawable/ic_baseline_thumb_down_24" />
 
         <ImageView
@@ -139,6 +141,7 @@
             android:layout_marginStart="4dp"
             android:contentDescription="@string/quote_subject"
             android:paddingBottom="2dp"
+            android:background="?android:attr/selectableItemBackground"
             android:src="@drawable/ic_reply_24dp" />
 
         <ImageView

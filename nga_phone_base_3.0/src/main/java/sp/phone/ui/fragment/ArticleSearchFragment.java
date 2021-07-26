@@ -31,7 +31,8 @@ public class ArticleSearchFragment extends ArticleListFragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.article_list_option_menu_reply,menu);
+        if(mRequestParam.tid != 0)
+            inflater.inflate(R.menu.article_list_option_menu_reply,menu);
     }
 
     @Override

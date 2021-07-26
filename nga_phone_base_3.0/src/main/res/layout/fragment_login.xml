@@ -40,7 +40,7 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!--<sp.phone.view.webview.WebViewEx-->
+    <!--<WebView-->
     <!--android:id="@+id/webview"-->
     <!--android:layout_width="wrap_content"-->
     <!--android:layout_height="wrap_content"-->

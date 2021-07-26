@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.CookieManager;
-import android.webkit.JsResult;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
@@ -18,8 +17,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
-import java.util.Timer;
-import java.util.TimerTask;
+import androidx.annotation.NonNull;
 
 import gov.anzong.androidnga.R;
 import gov.anzong.androidnga.base.util.ToastUtils;
@@ -75,7 +73,7 @@ public class LoginWebFragment extends BaseFragment {
         }
     }
 
-    private class LoginWebViewClient extends WebViewClient {
+    private static class LoginWebViewClient extends WebViewClient {
 
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
@@ -91,7 +89,7 @@ public class LoginWebFragment extends BaseFragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (mWebView != null) {
             mWebView.destroy();
         }

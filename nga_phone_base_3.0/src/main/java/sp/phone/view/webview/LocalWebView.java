@@ -8,17 +8,17 @@ import android.util.AttributeSet;
 import android.webkit.DownloadListener;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
+import android.webkit.WebView;
 
 import androidx.annotation.Nullable;
 
 import gov.anzong.androidnga.common.util.LogUtils;
-import gov.anzong.androidnga.common.view.WebViewEx;
 import sp.phone.common.PhoneConfiguration;
 
 /**
  * @author Justwen
  */
-public class LocalWebView extends WebViewEx implements DownloadListener {
+public class LocalWebView extends WebView implements DownloadListener {
 
     private WebViewClientEx mWebViewClientEx;
 

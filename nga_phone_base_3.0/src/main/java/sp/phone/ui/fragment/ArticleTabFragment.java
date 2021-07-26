@@ -192,6 +192,9 @@ public class ArticleTabFragment extends BaseRxFragment {
             case R.id.menu_copy_url:
                 copyUrl();
                 break;
+            case R.id.menu_open_by_browser:
+                openByBrowser();
+                break;
             case R.id.menu_nightmode:
                 ThemeManager.getInstance().setNightMode(true);
                 break;
@@ -230,7 +233,10 @@ public class ArticleTabFragment extends BaseRxFragment {
             clipboardManager.setPrimaryClip(clipData);
             showToast("已经复制至粘贴板");
         }
+    }
 
+    private void openByBrowser(){
+        FunctionUtils.openUrlByDefaultBrowser(mActivity,getUrl());
     }
 
     private void share() {
