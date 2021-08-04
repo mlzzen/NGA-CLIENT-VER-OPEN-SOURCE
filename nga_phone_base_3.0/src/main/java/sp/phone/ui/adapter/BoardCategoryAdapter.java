@@ -18,7 +18,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import gov.anzong.androidnga.R;
-import gov.anzong.androidnga.util.GlideApp;
+import gov.anzong.androidnga.GlideApp;
 import sp.phone.common.ApiConstants;
 import sp.phone.mvp.model.entity.Board;
 import sp.phone.mvp.model.entity.BoardCategory;
@@ -98,22 +98,21 @@ public class BoardCategoryAdapter extends RecyclerView.Adapter<BoardCategoryAdap
                 board = mCategory.getBoard(position);
             }
 
-            Drawable draw = getDrawable(board);
-            if (draw == null) {
-                String url;
-                if (board.getStid() != 0) {
-                    url = String.format(ApiConstants.URL_BOARD_ICON_STID, board.getStid());
-                } else {
-                    url = String.format(ApiConstants.URL_BOARD_ICON, board.getFid());
-                }
-                GlideApp.with(mActivity)
-                        .load(url)
-                        .placeholder(R.drawable.default_board_icon)
-                        .dontAnimate()
-                        .into(holder.icon);
+
+            //设置版面图标
+            String url;
+            if (board.getStid() != 0) {
+                url = String.format(ApiConstants.URL_BOARD_ICON_STID, board.getStid());
             } else {
-                holder.icon.setImageDrawable(draw);
+                url = String.format(ApiConstants.URL_BOARD_ICON, board.getFid());
             }
+            GlideApp.with(mActivity)
+                    .load(url)
+                    .placeholder(R.drawable.default_board_icon)
+                    .dontAnimate()
+                    .into(holder.icon);
+
+
             holder.itemView.setTag(board);
             holder.name.setText(board.getName());
             RxUtils.clicks(holder.itemView, v -> RxBus.getInstance().post(new RxEvent(RxEvent.EVENT_SHOW_TOPIC_LIST, board)));
@@ -137,26 +136,28 @@ public class BoardCategoryAdapter extends RecyclerView.Adapter<BoardCategoryAdap
     public int getItemCount() {
         return mTotalCount;
     }
-
-    private int getResId(Board board) {
-        if (board.getStid() != 0) {
-            return 0;
-        }
-        int fid = board.getFid();
-        String resName = fid > 0 ? "p" + fid : "p_" + Math.abs(fid);
-        return mActivity.getResources().getIdentifier(resName, "drawable", mActivity.getPackageName());
-    }
-
-    private Drawable getDrawable(Board board) {
-        Drawable drawable = null;
-        int resId = getResId(board);
-        if (resId != 0) {
-            drawable = ContextCompat.getDrawable(mActivity, resId);
+    /*
+        private int getResId(Board board) {
+            if (board.getStid() != 0) {
+                return 0;
+            }
+            int fid = board.getFid();
+            String resName = fid > 0 ? "p" + fid : "p_" + Math.abs(fid);
+            return mActivity.getResources().getIdentifier(resName, "drawable", mActivi.getPackageName());
         }
 
-        return drawable;
-    }
+        private Drawable getDrawable(Board board) {
+            Drawable drawable = null;
+            int resId = getResId(board);
+            if (resId != 0) {
+                drawable = ContextCompat.getDrawable(mActivity, resId);
+            }
 
+            return drawable;
+        }
+
+
+     */
     public LayoutInflater getLayoutInflater() {
         return mActivity.getLayoutInflater();
     }

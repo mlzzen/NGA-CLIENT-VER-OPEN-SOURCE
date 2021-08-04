@@ -32,7 +32,7 @@ import java.util.zip.ZipFile;
 
 import gov.anzong.androidnga.R;
 import gov.anzong.androidnga.base.util.PermissionUtils;
-import gov.anzong.androidnga.util.GlideApp;
+import gov.anzong.androidnga.GlideApp;
 import gov.anzong.androidnga.base.util.ContextUtils;;
 import sp.phone.common.PhoneConfiguration;
 

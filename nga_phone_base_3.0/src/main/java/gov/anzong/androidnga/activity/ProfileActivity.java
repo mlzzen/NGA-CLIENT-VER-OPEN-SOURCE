@@ -555,7 +555,7 @@ public class ProfileActivity extends BaseActivity implements OnHttpCallBack<Prof
 
     @Override
     public void onError(String text) {
-        ActivityUtils.showToast(text);
+        ToastUtils.error(text);
     }
 
     @Override

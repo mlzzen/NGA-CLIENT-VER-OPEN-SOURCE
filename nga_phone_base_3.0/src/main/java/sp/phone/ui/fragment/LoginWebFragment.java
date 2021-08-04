@@ -3,16 +3,23 @@ package sp.phone.ui.fragment;
 import android.app.Activity;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
+
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.CookieManager;
+import android.webkit.JsResult;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 import gov.anzong.androidnga.R;
 import gov.anzong.androidnga.base.util.ToastUtils;
@@ -35,10 +42,22 @@ public class LoginWebFragment extends BaseFragment {
 
     private LoginPresenter mLoginPresenter;
 
+    private final Handler handler = new Handler(Looper.getMainLooper());
+
+
+    private final Runnable r = new Runnable() {
+        @Override
+        public void run() {
+            setCookies();
+            handler.postDelayed(r,1000);
+        }
+    };
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         mLoginPresenter = new LoginPresenter();
         super.onCreate(savedInstanceState);
+
         ToastUtils.info("不支持QQ和微博登录");
     }
 
@@ -100,8 +119,9 @@ public class LoginWebFragment extends BaseFragment {
      */
     @Override
     public void onPause() {
-        setCookies();
+        //setCookies();
         super.onPause();
+        handler.removeCallbacksAndMessages(null);
         mWebView.onPause();
     }
 
@@ -111,6 +131,7 @@ public class LoginWebFragment extends BaseFragment {
     @Override
     public void onResume() {
         mWebView.onResume();
+        handler.postDelayed(r,100);
         super.onResume();
     }
 
@@ -138,13 +159,13 @@ public class LoginWebFragment extends BaseFragment {
 
     private void setCookies() {
         String cookieStr = CookieManager.getInstance().getCookie(mWebView.getUrl());
-        if (!StringUtils.isEmpty(cookieStr)) {
-            mLoginPresenter.parseCookie(cookieStr);
-//            Toast.makeText(mActivity, "登陆成功", Toast.LENGTH_SHORT).show();
+        if (!StringUtils.isEmpty(cookieStr) && mLoginPresenter.parseCookie(cookieStr)) {
+            ToastUtils.success("登录成功");
             if (mActivity != null) {
                 mActivity.setResult(Activity.RESULT_OK);
                 mActivity.finish();
             }
+            CookieManager.getInstance().removeAllCookies(null);
         }
     }
 }

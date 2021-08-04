@@ -1,6 +1,5 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
 
 def static getDate() {
     def date = new Date()
@@ -68,8 +67,7 @@ android {
         }
         debug {
             debuggable true
-            minifyEnabled false
-        }
+            minifyEnabled false}
     }
 
     dexOptions {
@@ -99,7 +97,7 @@ dependencies {
     implementation "androidx.cardview:cardview:1.0.0"
 
     // lifecycle
-    implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
 
     //butterKnife
     implementation 'com.jakewharton:butterknife:10.2.1'
@@ -110,7 +108,7 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
 
     implementation 'com.squareup.retrofit2:retrofit:2.3.0'
-    implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
     implementation 'com.squareup.retrofit2:retrofit-converters:2.3.0'
     implementation 'com.squareup.retrofit2:converter-scalars:2.3.0'
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
@@ -128,7 +126,7 @@ dependencies {
     implementation project(":lib_http")
 
     // kotlin
-    implementation "androidx.core:core-ktx:1.3.0"
+    implementation "androidx.core:core-ktx:1.3.1"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 }
 

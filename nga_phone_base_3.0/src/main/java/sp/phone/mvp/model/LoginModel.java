@@ -10,6 +10,7 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import gov.anzong.androidnga.base.util.ToastUtils;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
@@ -93,7 +94,7 @@ public class LoginModel extends BaseModel implements LoginContract.Model {
 //                            String error = obj.getJSONObject("error").getString("0");
 //                            callBack.onError(error);
 //                        }
-                        ActivityUtils.showToast(s);
+                        ToastUtils.info(s);
                         super.onNext(s);
                     }
                 });

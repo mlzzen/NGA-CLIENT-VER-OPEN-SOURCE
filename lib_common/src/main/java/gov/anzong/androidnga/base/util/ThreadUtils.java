@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class ThreadUtils {
 
-    private static Handler sHandler = new Handler(Looper.getMainLooper());
+    private static final Handler sHandler = new Handler(Looper.getMainLooper());
 
     private static volatile ThreadPoolExecutor sThreadPoolExecutor;
 

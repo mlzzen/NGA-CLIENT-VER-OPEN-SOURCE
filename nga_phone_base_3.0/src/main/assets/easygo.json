@@ -9,10 +9,22 @@
       },
       "body": {
         "mode": "1",
+        "Activities": [
+          {
+            "name": "gov.anzong.androidnga.activity.WebViewerActivity",
+            "defaultFullScreen": "true"
+          }
+        ],
         "activityPairs": [
           {
             "from": "gov.anzong.androidnga.activity.TopicListActivity",
             "to": "*"
+          },{
+            "from": "gov.anzong.androidnga.activity.MainActivity",
+            "to": "gov.anzong.androidnga.activity.TopicListActivity"
+          },{
+            "from": "gov.anzong.androidnga.activity.MainActivity",
+            "to": "gov.anzong.androidnga.activity.LoginActivity"
           }
         ],
         "UX": {

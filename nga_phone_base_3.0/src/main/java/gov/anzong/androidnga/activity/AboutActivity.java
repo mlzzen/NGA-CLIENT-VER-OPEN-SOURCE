@@ -38,9 +38,9 @@ public class AboutActivity extends MaterialAboutActivity {
         MaterialAboutCard.Builder builder = new MaterialAboutCard.Builder();
         builder.addItem(new MaterialAboutActionItem.Builder()
                 .text(R.string.start_title)
-                .subText("已经惨遭Yricky魔改")
+                .subText("已经惨遭Yricky魔改，点这里可以骂他。")
                 .icon(R.mipmap.ic_launcher)
-                .setOnClickAction(() -> new VersionUpgradeDialogFragment().show(getSupportFragmentManager(), null))
+                .setOnClickAction(() -> FunctionUtils.openUrlByDefaultBrowser(AboutActivity.this, "https://gitee.com/sjtuYricky/NGA-CLIENT-VER-OPEN-SOURCE/issues"))
                 .build());
 
         builder.addItem(new MaterialAboutActionItem.Builder()
@@ -54,7 +54,7 @@ public class AboutActivity extends MaterialAboutActivity {
                         intent.setData(Uri.parse(url));
                         startActivity(intent);
                     } catch (ActivityNotFoundException e) {
-                        //FunctionUtils.openUrlByDefaultBrowser(AboutActivity.this, "https://www.coolapk.com/apk/gov.anzong.androidnga");
+                        FunctionUtils.openUrlByDefaultBrowser(AboutActivity.this, "https://gitee.com/sjtuYricky/NGA-CLIENT-VER-OPEN-SOURCE");
                     }
                 })
                 .build());
@@ -74,9 +74,13 @@ public class AboutActivity extends MaterialAboutActivity {
         builder.addItem(new MaterialAboutActionItem.Builder()
                 .text("来康康有没有更新")
                 .setOnClickAction(() -> {
+                    FunctionUtils.openUrlByDefaultBrowser(AboutActivity.this, "https://gitee.com/sjtuYricky/NGA-CLIENT-VER-OPEN-SOURCE/releases");
+                    /*
                     Intent intent = new Intent(AboutActivity.this, WebViewerActivity.class);
                     intent.putExtra("path", "https://gitee.com/sjtuYricky/NGA-CLIENT-VER-OPEN-SOURCE/releases");
+                    intent.putExtra("title","更新");
                     startActivity(intent);
+                     */
 
                 })
                 .icon(R.drawable.ic_update_24dp)

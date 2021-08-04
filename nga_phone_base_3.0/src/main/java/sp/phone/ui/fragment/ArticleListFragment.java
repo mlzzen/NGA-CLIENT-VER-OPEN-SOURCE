@@ -22,6 +22,7 @@ import butterknife.ButterKnife;
 import gov.anzong.androidnga.R;
 import gov.anzong.androidnga.activity.BaseActivity;
 import gov.anzong.androidnga.arouter.ARouterConstants;
+import gov.anzong.androidnga.base.util.ToastUtils;
 import sp.phone.mvp.viewmodel.ArticleShareViewModel;
 import io.reactivex.annotations.NonNull;
 import sp.phone.common.PhoneConfiguration;
@@ -109,7 +110,7 @@ public class ArticleListFragment extends BaseMvpFragment<ArticleListPresenter> i
                     break;
                 case R.id.menu_signature:
                     if (row.getISANONYMOUS()) {
-                        ActivityUtils.showToast("这白痴匿名了,神马都看不到");
+                        ToastUtils.info("这白痴匿名了,神马都看不到");
                     } else {
                         FunctionUtils.Create_Signature_Dialog(row, getActivity(),
                                 mListView);
@@ -129,12 +130,6 @@ public class ArticleListFragment extends BaseMvpFragment<ArticleListPresenter> i
                             .withInt(ParamKey.KEY_AUTHOR_ID, row.getAuthorid())
                             .withInt("fromreplyactivity", 1)
                             .navigation();
-                    break;
-                case R.id.menu_support:
-                    mPresenter.postSupportTask(tid, row.getPid());
-                    break;
-                case R.id.menu_oppose:
-                    mPresenter.postOpposeTask(tid, row.getPid());
                     break;
                 case R.id.menu_favorite:
                     BookmarkTask.execute(tidStr, pidStr);
@@ -237,6 +232,16 @@ public class ArticleListFragment extends BaseMvpFragment<ArticleListPresenter> i
         ((BaseActivity) getActivity()).setupToolbar();
         mArticleAdapter = new ArticleListAdapter(getContext(),getActivity().getSupportFragmentManager());
         mArticleAdapter.setMenuTogglerListener(mMenuTogglerListener);
+        mArticleAdapter.setSupportListener((v)-> {
+            ThreadRowInfo row = (ThreadRowInfo) v.getTag();
+            int tid = row.getTid();
+            mPresenter.postSupportTask(tid, row.getPid());
+        });
+        mArticleAdapter.setOpposeListener((v)-> {
+            ThreadRowInfo row = (ThreadRowInfo) v.getTag();
+            int tid = row.getTid();
+            mPresenter.postOpposeTask(tid, row.getPid());
+        });
         mListView.setLayoutManager(new LinearLayoutManager(getContext()));
         mListView.setItemViewCacheSize(20);
         mListView.setAdapter(mArticleAdapter);

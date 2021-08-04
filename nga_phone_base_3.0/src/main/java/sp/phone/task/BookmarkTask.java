@@ -1,7 +1,8 @@
 package sp.phone.task;
 
 import gov.anzong.androidnga.Utils;
-import gov.anzong.androidnga.util.ToastUtils;
+
+import gov.anzong.androidnga.base.util.ToastUtils;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import sp.phone.http.retrofit.RetrofitHelper;
@@ -23,7 +24,7 @@ public class BookmarkTask {
                     public void onNext(String result) {
                         String msg = StringUtils.getStringBetween(result, 0, "{\"0\":\"", "\"},\"time\"").result;
                         if (!StringUtils.isEmpty(msg)) {
-                            ToastUtils.showShortToast(msg.trim());
+                            ToastUtils.info(msg.trim());
                         }
                     }
                 });
@@ -40,7 +41,7 @@ public class BookmarkTask {
                     public void onNext(String result) {
                         String msg = StringUtils.getStringBetween(result, 0, "{\"0\":\"", "\"},\"time\"").result;
                         if (!StringUtils.isEmpty(msg)) {
-                            ToastUtils.showShortToast(msg.trim());
+                            ToastUtils.info(msg.trim());
                         }
                     }
                 });

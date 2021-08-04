@@ -32,6 +32,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import gov.anzong.androidnga.R;
 import gov.anzong.androidnga.Utils;
+import gov.anzong.androidnga.activity.WebViewerActivity;
 import gov.anzong.androidnga.base.widget.TabLayoutEx;
 import sp.phone.mvp.viewmodel.ArticleShareViewModel;
 import io.reactivex.Observable;
@@ -211,7 +212,7 @@ public class ArticleTabFragment extends BaseRxFragment {
         return getActivityViewModelProvider().get(ArticleShareViewModel.class);
     }
 
-    private void copyUrl() {
+    public String getUrl(){
         StringBuilder builder = new StringBuilder();
         builder.append(Utils.getNGAHost()).append("read.php?");
         if (mRequestParam.pid != 0) {
@@ -219,9 +220,13 @@ public class ArticleTabFragment extends BaseRxFragment {
         } else {
             builder.append("tid=").append(mRequestParam.tid);
         }
+        return builder.toString();
+    }
+
+    private void copyUrl() {
         ClipboardManager clipboardManager = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
         if (clipboardManager != null) {
-            ClipData clipData = ClipData.newPlainText("text", builder.toString());
+            ClipData clipData = ClipData.newPlainText("text", getUrl());
             clipboardManager.setPrimaryClip(clipData);
             showToast("已经复制至粘贴板");
         }

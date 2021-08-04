@@ -33,7 +33,7 @@ import java.net.HttpURLConnection;
 import java.util.HashSet;
 
 import gov.anzong.androidnga.R;
-import gov.anzong.androidnga.util.ToastUtils;
+import gov.anzong.androidnga.base.util.ToastUtils;
 import sp.phone.common.PhoneConfiguration;
 import sp.phone.common.UserManagerImpl;
 import sp.phone.param.AvatarPostAction;
@@ -364,17 +364,17 @@ public class AvatarPostActivity extends BaseActivity implements
                 if (titleText.getText().toString().startsWith("http")) {
                     synchronized (commit_lock) {
                         if (loading == true) {
-                            ToastUtils.showToast(R.string.avoidWindfury);
+                            ToastUtils.info(R.string.avoidWindfury);
                             return;
                         }
                         loading = true;
                     }
                     handleReply(v);
                 } else {
-                    ToastUtils.showToast("请输入正确的头像URL地址");
+                    ToastUtils.warn("请输入正确的头像URL地址");
                 }
             } else {
-                ToastUtils.showToast("请输入正确的头像URL地址");
+                ToastUtils.warn("请输入正确的头像URL地址");
             }
         }
 
@@ -509,7 +509,7 @@ public class AvatarPostActivity extends BaseActivity implements
                 if (!success)
                     keepActivity = true;
             }
-            ToastUtils.showToast("操作成功");
+            ToastUtils.success("操作成功");
             ActivityUtils.getInstance().dismiss();
             String userId = UserManagerImpl.getInstance().getUserId();
             String avatarPath = HttpUtil.PATH_AVATAR + "/" + userId + ".jpg";

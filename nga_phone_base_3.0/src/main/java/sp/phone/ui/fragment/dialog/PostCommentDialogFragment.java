@@ -10,7 +10,7 @@ import android.widget.EditText;
 import java.lang.reflect.Field;
 
 import gov.anzong.androidnga.R;
-import gov.anzong.androidnga.util.ToastUtils;
+import gov.anzong.androidnga.base.util.ToastUtils;
 import sp.phone.task.PostCommentTask;
 import sp.phone.util.NLog;
 
@@ -41,7 +41,7 @@ public class PostCommentDialogFragment extends BaseDialogFragment implements
                                 getActivity(), PostCommentDialogFragment.this)
                                 .execute(input.getText().toString());
                     } else {
-                        ToastUtils.showShortToast("贴条内容长度必须在6~650字节范围内");
+                        ToastUtils.warn("贴条内容长度必须在6~650字节范围内");
                     }
                     try {
                         Field field = dialog.getClass().getSuperclass()
@@ -68,7 +68,8 @@ public class PostCommentDialogFragment extends BaseDialogFragment implements
 
     @Override
     public void OnPostCommentFinished(String result, boolean success) {
-        ToastUtils.showShortToast(result);
+        //todo 用正确格式显示result
+        ToastUtils.flat(result);
         if (getActivity() != null) {
             if (success) {
                 NLog.i("TAG", "SUCCESS");

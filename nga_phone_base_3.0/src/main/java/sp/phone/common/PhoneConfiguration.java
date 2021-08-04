@@ -99,7 +99,7 @@ public class PhoneConfiguration implements PreferenceKey, SharedPreferences.OnSh
 
     private static class PhoneConfigurationHolder {
 
-        private static PhoneConfiguration sInstance = new PhoneConfiguration();
+        private static final PhoneConfiguration sInstance = new PhoneConfiguration();
     }
 
     public static PhoneConfiguration getInstance() {

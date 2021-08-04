@@ -6,8 +6,6 @@ import android.net.Uri;
 import android.text.TextUtils;
 
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import gov.anzong.androidnga.activity.ArticleListActivity;
 import gov.anzong.androidnga.activity.TopicListActivity;
@@ -52,7 +50,7 @@ public class BoardPresenter extends BasePresenter<NavigationDrawerFragment, Boar
     @Override
     public boolean addBoard(String fidStr, String name, String stidStr) {
         if (name.equals("")) {
-            ToastUtils.showToast("请输入版面名称");
+            ToastUtils.info("请输入版面名称");
             return false;
         } else {
             int fid = 0;
@@ -69,7 +67,7 @@ public class BoardPresenter extends BasePresenter<NavigationDrawerFragment, Boar
                 addBookmarkBoard(fid, stid, name);
                 return true;
             } catch (NumberFormatException e) {
-                ToastUtils.showToast("请输入正确的版面ID或者合集ID");
+                ToastUtils.info("请输入正确的版面ID或者合集ID");
                 return false;
             }
 
@@ -81,7 +79,7 @@ public class BoardPresenter extends BasePresenter<NavigationDrawerFragment, Boar
         if (userList != null && userList.size() > 1) {
             int index = mBaseView.switchToNextUser();
             mUserManager.setActiveUser(index);
-            ToastUtils.showToast("切换账户成功,当前账户名:" + mUserManager.getActiveUser().getNickName());
+            ToastUtils.info("切换账户成功,当前账户名:" + mUserManager.getActiveUser().getNickName());
         } else {
             mBaseView.jumpToLogin();
         }
@@ -108,7 +106,7 @@ public class BoardPresenter extends BasePresenter<NavigationDrawerFragment, Boar
         }
         if (fid == 0) {
             String tip = fidString + "绝对不存在";
-            ToastUtils.showToast(tip);
+            ToastUtils.info(tip);
             return;
         }
 
@@ -180,7 +178,7 @@ public class BoardPresenter extends BasePresenter<NavigationDrawerFragment, Boar
     @Override
     public void addBookmarkBoard(int fid, int stid, String name) {
         if (mBaseModel.isBookmark(fid, stid)) {
-            ToastUtils.showToast("该版面已存在");
+            ToastUtils.info("该版面已存在");
         } else {
             mBaseModel.addBookmark(fid, stid, name);
             mBaseView.notifyDataSetChanged();

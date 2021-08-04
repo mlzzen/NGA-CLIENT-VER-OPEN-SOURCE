@@ -13,7 +13,7 @@ import android.view.MenuItem;
 import android.widget.EditText;
 
 import gov.anzong.androidnga.R;
-import gov.anzong.androidnga.util.ToastUtils;
+import gov.anzong.androidnga.base.util.ToastUtils;
 import sp.phone.common.UserManagerImpl;
 import sp.phone.param.SignPostParam;
 import gov.anzong.androidnga.http.OnHttpCallBack;
@@ -89,9 +89,9 @@ public class SignPostActivity extends BaseActivity {
     private void postSign() {
         String bodyText = mBodyText.getText().toString();
         if (StringUtils.isEmpty(bodyText)) {
-            ToastUtils.showToast("请输入内容");
+            ToastUtils.warn("请输入内容");
         } else if (mPostTask != null && mPostTask.isRunning()) {
-            ToastUtils.showToast(R.string.avoidWindfury);
+            ToastUtils.info(R.string.avoidWindfury);
         } else {
             if (mPostTask == null) {
                 mPostTask = new SignPostTask();
@@ -100,12 +100,12 @@ public class SignPostActivity extends BaseActivity {
             mPostTask.execute(mPostParam, new OnHttpCallBack<String>() {
                 @Override
                 public void onError(String text) {
-                    ActivityUtils.showToast(text);
+                    ToastUtils.error(text);
                 }
 
                 @Override
                 public void onSuccess(String data) {
-                    ActivityUtils.showToast(data);
+                    ToastUtils.success(data);
                     Intent intent = new Intent();
                     intent.putExtra("sign", mPostParam.getSign());
                     setResult(Activity.RESULT_OK, intent);

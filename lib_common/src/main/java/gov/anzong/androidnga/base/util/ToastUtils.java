@@ -12,28 +12,11 @@ import es.dmoral.toasty.Toasty;
  */
 public class ToastUtils {
 
-    @Deprecated
-    public static void showShortToast(String text) {
-        info(text);
-    }
 
-    @Deprecated
-    public static void showShortToast(@StringRes int strId) {
-        showShortToast(ContextUtils.getString(strId));
-    }
 
-    @Deprecated
-    public static void showToast(String text) {
-        showShortToast(text);
-    }
 
-    public static void show(String text) {
+    public static void flat(String text) {
         ThreadUtils.runOnMainThread(() -> Toast.makeText(ContextUtils.getContext(), text, Toast.LENGTH_SHORT).show());
-    }
-
-    @Deprecated
-    public static void showToast(@StringRes int strId) {
-        showShortToast(strId);
     }
 
     public static void success(@StringRes int id) {

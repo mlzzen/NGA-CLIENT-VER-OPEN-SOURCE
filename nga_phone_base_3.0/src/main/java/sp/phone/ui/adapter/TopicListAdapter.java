@@ -65,8 +65,7 @@ public class TopicListAdapter extends BaseAppendableAdapter<ThreadPageInfo, Topi
         holder.author.setText(entry.getAuthor());
         holder.lastReply.setText(entry.getLastPoster());
         holder.num.setText(String.valueOf(entry.getReplies()));
-        if(entry.getReplies()>99)
-            holder.num.setTextAppearance(R.style.bold_text);
+        holder.num.setTextAppearance(entry.getReplies()>99?R.style.text_style_bold:R.style.text_style_normal);
         holder.title.setText(TopicTitleHelper.handleTitleFormat(entry));
     }
 

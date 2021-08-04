@@ -1,7 +1,6 @@
 package gov.anzong.androidnga;
 
 import android.app.Application;
-import android.os.Process;
 import android.webkit.WebView;
 
 import com.alibaba.android.arouter.launcher.ARouter;
@@ -10,7 +9,6 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import gov.anzong.androidnga.base.util.ContextUtils;
 import gov.anzong.androidnga.base.util.PreferenceUtils;
 import gov.anzong.androidnga.common.PreferenceKey;
-import gov.anzong.androidnga.common.util.ReflectUtils;
 import sp.phone.common.FilterKeywordsManagerImpl;
 import sp.phone.common.UserManagerImpl;
 import sp.phone.common.VersionUpgradeHelper;

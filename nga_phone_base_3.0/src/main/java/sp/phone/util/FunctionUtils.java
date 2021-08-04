@@ -41,7 +41,6 @@ import gov.anzong.androidnga.Utils;
 import gov.anzong.androidnga.base.util.ToastUtils;
 import gov.anzong.androidnga.core.data.HtmlData;
 import gov.anzong.androidnga.core.decode.ForumDecoder;
-import gov.anzong.androidnga.util.NetUtil;
 import sp.phone.http.bean.MessageArticlePageInfo;
 import sp.phone.http.bean.ThreadRowInfo;
 import sp.phone.common.PhoneConfiguration;
@@ -87,7 +86,7 @@ public class FunctionUtils {
         if (clipboardManager != null) {
             ClipData clipData = ClipData.newPlainText(text, text);
             clipboardManager.setPrimaryClip(clipData);
-            ActivityUtils.showToast(R.string.copied_to_clipboard);
+            ToastUtils.info(R.string.copied_to_clipboard);
         }
     }
 
@@ -117,26 +116,16 @@ public class FunctionUtils {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setMessage("这白痴是系统账号,神马都看不到");
         builder.setTitle("看不到");
-        builder.setPositiveButton("关闭", new DialogInterface.OnClickListener() {
-
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // TODO Auto-generated method stub
-                dialog.dismiss();
-            }
-
+        builder.setPositiveButton("关闭", (dialog, which) -> {
+            // TODO Auto-generated method stub
+            dialog.dismiss();
         });
 
         final AlertDialog dialog = builder.create();
         dialog.show();
-        dialog.setOnDismissListener(new AlertDialog.OnDismissListener() {
-
-            @Override
-            public void onDismiss(DialogInterface arg0) {
-                // TODO Auto-generated method stub
-                dialog.dismiss();
-            }
-
+        dialog.setOnDismissListener(arg0 -> {
+            // TODO Auto-generated method stub
+            dialog.dismiss();
         });
     }
 
@@ -198,21 +187,11 @@ public class FunctionUtils {
                         FunctionUtils.signatureToHtmlText(row, showImage,
                                 ArticleUtil.showImageQuality(), fgColorStr,
                                 bgcolorStr, context), "text/html", "utf-8", null);
-        alert.setPositiveButton("关闭", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
+        alert.setPositiveButton("关闭", (dialog, which) -> dialog.dismiss());
 
         final AlertDialog dialog = alert.create();
         dialog.show();
-        dialog.setOnDismissListener(new AlertDialog.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface arg0) {
-                dialog.dismiss();
-            }
-        });
+        dialog.setOnDismissListener(arg0 -> dialog.dismiss());
     }
 
     @SuppressWarnings("unused")
@@ -238,12 +217,7 @@ public class FunctionUtils {
         final WebView contentTV = (WebView) view.findViewById(R.id.votewebview);
         contentTV.setBackgroundColor(0);
         contentTV.setLongClickable(false);
-        contentTV.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                return true;
-            }
-        });
+        contentTV.setOnLongClickListener(view1 -> true);
         ((Activity) context).getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         boolean showImage = PhoneConfiguration.getInstance().isDownImgNoWifi()
                 || NetUtil.getInstance().isInWifi();
@@ -264,20 +238,16 @@ public class FunctionUtils {
             public void onProgressChanged(WebView view, int newProgress) {
                 super.onProgressChanged(view, newProgress);
                 view.requestFocus(View.FOCUS_DOWN);
-                view.setOnTouchListener(new View.OnTouchListener() {
-                    @SuppressLint("ClickableViewAccessibility")
-                    @Override
-                    public boolean onTouch(View v, MotionEvent event) {
-                        switch (event.getAction()) {
-                            case MotionEvent.ACTION_DOWN:
-                            case MotionEvent.ACTION_UP:
-                                if (!v.hasFocus()) {
-                                    v.requestFocus(View.FOCUS_DOWN);
-                                }
-                                break;
-                        }
-                        return false;
+                view.setOnTouchListener((v, event) -> {
+                    switch (event.getAction()) {
+                        case MotionEvent.ACTION_DOWN:
+                        case MotionEvent.ACTION_UP:
+                            if (!v.hasFocus()) {
+                                v.requestFocus(View.FOCUS_DOWN);
+                            }
+                            break;
                     }
+                    return false;
                 });
             }
 
@@ -287,13 +257,7 @@ public class FunctionUtils {
                 final AlertDialog.Builder b2 = new AlertDialog.Builder(context)
                         .setMessage(message)
                         .setPositiveButton("确定",
-                                new AlertDialog.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog,
-                                                        int which) {
-                                        result.confirm();
-                                    }
-                                });
+                                (dialog, which) -> result.confirm());
 
                 b2.setCancelable(false);
                 b2.create();
@@ -308,28 +272,11 @@ public class FunctionUtils {
                         context)
                         .setMessage(message)
                         .setPositiveButton("确定",
-                                new AlertDialog.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog,
-                                                        int which) {
-                                        result.confirm();
-                                    }
-                                })
+                                (dialog, which) -> result.confirm())
                         .setNeutralButton("取消",
-                                new AlertDialog.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog,
-                                                        int which) {
-                                        result.cancel();
-                                    }
-                                })
+                                (dialog, which) -> result.cancel())
                         .setOnCancelListener(
-                                new AlertDialog.OnCancelListener() {
-                                    @Override
-                                    public void onCancel(DialogInterface dialog) {
-                                        result.cancel();
-                                    }
-                                });
+                                dialog -> result.cancel());
                 b1.create();
                 b1.show();
                 return true;
@@ -341,22 +288,12 @@ public class FunctionUtils {
                 FunctionUtils.VoteToHtmlText(row, showImage, ArticleUtil.showImageQuality(),
                         fgColorStr, bgcolorStr), "text/html", "utf-8", null);
         contentTV.requestLayout();
-        alert.setPositiveButton("关闭", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
+        alert.setPositiveButton("关闭", (dialog, which) -> dialog.dismiss());
 
         final Dialog dialog = alert.create();
         dialog.show();
         dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
-        dialog.setOnDismissListener(new AlertDialog.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface arg0) {
-                dialog.dismiss();
-            }
-        });
+        dialog.setOnDismissListener(arg0 -> dialog.dismiss());
     }
 
     public static void handleNickName(MessageArticlePageInfo row, int fgColor,

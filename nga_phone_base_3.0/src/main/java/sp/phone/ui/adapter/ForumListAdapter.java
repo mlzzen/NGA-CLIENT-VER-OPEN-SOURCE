@@ -15,7 +15,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import gov.anzong.androidnga.R;
 import gov.anzong.androidnga.base.util.ContextUtils;
-import gov.anzong.androidnga.util.GlideApp;
+import gov.anzong.androidnga.GlideApp;
 import sp.phone.common.ApiConstants;
 import sp.phone.common.PhoneConfiguration;
 import sp.phone.mvp.model.ForumsListModel;

@@ -153,13 +153,13 @@ public class TopicListFragment extends TopicSearchFragment {
                 mPresenter.addBookmarkBoard(board);
                 item.setVisible(false);
                 mOptionMenu.findItem(R.id.menu_remove_bookmark).setVisible(true);
-                ToastUtils.showToast(R.string.toast_add_bookmark_board);
+                ToastUtils.info(R.string.toast_add_bookmark_board);
                 break;
             case R.id.menu_remove_bookmark:
                 mPresenter.removeBookmarkBoard(mRequestParam.fid, mRequestParam.stid);
                 item.setVisible(false);
                 mOptionMenu.findItem(R.id.menu_add_bookmark).setVisible(true);
-                ToastUtils.showToast(R.string.toast_remove_bookmark_board);
+                ToastUtils.info(R.string.toast_remove_bookmark_board);
                 break;
             case R.id.menu_sub_board:
                 showSubBoardList();

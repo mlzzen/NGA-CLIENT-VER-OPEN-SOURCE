@@ -15,7 +15,8 @@ public interface LoginContract {
 
         void login(String userName, String password, String authCode);
 
-        void parseCookie(String cookie);
+        //返回值表示是否成功获取用户信息
+        boolean parseCookie(String cookie);
 
     }
 

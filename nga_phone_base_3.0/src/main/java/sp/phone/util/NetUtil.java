@@ -1,11 +1,12 @@
-package gov.anzong.androidnga.util;
+package sp.phone.util;
 
+import android.app.Application;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
 import gov.anzong.androidnga.base.util.ContextUtils;;
-import gov.anzong.androidnga.base.util.ContextUtils;;
+;
 
 /**
  * Created by elrond on 2016/12/22.
@@ -17,14 +18,14 @@ public class NetUtil {
 
     public static NetUtil getInstance() {
         if (mInstance == null) {
-            mInstance = new NetUtil(ContextUtils.getContext());
+            mInstance = new NetUtil(ContextUtils.getApplication());
         }
         return mInstance;
     }
 
-    private Context context;
+    private final Application context;
 
-    private NetUtil(Context context) {
+    private NetUtil(Application context) {
         this.context = context;
     }
 

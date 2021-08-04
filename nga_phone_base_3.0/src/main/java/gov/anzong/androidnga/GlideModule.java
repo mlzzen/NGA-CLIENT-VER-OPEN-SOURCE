@@ -1,4 +1,4 @@
-package gov.anzong.androidnga.util;
+package gov.anzong.androidnga;
 
 import android.app.ActivityManager;
 import android.content.Context;
@@ -6,22 +6,23 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 
 import com.bumptech.glide.GlideBuilder;
-import com.bumptech.glide.annotation.GlideModule;
 import com.bumptech.glide.load.DecodeFormat;
-import com.bumptech.glide.load.engine.cache.ExternalPreferredCacheDiskCacheFactory;
-import com.bumptech.glide.load.engine.cache.InternalCacheDiskCacheFactory;
+import com.bumptech.glide.load.engine.cache.DiskLruCacheFactory;
 import com.bumptech.glide.load.engine.cache.LruResourceCache;
 import com.bumptech.glide.module.AppGlideModule;
 import com.bumptech.glide.request.RequestOptions;
 
-/**
- * @author Justwen
- */
-@GlideModule
-public class CustomGlideModule extends AppGlideModule {
+import org.jetbrains.annotations.NotNull;
 
+/**
+ * @author Yricky
+ * @date 2021/7/25 下午10:53
+ */
+@com.bumptech.glide.annotation.GlideModule
+public class GlideModule extends AppGlideModule {
     @Override
-    public void applyOptions(Context context, @NonNull GlideBuilder builder) {
+    public void applyOptions(@NonNull @NotNull Context context, @NonNull @NotNull GlideBuilder builder) {
+        //        设置缓存大小为20mb
         ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         if (am != null) {
             int memoryCacheSize = 1024 * 1024 * am.getMemoryClass() / 3;
@@ -30,7 +31,8 @@ public class CustomGlideModule extends AppGlideModule {
         RequestOptions requestOptions = new RequestOptions();
         requestOptions = requestOptions.format(DecodeFormat.PREFER_ARGB_8888);
         builder.setDefaultRequestOptions(requestOptions);
-        builder.setDiskCache(new InternalCacheDiskCacheFactory(context));
-    }
+        int diskCacheSizeBytes = 1024 * 1024 * 32; // 32mb
+        builder.setDiskCache(new DiskLruCacheFactory(context.getExternalFilesDir("glideLruCache").getPath(), diskCacheSizeBytes));
 
+    }
 }

@@ -2,9 +2,8 @@ package sp.phone.http.bean;
 
 import java.util.List;
 
-import gov.anzong.androidnga.common.base.JavaBean;
 
-public class CategoryBean implements JavaBean {
+public class CategoryBean {
 
 
     /**

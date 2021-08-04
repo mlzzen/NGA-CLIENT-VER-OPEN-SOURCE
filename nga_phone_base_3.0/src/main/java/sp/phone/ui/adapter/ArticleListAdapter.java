@@ -28,6 +28,7 @@ import gov.anzong.androidnga.R;
 import gov.anzong.androidnga.arouter.ARouterConstants;
 import gov.anzong.androidnga.base.util.ContextUtils;
 import gov.anzong.androidnga.base.util.DeviceUtils;
+import gov.anzong.androidnga.base.util.ToastUtils;
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -179,7 +180,7 @@ public class ArticleListAdapter extends RecyclerView.Adapter<ArticleListAdapter.
                         }
                         break;
                 }
-                ActivityUtils.showToast(deviceInfo);
+                ToastUtils.info(deviceInfo);
             }
         }
     };
@@ -283,7 +284,7 @@ public class ArticleListAdapter extends RecyclerView.Adapter<ArticleListAdapter.
             ThreadRowInfo row = (ThreadRowInfo) view.getTag();
 
             if (row.getISANONYMOUS()) {
-                ActivityUtils.showToast("这白痴匿名了,神马都看不到");
+                ToastUtils.info("这白痴匿名了,神马都看不到");
             } else if (row.getAuthor() != null){
                 ARouter.getInstance()
                         .build(ARouterConstants.ACTIVITY_PROFILE)
@@ -299,7 +300,7 @@ public class ArticleListAdapter extends RecyclerView.Adapter<ArticleListAdapter.
         public void onClick(View view) {
             ThreadRowInfo row = (ThreadRowInfo) view.getTag();
             if (row.getISANONYMOUS()) {
-                ActivityUtils.showToast("这白痴匿名了,神马都看不到");
+                ToastUtils.info("这白痴匿名了,神马都看不到");
             } else {
                 Bundle bundle = new Bundle();
                 bundle.putString("name", row.getAuthor());
@@ -311,6 +312,8 @@ public class ArticleListAdapter extends RecyclerView.Adapter<ArticleListAdapter.
     };
 
     private View.OnClickListener mMenuTogglerListener;
+    private View.OnClickListener mSupportListener;
+    private View.OnClickListener mOpposeListener;
 
     public class ArticleViewHolder extends RecyclerView.ViewHolder {
 
@@ -330,6 +333,12 @@ public class ArticleListAdapter extends RecyclerView.Adapter<ArticleListAdapter.
 
         @BindView(R.id.iv_reply)
         ImageView replyBtn;
+
+        @BindView(R.id.iv_favour)
+        ImageView favourBtn;
+
+        @BindView(R.id.iv_tread)
+        ImageView treadBtn;
 
         @BindView(R.id.iv_avatar)
         ImageView avatarIv;
@@ -378,6 +387,12 @@ public class ArticleListAdapter extends RecyclerView.Adapter<ArticleListAdapter.
     public void setMenuTogglerListener(View.OnClickListener menuTogglerListener) {
         mMenuTogglerListener = menuTogglerListener;
     }
+    public void setSupportListener(View.OnClickListener listener) {
+        mSupportListener = listener;
+    }
+    public void setOpposeListener(View.OnClickListener listener) {
+        mOpposeListener = listener;
+    }
 
     @Override
     public int getItemViewType(int position) {
@@ -403,6 +418,8 @@ public class ArticleListAdapter extends RecyclerView.Adapter<ArticleListAdapter.
         RxUtils.clicks(viewHolder.clientIv, mOnClientClickListener);
         RxUtils.clicks(viewHolder.menuIv, mMenuTogglerListener);
         RxUtils.clicks(viewHolder.avatarPanel, mOnAvatarClickListener);
+        RxUtils.clicks(viewHolder.favourBtn,mSupportListener);
+        RxUtils.clicks(viewHolder.treadBtn,mOpposeListener);
         viewHolder.contentTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, PhoneConfiguration.getInstance().getTopicContentSize());
         // viewHolder.contentTV.setTextSize(PhoneConfiguration.getInstance().getTopicContentSize());
         return viewHolder;
@@ -425,6 +442,8 @@ public class ArticleListAdapter extends RecyclerView.Adapter<ArticleListAdapter.
         holder.nickNameTV.setTag(row);
         holder.menuIv.setTag(row);
         holder.avatarPanel.setTag(row);
+        holder.favourBtn.setTag(row);
+        holder.treadBtn.setTag(row);
 
         onBindAvatarView(holder.avatarIv, row);
         onBindDeviceType(holder.clientIv, row);
@@ -435,8 +454,8 @@ public class ArticleListAdapter extends RecyclerView.Adapter<ArticleListAdapter.
 
         holder.floorTv.setText(MessageFormat.format("[{0} 楼]", String.valueOf(row.getLou())));
         holder.postTimeTv.setText(row.getPostdate());
-        holder.scoreTv.setText(MessageFormat.format("顶 : {0}", row.getScore()));
-
+        holder.scoreTv.setText(MessageFormat.format("{0}", row.getScore()));
+        //todo 赞多加粗
         holder.detailTv.setText(String.format("级别：%s   威望：%s   发帖：%s", row.getMemberGroup(), row.getReputation(), row.getPostCount()));
 
     }

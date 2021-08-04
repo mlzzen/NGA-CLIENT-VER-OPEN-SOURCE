@@ -10,7 +10,8 @@ import androidx.appcompat.app.AppCompatDialogFragment;
 import android.view.View;
 import android.widget.Button;
 
-import gov.anzong.androidnga.util.ToastUtils;
+
+import gov.anzong.androidnga.base.util.ToastUtils;
 import sp.phone.util.NLog;
 
 /**
@@ -21,7 +22,7 @@ public abstract class BaseDialogFragment extends AppCompatDialogFragment impleme
 
     public void showToast(String toast) {
         if (getContext() != null) {
-            ToastUtils.showToast(toast);
+            ToastUtils.flat(toast);
         }
     }
 

@@ -15,7 +15,7 @@ public class Constants {
     public static final int AVATAR_SIZE_MIN = 1;
     public static final int AVATAR_SIZE_MAX = 140;
 
-    public static final int EMOTICON_SIZE_DEFAULT = 150;
+    public static final int EMOTICON_SIZE_DEFAULT = 64;
     public static final int EMOTICON_SIZE_MIN = 1;
     public static final int EMOTICON_SIZE_MAX = 200;
 
