@@ -116,7 +116,7 @@
             android:layout_height="24dp"
             android:layout_marginEnd="4dp"
             android:padding="3dp"
-            android:background="?android:attr/selectableItemBackground"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
             android:src="@drawable/ic_baseline_thumb_up_24" />
 
         <TextView
@@ -131,7 +131,7 @@
             android:layout_height="24dp"
             android:layout_marginStart="4dp"
             android:padding="3dp"
-            android:background="?android:attr/selectableItemBackground"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
             android:src="@drawable/ic_baseline_thumb_down_24" />
 
         <ImageView
@@ -141,7 +141,7 @@
             android:layout_marginStart="4dp"
             android:contentDescription="@string/quote_subject"
             android:paddingBottom="2dp"
-            android:background="?android:attr/selectableItemBackground"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
             android:src="@drawable/ic_reply_24dp" />
 
         <ImageView
