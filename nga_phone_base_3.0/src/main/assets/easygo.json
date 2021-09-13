@@ -11,7 +11,7 @@
         "mode": "1",
         "Activities": [
           {
-            "name": "gov.anzong.androidnga.activity.WebViewerActivity",
+            "name": "gov.anzong.androidnga.activity.FullScreenWebViewActivity",
             "defaultFullScreen": "true"
           }
         ],

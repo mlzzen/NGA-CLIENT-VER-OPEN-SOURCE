@@ -56,9 +56,6 @@ public abstract class BaseFragment extends Fragment {
         }
     }
 
-    protected ActionBar getSupportActionBar() {
-        return mActivity != null ? mActivity.getSupportActionBar() : null;
-    }
 
     public void setTitle(String title) {
         mTitleStr = title;

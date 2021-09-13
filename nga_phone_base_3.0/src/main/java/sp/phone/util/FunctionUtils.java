@@ -529,7 +529,7 @@ public class FunctionUtils {
         int i;
         boolean mode = false;
         content = content.trim();
-        String quotekeyword[][] = {
+        String[][] quoteKeyword = {
                 {"[customachieve]", "[/customachieve]"},// 0
                 {"[wow", "]]"},
                 {"[lol", "]]"},
@@ -572,21 +572,20 @@ public class FunctionUtils {
             content = content.substring(0, 99);
             mode = true;
         }
-        for (i = 0; i < 38; i++) {
-            while (content.toLowerCase().lastIndexOf(quotekeyword[i][0]) > content
-                    .toLowerCase().lastIndexOf(quotekeyword[i][1])) {
+        for (i = 0; i < quoteKeyword.length; i++) {
+            while (content.toLowerCase().lastIndexOf(quoteKeyword[i][0]) > content
+                    .toLowerCase().lastIndexOf(quoteKeyword[i][1])) {
                 content = content.substring(0, content.toLowerCase()
-                        .lastIndexOf(quotekeyword[i][0]));
+                        .lastIndexOf(quoteKeyword[i][0]));
             }
         }
         if (mode) {
             content = content + "......";
         }
-        return content.toString();
+        return content;
     }
 
 
-    @SuppressWarnings("unused")
     public static String ColorTxt(String bodyString) {
         while (bodyString.startsWith("\n")) {
             bodyString = bodyString.substring(1);
@@ -600,8 +599,8 @@ public class FunctionUtils {
         bslenth = bodyString.length();
 
 
-        String scolor[] = {"[color=skyblue]", "[color=royalblue]", "[color=blue]", "[color=darkblue]", "[color=orange]", "[color=orangered]", "[color=crimson]", "[color=red]", "[color=firebrick]", "[color=darkred]", "[color=green]", "[color=limegreen]", "[color=seagreen]", "[color=teal]", "[color=deeppink]", "[color=tomato]", "[color=coral]", "[color=purple]", "[color=indigo]", "[color=burlywood]", "[color=sandybrown]", "[color=sienna]", "[color=chocolate]", "[color=silver]"};
-        String keyword[][] = {
+        String[] scolor = {"[color=skyblue]", "[color=royalblue]", "[color=blue]", "[color=darkblue]", "[color=orange]", "[color=orangered]", "[color=crimson]", "[color=red]", "[color=firebrick]", "[color=darkred]", "[color=green]", "[color=limegreen]", "[color=seagreen]", "[color=teal]", "[color=deeppink]", "[color=tomato]", "[color=coral]", "[color=purple]", "[color=indigo]", "[color=burlywood]", "[color=sandybrown]", "[color=sienna]", "[color=chocolate]", "[color=silver]"};
+        String[][] keyword = {
                 {"[customachieve]", "[/customachieve]", "16"},
                 {"[wow", "]]", "2"},
                 {"[lol", "]]", "2"},
@@ -659,11 +658,11 @@ public class FunctionUtils {
                 {"[collapse", "]", "1"},
                 {"[/collapse]", "[/collapse]", "11"}};
         char[] arrtxtchar = bodyString.toCharArray();
-        String txtsendout = scolor[(int) (Math.random() * 23)];
+        StringBuilder txtsendout = new StringBuilder(scolor[(int) (Math.random() * 23)]);
         String quotetxt = "";
         for (i = 0; i < bslenth; i++) {
-            if (Character.toString(arrtxtchar[i]).equals("\n") == false && Character.toString(arrtxtchar[i]).equals("[") == false && Character.toString(arrtxtchar[i]).equals(" ") == false) {
-                txtsendout += arrtxtchar[i] + "[/color]" + scolor[(int) (Math.random() * 23)];/*开始就是普通文字的话就直接加彩色字体了*/
+            if (!Character.toString(arrtxtchar[i]).equals("\n") && !Character.toString(arrtxtchar[i]).equals("[") && !Character.toString(arrtxtchar[i]).equals(" ")) {
+                txtsendout.append(arrtxtchar[i]).append("[/color]").append(scolor[(int) (Math.random() * 23)]);/*开始就是普通文字的话就直接加彩色字体了*/
             } else if (Character.toString(arrtxtchar[i]).equals("[")) {//首字符是[要判断
                 if (bodyString.toLowerCase().indexOf("[quote]", i - 1) == i) {//是引用的话
                     if (bodyString.toLowerCase().indexOf("[quote]", i - 1) > bodyString.toLowerCase().indexOf("[/quote]", i - 1)) {//这个他妈的引用没完
@@ -675,23 +674,23 @@ public class FunctionUtils {
                             quotetxt = quotetxt.substring(0, quotetxt.length() - 1);
                         }
                         bslenth = bodyString.length();
-                        txtsendout = txtsendout.substring(0, txtsendout.toLowerCase().lastIndexOf("[color"));
+                        txtsendout = new StringBuilder(txtsendout.substring(0, txtsendout.toString().toLowerCase().lastIndexOf("[color")));
                         quotetxt = "[quote]" + FunctionUtils.checkContent(quotetxt) + "[/quote]";
-                        txtsendout += quotetxt + scolor[(int) (Math.random() * 23)];
+                        txtsendout.append(quotetxt).append(scolor[(int) (Math.random() * 23)]);
                         break;
                     } else {
                         quotetxt = bodyString.substring(i + 7, bodyString.toLowerCase().indexOf("[/quote]", i));
                         while (quotetxt.endsWith(".")) {
                             quotetxt = quotetxt.substring(0, quotetxt.length() - 1);
                         }
-                        txtsendout = txtsendout.substring(0, txtsendout.toLowerCase().lastIndexOf("[color"));
+                        txtsendout = new StringBuilder(txtsendout.substring(0, txtsendout.toString().toLowerCase().lastIndexOf("[color")));
                         quotetxt = "[quote]" + FunctionUtils.checkContent(quotetxt) + "[/quote]";
-                        txtsendout += quotetxt + scolor[(int) (Math.random() * 23)];
+                        txtsendout.append(quotetxt).append(scolor[(int) (Math.random() * 23)]);
                         i = bodyString.toLowerCase().indexOf("[/quote]", i) + 7;
                     }
                 } else if (bodyString.toLowerCase().indexOf("[color", i - 1) == i) {
                     if (bodyString.toLowerCase().indexOf("[/color]", i) >= 0) {
-                        txtsendout += bodyString.substring(bodyString.indexOf("]", i) + 1, bodyString.toLowerCase().indexOf("[/color]", i) + 8) + scolor[(int) (Math.random() * 23)];
+                        txtsendout.append(bodyString.substring(bodyString.indexOf("]", i) + 1, bodyString.toLowerCase().indexOf("[/color]", i) + 8)).append(scolor[(int) (Math.random() * 23)]);
                         i = bodyString.indexOf("[/color]", i) + 7;
                     } else {
                         bodyString = bodyString.substring(0, i) + bodyString.substring(bodyString.toLowerCase().indexOf("]", i) + 1, bslenth);
@@ -701,8 +700,8 @@ public class FunctionUtils {
                     for (ia = 0; ia < 56; ia++) {
                         if (bodyString.toLowerCase().indexOf(keyword[ia][0], i - 1) == i) {
                             if (bodyString.toLowerCase().indexOf(keyword[ia][1], i) >= 0) {
-                                txtsendout = txtsendout.substring(0, txtsendout.toLowerCase().lastIndexOf("[color"));
-                                txtsendout += bodyString.substring(i, bodyString.toLowerCase().indexOf(keyword[ia][1], i)) + keyword[ia][1] + scolor[(int) (Math.random() * 23)];
+                                txtsendout = new StringBuilder(txtsendout.substring(0, txtsendout.toString().toLowerCase().lastIndexOf("[color")));
+                                txtsendout.append(bodyString.substring(i, bodyString.toLowerCase().indexOf(keyword[ia][1], i))).append(keyword[ia][1]).append(scolor[(int) (Math.random() * 23)]);
                                 i = bodyString.toLowerCase().indexOf(keyword[ia][1], i) + Integer.parseInt(keyword[ia][2]) - 1;
                             } else {
                                 itmp = bodyString.indexOf("]", i);
@@ -714,15 +713,15 @@ public class FunctionUtils {
                     }
                 }
             } else if (Character.toString(arrtxtchar[i]).equals(" ") || Character.toString(arrtxtchar[i]).equals("\n")) {
-                txtsendout = txtsendout.substring(0, txtsendout.toLowerCase().lastIndexOf("[color"));
-                txtsendout += bodyString.substring(i, i + 1) + scolor[(int) (Math.random() * 23)];
+                txtsendout = new StringBuilder(txtsendout.substring(0, txtsendout.toString().toLowerCase().lastIndexOf("[color")));
+                txtsendout.append(bodyString.substring(i, i + 1)).append(scolor[(int) (Math.random() * 23)]);
             }
         }
-        if (txtsendout.toLowerCase().lastIndexOf("[color") >= 0) {
-            txtsendout = txtsendout.substring(0, txtsendout.toLowerCase().lastIndexOf("[color"));
+        if (txtsendout.toString().toLowerCase().lastIndexOf("[color") >= 0) {
+            txtsendout = new StringBuilder(txtsendout.substring(0, txtsendout.toString().toLowerCase().lastIndexOf("[color")));
         }
-        txtsendout = existquotetxt + txtsendout.replaceAll("&nbsp;", " ").trim();
-        return txtsendout.toString();
+        txtsendout = new StringBuilder(existquotetxt + txtsendout.toString().replaceAll("&nbsp;", " ").trim());
+        return txtsendout.toString().toString();
     }
 
     public static String ColorTxtCheck(String text) {
@@ -732,15 +731,14 @@ public class FunctionUtils {
         } else {
             xxtp = text;
         }
-        return xxtp.toString();
+        return xxtp;
     }
 
     public static String getPath(final Context context, final Uri uri) {
 
-        final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
 
         // DocumentProvider
-        if (isKitKat && DocumentsContract.isDocumentUri(context, uri)) {
+        if (DocumentsContract.isDocumentUri(context, uri)) {
             // ExternalStorageProvider
             if (isExternalStorageDocument(uri)) {
                 final String docId = DocumentsContract.getDocumentId(uri);
@@ -832,25 +830,6 @@ public class FunctionUtils {
     public static boolean isMediaDocument(Uri uri) {
         return "com.android.providers.media.documents".equals(uri
                 .getAuthority());
-    }
-
-    public static String getngaClientChecksum(Context context) {
-        String str = null;
-        String secret = context
-                .getString(R.string.checksecret);
-        try {
-            str = MD5Util.MD5(new StringBuilder(String
-                    .valueOf(UserManagerImpl.getInstance().getUserId()))
-                    .append(secret).append(System.currentTimeMillis() / 1000L)
-                    .toString())
-                    + System.currentTimeMillis() / 1000L;
-            return str;
-        } catch (Exception localException) {
-            while (true)
-                str = MD5Util.MD5(new StringBuilder(secret).append(
-                        System.currentTimeMillis() / 1000L).toString())
-                        + System.currentTimeMillis() / 1000L;
-        }
     }
 
     public static void share(Context context, String title, String content) {

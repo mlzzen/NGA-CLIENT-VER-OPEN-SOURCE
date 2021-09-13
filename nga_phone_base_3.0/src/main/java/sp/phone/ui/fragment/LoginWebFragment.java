@@ -55,7 +55,7 @@ public class LoginWebFragment extends BaseFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         mLoginPresenter = new LoginPresenter();
         super.onCreate(savedInstanceState);
-
+        CookieManager.getInstance().removeAllCookies(null);
         ToastUtils.info("不支持QQ和微博登录");
     }
 
@@ -163,7 +163,6 @@ public class LoginWebFragment extends BaseFragment {
                 mActivity.setResult(Activity.RESULT_OK);
                 mActivity.finish();
             }
-            CookieManager.getInstance().removeAllCookies(null);
         }
     }
 }

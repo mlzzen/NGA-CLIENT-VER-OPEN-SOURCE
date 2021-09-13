@@ -1,136 +1,100 @@
-package sp.phone.ui.fragment;
+package sp.phone.ui.fragment
 
+import android.widget.SeekBar.OnSeekBarChangeListener
+import sp.phone.common.PhoneConfiguration
+import android.webkit.WebView
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import android.os.Bundle
+import android.view.View
+import gov.anzong.androidnga.R
+import android.widget.SeekBar
+import sp.phone.common.Constants
 
-import android.graphics.Color;
-import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.webkit.WebView;
-
-import com.zhouyou.view.seekbar.SignSeekBar;
-
-import gov.anzong.androidnga.R;
-import gov.anzong.androidnga.base.widget.SeekBarEx;
-import gov.anzong.androidnga.common.util.FileUtils;
-import sp.phone.common.Constants;
-import sp.phone.common.PhoneConfiguration;
-
-public class SettingsSizeFragment extends BaseFragment implements  SignSeekBar.OnProgressChangedListener {
-
-    private PhoneConfiguration mConfiguration = PhoneConfiguration.getInstance();
-
-    private WebView mWebView;
-
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_settings_size, container, false);
-        initView(rootView);
-        return rootView;
+class SettingsSizeFragment : BaseFragment(), OnSeekBarChangeListener {
+    private val mConfiguration = PhoneConfiguration.getInstance()
+    private var mWebView: WebView? = null
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val rootView = inflater.inflate(R.layout.fragment_settings_size, container, false)
+        initView(rootView)
+        return rootView
     }
 
-    @Override
-    public void onResume() {
-        getActivity().setTitle(R.string.setting_title_size);
-        super.onResume();
+    override fun onResume() {
+        activity?.setTitle(R.string.setting_title_size)
+        super.onResume()
     }
 
-    private void initView(View rootView) {
-        initFontSizeView(rootView);
-        initAvatarSizeView(rootView);
-        initWebFontSizeView(rootView);
-        initEmotionSizeView(rootView);
-
+    private fun initView(rootView: View) {
+        initFontSizeView(rootView)
+        initAvatarSizeView(rootView)
+        initWebFontSizeView(rootView)
+        initEmotionSizeView(rootView)
     }
 
-    private void initFontSizeView(View rootView) {
-        SeekBarEx seekBar = rootView.findViewById(R.id.seek_topic_title);
-        seekBar.getConfigBuilder()
-                .max(Constants.TOPIC_TITLE_SIZE_MAX)
-                .min(Constants.TOPIC_TITLE_SIZE_MIN)
-                .progress(mConfiguration.getTopicTitleSize())
-                .sectionCount(Constants.TOPIC_TITLE_SIZE_MAX - Constants.TOPIC_TITLE_SIZE_MIN)
-                .build();
-        seekBar.setOnProgressChangedListener(this);
+    private fun initFontSizeView(rootView: View) {
+        val seekBar = rootView.findViewById<SeekBar>(R.id.seek_topic_title)
+        seekBar.apply {
+            max = Constants.TOPIC_TITLE_SIZE_MAX
+            min = Constants.TOPIC_CONTENT_SIZE_MIN
+            progress = mConfiguration.topicContentSize
+        }
+        seekBar.setOnSeekBarChangeListener(this)
     }
 
-    private void initWebFontSizeView(View rootView) {
-        SeekBarEx seekBar = rootView.findViewById(R.id.seek_web_size);
-        int max = 100;
-        int min = 1;
-        int size = mConfiguration.getWebViewTextZoom();
-        seekBar.getConfigBuilder()
-                .max(max)
-                .min(min)
-                .progress(size)
-                .sectionCount(max - min)
-                .build();
-        seekBar.setOnProgressChangedListener(this);
+    private fun initWebFontSizeView(rootView: View) {
+        val seekBar: SeekBar = rootView.findViewById(R.id.seek_web_size)
 
-        mWebView = rootView.findViewById(R.id.webview);
-        mWebView.loadUrl("file:///android_asset/html/adjust_size.html");
+        seekBar.apply {
+            max = 100
+            min = 1
+            progress = mConfiguration.webViewTextZoom
+        }
+        seekBar.setOnSeekBarChangeListener(this)
+        mWebView = rootView.findViewById(R.id.webview)
+        mWebView?.loadUrl("file:///android_asset/html/adjust_size.html")
     }
 
-    private void initAvatarSizeView(View rootView) {
-        SeekBarEx seekBar = rootView.findViewById(R.id.seek_avatar);
-        seekBar.getConfigBuilder()
-                .max(Constants.AVATAR_SIZE_MAX)
-                .min(Constants.AVATAR_SIZE_MIN)
-                .progress(mConfiguration.getAvatarSize())
-                .sectionCount(Constants.AVATAR_SIZE_MAX - Constants.AVATAR_SIZE_MIN)
-                .build();
-        seekBar.setOnProgressChangedListener(this);
+    private fun initAvatarSizeView(rootView: View) {
+        val seekBar: SeekBar = rootView.findViewById(R.id.seek_avatar)
+
+        seekBar.apply{
+            max= Constants.AVATAR_SIZE_MAX
+            min = Constants.AVATAR_SIZE_MIN
+            progress = mConfiguration.avatarSize
+        }
+        seekBar.setOnSeekBarChangeListener(this)
     }
 
-    private void initEmotionSizeView(View rootView) {
-        SeekBarEx seekBar = rootView.findViewById(R.id.seek_emoticon);
-        int max = Constants.EMOTICON_SIZE_MAX;
-        int min = Constants.EMOTICON_SIZE_MIN;
-        seekBar.getConfigBuilder()
-                .max(max)
-                .min(min)
-                .progress(mConfiguration.getEmoticonSize())
-                .sectionCount(max - min)
-                .build();
-        seekBar.setOnProgressChangedListener(this);
+    private fun initEmotionSizeView(rootView: View) {
+        val seekBar: SeekBar = rootView.findViewById(R.id.seek_emoticon)
+
+        seekBar.apply {
+            max = Constants.EMOTICON_SIZE_MAX
+            min = Constants.EMOTICON_SIZE_MIN
+            progress = mConfiguration.emoticonSize
+        }
+        seekBar.setOnSeekBarChangeListener(this)
     }
 
-    @Override
-    public void onProgressChanged(SignSeekBar signSeekBar, int progress, float progressFloat, boolean fromUser) {
-        switch (signSeekBar.getId()) {
-            case R.id.seek_web_size:
-                mWebView.getSettings().setTextZoom(progress);
-                break;
-            default:
-                break;
+    override fun onProgressChanged(signSeekBar: SeekBar, progress: Int, fromUser: Boolean) {
+        when (signSeekBar.id) {
+            R.id.seek_web_size -> {
+                mWebView!!.settings.textZoom = progress
+                mConfiguration.webViewTextZoom = progress
+            }
+            R.id.seek_topic_title -> mConfiguration.setTopicTitleSize(progress)
+            R.id.seek_avatar -> mConfiguration.avatarSize = progress
+            R.id.seek_emoticon -> mConfiguration.emoticonSize = progress
+            else -> {
+            }
         }
     }
 
-    @Override
-    public void getProgressOnActionUp(SignSeekBar signSeekBar, int progress, float progressFloat) {
-        switch (signSeekBar.getId()) {
-            case R.id.seek_topic_title:
-                mConfiguration.setTopicTitleSize(progress);
-                break;
-            case R.id.seek_avatar:
-                mConfiguration.setAvatarSize(progress);
-                break;
-            case R.id.seek_emoticon:
-                mConfiguration.setEmoticonSize(progress);
-                break;
-            case R.id.seek_web_size:
-                mConfiguration.setWebViewTextZoom(progress);
-                break;
-            default:
-                break;
-        }
-    }
-
-    @Override
-    public void getProgressOnFinally(SignSeekBar signSeekBar, int progress, float progressFloat, boolean fromUser) {
-
-
-    }
+    override fun onStartTrackingTouch(seekBar: SeekBar) {}
+    override fun onStopTrackingTouch(seekBar: SeekBar) {}
 }

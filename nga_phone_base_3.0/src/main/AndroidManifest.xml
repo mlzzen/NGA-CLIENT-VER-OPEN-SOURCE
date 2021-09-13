@@ -179,7 +179,8 @@
         </activity>
         <activity android:name=".gallery.ImageZoomActivity" />
         <activity android:name=".activity.ForumListActivity" />
-        <activity android:name=".activity.WebViewerActivity" />
+        <activity android:name=".activity.WebViewActivity" />
+        <activity android:name=".activity.FullScreenWebViewActivity" />
         <activity android:name=".activity.RecentNotificationActivity" />
         <activity android:name=".activity.LauncherSubActivity" />
         <activity

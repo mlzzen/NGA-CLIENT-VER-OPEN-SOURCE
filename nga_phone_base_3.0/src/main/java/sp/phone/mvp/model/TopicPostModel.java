@@ -6,6 +6,8 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.ParcelFileDescriptor;
 
+import androidx.annotation.NonNull;
+
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.trello.rxlifecycle2.android.FragmentEvent;
@@ -26,7 +28,6 @@ import gov.anzong.androidnga.base.util.ContextUtils;
 import gov.anzong.androidnga.base.util.ToastUtils;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.MediaType;
@@ -188,12 +189,12 @@ public class TopicPostModel extends BaseModel implements TopicPostContract.Model
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseSubscriber<MultipartBody>() {
                     @Override
-                    public void onNext(MultipartBody body) {
+                    public void onNext(@NonNull MultipartBody body) {
                         uploadFileInner(body, uri, postParam, callBack, compress);
                     }
 
                     @Override
-                    public void onError(Throwable throwable) {
+                    public void onError(@NonNull Throwable throwable) {
                         callBack.onError(throwable.getMessage());
                     }
                 });
@@ -210,14 +211,14 @@ public class TopicPostModel extends BaseModel implements TopicPostContract.Model
                 .compose(getLifecycleProvider().<ResponseBody>bindUntilEvent(FragmentEvent.DETACH))
                 .map(new Function<ResponseBody, String>() {
                     @Override
-                    public String apply(ResponseBody responseBody) throws Exception {
+                    public String apply(@NonNull ResponseBody responseBody) throws Exception {
                         return responseBody.string();
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseSubscriber<String>() {
                     @Override
-                    public void onNext(String s) {
+                    public void onNext(@NonNull String s) {
                         try {
                             s = s.replace("window.script_muti_get_var_store=", "");
                             JSONObject object = JSON.parseObject(s);

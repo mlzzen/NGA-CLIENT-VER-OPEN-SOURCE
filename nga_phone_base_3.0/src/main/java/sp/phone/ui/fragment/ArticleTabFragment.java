@@ -25,23 +25,20 @@ import androidx.viewpager.widget.ViewPager;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.trello.rxlifecycle2.android.FragmentEvent;
 
-import java.util.concurrent.TimeUnit;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import gov.anzong.androidnga.R;
 import gov.anzong.androidnga.Utils;
-import gov.anzong.androidnga.activity.WebViewerActivity;
+import gov.anzong.androidnga.activity.AboutActivity;
+import gov.anzong.androidnga.activity.FullScreenWebViewActivity;
+import gov.anzong.androidnga.activity.WebViewActivity;
 import gov.anzong.androidnga.base.widget.TabLayoutEx;
 import sp.phone.mvp.viewmodel.ArticleShareViewModel;
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import sp.phone.common.PhoneConfiguration;
 import sp.phone.common.UserManagerImpl;
 import sp.phone.param.ArticleListParam;
 import sp.phone.param.ParamKey;
-import sp.phone.rxjava.BaseSubscriber;
 import sp.phone.rxjava.RxBus;
 import sp.phone.rxjava.RxEvent;
 import sp.phone.task.BookmarkTask;
@@ -236,8 +233,17 @@ public class ArticleTabFragment extends BaseRxFragment {
     }
 
     private void openByBrowser(){
+        /*
+        Intent intent = new Intent(getActivity(), WebViewActivity.class);
+        intent.putExtra("path", getUrl());
+        intent.putExtra("title",getActivity().getTitle());
+        intent.putExtra("needJump",false);
+        startActivity(intent);
+
+         */
         FunctionUtils.openUrlByDefaultBrowser(mActivity,getUrl());
     }
+
 
     private void share() {
         String title = getString(R.string.share);

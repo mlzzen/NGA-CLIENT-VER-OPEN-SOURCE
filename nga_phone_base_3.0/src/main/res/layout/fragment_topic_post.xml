@@ -68,6 +68,7 @@
                 android:id="@+id/btn_emoticon"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
                 android:layout_weight="1"
                 android:background="@null"
                 android:src="@drawable/btn_ic_insert_emoticon"/>
@@ -77,21 +78,36 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:layout_gravity="bottom"
                 android:background="@null"
                 android:src="@drawable/btn_ic_text_fields"/>
-
-            <ImageButton
-                android:id="@+id/btn_attachment"
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@null"
-                android:src="@drawable/ic_image_24dp"/>
+                android:orientation="vertical"
+                android:layout_weight="1">
+                <ProgressBar
+                    android:id="@+id/progress_upload_img"
+                    android:visibility="gone"
+                    android:layout_gravity="center_horizontal"
+                    android:indeterminateTint="#FFFFFF"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"/>
+                <ImageButton
+                    android:id="@+id/btn_attachment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:src="@drawable/ic_image_24dp"/>
+            </LinearLayout>
+
 
             <ImageButton
                 android:id="@+id/btn_category"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+
                 android:layout_weight="1"
                 android:background="@null"
                 android:src="@drawable/ic_subtitles_24dp"/>
@@ -100,6 +116,8 @@
                 android:id="@+id/btn_keyboard"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+
                 android:layout_weight="1"
                 android:background="@null"
                 android:src="@drawable/ic_keyboard_24dp"/>

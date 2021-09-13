@@ -46,7 +46,7 @@ public class ThreadRowInfo {
 
     private String mMemberGroup;
 
-    private List<String> mImageUrlList = new ArrayList<>();
+    private final List<String> mImageUrlList = new ArrayList<>();
 
     public void addImageUrl(String url) {
         mImageUrlList.add(url);

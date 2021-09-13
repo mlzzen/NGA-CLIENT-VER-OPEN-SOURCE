@@ -16,7 +16,6 @@ import com.danielstone.materialaboutlibrary.model.MaterialAboutList;
 import gov.anzong.androidnga.BuildConfig;
 import gov.anzong.androidnga.R;
 import gov.anzong.androidnga.debug.Debugger;
-import sp.phone.ui.fragment.dialog.VersionUpgradeDialogFragment;
 import sp.phone.theme.ThemeManager;
 import sp.phone.util.FunctionUtils;
 
@@ -46,7 +45,7 @@ public class AboutActivity extends MaterialAboutActivity {
         builder.addItem(new MaterialAboutActionItem.Builder()
                 .text("版本")
                 .subText(BuildConfig.VERSION_NAME)
-                .icon(R.drawable.ic_about)
+                .icon(BuildConfig.VERSION_NAME.endsWith(".0")?R.drawable.ic_about_debug:R.drawable.ic_about)
                 .setOnClickAction(() -> {
                     try {
                         String url = "market://details?id=" + getPackageName();
@@ -63,7 +62,7 @@ public class AboutActivity extends MaterialAboutActivity {
                 .text("License")
                 .subText("GNU GPL v2,开放源代码许可")
                 .setOnClickAction(() -> {
-                    Intent intent = new Intent(AboutActivity.this, WebViewerActivity.class);
+                    Intent intent = new Intent(AboutActivity.this, FullScreenWebViewActivity.class);
                     intent.putExtra("path", "file:///android_asset/OSLICENSE.TXT");
                     startActivity(intent);
 
@@ -76,7 +75,7 @@ public class AboutActivity extends MaterialAboutActivity {
                 .setOnClickAction(() -> {
                     FunctionUtils.openUrlByDefaultBrowser(AboutActivity.this, "https://gitee.com/sjtuYricky/NGA-CLIENT-VER-OPEN-SOURCE/releases");
                     /*
-                    Intent intent = new Intent(AboutActivity.this, WebViewerActivity.class);
+                    Intent intent = new Intent(AboutActivity.this, WebViewActivity.class);
                     intent.putExtra("path", "https://gitee.com/sjtuYricky/NGA-CLIENT-VER-OPEN-SOURCE/releases");
                     intent.putExtra("title","更新");
                     startActivity(intent);

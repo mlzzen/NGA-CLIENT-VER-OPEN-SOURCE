@@ -15,10 +15,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 
 import gov.anzong.androidnga.R;
 import gov.anzong.androidnga.base.util.ToastUtils;
-import gov.anzong.androidnga.base.widget.ProgressBarEx;
 import sp.phone.param.ParamKey;
 import sp.phone.mvp.contract.TopicPostContract;
 import sp.phone.mvp.presenter.TopicPostPresenter;
@@ -34,9 +34,10 @@ public class TopicPostFragment extends BaseMvpFragment<TopicPostPresenter> imple
 
     private EditText mBodyEditText;
 
-    private ProgressBarEx mProgressBar;
 
     private EditText mTitleEditText;
+
+    private ProgressBar progressBar;
 
     private ToolbarContainer mToolbarContainer;
 
@@ -60,6 +61,7 @@ public class TopicPostFragment extends BaseMvpFragment<TopicPostPresenter> imple
         mTitleEditText = rootView.findViewById(R.id.reply_titile_edittext);
         mBodyEditText = rootView.findViewById(R.id.reply_body_edittext);
         mAnonyCheckBox = rootView.findViewById(R.id.anony);
+        progressBar = rootView.findViewById(R.id.progress_upload_img);
         return rootView;
     }
 
@@ -170,15 +172,12 @@ public class TopicPostFragment extends BaseMvpFragment<TopicPostPresenter> imple
 
     @Override
     public void showUploadFileProgressBar() {
-        if (mProgressBar == null) {
-            mProgressBar = new ProgressBarEx(this);
-        }
-        mProgressBar.show("上传文件中......");
+        progressBar.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void hideUploadFileProgressBar() {
-        mProgressBar.hide();
+        progressBar.setVisibility(View.GONE);
     }
 
     @Override
