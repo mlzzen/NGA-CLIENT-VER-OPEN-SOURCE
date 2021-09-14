@@ -1,5 +1,6 @@
 //include ':lib_cloud'
 include ':lib_common'
-include ':nga_phone_base_3.0'
+include ':nosc_phone'
 include ':lib_core'
 //include ':lib_http'
+include ':lib_nosc_ui'

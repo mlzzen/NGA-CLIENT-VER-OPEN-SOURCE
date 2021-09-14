@@ -23,6 +23,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.viewpager.widget.ViewPager;
 
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
+import com.google.android.material.tabs.TabLayout;
 import com.trello.rxlifecycle2.android.FragmentEvent;
 
 import butterknife.BindView;

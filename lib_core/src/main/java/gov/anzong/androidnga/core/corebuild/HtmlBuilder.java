@@ -10,7 +10,7 @@ import gov.anzong.androidnga.core.data.HtmlData;
  */
 public class HtmlBuilder {
 
-    private static List<IHtmlBuild> sHtmlBuilders = new ArrayList<>();
+    private static final List<IHtmlBuild> sHtmlBuilders = new ArrayList<>();
 
     static {
         sHtmlBuilders.add(new HtmlCommentBuilder());

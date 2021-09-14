@@ -8,25 +8,9 @@ def static getDate() {
 
 }
 
-def isJenkins() {
-    return project.hasProperty('IS_JENKINS') && IS_JENKINS == 'true'
-}
 
 android {
     compileSdkVersion project.compileSdkVersion
-
-    signingConfigs {
-        signingConfig {
-            if (isJenkins()) {
-                storeFile file('../../android19910914.keystore')
-            } else {
-                storeFile file('..\\keystore\\android19910914.keystore')
-            }
-            storePassword '19910914'
-            keyAlias 'android.keystore'
-            keyPassword '19910914'
-        }
-    }
 
     packagingOptions {
         exclude 'META-INF/LICENSE.txt'
@@ -35,7 +19,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "gov.anzong.androidnga.y_ver"
+        applicationId "gov.nosc.android"
         minSdkVersion project.minSdkVersion
         targetSdkVersion project.targetSdkVersion
         multiDexEnabled true
@@ -63,11 +47,11 @@ android {
             pseudoLocalesEnabled false
             minifyEnabled false
             zipAlignEnabled true
-            signingConfig signingConfigs.signingConfig
         }
         debug {
             debuggable true
-            minifyEnabled false}
+            minifyEnabled false
+        }
     }
 
     dexOptions {
@@ -120,7 +104,7 @@ dependencies {
     implementation 'com.github.markzhai:blockcanary-no-op:1.5.0'
     implementation'com.github.daniel-stoneuk:material-about-library:2.3.0'
     implementation project(':lib_common')
-    //implementation project(':lib_cloud')
+    implementation project(':lib_nosc_ui')
     implementation project(':lib_core')
     //implementation project(":lib_http")
 
