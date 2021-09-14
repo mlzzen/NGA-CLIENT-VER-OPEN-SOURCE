@@ -281,7 +281,7 @@ public class TopicListPresenter extends ViewModel implements LifecycleObserver {
             @Override
             public void onNext(Boolean aBoolean) {
                 if (aBoolean) {
-                    String srcDir = ContextUtils.getContext().getFilesDir().getAbsolutePath() + "/cache/";
+                    String srcDir = ContextUtils.getExternalDir("articleCache");
 
                     DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss", Locale.getDefault());
                     String dateStr = dateFormat.format(new Date(System.currentTimeMillis()));

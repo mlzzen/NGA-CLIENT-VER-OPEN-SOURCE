@@ -18,13 +18,13 @@ import gov.anzong.androidnga.common.PreferenceKey;
 
 public class ThemeManager implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-    private int[] mAppThemes = {
+    private final int[] mAppThemes = {
             R.style.AppThemeDayNightBrown_NoActionBar,
             R.style.AppThemeDayNightGreen_NoActionBar,
             R.style.AppThemeDayNightBlack_NoActionBar,
     };
 
-    private int[] mAppThemesActionBar = {
+    private final int[] mAppThemesActionBar = {
             R.style.AppThemeDayNightBrown,
             R.style.AppThemeDayNightGreen,
             R.style.AppThemeDayNightBlack,
@@ -34,35 +34,37 @@ public class ThemeManager implements SharedPreferences.OnSharedPreferenceChangeL
 
     private boolean mNightMode;
 
-    private Context mContext;
-
     private WebViewTheme mWebViewTheme;
 
-    private TypedValue mTypedValue = new TypedValue();
+    private final TypedValue mTypedValue = new TypedValue();
 
     private boolean mNightModeFollowSystem;
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sp, String key) {
-        if (key.equals(PreferenceKey.NIGHT_MODE)) {
-            mNightMode = sp.getBoolean(key, false);
-            applyDayNight();
-        } else if (key.equals(PreferenceKey.MATERIAL_THEME)) {
-            mThemeIndex = Integer.parseInt(sp.getString(key, "0"));
-        } else if (key.equals(PreferenceKey.KEY_NIGHT_MODE_FOLLOW_SYSTEM)) {
-            mNightModeFollowSystem = sp.getBoolean(key, false);
-            applyDayNight();
+        switch (key) {
+            case PreferenceKey.NIGHT_MODE:
+                mNightMode = sp.getBoolean(key, false);
+                applyDayNight();
+                break;
+            case PreferenceKey.MATERIAL_THEME:
+                mThemeIndex = Integer.parseInt(sp.getString(key, "0"));
+                break;
+            case PreferenceKey.KEY_NIGHT_MODE_FOLLOW_SYSTEM:
+                mNightModeFollowSystem = sp.getBoolean(key, false);
+                applyDayNight();
+                break;
         }
         mWebViewTheme = null;
     }
 
     private static class ThemeManagerHolder {
 
-        private static ThemeManager sInstance = new ThemeManager();
+        private static final ThemeManager sInstance = new ThemeManager();
     }
 
     private ThemeManager() {
-        mContext = ContextUtils.getContext();
+        Context mContext = ContextUtils.getContext();
         SharedPreferences sp = mContext.getSharedPreferences(PreferenceKey.PERFERENCE, Context.MODE_PRIVATE);
         sp.registerOnSharedPreferenceChangeListener(this);
         mNightMode = sp.getBoolean(PreferenceKey.NIGHT_MODE, false);

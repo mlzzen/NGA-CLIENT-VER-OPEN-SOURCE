@@ -20,9 +20,8 @@
             app:layout_scrollFlags="scroll|snap"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-        <gov.anzong.androidnga.base.widget.TabLayoutEx
+        <gov.nosc.ui.PageSelector
             android:id="@+id/tabs"
-            app:tabMode="scrollable"
             android:layout_width="match_parent"
             android:layout_height="@dimen/article_list_tab_height" />
 

@@ -131,6 +131,9 @@ public class Board implements Parcelable {
     }
 
     public BoardKey getBoardKey() {
+        if (mBoardKey == null) {
+            mBoardKey = new BoardKey(mFid, mStd);
+        }
         return mBoardKey;
     }
 
@@ -140,13 +143,6 @@ public class Board implements Parcelable {
 
     public void setBoardHead(String boardHead) {
         mBoardHead = boardHead;
-    }
-
-    @Deprecated
-    public void fixBoardKey() {
-        if (mBoardKey == null) {
-            mBoardKey = new BoardKey(mFid, mStd);
-        }
     }
 
     @Override

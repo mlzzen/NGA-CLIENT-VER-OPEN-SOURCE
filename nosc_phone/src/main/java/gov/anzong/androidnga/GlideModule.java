@@ -14,6 +14,8 @@ import com.bumptech.glide.request.RequestOptions;
 
 import org.jetbrains.annotations.NotNull;
 
+import gov.anzong.androidnga.base.util.ContextUtils;
+
 /**
  * @author Yricky
  * @date 2021/7/25 下午10:53
@@ -32,7 +34,7 @@ public class GlideModule extends AppGlideModule {
         requestOptions = requestOptions.format(DecodeFormat.PREFER_ARGB_8888);
         builder.setDefaultRequestOptions(requestOptions);
         int diskCacheSizeBytes = 1024 * 1024 * 32; // 32mb
-        builder.setDiskCache(new DiskLruCacheFactory(context.getExternalFilesDir("glideLruCache").getPath(), diskCacheSizeBytes));
+        builder.setDiskCache(new DiskLruCacheFactory(ContextUtils.getExternalDir("glideLruCache"), diskCacheSizeBytes));
 
     }
 }

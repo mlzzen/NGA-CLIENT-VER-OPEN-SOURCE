@@ -23,7 +23,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.viewpager.widget.ViewPager;
 
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
-import com.google.android.material.tabs.TabLayout;
 import com.trello.rxlifecycle2.android.FragmentEvent;
 
 import butterknife.BindView;
@@ -31,10 +30,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import gov.anzong.androidnga.R;
 import gov.anzong.androidnga.Utils;
-import gov.anzong.androidnga.activity.AboutActivity;
-import gov.anzong.androidnga.activity.FullScreenWebViewActivity;
-import gov.anzong.androidnga.activity.WebViewActivity;
-import gov.anzong.androidnga.base.widget.TabLayoutEx;
+import gov.nosc.ui.PageSelector;
 import sp.phone.mvp.viewmodel.ArticleShareViewModel;
 import sp.phone.common.PhoneConfiguration;
 import sp.phone.common.UserManagerImpl;
@@ -66,7 +62,7 @@ public class ArticleTabFragment extends BaseRxFragment {
     private ArticleListParam mRequestParam;
 
     @BindView(R.id.tabs)
-    public TabLayoutEx mTabLayout;
+    public PageSelector mTabLayout;
 
     private static final String GOTO_TAG = "goto";
 
@@ -91,8 +87,6 @@ public class ArticleTabFragment extends BaseRxFragment {
             int count = (int) Math.ceil(mReplyCount / 20.0f);
             if (count != mPagerAdapter.getCount()) {
                 mPagerAdapter.setCount(count);
-                mTabLayout.setTabOnScreenLimit(count <= 5 ? count : 0);
-                mTabLayout.notifyDataSetChanged();
             }
         });
     }
@@ -122,9 +116,8 @@ public class ArticleTabFragment extends BaseRxFragment {
             }
         });
 
-        mTabLayout.setTabOnScreenLimit(1);
-        mTabLayout.setUpWithViewPager(mViewPager);
-
+        mTabLayout.bindViewPager(mViewPager);
+        mTabLayout.setOnClickListener((v)-> createGotoDialog());
         mFam.getAddFloatingActionButton().setOnLongClickListener(v -> {
             mBehavior.animateOut(mFam);
             return true;
@@ -180,9 +173,6 @@ public class ArticleTabFragment extends BaseRxFragment {
         switch (item.getItemId()) {
             case R.id.menu_add_bookmark:
                 BookmarkTask.execute(mRequestParam.tid);
-                break;
-            case R.id.menu_goto_floor:
-                createGotoDialog();
                 break;
             case R.id.menu_share:
                 share();
@@ -269,7 +259,6 @@ public class ArticleTabFragment extends BaseRxFragment {
 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
-        menu.findItem(R.id.menu_goto_floor).setVisible(mReplyCount != 0);
 
         if (ThemeManager.getInstance().isNightModeFollowSystem()) {
             menu.findItem(R.id.menu_nightmode).setVisible(false);
@@ -293,7 +282,7 @@ public class ArticleTabFragment extends BaseRxFragment {
         Bundle args = new Bundle();
         args.putInt("page", mPagerAdapter.getCount());
         args.putInt("floor", mReplyCount);
-
+        args.putInt("currPage",mViewPager.getCurrentItem());
         DialogFragment df = new GotoDialogFragment();
         df.setArguments(args);
         df.setTargetFragment(this, ActivityUtils.REQUEST_CODE_JUMP_PAGE);

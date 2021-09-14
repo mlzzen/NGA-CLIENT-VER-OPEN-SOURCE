@@ -14,7 +14,6 @@ import sp.phone.http.bean.CategoryBean;
 import sp.phone.mvp.contract.BoardContract;
 import sp.phone.mvp.model.entity.Board;
 import sp.phone.mvp.model.entity.BoardCategory;
-import sp.phone.util.NLog;
 import sp.phone.util.StringUtils;
 
 /**
@@ -24,9 +23,9 @@ public class BoardModel extends BaseModel implements BoardContract.Model {
 
     private static final int PRELOAD_BOARD_VERSION = 1;
 
-    private List<BoardCategory> mBoardCategoryList = new ArrayList<>();
+    private final List<BoardCategory> mBoardCategoryList = new ArrayList<>();
 
-    private BoardCategory mBookmarkCategory;
+    private final BoardCategory mBookmarkCategory;
 
     private BoardModel() {
         mBookmarkCategory = loadBookmarkBoards();
@@ -99,9 +98,6 @@ public class BoardModel extends BaseModel implements BoardContract.Model {
     private BoardCategory loadBookmarkBoards() {
         BoardCategory category = new BoardCategory("我的收藏");
         List<Board> bookmarkBoards = PreferenceUtils.getData(PreferenceKey.BOOKMARK_BOARD, Board.class);
-        for (Board board : bookmarkBoards) {
-            board.fixBoardKey();
-        }
         category.addBoards(bookmarkBoards);
         category.setBookmarkCategory(true);
         return category;
@@ -202,7 +198,7 @@ public class BoardModel extends BaseModel implements BoardContract.Model {
     }
 
     private static class SingletonHolder {
-        private static BoardModel sInstance = new BoardModel();
+        private static final BoardModel sInstance = new BoardModel();
     }
 
     public static BoardModel getInstance() {

@@ -112,7 +112,7 @@ public class ArticleListModel extends BaseModel implements ArticleListContract.M
         }
         ThreadUtils.postOnSubThread(() -> {
             try {
-                String path = ContextUtils.getContext().getFilesDir().getAbsolutePath() + "/cache/" + param.tid;
+                String path = ContextUtils.getExternalDir("articleCache") + param.tid;
                 File describeFile = new File(path, param.tid + ".json");
                 FileUtils.write(describeFile, param.topicInfo);
                 File rawDataFile = new File(path, param.page + ".json");
@@ -128,8 +128,7 @@ public class ArticleListModel extends BaseModel implements ArticleListContract.M
     @Override
     public void loadCachePage(ArticleListParam param, OnHttpCallBack<ThreadData> callBack) {
         Observable.create((ObservableOnSubscribe<ThreadData>) emitter -> {
-            String cachePath = ContextUtils.getContext().getFilesDir().getAbsolutePath()
-                    + "/cache/" + param.tid + "/" + param.page + ".json";
+            String cachePath = ContextUtils.getExternalDir("articleCache") + param.tid + "/" + param.page + ".json";
             File cacheFile = new File(cachePath);
             String rawData = FileUtils.readFileToString(cacheFile);
             ThreadData threadData = ArticleConvertFactory.getArticleInfo(rawData);

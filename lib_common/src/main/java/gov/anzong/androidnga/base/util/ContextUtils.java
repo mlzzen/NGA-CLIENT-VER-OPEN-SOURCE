@@ -28,6 +28,10 @@ public class ContextUtils {
         return sResumedActivity == null ? sApplication : sResumedActivity;
     }
 
+    public static String getExternalDir(String purpose){
+        return getContext().getExternalFilesDir(purpose).getAbsolutePath() + "/";
+    }
+
     public static void setApplication(Application application) {
         sApplication = application;
         sApplication.registerActivityLifecycleCallbacks(new Application.ActivityLifecycleCallbacks() {

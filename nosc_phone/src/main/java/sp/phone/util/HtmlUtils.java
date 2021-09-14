@@ -235,6 +235,6 @@ public class HtmlUtils {
         if (row == null || StringUtils.isEmpty(row.getVote())) {
             return "";
         }
-        return "<br/><hr/>" + "本楼有投票/投注内容,长按本楼在菜单中点击投票/投注按钮";
+        return "<br/><hr/>" + "本楼有投票/投注内容,在本楼右下角菜单中点击投票/投注";
     }
 }

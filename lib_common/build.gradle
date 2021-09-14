@@ -46,11 +46,11 @@ dependencies {
     api('com.zhouyou:signseekbar:1.0.8') {
         exclude group: 'com.android.support'
     }
-     */
+
     api('com.nshmura:recyclertablayout:1.5.0') {
         exclude group: 'com.android.support'
     }
-
+     */
 
 
 

@@ -13,7 +13,7 @@ import java.util.List;
 import gov.anzong.androidnga.R;
 import gov.anzong.androidnga.base.util.ContextUtils;
 import gov.anzong.androidnga.base.util.ToastUtils;
-import gov.anzong.androidnga.base.widget.TabLayoutEx;
+import gov.nosc.ui.PageSelector;
 import sp.phone.param.ArticleListParam;
 import sp.phone.param.ParamKey;
 import sp.phone.ui.adapter.ArticlePagerAdapter;
@@ -58,13 +58,13 @@ public class ArticleCacheActivity extends BaseActivity {
         ViewPager viewPager = findViewById(R.id.pager);
         viewPager.setAdapter(mPagerAdapter);
 
-        TabLayoutEx tabLayout = findViewById(R.id.tabs);
-        tabLayout.setUpWithViewPager(viewPager);
+        PageSelector tabLayout = findViewById(R.id.tabs);
+        tabLayout.bindViewPager(viewPager);
     }
 
     private void loadCachePageList(String tid) {
         mCachePageList.clear();
-        String path = ContextUtils.getContext().getFilesDir().getAbsolutePath() + "/cache/" + tid;
+        String path = ContextUtils.getExternalDir("articleCache") + tid;
         File[] cacheFiles = new File(path).listFiles();
         if (cacheFiles != null) {
             for (File cacheFile : cacheFiles) {

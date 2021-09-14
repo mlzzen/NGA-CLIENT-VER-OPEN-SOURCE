@@ -8,11 +8,6 @@
         androidnga:showAsAction="ifRoom"/>
 
     <item
-        android:id="@+id/menu_goto_floor"
-        android:title="@string/goto_floor"
-        androidnga:showAsAction="never"/>
-
-    <item
         android:id="@+id/menu_copy_url"
         android:title="@string/menu_copy_url"
         androidnga:showAsAction="never"/>

@@ -66,7 +66,7 @@ public class TopicListModel extends BaseModel implements TopicListContract.Model
     @Override
     public void loadCache(OnHttpCallBack<TopicListInfo> callBack) {
         Observable.create((ObservableOnSubscribe<TopicListInfo>) emitter -> {
-            String path = ContextUtils.getContext().getFilesDir().getAbsolutePath() + "/cache/";
+            String path = ContextUtils.getExternalDir("articleCache");
             File[] cacheDirs = new File(path).listFiles();
 
             if (cacheDirs == null) {
@@ -196,7 +196,7 @@ public class TopicListModel extends BaseModel implements TopicListContract.Model
     @Override
     public void removeCacheTopic(ThreadPageInfo info, OnHttpCallBack<String> callBack) {
         ThreadUtils.postOnSubThread(() -> {
-            String path = ContextUtils.getContext().getFilesDir().getAbsolutePath() + "/cache/";
+            String path = ContextUtils.getExternalDir("articleCache");
             File[] cacheDirs = new File(path).listFiles();
             if (cacheDirs == null) {
                 callBack.onError(null);
