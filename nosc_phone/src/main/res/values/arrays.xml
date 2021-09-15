@@ -1,45 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="image_quality_option">
-        <item>@string/image_quality_option_original</item>
-        <item>@string/image_quality_option_small</item>
-        <item>@string/image_quality_option_medium</item>
-        <item>@string/image_quality_option_large</item>
-    </string-array>
-
-    <string-array name="image_quality_option_value">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-    </string-array>
-
-    <string-array name="swipe_back_position">
-        <item>@string/swipeback_left</item>
-        <item>@string/swipeback_right</item>
-        <item>@string/swipeback_left_right</item>
-        <item>@string/swipeback_left_right_bottom</item>
-    </string-array>
-
-    <string-array name="swipe_back_option_value">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-    </string-array>
-    <string-array name="black_gun_sound">
-        <item>@string/blackgun_sound_0</item>
-        <item>@string/blackgun_sound_1</item>
-        <item>@string/blackgun_sound_2</item>
-        <item>@string/blackgun_sound_3</item>
-    </string-array>
-
-    <string-array name="black_gun_sound_value">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-    </string-array>
 
     <string-array name="material_theme">
         <item>棕色</item>
@@ -75,6 +35,34 @@
         <item>2</item>
         <item>3</item>
         <item>4</item>
+    </string-array>
+
+    <string-array name="colorchoose">
+        <item>默认 (纯黑色)</item>
+        <item>skyblue (天蓝色)</item>
+        <item>royalblue (品蓝色)</item>
+        <item>blue (纯蓝色)</item>
+        <item>darkblue (深蓝色)</item>
+        <item>orange (纯橙色)</item>
+        <item>orangered (橙红色)</item>
+        <item>crimson (深红色)</item>
+        <item>red (纯红色)</item>
+        <item>firebrick (砖红色)</item>
+        <item>darkred (暗红色)</item>
+        <item>green (纯绿色)</item>
+        <item>limegreen (石灰绿)</item>
+        <item>seagreen (海蓝色)</item>
+        <item>teal (蓝绿色)</item>
+        <item>deeppink (深粉色)</item>
+        <item>tomato (番茄红)</item>
+        <item>coral (珊瑚色)</item>
+        <item>purple (纯紫色)</item>
+        <item>indigo (靛蓝色)</item>
+        <item>burlywood (原木色)</item>
+        <item>sandybrown (黄褐色)</item>
+        <item>sienna (黄土色)</item>
+        <item>chocolate (咖啡色)</item>
+        <item>silver (银灰色)</item>
     </string-array>
 
 </resources>
