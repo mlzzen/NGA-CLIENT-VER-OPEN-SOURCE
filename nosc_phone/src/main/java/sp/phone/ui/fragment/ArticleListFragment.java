@@ -11,7 +11,7 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.lifecycle.Observer;
-import androidx.recyclerview.widget.DividerItemDecoration;
+
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -116,9 +116,9 @@ public class ArticleListFragment extends BaseMvpFragment<ArticleListPresenter> i
                                 mListView);
                     }
                     break;
-                case R.id.menu_vote:
-                    FunctionUtils.createVoteDialog(row, getActivity(), mListView, mToast);
-                    break;
+//                case R.id.menu_vote:
+//                    FunctionUtils.createVoteDialog(row, getActivity(), mListView, mToast);
+//                    break;
                 case R.id.menu_ban_this_one:
                     mPresenter.banThisSB(row);
                     break;
@@ -165,10 +165,10 @@ public class ArticleListFragment extends BaseMvpFragment<ArticleListPresenter> i
                 item.setTitle(row.get_isInBlackList() ? R.string.cancel_ban_thisone : R.string.ban_thisone);
             }
 
-            item = menu.findItem(R.id.menu_vote);
-            if (item != null && StringUtils.isEmpty(row.getVote())) {
-                item.setVisible(false);
-            }
+//            item = menu.findItem(R.id.menu_vote);
+//            if (item != null && StringUtils.isEmpty(row.getVote())) {
+//                item.setVisible(false);
+//            }
 
             item = menu.findItem(R.id.menu_edit);
             if (item != null) {
@@ -246,9 +246,6 @@ public class ArticleListFragment extends BaseMvpFragment<ArticleListPresenter> i
         mListView.setItemViewCacheSize(20);
         mListView.setAdapter(mArticleAdapter);
         mListView.setEmptyView(view.findViewById(R.id.empty_view));
-        if (PhoneConfiguration.getInstance().useSolidColorBackground()) {
-            mListView.addItemDecoration(new DividerItemDecoration(view.getContext(), DividerItemDecoration.VERTICAL));
-        }
 
         TextView sayingView = (TextView) mLoadingView.findViewById(R.id.saying);
         sayingView.setText(ActivityUtils.getSaying());

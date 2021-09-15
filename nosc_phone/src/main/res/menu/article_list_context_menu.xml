@@ -17,9 +17,9 @@
         android:id="@+id/menu_signature"
         android:title="@string/signature_dialog"/>
 
-    <item
-        android:id="@+id/menu_vote"
-        android:title="@string/vote_dialog"/>
+<!--    <item-->
+<!--        android:id="@+id/menu_vote"-->
+<!--        android:title="@string/vote_dialog"/>-->
 
     <item
         android:id="@+id/menu_favorite"

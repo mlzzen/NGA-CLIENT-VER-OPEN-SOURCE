@@ -12,7 +12,7 @@ import gov.anzong.androidnga.core.data.HtmlData;
  */
 public class ForumDecoder {
 
-    private static List<IForumDecoder> sDecoderPool = new ArrayList<>();
+    private static final List<IForumDecoder> sDecoderPool = new ArrayList<>();
 
     static {
         sDecoderPool.add(new ForumBasicDecoder());
@@ -36,9 +36,6 @@ public class ForumDecoder {
         return decode(rawData, htmlData, null);
     }
 
-    public static String decodeBasic(String rawData) {
-        return new ForumBasicDecoder().decode(rawData);
-    }
 //
 //    private List<IForumDecoder> mForumDecoders = new ArrayList<>();
 //

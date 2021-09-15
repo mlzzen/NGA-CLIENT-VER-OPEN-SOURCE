@@ -232,6 +232,10 @@ public class ForumBasicDecoder implements IForumDecoder {
         content = StringUtils.replaceAll(content, "\\[collapse=(.*?)](.*?)\\[/collapse]", "<div><button onclick='toggleCollapse(this,\"$1\")'>点击显示内容 : $1</button><div name='collapse' class='collapse' style='display:none'>$2</div></div>");
         content = StringUtils.replaceAll(content, "\\[collapse](.*?)\\[/collapse]", "<div><button onclick='toggleCollapse(this)'>点击显示内容</button><div name='collapse' class='collapse'style='display:none' >$1</div></div>");
 
+        //[randomblock]
+        content = StringUtils.replaceAll(content, IGNORE_CASE_TAG + "\\[randomblock]","<div>");
+        content = StringUtils.replaceAll(content, IGNORE_CASE_TAG + "\\[/randomblock]","</div>");
+
         // [flash=video]/flash]
         content = StringUtils.replaceAll(content, "\\[flash=video].(.*?)\\[/flash]", "<video src='http://img.ngacn.cc/attachments$1' controls='controls'></video>");
 

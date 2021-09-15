@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -433,10 +434,9 @@ public class ArticleListAdapter extends RecyclerView.Adapter<ArticleListAdapter.
         if (row == null) {
             return;
         }
-
-        if (!PhoneConfiguration.getInstance().useSolidColorBackground()) {
-            holder.itemView.setBackgroundResource(ThemeManager.getInstance().getBackgroundColor(position));
-        }
+        int  color = holder.itemView.getContext().getColor(ThemeManager.getInstance().getBackgroundColor(
+                PhoneConfiguration.getInstance().useSolidColorBackground()?1:position));
+        ((CardView)holder.itemView).setCardBackgroundColor(color);
 
         holder.replyBtn.setTag(row);
         holder.nickNameTV.setTag(row);

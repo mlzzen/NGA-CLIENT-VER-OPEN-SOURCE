@@ -11,6 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import gov.anzong.androidnga.R;
+import gov.anzong.androidnga.Utils;
+import gov.anzong.androidnga.core.data.HtmlData;
+import gov.anzong.androidnga.core.decode.ForumDecoder;
 import sp.phone.http.bean.MessageArticlePageInfo;
 import sp.phone.http.bean.MessageDetailInfo;
 import gov.anzong.androidnga.base.util.ContextUtils;;
@@ -156,10 +159,10 @@ public class MessageUtil {
         row.setSignature(userInfo.getString("signature"));
     }
 
-    @SuppressWarnings("unused")
-    private List<MessageArticlePageInfo> convertJSobjToList(JSONObject rowMap, JSONObject userInfoMap) {
-        return convertJSobjToList(rowMap, userInfoMap, 1);
-    }
+
+//    private List<MessageArticlePageInfo> convertJSobjToList(JSONObject rowMap, JSONObject userInfoMap) {
+//        return convertJSobjToList(rowMap, userInfoMap, 1);
+//    }
 
     private void fillFormated_html_data(MessageArticlePageInfo row, int i) {
 
@@ -197,7 +200,7 @@ public class MessageUtil {
     public static String convertToHtmlText(final MessageArticlePageInfo row,
                                            boolean showImage, int imageQuality, final String fgColorStr,
                                            final String bgcolorStr) {
-        String ngaHtml = StringUtils.decodeForumTag(row.getContent(), showImage, imageQuality, null);
+        String ngaHtml = ForumDecoder.decode(row.getContent(), HtmlData.create(row.getContent(), Utils.getNGAHost()));
         if (StringUtils.isEmpty(ngaHtml)) {
             ngaHtml = "<font color='red'>[" + ContextUtils.getString(R.string.hide) + "]</font>";
         }

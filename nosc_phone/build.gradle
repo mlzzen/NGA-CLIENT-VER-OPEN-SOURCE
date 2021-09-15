@@ -49,6 +49,7 @@ android {
             zipAlignEnabled true
         }
         debug {
+            versionNameSuffix ".0"
             debuggable true
             minifyEnabled false
         }

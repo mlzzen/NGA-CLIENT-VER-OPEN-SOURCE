@@ -35,7 +35,6 @@ import android.widget.Toast;
 
 import java.util.Objects;
 
-import gov.anzong.androidnga.BuildConfig;
 import gov.anzong.androidnga.R;
 import gov.anzong.androidnga.Utils;
 import gov.anzong.androidnga.base.util.ToastUtils;
@@ -100,7 +99,7 @@ public class FunctionUtils {
 
 
         WebSettings setting = contentTV.getSettings();
-        setting.setUserAgentString(context.getString(R.string.clientua) + BuildConfig.VERSION_CODE);
+        setting.setUserAgentString(context.getString(R.string.clientua));
         setting.setDefaultFontSize(PhoneConfiguration.getInstance()
                 .getWebSize());
         setting.setJavaScriptEnabled(false);
@@ -112,23 +111,23 @@ public class FunctionUtils {
     }
 
 
-    public static void errordialogadmin(Context context, final View listView) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setMessage("这白痴是系统账号,神马都看不到");
-        builder.setTitle("看不到");
-        builder.setPositiveButton("关闭", (dialog, which) -> {
-            // TODO Auto-generated method stub
-            dialog.dismiss();
-        });
-
-        final AlertDialog dialog = builder.create();
-        dialog.show();
-        dialog.setOnDismissListener(arg0 -> {
-            // TODO Auto-generated method stub
-            dialog.dismiss();
-        });
-    }
-
+//    public static void errordialogadmin(Context context, final View listView) {
+//        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+//        builder.setMessage("这白痴是系统账号,神马都看不到");
+//        builder.setTitle("看不到");
+//        builder.setPositiveButton("关闭", (dialog, which) -> {
+//            // TODO Auto-generated method stub
+//            dialog.dismiss();
+//        });
+//
+//        final AlertDialog dialog = builder.create();
+//        dialog.show();
+//        dialog.setOnDismissListener(arg0 -> {
+//            // TODO Auto-generated method stub
+//            dialog.dismiss();
+//        });
+//    }
+/*
     public static String signatureToHtmlText_Message(final MessageArticlePageInfo row,
                                                      boolean showImage, int imageQuality, final String fgColorStr,
                                                      final String bgcolorStr, Context context) {
@@ -148,6 +147,8 @@ public class FunctionUtils {
 
         return ngaHtml;
     }
+
+ */
 
     public static void Create_Signature_Dialog(ThreadRowInfo row, final Context context, final View scrollview) {
         LayoutInflater layoutInflater = ((Activity) context).getLayoutInflater();
@@ -184,8 +185,7 @@ public class FunctionUtils {
         contentTV
                 .loadDataWithBaseURL(
                         null,
-                        FunctionUtils.signatureToHtmlText(row, showImage,
-                                ArticleUtil.showImageQuality(), fgColorStr,
+                        FunctionUtils.signatureToHtmlText(row,  fgColorStr,
                                 bgcolorStr, context), "text/html", "utf-8", null);
         alert.setPositiveButton("关闭", (dialog, which) -> dialog.dismiss());
 
@@ -194,107 +194,105 @@ public class FunctionUtils {
         dialog.setOnDismissListener(arg0 -> dialog.dismiss());
     }
 
-    @SuppressWarnings("unused")
-    public static void createVoteDialog(ThreadRowInfo row, final Context context, final View scrollview, Toast toast) {
-        LayoutInflater layoutInflater = ((Activity) context).getLayoutInflater();
-        final View view = layoutInflater.inflate(R.layout.dialog_vote, null);
-        String name = row.getAuthor();
-        AlertDialog.Builder alert = new AlertDialog.Builder(context);
-        alert.setView(view);
-        alert.setTitle("投票/投注");
-        // COLOR
-
-        ThemeManager theme = ThemeManager.getInstance();
-        int bgColor = context.getResources().getColor(theme.getBackgroundColor(0));
-        int fgColor = context.getResources().getColor(theme.getForegroundColor());
-        bgColor = bgColor & 0xffffff;
-        final String bgcolorStr = String.format("%06x", bgColor);
-
-        int htmlfgColor = fgColor & 0xffffff;
-        final String fgColorStr = String.format("%06x", htmlfgColor);
-
-        WebViewClient client = new WebViewClientEx((FragmentActivity) context);
-        final WebView contentTV = (WebView) view.findViewById(R.id.votewebview);
-        contentTV.setBackgroundColor(0);
-        contentTV.setLongClickable(false);
-        contentTV.setOnLongClickListener(view1 -> true);
-        ((Activity) context).getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-        boolean showImage = PhoneConfiguration.getInstance().isDownImgNoWifi()
-                || NetUtil.getInstance().isInWifi();
-        WebSettings setting = contentTV.getSettings();
-        setting.setDefaultFontSize(PhoneConfiguration.getInstance()
-                .getWebSize());
-        setting.setJavaScriptEnabled(true);
-        setting.setJavaScriptCanOpenWindowsAutomatically(true);
-        contentTV.addJavascriptInterface(new ProxyBridge(context, toast), "ProxyBridge");
-        contentTV.setFocusableInTouchMode(true);
-        contentTV.setFocusable(true);
-        contentTV.setHapticFeedbackEnabled(true);
-        contentTV.setClickable(true);
-        contentTV.requestFocusFromTouch();
-        contentTV.setWebChromeClient(new WebChromeClient() {
-
-            @Override
-            public void onProgressChanged(WebView view, int newProgress) {
-                super.onProgressChanged(view, newProgress);
-                view.requestFocus(View.FOCUS_DOWN);
-                view.setOnTouchListener((v, event) -> {
-                    switch (event.getAction()) {
-                        case MotionEvent.ACTION_DOWN:
-                        case MotionEvent.ACTION_UP:
-                            if (!v.hasFocus()) {
-                                v.requestFocus(View.FOCUS_DOWN);
-                            }
-                            break;
-                    }
-                    return false;
-                });
-            }
-
-            @Override
-            public boolean onJsAlert(WebView view, String url, String message,
-                                     final android.webkit.JsResult result) {
-                final AlertDialog.Builder b2 = new AlertDialog.Builder(context)
-                        .setMessage(message)
-                        .setPositiveButton("确定",
-                                (dialog, which) -> result.confirm());
-
-                b2.setCancelable(false);
-                b2.create();
-                b2.show();
-                return true;
-            }
-
-            @Override
-            public boolean onJsConfirm(WebView view, String url,
-                                       String message, final android.webkit.JsResult result) {
-                final AlertDialog.Builder b1 = new AlertDialog.Builder(
-                        context)
-                        .setMessage(message)
-                        .setPositiveButton("确定",
-                                (dialog, which) -> result.confirm())
-                        .setNeutralButton("取消",
-                                (dialog, which) -> result.cancel())
-                        .setOnCancelListener(
-                                dialog -> result.cancel());
-                b1.create();
-                b1.show();
-                return true;
-            }
-        });
-        contentTV.setWebViewClient(client);
-        contentTV.loadDataWithBaseURL(
-                null,
-                FunctionUtils.VoteToHtmlText(row, showImage, ArticleUtil.showImageQuality(),
-                        fgColorStr, bgcolorStr), "text/html", "utf-8", null);
-        contentTV.requestLayout();
-        alert.setPositiveButton("关闭", (dialog, which) -> dialog.dismiss());
-
-        final Dialog dialog = alert.create();
-        dialog.show();
-        dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
-        dialog.setOnDismissListener(arg0 -> dialog.dismiss());
-    }
+//    public static void createVoteDialog(ThreadRowInfo row, final Context context, final View scrollview, Toast toast) {
+//        LayoutInflater layoutInflater = ((Activity) context).getLayoutInflater();
+//        final View view = layoutInflater.inflate(R.layout.dialog_vote, null);
+//        String name = row.getAuthor();
+//        AlertDialog.Builder alert = new AlertDialog.Builder(context);
+//        alert.setView(view);
+//        alert.setTitle("投票/投注");
+//        // COLOR
+//
+//        ThemeManager theme = ThemeManager.getInstance();
+//        int bgColor = context.getResources().getColor(theme.getBackgroundColor(0));
+//        int fgColor = context.getResources().getColor(theme.getForegroundColor());
+//        bgColor = bgColor & 0xffffff;
+//        final String bgcolorStr = String.format("%06x", bgColor);
+//
+//        int htmlfgColor = fgColor & 0xffffff;
+//        final String fgColorStr = String.format("%06x", htmlfgColor);
+//
+//        WebViewClient client = new WebViewClientEx((FragmentActivity) context);
+//        final WebView contentTV = (WebView) view.findViewById(R.id.votewebview);
+//        contentTV.setBackgroundColor(0);
+//        contentTV.setLongClickable(false);
+//        contentTV.setOnLongClickListener(view1 -> true);
+//        ((Activity) context).getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+//        boolean showImage = PhoneConfiguration.getInstance().isDownImgNoWifi()
+//                || NetUtil.getInstance().isInWifi();
+//        WebSettings setting = contentTV.getSettings();
+//        setting.setDefaultFontSize(PhoneConfiguration.getInstance()
+//                .getWebSize());
+//        setting.setJavaScriptEnabled(true);
+//        setting.setJavaScriptCanOpenWindowsAutomatically(true);
+//        contentTV.addJavascriptInterface(new ProxyBridge(context, toast), "ProxyBridge");
+//        contentTV.setFocusableInTouchMode(true);
+//        contentTV.setFocusable(true);
+//        contentTV.setHapticFeedbackEnabled(true);
+//        contentTV.setClickable(true);
+//        contentTV.requestFocusFromTouch();
+//        contentTV.setWebChromeClient(new WebChromeClient() {
+//
+//            @Override
+//            public void onProgressChanged(WebView view, int newProgress) {
+//                super.onProgressChanged(view, newProgress);
+//                view.requestFocus(View.FOCUS_DOWN);
+//                view.setOnTouchListener((v, event) -> {
+//                    switch (event.getAction()) {
+//                        case MotionEvent.ACTION_DOWN:
+//                        case MotionEvent.ACTION_UP:
+//                            if (!v.hasFocus()) {
+//                                v.requestFocus(View.FOCUS_DOWN);
+//                            }
+//                            break;
+//                    }
+//                    return false;
+//                });
+//            }
+//
+//            @Override
+//            public boolean onJsAlert(WebView view, String url, String message,
+//                                     final android.webkit.JsResult result) {
+//                final AlertDialog.Builder b2 = new AlertDialog.Builder(context)
+//                        .setMessage(message)
+//                        .setPositiveButton("确定",
+//                                (dialog, which) -> result.confirm());
+//
+//                b2.setCancelable(false);
+//                b2.create();
+//                b2.show();
+//                return true;
+//            }
+//
+//            @Override
+//            public boolean onJsConfirm(WebView view, String url,
+//                                       String message, final android.webkit.JsResult result) {
+//                final AlertDialog.Builder b1 = new AlertDialog.Builder(
+//                        context)
+//                        .setMessage(message)
+//                        .setPositiveButton("确定",
+//                                (dialog, which) -> result.confirm())
+//                        .setNeutralButton("取消",
+//                                (dialog, which) -> result.cancel())
+//                        .setOnCancelListener(
+//                                dialog -> result.cancel());
+//                b1.create();
+//                b1.show();
+//                return true;
+//            }
+//        });
+//        contentTV.setWebViewClient(client);
+//        contentTV.loadDataWithBaseURL(
+//                null,
+//                FunctionUtils.VoteToHtmlText(row, fgColorStr, bgcolorStr), "text/html", "utf-8", null);
+//        contentTV.requestLayout();
+//        alert.setPositiveButton("关闭", (dialog, which) -> dialog.dismiss());
+//
+//        final Dialog dialog = alert.create();
+//        dialog.show();
+//        dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
+//        dialog.setOnDismissListener(arg0 -> dialog.dismiss());
+//    }
 
     public static void handleNickName(MessageArticlePageInfo row, int fgColor,
                                       TextView nickNameTV, Context context) {
@@ -350,25 +348,6 @@ public class FunctionUtils {
         nickNameTV.setTextColor(fgColor);
     }
 
-    public static void fillFormatedHtmlData(ThreadRowInfo row, int i, Context context) {
-        ThemeManager theme = ThemeManager.getInstance();
-        if (row.getContent() == null) {
-            row.setContent(row.getSubject());
-            row.setSubject(null);
-        }
-        if (!StringUtils.isEmpty(row.getFromClient())) {
-            if (row.getFromClient().startsWith("103 ") && !StringUtils.isEmpty(row.getContent())) {
-                row.setContent(StringUtils.unescape(row.getContent()));
-            }
-        }
-        int fgColor = theme.getWebTextColor();
-
-        int htmlfgColor = fgColor & 0xffffff;
-        final String fgColorStr = String.format("%06x", htmlfgColor);
-
-        String formated_html_data = HtmlUtils.convertToHtmlText(row, isShowImage(), showImageQuality(), fgColorStr, context);
-        row.setFormattedHtmlData(formated_html_data);
-    }
 
     public static boolean isShowImage() {
         return PhoneConfiguration.getInstance().isDownImgNoWifi() || NetUtil.getInstance().isInWifi();
@@ -384,7 +363,7 @@ public class FunctionUtils {
     }
 
     public static String signatureToHtmlText(final ThreadRowInfo row,
-                                             boolean showImage, int imageQuality, final String fgColorStr,
+                                             final String fgColorStr,
                                              final String bgcolorStr, Context context) {
         initStaticStrings(context);
         String ngaHtml = ForumDecoder.decode(row.getSignature(), HtmlData.create(row.getSignature(), Utils.getNGAHost()));
@@ -406,8 +385,7 @@ public class FunctionUtils {
         return ngaHtml;
     }
 
-    public static String VoteToHtmlText(final ThreadRowInfo row, boolean showImage,
-                                        int imageQuality, final String fgColorStr, final String bgcolorStr) {
+    public static String VoteToHtmlText(final ThreadRowInfo row,  final String fgColorStr, final String bgcolorStr) {
         if (StringUtils.isEmpty(row.getVote()))
             return "本楼没有投票/投注内容";
         String ngaHtml = String.valueOf(row.getTid()) + ",'" + row.getVote()
@@ -446,7 +424,7 @@ public class FunctionUtils {
 //	public static String findimgonphone(String avatarlocalurl){
 //		
 //	}
-
+/*
     public static String avatarToHtmlText_Message(final MessageArticlePageInfo row, boolean showImage,
                                                   int imageQuality, final String fgColorStr, final String bgcolorStr, Context context) {
         String ngaHtml = null;
@@ -505,6 +483,8 @@ public class FunctionUtils {
 
         return ngaHtml;
     }
+
+ */
 
     public static boolean isComment(ThreadRowInfo row) {
 
