@@ -359,8 +359,8 @@ public class ArticleListAdapter extends RecyclerView.Adapter<ArticleListAdapter.
         @BindView(R.id.tv_detail)
         TextView detailTv;
 
-        @BindView(R.id.tv_content)
-        TextView contentTextView;
+//        @BindView(R.id.tv_content)
+//        TextView contentTextView;
 
         public ArticleViewHolder(View itemView) {
             super(itemView);
@@ -407,13 +407,13 @@ public class ArticleListAdapter extends RecyclerView.Adapter<ArticleListAdapter.
         ArticleViewHolder viewHolder = new ArticleViewHolder(view);
         ViewGroup.LayoutParams lp = viewHolder.avatarIv.getLayoutParams();
         lp.width = lp.height = PhoneConfiguration.getInstance().getAvatarSize();
-        if (viewType == VIEW_TYPE_WEB_VIEW) {
-            viewHolder.contentTextView.setVisibility(View.GONE);
-            // viewHolder.contentTV.setVisibility(View.VISIBLE);
-        } else {
-            viewHolder.contentTextView.setVisibility(View.VISIBLE);
-            //  viewHolder.contentTV.setVisibility(View.GONE);
-        }
+//        if (viewType == VIEW_TYPE_WEB_VIEW) {
+//            viewHolder.contentTextView.setVisibility(View.GONE);
+//            // viewHolder.contentTV.setVisibility(View.VISIBLE);
+//        } else {
+//            viewHolder.contentTextView.setVisibility(View.VISIBLE);
+//            //  viewHolder.contentTV.setVisibility(View.GONE);
+//        }
         RxUtils.clicks(viewHolder.nickNameTV, mOnProfileClickListener);
         RxUtils.clicks(viewHolder.replyBtn, mOnReplyClickListener);
         RxUtils.clicks(viewHolder.clientIv, mOnClientClickListener);
@@ -421,7 +421,7 @@ public class ArticleListAdapter extends RecyclerView.Adapter<ArticleListAdapter.
         RxUtils.clicks(viewHolder.avatarPanel, mOnAvatarClickListener);
         RxUtils.clicks(viewHolder.favourBtn,mSupportListener);
         RxUtils.clicks(viewHolder.treadBtn,mOpposeListener);
-        viewHolder.contentTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, PhoneConfiguration.getInstance().getTopicContentSize());
+        //viewHolder.contentTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, PhoneConfiguration.getInstance().getTopicContentSize());
         // viewHolder.contentTV.setTextSize(PhoneConfiguration.getInstance().getTopicContentSize());
         return viewHolder;
     }
@@ -495,7 +495,7 @@ public class ArticleListAdapter extends RecyclerView.Adapter<ArticleListAdapter.
             holder.contentTV.getWebViewClientEx().setImgUrls(row.getImageUrls());
             holder.contentTV.loadDataWithBaseURL(null, html, "text/html", "utf-8", null);
         } else {
-            holder.contentTextView.setText(row.getContent());
+            //holder.contentTextView.setText(row.getContent());
         }
     }
 

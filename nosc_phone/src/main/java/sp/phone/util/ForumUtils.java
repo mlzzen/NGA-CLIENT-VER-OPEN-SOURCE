@@ -19,12 +19,6 @@ public class ForumUtils {
         return context.getResources().getStringArray(R.array.nga_domain)[index];
     }
 
-    public static String getAvailableDomainNoHttp() {
-        Context context = ContextUtils.getContext();
-        SharedPreferences sp = context.getSharedPreferences(PreferenceKey.PERFERENCE, Context.MODE_PRIVATE);
-        int index = Integer.parseInt(sp.getString(PreferenceKey.KEY_NGA_DOMAIN, "1"));
-        return context.getResources().getStringArray(R.array.nga_domain_no_http)[index];
-    }
 
     /**
      * @param statusCode

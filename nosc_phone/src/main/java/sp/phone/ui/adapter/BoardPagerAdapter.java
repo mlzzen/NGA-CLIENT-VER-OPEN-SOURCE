@@ -11,6 +11,7 @@ import java.util.List;
 import sp.phone.mvp.model.entity.BoardCategory;
 import sp.phone.ui.fragment.BoardCategoryFragment;
 
+
 /**
  * 版块分页Adapter
  */

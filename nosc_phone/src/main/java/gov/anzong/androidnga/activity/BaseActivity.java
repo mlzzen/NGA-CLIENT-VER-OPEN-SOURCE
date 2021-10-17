@@ -172,25 +172,6 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent ev) {
-        try {
-            return super.dispatchTouchEvent(ev);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    @Override
-    public boolean dispatchKeyEvent(KeyEvent event) {
-        try {
-            return super.dispatchKeyEvent(event);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
 
     @Override
     protected void onResume() {

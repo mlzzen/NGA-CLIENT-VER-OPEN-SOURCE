@@ -61,9 +61,8 @@ dependencies {
     api("com.google.guava:guava:29.0-android")
 
     // kotlin
-    implementation "androidx.core:core-ktx:1.6.0"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
     //retrofit
-    implementation 'com.squareup.retrofit2:retrofit:2.3.0'
+    api 'com.squareup.retrofit2:retrofit:2.9.0'
 }

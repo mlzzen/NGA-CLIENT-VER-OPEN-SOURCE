@@ -14,14 +14,14 @@ import sp.phone.util.ForumUtils;
  */
 public class Utils {
 
-    private static final String DOMAIN = "bbs.ngacn.cc";
+    //private static final String DOMAIN = "bbs.ngacn.cc";
 
     public static String getNGAHost() {
         return ForumUtils.getAvailableDomain() + "/";
     }
 
     public static String getNGADomain() {
-        return DOMAIN;
+        return ForumUtils.getAvailableDomain();
     }
 
     /**

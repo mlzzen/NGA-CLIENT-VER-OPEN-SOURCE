@@ -29,6 +29,7 @@
         <activity
             android:name=".activity.MainActivity"
             android:configChanges="orientation|screenSize|locale|screenLayout|smallestScreenSize"
+            android:launchMode="singleTask"
             android:label="@string/app_name"
             android:theme="@style/AppTheme">
 

@@ -15,10 +15,6 @@ public class NLog {
 
     public static final String TAG = "NGAClient";
 
-    public static void setDebug(boolean debug) {
-        sDebugMode = debug;
-    }
-
     public static int v(String tag, String msg) {
         if (sDebugMode) {
             return Log.v(tag, msg);
@@ -93,13 +89,6 @@ public class NLog {
                     e.printStackTrace();
                 }
             }
-        }
-    }
-
-    public static void print(Throwable throwable) {
-        if (sDebugMode) {
-            String msg = Log.getStackTraceString(throwable);
-            Log.w(TAG, msg);
         }
     }
 

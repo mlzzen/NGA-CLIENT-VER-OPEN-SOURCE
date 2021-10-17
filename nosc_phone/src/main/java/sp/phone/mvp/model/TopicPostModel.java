@@ -58,7 +58,7 @@ public class TopicPostModel extends BaseModel implements TopicPostContract.Model
 
     private String mHostUrl = Utils.getNGAHost() + "post.php?";
 
-    private static final String BASE_URL_ATTACHMENT_SERVER = "https://img8.nga.cn/attach.php?";
+    private static final String BASE_URL_ATTACHMENT_SERVER = "https://img.nga.178.com/attach.php?";
 
     private final RetrofitService mRetrofitService;
 
