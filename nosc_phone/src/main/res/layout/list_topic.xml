@@ -1,75 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?android:attr/selectableItemBackground"
-    android:orientation="vertical"
     android:padding="@dimen/topic_list_item_padding">
 
     <TextView
         android:id="@id/title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:paddingBottom="12dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textSize="17sp" />
+
+    <ImageView
+        android:id="@+id/iv_person"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title"
+        android:src="@drawable/ic_person" />
+
+    <TextView
+        android:id="@+id/author"
+        android:layout_width="140dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        app:layout_constraintStart_toEndOf="@id/iv_person"
+        app:layout_constraintTop_toBottomOf="@id/title"
+        android:gravity="bottom"
+        android:maxLines="2"
+        android:text="@string/sample_nick_name"
+        android:textColor="@color/night_link_color"
         android:textIsSelectable="false"
-        android:textSize="17.0sp" />
+        android:textSize="@dimen/topic_list_item_sub_text_size" />
 
-    <RelativeLayout
-        android:layout_width="match_parent"
+
+    <TextView
+        android:id="@+id/last_reply"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="bottom|end"
-        android:paddingTop="12dp">
+        android:layout_marginEnd="8dp"
+        app:layout_constraintTop_toBottomOf="@id/title"
+        app:layout_constraintEnd_toStartOf="@id/im3"
+        android:maxLines="2"
+        android:text="@string/sample_nick_name"
+        android:textColor="@color/night_link_color"
+        android:textSize="@dimen/topic_list_item_sub_text_size" />
 
-        <ImageView
-            android:id="@+id/iv_person"
-            android:layout_width="15dp"
-            android:layout_height="15dp"
-            android:src="@drawable/ic_person" />
+    <ImageView
+        android:id="@+id/im3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/title"
+        app:layout_constraintEnd_toStartOf="@id/num"
+        android:layout_marginEnd="4dp"
+        android:contentDescription="@string/app_name"
+        android:src="@drawable/replies_icon" />
 
-        <TextView
-            android:id="@+id/author"
-            android:layout_width="140dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:layout_toEndOf="@id/iv_person"
-            android:gravity="bottom"
-            android:maxLines="2"
-            android:text="@string/sample_nick_name"
-            android:textColor="@color/night_link_color"
-            android:textIsSelectable="false"
-            android:textSize="@dimen/topic_list_item_sub_text_size" />
+    <TextView
+        android:id="@+id/num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxLines="1"
+        app:layout_constraintTop_toBottomOf="@id/title"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textColor="@color/night_link_color"
+        android:textSize="@dimen/topic_list_item_sub_text_size" />
 
-        <TextView
-            android:id="@+id/last_reply"
-            android:layout_width="140dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_toStartOf="@+id/im3"
-            android:gravity="right"
-            android:maxLines="2"
-            android:text="@string/sample_nick_name"
-            android:textColor="@color/night_link_color"
-            android:textIsSelectable="false"
-            android:textSize="@dimen/topic_list_item_sub_text_size" />
-
-        <ImageView
-            android:id="@+id/im3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="4.0dip"
-            android:layout_toStartOf="@id/num"
-            android:contentDescription="@string/app_name"
-            android:src="@drawable/replies_icon" />
-
-        <TextView
-            android:id="@+id/num"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:maxLines="1"
-            android:textColor="@color/night_link_color"
-            android:textIsSelectable="false"
-            android:textSize="@dimen/topic_list_item_sub_text_size" />
-    </RelativeLayout>
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
 			

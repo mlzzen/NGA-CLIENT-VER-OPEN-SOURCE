@@ -2,6 +2,7 @@
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_marginTop="4dp"
     android:layout_marginBottom="4dp"
     android:layout_marginLeft="6dp"
@@ -14,22 +15,27 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <RelativeLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dp">
 
             <FrameLayout
                 android:id="@+id/fl_avatar"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_marginEnd="8dp">
+                android:paddingEnd="8dp">
 
                 <ImageView
                     android:id="@+id/iv_avatar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    tools:layout_width="48dp"
+                    tools:layout_height="48dp"
+                    tools:src="@drawable/default_avatar"
                     android:contentDescription="@string/avatar"
                     android:focusable="false"
                     android:scaleType="centerCrop" />
@@ -39,21 +45,27 @@
                 android:id="@+id/tv_nickName"
                 android:layout_width="160dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="2dp"
-                android:layout_marginTop="4dp"
-                android:layout_toEndOf="@+id/fl_avatar"
+                app:layout_constraintTop_toTopOf="@id/fl_avatar"
+                app:layout_constraintStart_toEndOf="@id/fl_avatar"
                 android:textColor="?attr/colorAccent"
                 android:textIsSelectable="false"
                 android:textStyle="bold" />
-
+            <TextView
+                android:id="@+id/tv_post_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="@id/tv_nickName"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:textColor="@color/text_color_disabled"
+                android:textIsSelectable="false"
+                android:textSize="14sp" />
             <TextView
                 android:id="@+id/tv_floor"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tv_post_time"
-                android:layout_alignTop="@+id/tv_detail"
-                android:layout_alignBottom="@+id/tv_detail"
-                android:layout_alignParentEnd="true"
+                app:layout_constraintTop_toBottomOf="@id/tv_post_time"
+                app:layout_constraintEnd_toEndOf="parent"
                 android:textColor="@color/text_color_disabled"
                 android:textIsSelectable="false"
                 android:textSize="14sp" />
@@ -63,35 +75,24 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tv_nickName"
-                android:layout_marginStart="2dp"
-                android:layout_marginTop="4dp"
-                android:layout_toStartOf="@id/tv_floor"
-                android:layout_toEndOf="@+id/fl_avatar"
+                app:layout_constraintStart_toStartOf="@id/tv_nickName"
+                app:layout_constraintTop_toBottomOf="@id/tv_nickName"
                 android:textColor="@color/text_color_disabled"
                 android:textSize="14sp" />
 
-            <TextView
-                android:id="@+id/tv_post_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/tv_nickName"
-                android:layout_alignParentEnd="true"
-                android:textColor="@color/text_color_disabled"
-                android:textIsSelectable="false"
-                android:textSize="14sp" />
+
 
 
             <ImageView
                 android:id="@+id/iv_client"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/tv_post_time"
-                android:layout_alignTop="@+id/tv_floor"
-                android:layout_alignBottom="@+id/tv_floor"
-                android:layout_marginEnd="2dp"
-                android:layout_toStartOf="@+id/tv_floor"
-                android:visibility="gone" />
-        </RelativeLayout>
+                tools:src="@drawable/ic_android_12dp"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                app:layout_constraintTop_toTopOf="@id/tv_floor"
+                app:layout_constraintBottom_toBottomOf="@id/tv_floor"
+                android:layout_margin="2dp"
+                app:layout_constraintEnd_toStartOf="@id/tv_floor"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <FrameLayout
             android:id="@+id/wv_container"

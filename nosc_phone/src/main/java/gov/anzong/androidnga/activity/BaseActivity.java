@@ -3,6 +3,7 @@ package gov.anzong.androidnga.activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.MenuItem;
@@ -58,6 +59,9 @@ public abstract class BaseActivity extends AppCompatActivity {
         try {
             if (ThemeManager.getInstance().isNightMode()) {
                 getWindow().setNavigationBarColor(ContextUtils.getColor(R.color.background_color));
+            }else {
+                // Set Transparent as the default color to match the theme
+                getWindow().setNavigationBarColor(Color.TRANSPARENT);
             }
         } catch (Exception e) {
             NLog.e("set navigation bar color exception occur: " + e);

@@ -71,6 +71,8 @@
 
     <gov.nosc.ui.PageSelector
         android:id="@+id/tabs"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        android:background="@color/cardview_dark_background"
         android:layout_width="match_parent"
         android:layout_height="@dimen/article_list_tab_height"
         android:layout_gravity="bottom" />

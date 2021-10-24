@@ -112,7 +112,7 @@ public class MessageContentAdapter extends BaseAppendableAdapterEx<MessageDetail
         ThemeManager theme = ThemeManager.getInstance();
         holder.postTime.setText(entry.getTime());
         String floor = String.valueOf(entry.getLou());
-        holder.floor.setText("[" + floor + " ¥]");
+        holder.floor.setText("#" + floor);
         holder.nickName.setTextColor(res.getColor(theme.getForegroundColor()));
         holder.postTime.setTextColor(res.getColor(theme.getForegroundColor()));
         holder.floor.setTextColor(res.getColor(theme.getForegroundColor()));

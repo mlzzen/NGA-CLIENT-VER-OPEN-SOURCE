@@ -316,7 +316,7 @@ public class ArticleListAdapter extends RecyclerView.Adapter<ArticleListAdapter.
     private View.OnClickListener mSupportListener;
     private View.OnClickListener mOpposeListener;
 
-    public class ArticleViewHolder extends RecyclerView.ViewHolder {
+    public static class ArticleViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.tv_nickName)
         TextView nickNameTV;
@@ -452,7 +452,7 @@ public class ArticleListAdapter extends RecyclerView.Adapter<ArticleListAdapter.
         int fgColor = mThemeManager.getAccentColor(mContext);
         FunctionUtils.handleNickName(row, fgColor, holder.nickNameTV, mTopicOwner, mContext);
 
-        holder.floorTv.setText(MessageFormat.format("[{0} 楼]", String.valueOf(row.getLou())));
+        holder.floorTv.setText(MessageFormat.format("#{0}", String.valueOf(row.getLou())));
         holder.postTimeTv.setText(row.getPostdate());
         holder.scoreTv.setText(MessageFormat.format("{0}", row.getScore()));
         //todo 赞多加粗

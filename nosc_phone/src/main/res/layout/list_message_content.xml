@@ -1,49 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:descendantFocusability="blocksDescendants"
-    android:paddingBottom="0dp" >
+    android:layout_marginTop="4dp"
+    android:layout_marginBottom="4dp"
+    android:layout_marginLeft="6dp"
+    android:layout_marginRight="6dp"
+    app:cardCornerRadius="12dp"
+    android:descendantFocusability="blocksDescendants">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_margin="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/nickName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="10dp"
+            android:textIsSelectable="false"
+            android:textStyle="bold"/>
 
-    <TextView
-        android:id="@+id/nickName"
-        android:layout_width="100dip"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_marginLeft="5dp"
-        android:layout_marginTop="10dp"
-        android:textIsSelectable="false"
-        android:textStyle="bold" >
-    </TextView>
+        <TextView
+            android:id="@+id/floor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="@id/nickName"
+            app:layout_constraintStart_toEndOf="@id/nickName"
+            android:textIsSelectable="false" >
+        </TextView>
 
-    <WebView
-        android:id="@+id/content"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/nickName" />
-    
-    <!-- 由于wrap_content不支持margin bottom，用一个place_holder把整个撑大，避免快速回复按钮和文字重叠 -->
+        <TextView
+            android:id="@+id/postTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="@id/nickName"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_alignTop="@+id/floor"
+            android:textIsSelectable="false" >
+        </TextView>
 
-    <TextView
-        android:id="@+id/floor"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/nickName"
-        android:layout_toRightOf="@+id/nickName"
-        android:textIsSelectable="false" >
-    </TextView>
-    <TextView
-        android:id="@+id/postTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignTop="@+id/floor"
-        android:textIsSelectable="false" >
-    </TextView>
-    <LinearLayout
-        android:id="@+id/place_holder"
-        android:layout_width="fill_parent"
-        android:layout_height="6dp"
-        android:layout_below="@id/content"
-        android:orientation="horizontal" />
-</RelativeLayout>
+        <WebView
+            android:id="@+id/content"
+            app:layout_constraintTop_toBottomOf="@id/nickName"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/nickName"
+            tools:ignore="WebViewLayout" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+</androidx.cardview.widget.CardView>
