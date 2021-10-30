@@ -421,6 +421,7 @@ public class ProfileActivity extends BaseActivity implements OnHttpCallBack<Prof
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 321 && resultCode == Activity.RESULT_OK) {
             String signData = data.getStringExtra("sign");
             if (mProfileData != null) {
@@ -549,7 +550,7 @@ public class ProfileActivity extends BaseActivity implements OnHttpCallBack<Prof
     private void handleAvatar(ProfileData row) {
         final String avatarUrl = FunctionUtils.parseAvatarUrl(row.getAvatarUrl());//
         ImageUtils.loadRoundCornerAvatar(mAvatarIv, avatarUrl);
-        ImageUtils.loadDefaultAvatar((ImageView) findViewById(R.id.iv_toolbar_layout_bg), avatarUrl);
+        ImageUtils.loadAvatar((ImageView) findViewById(R.id.iv_toolbar_layout_bg), avatarUrl);
 
     }
 

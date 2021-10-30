@@ -2,6 +2,8 @@ package sp.phone.mvp.model;
 
 import android.util.Base64;
 
+import androidx.annotation.NonNull;
+
 import com.trello.rxlifecycle2.android.FragmentEvent;
 
 import java.io.ByteArrayOutputStream;
@@ -88,7 +90,7 @@ public class LoginModel extends BaseModel implements LoginContract.Model {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseSubscriber<String>() {
                     @Override
-                    public void onNext(String s) {
+                    public void onNext(@NonNull String s) {
 //                        JSONObject obj = JSON.parseObject(s);
 //                        if (obj.containsKey("error")) {
 //                            String error = obj.getJSONObject("error").getString("0");
@@ -101,16 +103,6 @@ public class LoginModel extends BaseModel implements LoginContract.Model {
 
     }
 
-
-    private FormBody buildFormBody(Map<String, String> fieldMap) {
-        FormBody.Builder builder = new FormBody.Builder();
-        for (Map.Entry<String, String> entry : fieldMap.entrySet()) {
-            String key = entry.getKey();
-            String value = entry.getValue();
-            builder.add(key, value);
-        }
-        return builder.build();
-    }
 
     private MultipartBody buildMultipartBody(Map<String, String> fieldMap) {
         MultipartBody.Builder builder = new MultipartBody.Builder();

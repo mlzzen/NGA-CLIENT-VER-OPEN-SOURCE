@@ -20,7 +20,7 @@ class ConfirmDialog(private var mMessage: CharSequence, private var mActionRunna
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val builder = AlertDialog.Builder(context!!);
+        val builder = AlertDialog.Builder(requireContext());
         builder.setMessage(mMessage)
                 .setPositiveButton(android.R.string.ok) { dialog, which -> mActionRunnable.run() }
                 .setNegativeButton(android.R.string.cancel, null);

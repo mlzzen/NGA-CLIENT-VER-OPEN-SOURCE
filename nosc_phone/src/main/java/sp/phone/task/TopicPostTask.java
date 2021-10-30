@@ -20,7 +20,6 @@ import sp.phone.util.NLog;
 
 public class TopicPostTask extends AsyncTask<String, Integer, String> {
 
-    private final Context mContext;
 
     private static final String LOG_TAG = TopicPostTask.class.getSimpleName();
 
@@ -28,11 +27,11 @@ public class TopicPostTask extends AsyncTask<String, Integer, String> {
 
     private final String result_end_tag = "<br/>";
 
-    private String mReplyUrl = Utils.getNGAHost() + "post.php?";
+    private final String mReplyUrl = Utils.getNGAHost() + "post.php?";
 
     private boolean mHasError = false;
 
-    private CallBack mCallBack;
+    private final CallBack mCallBack;
 
 
     public interface CallBack {
@@ -40,9 +39,8 @@ public class TopicPostTask extends AsyncTask<String, Integer, String> {
         void onArticlePostFinished(boolean isSuccess, String result);
     }
 
-    public TopicPostTask(Context context, CallBack callBack) {
+    public TopicPostTask(CallBack callBack) {
         super();
-        mContext = context;
         mCallBack = callBack;
     }
 
@@ -63,10 +61,9 @@ public class TopicPostTask extends AsyncTask<String, Integer, String> {
         if (params.length < 1)
             return "parameter error";
         String ret = "网络错误";
-        String url = mReplyUrl;
         String body = params[0];
 
-        HttpPostClient c = new HttpPostClient(url);
+        HttpPostClient c = new HttpPostClient(mReplyUrl);
         String cookie = PhoneConfiguration.getInstance().getCookie();
         c.setCookie(cookie);
         try {
@@ -74,7 +71,6 @@ public class TopicPostTask extends AsyncTask<String, Integer, String> {
             HttpURLConnection conn = c.post_body(body);
             if (conn != null) {
                 if (conn.getResponseCode() >= 500) {
-                    input = null;
                     mHasError = true;
                     ret = "二哥在用服务器下毛片";
                 } else {
@@ -112,7 +108,7 @@ public class TopicPostTask extends AsyncTask<String, Integer, String> {
 
     @Override
     protected void onPostExecute(String result) {
-        String success_results[] = {"发贴完毕", "@提醒每24小时不能超过50个"};
+        String[] success_results = {"发贴完毕", "@提醒每24小时不能超过50个"};
         if (!mHasError) {
             boolean success = false;
             for (String success_result : success_results) {

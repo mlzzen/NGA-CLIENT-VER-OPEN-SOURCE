@@ -11,36 +11,31 @@ import gov.anzong.androidnga.core.data.HtmlData;
  */
 public class ForumBasicDecoder implements IForumDecoder {
 
-    private static final String lesserNukeStyle = "<div style='border:1px solid #B63F32;margin:10px 10px 10px 10px;padding:10px' > <span style='color:#EE8A9E'>用户因此贴被暂时禁言，此效果不会累加</span><br/>";
-    private static final String styleAlignRight = "<div style='text-align:right' >";
-    private static final String styleAlignLeft = "<div style='text-align:left' >";
-    private static final String styleAlignCenter = "<div style='text-align:center' >";
-    private static final String styleColor = "<span style='color:$1' >";
-    private static final String endDiv = "</div>";
-
-    private static final String STYLE_QUOTE = "<div class='quote' >";
+    static final String lesserNukeStyle = "<div style='border:1px solid #B63F32;margin:10px 10px 10px 10px;padding:10px' > <span style='color:#EE8A9E'>用户因此贴被暂时禁言，此效果不会累加</span><br/>";
+    static final String styleAlignRight = "<div style='text-align:right' >";
+    static final String styleAlignLeft = "<div style='text-align:left' >";
+    static final String styleAlignCenter = "<div style='text-align:center' >";
+    static final String styleColor = "<span style='color:$1' >";
+    static final String endDiv = "</div>";
+    static final String styleLeft = "<div style='float:left' >";
+    static final String styleRight = "<div style='float:right' >";
+    static final String STYLE_QUOTE = "<div class='quote' >";
 
     @Override
     public String decode(String content, HtmlData htmlData) {
         if (StringUtils.isEmpty(content)) {
             return "";
         }
-        // s = StringUtils.unEscapeHtml(s);
 
         String quoteStyle = STYLE_QUOTE;
 
-        final String styleLeft = "<div style='float:left' >";
-        final String styleRight = "<div style='float:right' >";
+
         content = StringUtils.replaceAll(content, ignoreCaseTag + "&amp;", "&");
         content = StringUtils.replaceAll(content, ignoreCaseTag + "\\[l\\]", styleLeft);
         content = StringUtils.replaceAll(content, ignoreCaseTag + "\\[/l\\]", endDiv);
-        // content = StringUtils.replaceAll(content, "\\[L\\]", styleLeft);
-        // content = StringUtils.replaceAll(content, "\\[/L\\]", endDiv);
 
         content = StringUtils.replaceAll(content, ignoreCaseTag + "\\[r\\]", styleRight);
         content = StringUtils.replaceAll(content, ignoreCaseTag + "\\[/r\\]", endDiv);
-        // content = StringUtils.replaceAll(content, "\\[R\\]", styleRight);
-        // content = StringUtils.replaceAll(content, "\\[/R\\]", endDiv);
 
         content = StringUtils.replaceAll(content, ignoreCaseTag + "\\[align=right\\]", styleAlignRight);
         content = StringUtils.replaceAll(content, ignoreCaseTag + "\\[align=left\\]", styleAlignLeft);

@@ -14,11 +14,8 @@ class HtmlVoteBuilder : IHtmlBuild {
     override fun build(htmlData: HtmlData): CharSequence {
         if(htmlData.vote.isNullOrEmpty())
             return ""
-
         return "<div class='collapse'>" + Vote(htmlData.vote.split("~")).htmlStr + "</div>"
     }
-
-
 
     private class Vote(vList:List<String>){
         private object Votes{
@@ -90,7 +87,5 @@ class HtmlVoteBuilder : IHtmlBuild {
             htmlStr = sb.toString()
         }
     }
-
-
 
 }

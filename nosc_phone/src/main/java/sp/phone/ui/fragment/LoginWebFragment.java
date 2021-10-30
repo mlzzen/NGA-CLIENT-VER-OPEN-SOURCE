@@ -19,9 +19,12 @@ import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+
 import gov.anzong.androidnga.R;
 import gov.anzong.androidnga.base.util.ToastUtils;
-import sp.phone.mvp.presenter.LoginPresenter;
+import sp.phone.common.UserManagerImpl;
 import sp.phone.util.StringUtils;
 
 /**
@@ -32,13 +35,18 @@ public class LoginWebFragment extends BaseFragment {
 
     private static final String URL_LOGIN = "https://ngabbs.com/nuke.php?__lib=login&__act=account&login";
 
+    private static final String TAG_UID = "ngaPassportUid";
+
+    private static final String TAG_CID = "ngaPassportCid";
+
+    private static final String TAG_USER_NAME = "ngaPassportUrlencodedUname";
+
     private static final int MAX_PROGRESS = 100;
 
     private ProgressBar mProgressBar;
 
     private WebView mWebView;
 
-    private LoginPresenter mLoginPresenter;
 
     private final Handler handler = new Handler(Looper.getMainLooper());
 
@@ -53,7 +61,6 @@ public class LoginWebFragment extends BaseFragment {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        mLoginPresenter = new LoginPresenter();
         super.onCreate(savedInstanceState);
         CookieManager.getInstance().removeAllCookies(null);
         ToastUtils.info("不支持QQ和微博登录");
@@ -157,12 +164,52 @@ public class LoginWebFragment extends BaseFragment {
 
     private void setCookies() {
         String cookieStr = CookieManager.getInstance().getCookie(mWebView.getUrl());
-        if (!StringUtils.isEmpty(cookieStr) && mLoginPresenter.parseCookie(cookieStr)) {
+        if (!StringUtils.isEmpty(cookieStr) && parseCookie(cookieStr)) {
             ToastUtils.success("登录成功");
             if (mActivity != null) {
                 mActivity.setResult(Activity.RESULT_OK);
                 mActivity.finish();
             }
         }
+    }
+
+
+    public boolean parseCookie(String cookies) {
+        if (!cookies.contains(TAG_UID)) {
+            return false;
+        }
+        String uid = null;
+        String cid = null;
+        String userName = null;
+
+        for (String cookie : cookies.split(";")) {
+            cookie = cookie.trim();
+            if (cookie.contains(TAG_UID)) {
+                uid = cookie.substring(TAG_UID.length() + 1);
+            } else if (cookie.contains(TAG_CID)) {
+                cid = cookie.substring(TAG_CID.length() + 1);
+            } else if (cookie.contains(TAG_USER_NAME)) {
+                userName = cookie.substring(TAG_USER_NAME.length() + 1);
+                try {
+                    userName = URLDecoder.decode(userName, "gbk");
+                    userName = URLDecoder.decode(userName, "gbk");
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        if (!StringUtils.isEmpty(cid)
+                && !StringUtils.isEmpty(uid)
+                && !StringUtils.isEmpty(userName)) {
+            saveCookie(uid, cid, userName);
+            return true;
+        }
+        return false;
+
+    }
+
+    private void saveCookie(String uid, String cid, String userName) {
+        UserManagerImpl.getInstance().addUser(uid, cid, userName, "", 0);
     }
 }

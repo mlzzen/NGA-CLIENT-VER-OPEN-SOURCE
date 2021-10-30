@@ -1,15 +1,10 @@
 package sp.phone.util;
 
 import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo.State;
-
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import gov.anzong.androidnga.R;
 import gov.anzong.androidnga.Utils;
 import gov.anzong.androidnga.core.data.HtmlData;
@@ -17,7 +12,6 @@ import gov.anzong.androidnga.core.decode.ForumDecoder;
 import sp.phone.http.bean.MessageArticlePageInfo;
 import sp.phone.http.bean.MessageDetailInfo;
 import gov.anzong.androidnga.base.util.ContextUtils;;
-import sp.phone.common.PhoneConfiguration;
 import sp.phone.theme.ThemeManager;
 
 /**
@@ -25,40 +19,14 @@ import sp.phone.theme.ThemeManager;
  */
 public class MessageUtil {
     private final static String TAG = MessageUtil.class.getSimpleName();
-    private static Context context;
+    private final Context context;
 
-    @SuppressWarnings("static-access")
     public MessageUtil(Context context) {
         super();
         this.context = context;
     }
 
-    public static boolean isInWifi() {
-        ConnectivityManager conMan = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        State wifi = conMan.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState();
-        return wifi == State.CONNECTED;
-    }
 
-    public static int showImageQuality() {
-        return 0;
-//        if (isInWifi()) {
-//            return 0;
-//        } else {
-//            return PhoneConfiguration.getInstance().imageQuality;
-//        }
-    }
-
-    private boolean isShowImage() {
-        return PhoneConfiguration.getInstance().isDownImgNoWifi() || isInWifi();
-    }
-
-    /**
-     * 解析页面内容
-     *
-     * @param js
-     * @param page
-     * @return
-     */
     public MessageDetailInfo parseJsonThreadPage(String js, int page) {
         js = js.replaceAll("\"content\":\\+(\\d+),", "\"content\":\"+$1\",");
         js = js.replaceAll("\"subject\":\\+(\\d+),", "\"subject\":\"+$1\",");
@@ -68,7 +36,7 @@ public class MessageUtil {
         js = js.replaceAll("\"author\":(0\\d+),", "\"author\":\"$1\",");
         final String start = "\"__P\":{\"aid\":";
         final String end = "\"this_visit_rows\":";
-        if (js.indexOf(start) != -1 && js.indexOf(end) != -1) {
+        if (js.contains(start) && js.contains(end)) {
             NLog.w(TAG, "here comes an invalid response");
             String validJs = js.substring(0, js.indexOf(start));
             validJs += js.substring(js.indexOf(end));
@@ -99,15 +67,16 @@ public class MessageUtil {
         data.setMessageEntryList(messageEntryList);
         data.set__currentPage(o1.getIntValue("currentPage"));
         data.set__nextPage(o1.getIntValue("nextPage"));
-        String alluser = o1.getString("allUsers"), allusertmp = "";
-        alluser = alluser.replaceAll("	", " ");
-        String alluserarray[] = alluser.split(" ");
-        for (int i = 1; i < alluserarray.length; i += 2) {
-            allusertmp += alluserarray[i] + ",";
+        String allUser = o1.getString("allUsers");
+        StringBuilder allusertmp = new StringBuilder();
+        allUser = allUser.replaceAll("	", " ");
+        String[] allUserArray = allUser.split(" ");
+        for (int i = 1; i < allUserArray.length; i += 2) {
+            allusertmp.append(allUserArray[i]).append(",");
         }
         if (allusertmp.length() > 0)
-            allusertmp = allusertmp.substring(0, allusertmp.length() - 1);
-        data.set_Alluser(allusertmp);
+            allusertmp = new StringBuilder(allusertmp.substring(0, allusertmp.length() - 1));
+        data.set_Alluser(allusertmp.toString());
         if (data.getMessageEntryList().get(0) != null) {
             String title = data.getMessageEntryList().get(0).getSubject();
             if (!StringUtils.isEmpty(title)) {
@@ -181,24 +150,12 @@ public class MessageUtil {
         int htmlfgColor = fgColor & 0xffffff;
         final String fgColorStr = String.format("%06x", htmlfgColor);
 
-        String formated_html_data = convertToHtmlText(row,
-                isShowImage(), showImageQuality(), fgColorStr, bgcolorStr);
+        String formated_html_data = convertToHtmlText(row, fgColorStr, bgcolorStr);
 
         row.setFormated_html_data(formated_html_data);
     }
 
-    /**
-     * 转换函数
-     *
-     * @param row
-     * @param showImage
-     * @param imageQuality
-     * @param fgColorStr
-     * @param bgcolorStr
-     * @return
-     */
-    public static String convertToHtmlText(final MessageArticlePageInfo row,
-                                           boolean showImage, int imageQuality, final String fgColorStr,
+    public static String convertToHtmlText(final MessageArticlePageInfo row, final String fgColorStr,
                                            final String bgcolorStr) {
         String ngaHtml = ForumDecoder.decode(row.getContent(), HtmlData.create(row.getContent(), Utils.getNGAHost()));
         if (StringUtils.isEmpty(ngaHtml)) {
@@ -221,10 +178,7 @@ public class MessageUtil {
     private static String buildHeader(MessageArticlePageInfo row, String fgColorStr) {
         if (row == null || StringUtils.isEmpty(row.getSubject()))
             return "";
-        StringBuilder sb = new StringBuilder();
-        sb.append("<h4 style='color:").append(fgColorStr).append("' >")
-                .append(row.getSubject()).append("</h4>");
-        return sb.toString();
+        return "<h4 style='color:" + fgColorStr + "' >" + row.getSubject() + "</h4>";
     }
 
 }

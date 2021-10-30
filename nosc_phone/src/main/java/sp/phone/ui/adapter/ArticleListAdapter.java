@@ -289,8 +289,7 @@ public class ArticleListAdapter extends RecyclerView.Adapter<ArticleListAdapter.
             } else if (row.getAuthor() != null){
                 ARouter.getInstance()
                         .build(ARouterConstants.ACTIVITY_PROFILE)
-                        .withString("mode", "username")
-                        .withString("username", row.getAuthor())
+                        .withString("uid", ""+row.getAuthorid())
                         .navigation();
             }
         }
@@ -456,7 +455,7 @@ public class ArticleListAdapter extends RecyclerView.Adapter<ArticleListAdapter.
         holder.postTimeTv.setText(row.getPostdate());
         holder.scoreTv.setText(MessageFormat.format("{0}", row.getScore()));
         //todo 赞多加粗
-        holder.detailTv.setText(String.format("级别：%s   威望：%s   发帖：%s", row.getMemberGroup(), row.getReputation(), row.getPostCount()));
+        holder.detailTv.setText(String.format("级别:%s   威望:%s   发帖:%s", row.getMemberGroup(), row.getReputation(), row.getPostCount()));
 
     }
 

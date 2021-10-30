@@ -59,7 +59,6 @@ public class SearchHistoryUserFragment extends SearchHistoryBoardFragment {
         }
         ARouter.getInstance()
                 .build(ARouterConstants.ACTIVITY_PROFILE)
-                .withString("mode", mode)
                 .withString(mode, query)
                 .navigation(getContext());
 

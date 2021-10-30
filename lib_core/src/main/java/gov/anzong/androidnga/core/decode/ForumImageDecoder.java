@@ -64,8 +64,10 @@ public class ForumImageDecoder implements IForumDecoder {
                 if (!showImage) {
                     content = content.replace(s0, HTML_IMG_DEFAULT);
                 }
-                s1 = s1.replaceFirst("(http\\S+).(png|jpg).(thumb_s|medium|thumb|thumb_ss).jpg", "$1.$2");
-                mImageUrls.add(s1);
+                if(s1 != null){
+                    s1 = s1.replaceFirst("(http\\S+).(png|jpg).(thumb_s|medium|thumb|thumb_ss).jpg", "$1.$2");
+                    mImageUrls.add(s1);
+                }
             }
         }
         return content;

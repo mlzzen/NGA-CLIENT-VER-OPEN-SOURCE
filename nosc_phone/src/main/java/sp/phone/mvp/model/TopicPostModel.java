@@ -150,7 +150,7 @@ public class TopicPostModel extends BaseModel implements TopicPostContract.Model
 
     @Override
     public void post(PostParam postParam, TopicPostTask.CallBack callBack) {
-        new TopicPostTask(ContextUtils.getContext(), callBack).execute(postParam.toString());
+        new TopicPostTask( callBack).execute(postParam.toString());
     }
 
     @Override

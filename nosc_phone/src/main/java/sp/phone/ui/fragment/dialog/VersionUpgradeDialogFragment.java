@@ -27,7 +27,7 @@ public class VersionUpgradeDialogFragment extends BaseDialogFragment {
 
     @Override
     public void onDestroy() {
-        NgaClientApp.setNewVersion(false);
+//        NgaClientApp.setNewVersion(false);
         super.onDestroy();
     }
 

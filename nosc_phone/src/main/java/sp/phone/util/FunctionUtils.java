@@ -31,7 +31,6 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.Objects;
 
@@ -43,9 +42,7 @@ import gov.anzong.androidnga.core.decode.ForumDecoder;
 import sp.phone.http.bean.MessageArticlePageInfo;
 import sp.phone.http.bean.ThreadRowInfo;
 import sp.phone.common.PhoneConfiguration;
-import sp.phone.common.UserManagerImpl;
 import sp.phone.ui.fragment.dialog.ReportDialogFragment;
-import sp.phone.proxy.ProxyBridge;
 import sp.phone.theme.ThemeManager;
 import sp.phone.view.webview.WebViewClientEx;
 
@@ -111,45 +108,6 @@ public class FunctionUtils {
     }
 
 
-//    public static void errordialogadmin(Context context, final View listView) {
-//        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-//        builder.setMessage("这白痴是系统账号,神马都看不到");
-//        builder.setTitle("看不到");
-//        builder.setPositiveButton("关闭", (dialog, which) -> {
-//            // TODO Auto-generated method stub
-//            dialog.dismiss();
-//        });
-//
-//        final AlertDialog dialog = builder.create();
-//        dialog.show();
-//        dialog.setOnDismissListener(arg0 -> {
-//            // TODO Auto-generated method stub
-//            dialog.dismiss();
-//        });
-//    }
-/*
-    public static String signatureToHtmlText_Message(final MessageArticlePageInfo row,
-                                                     boolean showImage, int imageQuality, final String fgColorStr,
-                                                     final String bgcolorStr, Context context) {
-        initStaticStrings(context);
-        String ngaHtml = StringUtils.decodeForumTag(row.getSignature(),
-                showImage, imageQuality, null);
-        if (StringUtils.isEmpty(ngaHtml)) {
-            ngaHtml = "<font color='red'>[" + context.getString(R.string.hide)
-                    + "]</font>";
-        }
-        ngaHtml = "<HTML> <HEAD><META   http-equiv=Content-Type   content= \"text/html;   charset=utf-8 \">"
-                + "<body bgcolor= '#"
-                + bgcolorStr
-                + "'>"
-                + "<font color='#"
-                + fgColorStr + "' size='2'>" + ngaHtml + "</font></body>";
-
-        return ngaHtml;
-    }
-
- */
-
     public static void Create_Signature_Dialog(ThreadRowInfo row, final Context context, final View scrollview) {
         LayoutInflater layoutInflater = ((Activity) context).getLayoutInflater();
         final View view = layoutInflater.inflate(R.layout.dialog_signature,
@@ -175,8 +133,7 @@ public class FunctionUtils {
         contentTV.setFocusableInTouchMode(false);
         contentTV.setFocusable(false);
         contentTV.setLongClickable(false);
-        boolean showImage = PhoneConfiguration.getInstance().isDownImgNoWifi()
-                || NetUtil.getInstance().isInWifi();
+
         WebSettings setting = contentTV.getSettings();
         setting.setDefaultFontSize(PhoneConfiguration.getInstance()
                 .getWebSize());
@@ -194,105 +151,6 @@ public class FunctionUtils {
         dialog.setOnDismissListener(arg0 -> dialog.dismiss());
     }
 
-//    public static void createVoteDialog(ThreadRowInfo row, final Context context, final View scrollview, Toast toast) {
-//        LayoutInflater layoutInflater = ((Activity) context).getLayoutInflater();
-//        final View view = layoutInflater.inflate(R.layout.dialog_vote, null);
-//        String name = row.getAuthor();
-//        AlertDialog.Builder alert = new AlertDialog.Builder(context);
-//        alert.setView(view);
-//        alert.setTitle("投票/投注");
-//        // COLOR
-//
-//        ThemeManager theme = ThemeManager.getInstance();
-//        int bgColor = context.getResources().getColor(theme.getBackgroundColor(0));
-//        int fgColor = context.getResources().getColor(theme.getForegroundColor());
-//        bgColor = bgColor & 0xffffff;
-//        final String bgcolorStr = String.format("%06x", bgColor);
-//
-//        int htmlfgColor = fgColor & 0xffffff;
-//        final String fgColorStr = String.format("%06x", htmlfgColor);
-//
-//        WebViewClient client = new WebViewClientEx((FragmentActivity) context);
-//        final WebView contentTV = (WebView) view.findViewById(R.id.votewebview);
-//        contentTV.setBackgroundColor(0);
-//        contentTV.setLongClickable(false);
-//        contentTV.setOnLongClickListener(view1 -> true);
-//        ((Activity) context).getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-//        boolean showImage = PhoneConfiguration.getInstance().isDownImgNoWifi()
-//                || NetUtil.getInstance().isInWifi();
-//        WebSettings setting = contentTV.getSettings();
-//        setting.setDefaultFontSize(PhoneConfiguration.getInstance()
-//                .getWebSize());
-//        setting.setJavaScriptEnabled(true);
-//        setting.setJavaScriptCanOpenWindowsAutomatically(true);
-//        contentTV.addJavascriptInterface(new ProxyBridge(context, toast), "ProxyBridge");
-//        contentTV.setFocusableInTouchMode(true);
-//        contentTV.setFocusable(true);
-//        contentTV.setHapticFeedbackEnabled(true);
-//        contentTV.setClickable(true);
-//        contentTV.requestFocusFromTouch();
-//        contentTV.setWebChromeClient(new WebChromeClient() {
-//
-//            @Override
-//            public void onProgressChanged(WebView view, int newProgress) {
-//                super.onProgressChanged(view, newProgress);
-//                view.requestFocus(View.FOCUS_DOWN);
-//                view.setOnTouchListener((v, event) -> {
-//                    switch (event.getAction()) {
-//                        case MotionEvent.ACTION_DOWN:
-//                        case MotionEvent.ACTION_UP:
-//                            if (!v.hasFocus()) {
-//                                v.requestFocus(View.FOCUS_DOWN);
-//                            }
-//                            break;
-//                    }
-//                    return false;
-//                });
-//            }
-//
-//            @Override
-//            public boolean onJsAlert(WebView view, String url, String message,
-//                                     final android.webkit.JsResult result) {
-//                final AlertDialog.Builder b2 = new AlertDialog.Builder(context)
-//                        .setMessage(message)
-//                        .setPositiveButton("确定",
-//                                (dialog, which) -> result.confirm());
-//
-//                b2.setCancelable(false);
-//                b2.create();
-//                b2.show();
-//                return true;
-//            }
-//
-//            @Override
-//            public boolean onJsConfirm(WebView view, String url,
-//                                       String message, final android.webkit.JsResult result) {
-//                final AlertDialog.Builder b1 = new AlertDialog.Builder(
-//                        context)
-//                        .setMessage(message)
-//                        .setPositiveButton("确定",
-//                                (dialog, which) -> result.confirm())
-//                        .setNeutralButton("取消",
-//                                (dialog, which) -> result.cancel())
-//                        .setOnCancelListener(
-//                                dialog -> result.cancel());
-//                b1.create();
-//                b1.show();
-//                return true;
-//            }
-//        });
-//        contentTV.setWebViewClient(client);
-//        contentTV.loadDataWithBaseURL(
-//                null,
-//                FunctionUtils.VoteToHtmlText(row, fgColorStr, bgcolorStr), "text/html", "utf-8", null);
-//        contentTV.requestLayout();
-//        alert.setPositiveButton("关闭", (dialog, which) -> dialog.dismiss());
-//
-//        final Dialog dialog = alert.create();
-//        dialog.show();
-//        dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
-//        dialog.setOnDismissListener(arg0 -> dialog.dismiss());
-//    }
 
     public static void handleNickName(MessageArticlePageInfo row, int fgColor,
                                       TextView nickNameTV, Context context) {
@@ -349,19 +207,6 @@ public class FunctionUtils {
     }
 
 
-    public static boolean isShowImage() {
-        return PhoneConfiguration.getInstance().isDownImgNoWifi() || NetUtil.getInstance().isInWifi();
-    }
-
-    public static int showImageQuality() {
-        return 0;
-//        if (NetUtil.getInstance().isInWifi()) {
-//            return 0;
-//        } else {
-//            return PhoneConfiguration.getInstance().imageQuality;
-//        }
-    }
-
     public static String signatureToHtmlText(final ThreadRowInfo row,
                                              final String fgColorStr,
                                              final String bgcolorStr, Context context) {
@@ -385,20 +230,20 @@ public class FunctionUtils {
         return ngaHtml;
     }
 
-    public static String VoteToHtmlText(final ThreadRowInfo row,  final String fgColorStr, final String bgcolorStr) {
-        if (StringUtils.isEmpty(row.getVote()))
-            return "本楼没有投票/投注内容";
-        String ngaHtml = String.valueOf(row.getTid()) + ",'" + row.getVote()
-                + "'";
-        ngaHtml = "<!DOCTYPE html><html><head><meta http-equiv=Content-Type content=\"text/html;charset=utf-8\">"
-                + "<script type=\"text/javascript\" src=\"file:///android_asset/vote/vote.js\"></script><link rel=\"stylesheet\" type=\"text/css\" href=\"file:///android_asset/vote/vote.css\" />"
-                + " </head><body style=\"color:#" + fgColorStr + "\"bgcolor= '#"
-                + bgcolorStr
-                + "'><span id='votec'></span><script>vote("
-                + ngaHtml
-                + ")</script></body></html>";
-        return ngaHtml;
-    }
+//    public static String VoteToHtmlText(final ThreadRowInfo row,  final String fgColorStr, final String bgcolorStr) {
+//        if (StringUtils.isEmpty(row.getVote()))
+//            return "本楼没有投票/投注内容";
+//        String ngaHtml = String.valueOf(row.getTid()) + ",'" + row.getVote()
+//                + "'";
+//        ngaHtml = "<!DOCTYPE html><html><head><meta http-equiv=Content-Type content=\"text/html;charset=utf-8\">"
+//                + "<script type=\"text/javascript\" src=\"file:///android_asset/vote/vote.js\"></script><link rel=\"stylesheet\" type=\"text/css\" href=\"file:///android_asset/vote/vote.css\" />"
+//                + " </head><body style=\"color:#" + fgColorStr + "\"bgcolor= '#"
+//                + bgcolorStr
+//                + "'><span id='votec'></span><script>vote("
+//                + ngaHtml
+//                + ")</script></body></html>";
+//        return ngaHtml;
+//    }
 
 
     public static String parseAvatarUrl(String js_escap_avatar) {

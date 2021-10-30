@@ -17,7 +17,7 @@ import gov.anzong.androidnga.core.HtmlConvertFactory;
 import gov.anzong.androidnga.core.data.AttachmentData;
 import gov.anzong.androidnga.core.data.CommentData;
 import gov.anzong.androidnga.core.data.HtmlData;
-import gov.anzong.androidnga.base.util.ContextUtils;;
+import gov.anzong.androidnga.base.util.ContextUtils;
 import sp.phone.common.PhoneConfiguration;
 import sp.phone.http.bean.Attachment;
 import sp.phone.http.bean.DiceData;
@@ -285,7 +285,7 @@ public class ArticleConvertFactory {
         row.setYz(userInfo.getString("yz"));
         row.setMuteTime(userInfo.getString("mute_time"));
         try {
-            row.setAurvrc(Integer.valueOf(userInfo.getString("rvrc")));
+            row.setAurvrc(Integer.parseInt(userInfo.getString("rvrc")));
         } catch (Exception e) {
             row.setAurvrc(0);
         }
@@ -350,8 +350,8 @@ public class ArticleConvertFactory {
             for (String str : strs) {
                 if (str.length() > 0) {
                     String[] sstrs = str.split("d");
-                    int num = 0;
-                    int covers = 0;
+                    int num;
+                    int covers;
                     if (sstrs.length > 1) {
                         if (sstrs[0].length() > 0) {
                             try {
@@ -359,7 +359,6 @@ public class ArticleConvertFactory {
                             }catch (Exception e){
                                 num = 1;
                             }
-
                         } else {
                             num = 1;
                         }

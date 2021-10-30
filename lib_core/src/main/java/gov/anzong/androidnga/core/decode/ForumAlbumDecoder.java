@@ -17,8 +17,7 @@ public class ForumAlbumDecoder implements IForumDecoder {
         String sup = "", sdown = "", salbum = "", stemp = "", stitle = "";
         while (startpos < endpos && startpos >= 0) {
             sup = content.substring(0, startpos);
-            if (endpos >= 0)
-                sdown = content.substring(endpos, content.length());
+            sdown = content.substring(endpos);
             salbum = content.substring(startpos, endpos);
             stitle = salbum.replaceAll("(?i)" + "\\[album=(.*?)\\](.*?)\\[/album\\]", "$1");
             stemp = salbum.replaceAll("(?i)" + "\\[album=(.*?)\\](.*?)\\[/album\\]", "$2");

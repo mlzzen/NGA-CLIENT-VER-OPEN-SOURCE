@@ -19,7 +19,6 @@ import sp.phone.http.bean.ThreadRowInfo;
 
 public class UserManagerImpl implements UserManager {
 
-    private Context mContext;
 
     private int mActiveIndex;
 
@@ -49,7 +48,6 @@ public class UserManagerImpl implements UserManager {
 
     @Override
     public void initialize(Context context) {
-        mContext = context.getApplicationContext();
         mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
 
         mAvatarPreferences = context.getSharedPreferences(PreferenceKey.PREFERENCE_AVATAR, Context.MODE_PRIVATE);
