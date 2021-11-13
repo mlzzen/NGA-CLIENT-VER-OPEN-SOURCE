@@ -9,18 +9,12 @@ public interface PreferenceKey {
     String PERFERENCE = "perference";
     String DOWNLOAD_AVATAR_NO_WIFI = "download_avatar_nowifi";
     String DOWNLOAD_IMG_NO_WIFI = "down_load_without_wifi";
-    String DOWNLOAD_IMG_QUALITY_NO_WIFI = "download_img_quality_without_wifi";
     String ENABLE_NOTIFIACTION = "enableNotification";
     String NOTIFIACTION_SOUND = "notificationSound";
     String NIGHT_MODE = "nightmode";
-    String VERSION = "version";
     String REFRESH_AFTERPOST_SETTING_MODE = "refresh_after_post_setting_mode";
     String SHOW_SIGNATURE = "showSignature";
-    String SHOW_STATIC = "showStatic";
     String SHOW_COLORTXT = "showColortxt";
-    String SHOW_NEWWEIBA = "showNewweiba";
-    String SHOW_LAJIBANKUAI = "showLajibankuai";
-    String HANDSIDE = "HandSide";
 
     String USER_LIST = "userList";
     String BLACK_LIST = "";
@@ -74,15 +68,8 @@ public interface PreferenceKey {
 
     public static final String KEY_USE_SOLID_COLOR_BG = "use_solid_color_bg";
 
-    public static final String KEY_CHECK_UPGRADE_STATE = "key_check_upgrade_state";
-
-    public static final String KEY_CHECK_UPGRADE_TIME = "key_check_upgrade_time";
 
     public static final String KEY_NIGHT_MODE_FOLLOW_SYSTEM = "key_night_mode_follow_system";
-
-    public static final String VERSION_MAJOR_CODE = "version_major_code";
-
-    public static final String VERSION_MIRROR_CODE = "version_mirror_code";
 
     public static final String VERSION_CODE = "version_code";
 

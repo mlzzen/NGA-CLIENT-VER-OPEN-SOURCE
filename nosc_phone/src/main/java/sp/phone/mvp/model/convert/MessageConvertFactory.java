@@ -19,13 +19,13 @@ import sp.phone.util.StringUtils;
  * Created by Justwen on 2017/10/10.
  */
 
-public class MessageConvertFactory {
+public abstract class MessageConvertFactory {
 
-    private String mErrorMsg = "";
+    private static String mErrorMsg = "";
 
     private static final String TAG = MessageConvertFactory.class.getSimpleName();
 
-    public MessageListInfo getMessageListInfo(String js) {
+    public static MessageListInfo getMessageListInfo(String js) {
 
 
         if (js == null || js.isEmpty()) {
@@ -107,7 +107,7 @@ public class MessageConvertFactory {
         return ret;
     }
 
-    public MessageDetailInfo getMessageDetailInfo(String js, int page) {
+    public static MessageDetailInfo getMessageDetailInfo(String js, int page) {
 
         if (js == null) {
             mErrorMsg = ContextUtils.getString(R.string.network_error);
@@ -147,7 +147,7 @@ public class MessageConvertFactory {
         return ret;
     }
 
-    public String getErrorMsg() {
+    public static String getErrorMsg() {
         return mErrorMsg;
     }
 }

@@ -13,11 +13,9 @@ public abstract class BaseModel  {
 
     private volatile LifecycleProvider<FragmentEvent> mProvider;
 
-    private String mDomain;
 
-    public BaseModel() {
-        mDomain = ForumUtils.getAvailableDomain();
-    }
+
+    public BaseModel() { }
 
     public void detach() {
         mProvider = null;
@@ -31,7 +29,5 @@ public abstract class BaseModel  {
         return mProvider;
     }
 
-    protected String getAvailableDomain() {
-        return mDomain;
-    }
+
 }

@@ -12,7 +12,7 @@ import gov.anzong.androidnga.base.util.ContextUtils;;
 /**
  * Created by Justwen on 2017/11/23.
  */
-public class ErrorConvertFactory {
+public abstract class ErrorConvertFactory {
 
     public static String getErrorMessage(String js) {
         if (js.isEmpty()) {

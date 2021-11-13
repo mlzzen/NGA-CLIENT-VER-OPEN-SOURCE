@@ -33,6 +33,7 @@ import sp.phone.mvp.model.entity.ThreadPageInfo;
 import sp.phone.mvp.model.entity.TopicListInfo;
 import sp.phone.param.TopicListParam;
 import sp.phone.rxjava.BaseSubscriber;
+import sp.phone.util.ForumUtils;
 import sp.phone.util.NLog;
 import sp.phone.util.StringUtils;
 
@@ -219,7 +220,7 @@ public class TopicListModel extends BaseModel implements TopicListContract.Model
     }
 
     private String getUrl(int page, TopicListParam requestInfo) {
-        StringBuilder jsonUri = new StringBuilder(getAvailableDomain() + "/thread.php?");
+        StringBuilder jsonUri = new StringBuilder(ForumUtils.getAvailableDomain() + "/thread.php?");
         if (0 != requestInfo.authorId) {
             jsonUri.append("authorid=").append(requestInfo.authorId).append("&");
         }

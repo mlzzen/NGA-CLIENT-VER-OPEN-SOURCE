@@ -28,6 +28,7 @@ import sp.phone.mvp.model.convert.ArticleConvertFactory;
 import sp.phone.mvp.model.convert.ErrorConvertFactory;
 import sp.phone.param.ArticleListParam;
 import sp.phone.rxjava.BaseSubscriber;
+import sp.phone.util.ForumUtils;
 import sp.phone.util.NLog;
 
 /**
@@ -50,7 +51,7 @@ public class ArticleListModel extends BaseModel implements ArticleListContract.M
         int tid = param.tid;
         int pid = param.pid;
         int authorId = param.authorId;
-        String url = getAvailableDomain() + "/read.php?" + "&page=" + page + "&lite=js&noprefix&v2";
+        String url = ForumUtils.getAvailableDomain() + "/read.php?" + "&page=" + page + "&lite=js&noprefix&v2";
         if (tid != 0) {
             url = url + "&tid=" + tid;
         }

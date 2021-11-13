@@ -13,6 +13,8 @@ import android.text.TextUtils;
 import android.text.style.ImageSpan;
 import android.util.DisplayMetrics;
 
+import androidx.annotation.NonNull;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -143,8 +145,8 @@ public class TopicPostPresenter extends BasePresenter<TopicPostFragment, TopicPo
         PermissionUtils.request(mBaseView, new BaseSubscriber<Boolean>(){
 
             @Override
-            public void onNext(Boolean aBoolean) {
-                if (aBoolean != null && aBoolean) {
+            public void onNext(@NonNull Boolean aBoolean) {
+                if (aBoolean) {
                     mBaseView.showFilePicker();
                 }
 

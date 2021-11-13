@@ -44,10 +44,9 @@ public class MessageListModel {
                 .map(new Function<String, MessageListInfo>() {
                     @Override
                     public MessageListInfo apply(@NonNull String s) throws Exception {
-                        MessageConvertFactory factory = new MessageConvertFactory();
-                        MessageListInfo result = factory.getMessageListInfo(s);
+                        MessageListInfo result = MessageConvertFactory.getMessageListInfo(s);
                         if (result == null) {
-                            throw new Exception(factory.getErrorMsg());
+                            throw new Exception(MessageConvertFactory.getErrorMsg());
                         }
                         return result;
                     }
