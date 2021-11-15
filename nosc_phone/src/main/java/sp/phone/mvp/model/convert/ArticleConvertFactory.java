@@ -25,7 +25,7 @@ import nosc.api.bean.Attachment;
 import nosc.api.pojo.DiceData;
 import nosc.api.bean.ThreadData;
 import nosc.api.bean.ThreadRowInfo;
-import sp.phone.common.ForumConstants;
+import nosc.api.constants.ForumConstants;
 import sp.phone.common.UserManagerImpl;
 import sp.phone.mvp.model.entity.ThreadPageInfo;
 import sp.phone.theme.ThemeManager;

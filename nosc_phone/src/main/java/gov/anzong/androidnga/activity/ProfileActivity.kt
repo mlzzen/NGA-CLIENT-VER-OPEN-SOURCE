@@ -22,7 +22,6 @@ import gov.anzong.androidnga.core.data.HtmlData
 import gov.anzong.androidnga.core.decode.ForumDecoder
 import gov.anzong.androidnga.databinding.ActivityUserProfileBinding
 import nosc.api.callbacks.OnHttpCallBack
-import kotlinx.android.synthetic.main.activity_user_profile_content.*
 import nosc.api.bean.ProfileData
 import sp.phone.common.PhoneConfiguration
 import sp.phone.common.UserManagerImpl
@@ -134,15 +133,17 @@ class ProfileActivity : BaseActivity(),
         binding?.apply {
             toolbarLayout.title = profileInfo.userName
             tvUid.text = String.format("用户ID : %s", profileInfo.uid)
-            tv_post_count.text = profileInfo.postCount
-            tv_user_register_time.text = profileInfo.registerDate
-            tv_user_email.text = profileInfo.emailAddress
-            tv_user_tel.text = profileInfo.phoneNumber
-            tv_user_group.text = profileInfo.memberGroup
-            if (mCurrentUser) {
-                btn_modify_sign.visibility = View.VISIBLE
-            } else {
-                btn_modify_sign.visibility = View.GONE
+            content.apply{
+                tvPostCount.text = profileInfo.postCount
+                tvUserRegisterTime.text = profileInfo.registerDate
+                tvUserEmail.text = profileInfo.emailAddress
+                tvUserTel.text = profileInfo.phoneNumber
+                tvUserGroup.text = profileInfo.memberGroup
+                if (mCurrentUser) {
+                    btnModifySign.visibility = View.VISIBLE
+                } else {
+                    btnModifySign.visibility = View.GONE
+                }
             }
         }
 
@@ -154,17 +155,17 @@ class ProfileActivity : BaseActivity(),
     private fun handleUserState(profileInfo: ProfileData) {
         binding?.content?.let{
             if (profileInfo.isMuted) {
-                it.tvUserState.setText("已禁言")
+                it.tvUserState.text = "已禁言"
                 it.tvUserState.setTextColor(ContextCompat.getColor(this, R.color.color_state_muted))
                 if (!StringUtils.isEmpty(profileInfo.mutedTime)) {
-                    it.tvUserMuteTime.setText(profileInfo.mutedTime)
+                    it.tvUserMuteTime.text = profileInfo.mutedTime
                     //  mUserMuteTime.setVisibility(View.VISIBLE);
                 }
             } else if (profileInfo.isNuked) {
-                it.tvUserState.setText("NUKED(?)")
+                it.tvUserState.text = "NUKED(?)"
                 it.tvUserState.setTextColor(ContextCompat.getColor(this, R.color.color_state_nuked))
             } else {
-                it.tvUserState.setText("已激活")
+                it.tvUserState.text = "已激活"
                 it.tvUserState.setTextColor(ContextCompat.getColor(this, R.color.color_state_active))
             }
         }
@@ -204,7 +205,7 @@ class ProfileActivity : BaseActivity(),
         return builder.toString()
     }
 
-    fun startChangeSignActivity() {
+    private fun startChangeSignActivity() {
         val intent = Intent()
         intent.putExtra("prefix", mProfileData!!.sign)
         intent.setClass(this, PhoneConfiguration.getInstance().signPostActivityClass)
@@ -354,9 +355,8 @@ class ProfileActivity : BaseActivity(),
 
     private fun handleSignWebView(contentTV: WebViewEx, ret: ProfileData) {
         val theme = ThemeManager.getInstance()
-        var bgColor: Int
         val fgColor = resources.getColor(theme.foregroundColor)
-        bgColor = if (mThemeManager.isNightMode) {
+        var bgColor: Int = if (mThemeManager.isNightMode) {
             resources.getColor(theme.getBackgroundColor(0))
         } else {
             resources.getColor(R.color.profilebgcolor)

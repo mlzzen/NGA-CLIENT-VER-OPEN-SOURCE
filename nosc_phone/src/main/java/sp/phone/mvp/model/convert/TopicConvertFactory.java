@@ -28,11 +28,11 @@ import sp.phone.util.StringUtils;
  * Created by Justwen on 2017/11/21.
  */
 
-public class TopicConvertFactory {
+public abstract class TopicConvertFactory {
 
     private static final String TAG = TopicConvertFactory.class.getSimpleName();
 
-    public TopicListInfo getTopicListInfo(String js, int page) {
+    public static TopicListInfo getTopicListInfo(String js, int page) {
 
         if (js.startsWith("window.script_muti_get_var_store=")) {
             js = js.substring("window.script_muti_get_var_store=".length());
@@ -55,7 +55,7 @@ public class TopicConvertFactory {
 
     }
 
-    private void filter(TopicListInfo data) {
+    private static void filter(TopicListInfo data) {
 
 //        // 低版本android 没有stream方法
 //        // TODO: 如果第一页全部都是被屏蔽的，可能会认为加载失败
@@ -105,7 +105,7 @@ public class TopicConvertFactory {
         }
     }
 
-    private void sort(TopicListInfo listInfo) {
+    private static void sort(TopicListInfo listInfo) {
         List<ThreadPageInfo> list = listInfo.getThreadPageList();
         if (PhoneConfiguration.getInstance().needSortByPostOrder()) {
             Collections.sort(list, new Comparator<ThreadPageInfo>() {
@@ -127,7 +127,7 @@ public class TopicConvertFactory {
         }
     }
 
-    private void convertSubBoard(TopicListInfo listInfo, TopicListBean topicListBean) {
+    private static void convertSubBoard(TopicListInfo listInfo, TopicListBean topicListBean) {
         try {
             String subForumsStr = String.valueOf(topicListBean.getData().get__F().getSub_forums());
             if (TextUtils.isEmpty(subForumsStr)) {
@@ -169,7 +169,7 @@ public class TopicConvertFactory {
         }
     }
 
-    private void convertTopic(TopicListInfo listInfo, TopicListBean topicListBean, int page) {
+    private static void convertTopic(TopicListInfo listInfo, TopicListBean topicListBean, int page) {
         Map<String, TopicListBean.DataBean.TBean> map = topicListBean.getData().get__T();
         int count = 0;
         while (count < map.size()) {
@@ -235,7 +235,7 @@ public class TopicConvertFactory {
         }
     }
 
-    private boolean filterTopic(TopicListInfo listInfo, TopicListBean topicListBean, TopicListBean.DataBean.TBean tBean) {
+    private static boolean filterTopic(TopicListInfo listInfo, TopicListBean topicListBean, TopicListBean.DataBean.TBean tBean) {
         if (topicListBean.getData().get__F() != null
                 && PhoneConfiguration.getInstance().needFilterSubBoard()
                 && topicListBean.getData().get__F().getFid() == -7

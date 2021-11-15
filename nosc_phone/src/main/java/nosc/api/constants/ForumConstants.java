@@ -1,4 +1,4 @@
-package sp.phone.common;
+package nosc.api.constants;
 
 /**
  * Created by Justwen on 2018/9/2.

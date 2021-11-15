@@ -11,7 +11,6 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.lifecycle.Observer;
 
 import gov.anzong.androidnga.R;
 import gov.anzong.androidnga.activity.ArticleCacheActivity;
@@ -32,7 +31,7 @@ public class TopicCacheFragment extends TopicSearchFragment implements View.OnLo
         super.onViewCreated(view, savedInstanceState);
         ToastUtils.success("长按可删除缓存的帖子");
         mAdapter.setOnLongClickListener(this);
-        mPresenter.getRemovedTopic().observe(this, this::removeTopic);
+        viewModel.getRemovedTopic().observe(this, this::removeTopic);
     }
 
     @Override
@@ -54,7 +53,7 @@ public class TopicCacheFragment extends TopicSearchFragment implements View.OnLo
         builder.setMessage(this.getString(R.string.delete_favo_confirm_text))
                 .setPositiveButton(android.R.string.ok, (dialog, which) -> {
                     ThreadPageInfo info = (ThreadPageInfo) view.getTag();
-                    mPresenter.removeCacheTopic(info);
+                    viewModel.removeCacheTopic(info);
                 })
                 .setNegativeButton(android.R.string.cancel, null)
                 .create()
@@ -72,10 +71,10 @@ public class TopicCacheFragment extends TopicSearchFragment implements View.OnLo
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_cache_export:
-                mPresenter.exportCacheTopic(this);
+                viewModel.exportCacheTopic(this);
                 break;
             case R.id.menu_cache_import:
-                mPresenter.showFileChooser(this);
+                viewModel.showFileChooser(this);
                 break;
             default:
                 return super.onOptionsItemSelected(item);
@@ -104,7 +103,7 @@ public class TopicCacheFragment extends TopicSearchFragment implements View.OnLo
             if (data == null) {
                 return;
             }
-            mPresenter.importCacheTopic(data.getData());
+            viewModel.importCacheTopic(data.getData());
         } else {
             super.onActivityResult(requestCode, resultCode, data);
         }

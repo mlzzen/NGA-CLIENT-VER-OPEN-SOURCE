@@ -56,15 +56,14 @@ class BoardCategoryFragment : Fragment() {
                 ): Boolean {
                     BoardModel
                         .swapBookmark(viewHolder.adapterPosition, target.adapterPosition)
-                    mListView?.adapter!!
-                        .notifyItemMoved(viewHolder.adapterPosition, target.adapterPosition)
+                    mListView?.adapter?.notifyItemMoved(viewHolder.adapterPosition, target.adapterPosition)
                     return true
                 }
 
                 override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                     val board = mBoardCategory!!.getBoard(viewHolder.adapterPosition)
                     BoardModel.removeBookmark(board.fid, board.stid)
-                    mListView?.adapter!!.notifyItemRemoved(viewHolder.adapterPosition)
+                    mListView?.adapter?.notifyItemRemoved(viewHolder.adapterPosition)
                 }
             })
             touchHelper.attachToRecyclerView(mListView)

@@ -23,12 +23,12 @@ import gov.anzong.androidnga.activity.BaseActivity;
 import gov.anzong.androidnga.arouter.ARouterConstants;
 import gov.anzong.androidnga.base.util.ContextUtils;
 import gov.anzong.androidnga.base.widget.DividerItemDecorationEx;
-import sp.phone.common.ApiConstants;
+import nosc.api.constants.ApiConstants;
 import sp.phone.common.PhoneConfiguration;
 import sp.phone.common.TopicHistoryManager;
 import sp.phone.mvp.model.entity.ThreadPageInfo;
 import sp.phone.mvp.model.entity.TopicListInfo;
-import sp.phone.mvp.presenter.TopicListPresenter;
+import nosc.viewmodel.TopicListViewModel;
 import sp.phone.param.ArticleListParam;
 import sp.phone.param.ParamKey;
 import sp.phone.param.TopicListParam;
@@ -58,7 +58,7 @@ public class TopicSearchFragment extends BaseFragment implements View.OnClickLis
 
     public View mLoadingView;
 
-    protected TopicListPresenter mPresenter;
+    protected TopicListViewModel viewModel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -66,15 +66,15 @@ public class TopicSearchFragment extends BaseFragment implements View.OnClickLis
         mRequestParam = getArguments().getParcelable(ParamKey.KEY_PARAM);
         super.onCreate(savedInstanceState);
         setTitle();
-        mPresenter = onCreatePresenter();
-        getLifecycle().addObserver(mPresenter);
+        viewModel = onCreateViewModel();
+        getLifecycle().addObserver(viewModel);
     }
 
-    protected TopicListPresenter onCreatePresenter() {
+    protected TopicListViewModel onCreateViewModel() {
         ViewModelProvider viewModelProvider = new ViewModelProvider(this);
-        TopicListPresenter topicListPresenter = viewModelProvider.get(TopicListPresenter.class);
-        topicListPresenter.setRequestParam(mRequestParam);
-        return topicListPresenter;
+        TopicListViewModel topicListViewModel = viewModelProvider.get(TopicListViewModel.class);
+        topicListViewModel.setRequestParam(mRequestParam);
+        return topicListViewModel;
     }
 
     protected void setTitle() {
@@ -137,7 +137,7 @@ public class TopicSearchFragment extends BaseFragment implements View.OnClickLis
         mListView.setLayoutManager(new LinearLayoutManager(getContext()));
         mListView.setOnNextPageLoadListener(() -> {
             if (!isRefreshing()) {
-                mPresenter.loadNextPage(mAdapter.getNextPage(), mRequestParam);
+                viewModel.loadNextPage(mAdapter.getNextPage(), mRequestParam);
             }
         });
         mListView.setEmptyView(view.findViewById(R.id.empty_view));
@@ -148,14 +148,14 @@ public class TopicSearchFragment extends BaseFragment implements View.OnClickLis
         }
 
         mSwipeRefreshLayout.setVisibility(View.GONE);
-        mSwipeRefreshLayout.setOnRefreshListener(() -> mPresenter.loadPage(1, mRequestParam));
+        mSwipeRefreshLayout.setOnRefreshListener(() -> viewModel.loadPage(1, mRequestParam));
 
         TextView sayingView = (TextView) mLoadingView.findViewById(R.id.saying);
         sayingView.setText(ActivityUtils.getSaying());
 
         super.onViewCreated(view, savedInstanceState);
 
-        mPresenter.getFirstTopicList().observe(getViewLifecycleOwner(), topicListInfo -> {
+        viewModel.getFirstTopicList().observe(getViewLifecycleOwner(), topicListInfo -> {
             scrollTo(0);
             clearData();
             if (topicListInfo != null) {
@@ -163,14 +163,14 @@ public class TopicSearchFragment extends BaseFragment implements View.OnClickLis
             }
         });
 
-        mPresenter.getNextTopicList().observe(getViewLifecycleOwner(), this::setData);
+        viewModel.getNextTopicList().observe(getViewLifecycleOwner(), this::setData);
 
-        mPresenter.getErrorMsg().observe(getViewLifecycleOwner(), res -> {
+        viewModel.getErrorMsg().observe(getViewLifecycleOwner(), res -> {
             showToast(res);
             setNextPageEnabled(false);
         });
 
-        mPresenter.isRefreshing().observe(getViewLifecycleOwner(), aBoolean -> {
+        viewModel.isRefreshing().observe(getViewLifecycleOwner(), aBoolean -> {
             setRefreshing(aBoolean);
             if (!aBoolean) {
                 hideLoadingView();

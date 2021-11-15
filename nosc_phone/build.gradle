@@ -1,6 +1,5 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'//扩展插件
 apply plugin: 'kotlin-kapt'//kapt3插件
 def static getDate() {
     def date = new Date()

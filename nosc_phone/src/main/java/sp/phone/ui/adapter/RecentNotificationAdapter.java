@@ -15,7 +15,7 @@ import gov.anzong.androidnga.R;
 import sp.phone.mvp.model.entity.RecentReplyInfo;
 import sp.phone.util.ImageUtils;
 import sp.phone.util.StringUtils;
-import sp.phone.common.ApiConstants;
+import nosc.api.constants.ApiConstants;
 import sp.phone.common.UserManagerImpl;
 
 public class RecentNotificationAdapter extends RecyclerView.Adapter<RecentNotificationAdapter.ViewHolder> {

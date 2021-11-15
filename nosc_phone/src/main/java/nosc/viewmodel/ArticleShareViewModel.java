@@ -1,4 +1,4 @@
-package sp.phone.mvp.viewmodel;
+package nosc.viewmodel;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

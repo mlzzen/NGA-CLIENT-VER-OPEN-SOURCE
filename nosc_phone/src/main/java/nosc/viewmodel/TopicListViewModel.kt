@@ -1,9 +1,6 @@
-package sp.phone.mvp.presenter
+package nosc.viewmodel
 
 import android.Manifest
-import sp.phone.mvp.model.BoardModel.isBookmark
-import sp.phone.mvp.model.BoardModel.addBookmark
-import sp.phone.mvp.model.BoardModel.removeBookmark
 import sp.phone.mvp.model.entity.TopicListInfo
 import sp.phone.param.TopicListParam
 import sp.phone.mvp.model.entity.ThreadPageInfo
@@ -11,7 +8,6 @@ import sp.phone.mvp.model.TopicListModel
 import nosc.api.callbacks.OnHttpCallBack
 import gov.anzong.androidnga.base.util.ToastUtils
 import gov.anzong.androidnga.base.util.DeviceUtils
-import sp.phone.mvp.model.entity.Board
 import sp.phone.util.ARouterUtils
 import gov.anzong.androidnga.arouter.ARouterConstants
 import sp.phone.param.ParamKey
@@ -39,25 +35,24 @@ import java.util.*
  * @author Justwen
  * @date 2017/6/3
  */
-@Deprecated("Use mvvm")
-class TopicListPresenter : ViewModel(), LifecycleObserver {
+class TopicListViewModel : ViewModel(),LifecycleObserver{
     // Following variables are for the 24 hour hot topic feature
     // How many pages we query for twenty four hour hot topic
-    protected val twentyFourPageCount = 5
+    private val twentyFourPageCount = 5
 
     // How many total topics we want to show
-    protected val twentyFourTopicCount = 50
-    protected var pageQueriedCounter = 0
-    protected var twentyFourCurPos = 0
-    protected var twentyFourList = TopicListInfo()
-    protected var twentyFourCurList = TopicListInfo()
+    private val twentyFourTopicCount = 50
+    private var pageQueriedCounter = 0
+    private var twentyFourCurPos = 0
+    private var twentyFourList = TopicListInfo()
+    private var twentyFourCurList = TopicListInfo()
     private var mRequestParam: TopicListParam? = null
     val firstTopicList = MutableLiveData<TopicListInfo>()
     val nextTopicList = MutableLiveData<TopicListInfo>()
     val errorMsg = MutableLiveData<String>()
     val isRefreshing = MutableLiveData<Boolean>()
     val removedTopic = MutableLiveData<ThreadPageInfo>()
-    private var mBaseModel: TopicListModel
+    private var mBaseModel: TopicListModel = TopicListModel()
     private val mCallBack: OnHttpCallBack<TopicListInfo> = object :
         OnHttpCallBack<TopicListInfo> {
         override fun onError(text: String) {
@@ -73,9 +68,8 @@ class TopicListPresenter : ViewModel(), LifecycleObserver {
     private val mNextPageCallBack: OnHttpCallBack<TopicListInfo> =
         object : OnHttpCallBack<TopicListInfo> {
             override fun onError(text: String) {
-                if ("HTTP 404 Not Found" == text) ToastUtils.warn("已无更多") else errorMsg.setValue(
-                    text
-                )
+                if ("HTTP 404 Not Found" == text) ToastUtils.warn("已无更多")
+                else errorMsg.setValue(text)
                 isRefreshing.value = false
             }
 
@@ -183,7 +177,7 @@ class TopicListPresenter : ViewModel(), LifecycleObserver {
     fun loadNextPage(page: Int, requestInfo: TopicListParam) {
         isRefreshing.value = true
         if (requestInfo.twentyfour == 1) {
-            val endPos = Math.min(twentyFourCurPos + 20, twentyFourList.threadPageList.size)
+            val endPos = (twentyFourCurPos + 20).coerceAtMost(twentyFourList.threadPageList.size)
             twentyFourCurList.threadPageList = twentyFourList.threadPageList.subList(0, endPos)
             twentyFourCurPos = endPos
             isRefreshing.value = false
@@ -191,22 +185,6 @@ class TopicListPresenter : ViewModel(), LifecycleObserver {
         } else {
             mBaseModel.loadTopicList(page, requestInfo, mNextPageCallBack)
         }
-    }
-
-    fun isBookmarkBoard(fid: Int, stid: Int): Boolean {
-        return isBookmark(fid, stid)
-    }
-
-    fun addBookmarkBoard(fid: Int, stid: Int, boardName: String?) {
-        addBookmark(fid, stid, boardName!!)
-    }
-
-    fun addBookmarkBoard(board: Board?) {
-        addBookmark(board!!)
-    }
-
-    fun removeBookmarkBoard(fid: Int, stid: Int) {
-        removeBookmark(fid, stid)
     }
 
     fun startArticleActivity(tid: String, title: String?) {
@@ -302,7 +280,6 @@ class TopicListPresenter : ViewModel(), LifecycleObserver {
     }
 
     init {
-        mBaseModel = TopicListModel()
         mBaseModel = onCreateModel()
     }
 }

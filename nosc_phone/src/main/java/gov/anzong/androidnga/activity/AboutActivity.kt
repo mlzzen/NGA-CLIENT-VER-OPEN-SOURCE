@@ -41,7 +41,7 @@ class AboutActivity : MaterialAboutActivity() {
         builder.addItem(MaterialAboutActionItem.Builder()
             .text("版本")
             .subText(BuildConfig.VERSION_NAME)
-            .icon(if (BuildConfig.VERSION_NAME.endsWith(".0")) R.drawable.ic_about_debug else R.drawable.ic_about)
+            .icon(if (BuildConfig.DEBUG) R.drawable.ic_about_debug else R.drawable.ic_about)
 //            .setOnClickAction {
 //                try {
 //                    val url = "market://details?id=$packageName"

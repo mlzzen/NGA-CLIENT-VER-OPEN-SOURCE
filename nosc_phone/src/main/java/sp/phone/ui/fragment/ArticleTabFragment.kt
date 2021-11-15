@@ -8,7 +8,7 @@ import gov.nosc.ui.PageSelector
 import com.getbase.floatingactionbutton.FloatingActionsMenu
 import android.os.Bundle
 import sp.phone.param.ParamKey
-import sp.phone.mvp.viewmodel.ArticleShareViewModel
+import nosc.viewmodel.ArticleShareViewModel
 import androidx.viewpager.widget.ViewPager.SimpleOnPageChangeListener
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.trello.rxlifecycle2.android.FragmentEvent
@@ -89,9 +89,9 @@ class ArticleTabFragment : BaseRxFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         updateFloatingMenu()
-        mPagerAdapter = ArticlePagerAdapter(childFragmentManager, mRequestParam)
-        mViewPager!!.adapter = mPagerAdapter
-        mViewPager!!.addOnPageChangeListener(object : SimpleOnPageChangeListener() {
+        mPagerAdapter = ArticlePagerAdapter(childFragmentManager, mRequestParam!!)
+        mViewPager?.adapter = mPagerAdapter
+        mViewPager?.addOnPageChangeListener(object : SimpleOnPageChangeListener() {
             override fun onPageSelected(position: Int) {
                 mBehavior!!.animateIn(mFam)
                 super.onPageSelected(position)
@@ -171,7 +171,7 @@ class ArticleTabFragment : BaseRxFragment() {
     }
 
     private val activityViewModel: ArticleShareViewModel
-        private get() = activityViewModelProvider.get(ArticleShareViewModel::class.java)
+        get() = activityViewModelProvider[ArticleShareViewModel::class.java]
     val url: String
         get() {
             val builder = StringBuilder()

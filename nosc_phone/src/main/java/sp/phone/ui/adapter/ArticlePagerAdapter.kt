@@ -1,72 +1,55 @@
-package sp.phone.ui.adapter;
+package sp.phone.ui.adapter
 
-import android.os.Bundle;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentStatePagerAdapter;
-
-import java.util.List;
-
-import sp.phone.param.ArticleListParam;
-import sp.phone.param.ParamKey;
-import sp.phone.ui.fragment.ArticleListFragment;
+import android.os.Bundle
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import sp.phone.param.ArticleListParam
+import androidx.fragment.app.FragmentStatePagerAdapter
+import sp.phone.ui.fragment.ArticleListFragment
+import sp.phone.param.ParamKey
 
 /**
  * 帖子详情分页Adapter
- * Created by Justwen on 2017/7/9.
  */
-
-public class ArticlePagerAdapter extends FragmentStatePagerAdapter {
-
-    private int mCount = 1;
-
-    private ArticleListParam mRequestParam;
-
-    private List<String> mPageIndexList;
-
-    public ArticlePagerAdapter(FragmentManager fm, ArticleListParam param) {
-        super(fm);
-        mRequestParam = param;
+class ArticlePagerAdapter(fm: FragmentManager, private val mRequestParam: ArticleListParam) :
+    FragmentStatePagerAdapter(fm,BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+    private var mCount = 1
+    private var mPageIndexList: List<String>? = null
+    override fun getItem(position: Int): Fragment {
+        val fragment: Fragment = ArticleListFragment()
+        val bundle = Bundle()
+        bundle.putParcelable(ParamKey.KEY_PARAM, getRequestParam(position))
+        fragment.arguments = bundle
+        return fragment
     }
 
-    @Override
-    public Fragment getItem(int position) {
-        Fragment fragment = new ArticleListFragment();
-        Bundle bundle = new Bundle();
-        bundle.putParcelable(ParamKey.KEY_PARAM, getRequestParam(position));
-        fragment.setArguments(bundle);
-        return fragment;
-    }
-
-    private ArticleListParam getRequestParam(int position) {
-        ArticleListParam param = (ArticleListParam) mRequestParam.clone();
+    private fun getRequestParam(position: Int): ArticleListParam {
+        val param = mRequestParam.clone() as ArticleListParam
         if (mPageIndexList != null) {
-            param.page = Integer.parseInt(mPageIndexList.get(position));
+            param.page = mPageIndexList!![position].toInt()
         } else {
-            param.page = position + 1;
+            param.page = position + 1
         }
-        return param;
+        return param
     }
 
-    @Override
-    public int getCount() {
-        return mCount;
+    override fun getCount(): Int {
+        return mCount
     }
 
-    public void setCount(int count) {
+    fun setCount(count: Int) {
         if (mCount != count) {
-            mCount = count;
-            notifyDataSetChanged();
+            mCount = count
+            notifyDataSetChanged()
         }
     }
 
-    public void setPageIndexList(List<String> pageIndexList) {
-        mPageIndexList = pageIndexList;
-        setCount(pageIndexList.size());
+    fun setPageIndexList(pageIndexList: List<String>) {
+        mPageIndexList = pageIndexList
+        count = pageIndexList.size
     }
 
-    @Override
-    public CharSequence getPageTitle(int position) {
-        return mPageIndexList == null ? String.valueOf(position + 1) : mPageIndexList.get(position);
+    override fun getPageTitle(position: Int): CharSequence? {
+        return if (mPageIndexList == null) (position + 1).toString() else mPageIndexList!![position]
     }
 }

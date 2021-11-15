@@ -8,7 +8,7 @@ import gov.anzong.androidnga.R
 import android.widget.TextView
 import android.view.ViewGroup
 import sp.phone.mvp.model.entity.Board
-import sp.phone.common.ApiConstants
+import nosc.api.constants.ApiConstants
 import gov.anzong.androidnga.GlideApp
 import sp.phone.rxjava.RxUtils
 import sp.phone.rxjava.RxBus
@@ -74,7 +74,7 @@ class BoardCategoryAdapter(private val mActivity: Activity, private val mCategor
                 .dontAnimate()
                 .into(holder.icon!!)
             holder.itemView.tag = board
-            holder.name!!.text = board.name
+            holder.name?.text = board.name
             RxUtils.clicks(holder.itemView) {
                 RxBus.getInstance().post(RxEvent(RxEvent.EVENT_SHOW_TOPIC_LIST, board))
             }

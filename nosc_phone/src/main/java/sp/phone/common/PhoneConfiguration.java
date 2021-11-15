@@ -13,6 +13,7 @@ import gov.anzong.androidnga.activity.TopicListActivity;
 import gov.anzong.androidnga.base.util.ContextUtils;
 import gov.anzong.androidnga.base.util.PreferenceUtils;
 import gov.anzong.androidnga.common.PreferenceKey;
+import nosc.api.constants.Constants;
 
 public class PhoneConfiguration implements PreferenceKey, SharedPreferences.OnSharedPreferenceChangeListener {
     public Class<?> topicActivityClass = TopicListActivity.class;

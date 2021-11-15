@@ -6,7 +6,6 @@ import sp.phone.mvp.model.entity.Board
 import nosc.api.retrofit.RetrofitHelper
 import io.reactivex.schedulers.Schedulers
 import com.alibaba.fastjson.JSON
-import sp.phone.mvp.model.BoardModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import sp.phone.rxjava.BaseSubscriber
 import sp.phone.util.StringUtils

@@ -1,91 +1,77 @@
-package sp.phone.ui.fragment;
+package sp.phone.ui.fragment
 
-import android.app.Activity;
-import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Checkable;
-
-import com.alibaba.android.arouter.launcher.ARouter;
-
-import java.util.List;
-
-import gov.anzong.androidnga.R;
-import gov.anzong.androidnga.arouter.ARouterConstants;
-import sp.phone.ui.adapter.BoardSubListAdapter;
-import sp.phone.mvp.model.entity.SubBoard;
-import nosc.api.callbacks.OnHttpCallBack;
-import sp.phone.param.ParamKey;
-import sp.phone.task.SubscribeSubBoardTask;
-import sp.phone.view.RecyclerViewEx;
+import android.app.Activity
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Checkable
+import sp.phone.ui.fragment.BaseRxFragment
+import sp.phone.view.RecyclerViewEx
+import sp.phone.ui.adapter.BoardSubListAdapter
+import sp.phone.mvp.model.entity.SubBoard
+import sp.phone.task.SubscribeSubBoardTask
+import sp.phone.param.ParamKey
+import androidx.recyclerview.widget.LinearLayoutManager
+import nosc.api.callbacks.OnHttpCallBack
+import com.alibaba.android.arouter.launcher.ARouter
+import gov.anzong.androidnga.R
+import gov.anzong.androidnga.arouter.ARouterConstants
 
 /**
  * Created by Justwen on 2018/1/27.
  */
-
-public class BoardSubListFragment extends BaseRxFragment implements View.OnClickListener {
-
-    private RecyclerViewEx mListView;
-
-    private BoardSubListAdapter mListAdapter;
-
-    private List<SubBoard> mBoardList;
-
-    private SubscribeSubBoardTask mSubscribeTask;
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        Bundle bundle = getArguments();
-        setTitle(String.format("%s - 子板块", bundle.getString(ParamKey.KEY_TITLE)));
-        mBoardList = bundle.getParcelableArrayList("subBoard");
-        mSubscribeTask = new SubscribeSubBoardTask(getLifecycleProvider());
-        super.onCreate(savedInstanceState);
+class BoardSubListFragment : BaseRxFragment(){
+    private var mListView: RecyclerViewEx? = null
+    private var mListAdapter: BoardSubListAdapter? = null
+    private var mBoardList: List<SubBoard>? = null
+    private var mSubscribeTask: SubscribeSubBoardTask? = null
+    override fun onCreate(savedInstanceState: Bundle?) {
+        val bundle = arguments
+        setTitle(String.format("%s - 子板块", bundle?.getString(ParamKey.KEY_TITLE)))
+        mBoardList = bundle?.getParcelableArrayList("subBoard")
+        mSubscribeTask = SubscribeSubBoardTask(lifecycleProvider)
+        super.onCreate(savedInstanceState)
     }
 
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mListView = new RecyclerViewEx(inflater.getContext());
-        mListView.setLayoutManager(new LinearLayoutManager(inflater.getContext()));
-        mListAdapter = new BoardSubListAdapter(inflater.getContext(), mBoardList);
-        mListAdapter.setOnClickListener(this);
-        mListView.setAdapter(mListAdapter);
-        return mListView;
-    }
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        mListView = RecyclerViewEx(inflater.context)
+        mListView?.layoutManager = LinearLayoutManager(inflater.context)
+        mListAdapter = BoardSubListAdapter(inflater.context, mBoardList)
+        mListAdapter?.setOnClickListener{ v->
+            val board = v.tag as SubBoard
+            if (v.id == R.id.check) {
+                val callBack: OnHttpCallBack<String> = object : OnHttpCallBack<String> {
+                    override fun onError(text: String) {
+                        showToast(text)
+                        (v as Checkable).isChecked = board.isChecked
+                    }
 
-    @Override
-    public void onClick(final View v) {
-        final SubBoard board = (SubBoard) v.getTag();
-        if (v.getId() == R.id.check) {
-            OnHttpCallBack<String> callBack = new OnHttpCallBack<String>() {
-                @Override
-                public void onError(String text) {
-                    showToast(text);
-                    ((Checkable) v).setChecked(board.isChecked());
+                    override fun onSuccess(data: String) {
+                        showToast(data)
+                        board.isChecked = v.isClickable
+                        setResult(Activity.RESULT_OK)
+                    }
                 }
-
-                @Override
-                public void onSuccess(String data) {
-                    showToast(data);
-                    board.setChecked(v.isClickable());
-                    setResult(Activity.RESULT_OK);
+                if (board.isChecked) {
+                    mSubscribeTask!!.unsubscribe(board, callBack)
+                } else {
+                    mSubscribeTask!!.subscribe(board, callBack)
                 }
-            };
-            if (board.isChecked()) {
-                mSubscribeTask.unsubscribe(board, callBack);
             } else {
-                mSubscribeTask.subscribe(board, callBack);
-            }
-        } else {
-            ARouter.getInstance()
+                ARouter.getInstance()
                     .build(ARouterConstants.ACTIVITY_TOPIC_LIST)
-                    .withString(ParamKey.KEY_TITLE, board.getName())
-                    .withInt(ParamKey.KEY_FID, board.getFid())
-                    .withInt(ParamKey.KEY_STID, board.getStid())
-                    .navigation(getContext());
+                    .withString(ParamKey.KEY_TITLE, board.name)
+                    .withInt(ParamKey.KEY_FID, board.fid)
+                    .withInt(ParamKey.KEY_STID, board.stid)
+                    .navigation(context)
+            }
         }
+        mListView?.adapter = mListAdapter
+        return mListView
     }
 }

@@ -13,11 +13,11 @@ import sp.phone.mvp.model.entity.Board
 import gov.anzong.androidnga.base.util.ToastUtils
 import android.content.Intent
 import gov.anzong.androidnga.activity.LauncherSubActivity
-import sp.phone.ui.fragment.BoardSubListFragment
 import sp.phone.util.ActivityUtils
 import android.app.Activity
 import android.view.*
 import androidx.appcompat.widget.Toolbar
+import sp.phone.mvp.model.BoardModel
 
 /**
  * Created by Justwen on 2017/11/19.
@@ -94,7 +94,7 @@ class TopicListFragment : TopicSearchFragment() {
 
     fun refresh() {
         mFam!!.collapse()
-        mPresenter.loadPage(1, mRequestParam)
+        viewModel.loadPage(1, mRequestParam)
     }
 
     fun startPostActivity() {
@@ -110,7 +110,7 @@ class TopicListFragment : TopicSearchFragment() {
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
-        if (mPresenter.isBookmarkBoard(mRequestParam.fid, mRequestParam.stid)) {
+        if (BoardModel.isBookmark(mRequestParam.fid, mRequestParam.stid)) {
             menu.findItem(R.id.menu_add_bookmark).isVisible = false
             menu.findItem(R.id.menu_remove_bookmark).isVisible = true
         } else {
@@ -141,19 +141,19 @@ class TopicListFragment : TopicSearchFragment() {
             R.id.menu_add_bookmark -> {
                 val board = Board(mRequestParam.fid, mRequestParam.stid, mRequestParam.title)
                 board.boardHead = mRequestParam.boardHead
-                mPresenter.addBookmarkBoard(board)
+                BoardModel.addBookmark(board)
                 item.isVisible = false
                 mOptionMenu!!.findItem(R.id.menu_remove_bookmark).isVisible = true
                 ToastUtils.info(R.string.toast_add_bookmark_board)
             }
             R.id.menu_remove_bookmark -> {
-                mPresenter.removeBookmarkBoard(mRequestParam.fid, mRequestParam.stid)
+                BoardModel.removeBookmark(mRequestParam.fid, mRequestParam.stid)
                 item.isVisible = false
                 mOptionMenu!!.findItem(R.id.menu_add_bookmark).isVisible = true
                 ToastUtils.info(R.string.toast_remove_bookmark_board)
             }
             R.id.menu_sub_board -> showSubBoardList()
-            R.id.menu_board_head -> mPresenter.startArticleActivity(
+            R.id.menu_board_head -> viewModel.startArticleActivity(
                 mRequestParam.boardHead,
                 mRequestParam.title + " - 版头"
             )
@@ -173,7 +173,7 @@ class TopicListFragment : TopicSearchFragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == ActivityUtils.REQUEST_CODE_SUB_BOARD && resultCode == Activity.RESULT_OK) {
-            mPresenter.loadPage(1, mRequestParam)
+            viewModel.loadPage(1, mRequestParam)
         }
         super.onActivityResult(requestCode, resultCode, data)
     }

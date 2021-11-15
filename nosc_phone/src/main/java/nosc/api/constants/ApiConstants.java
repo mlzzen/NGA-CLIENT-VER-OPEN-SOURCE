@@ -1,4 +1,4 @@
-package sp.phone.common;
+package nosc.api.constants;
 
 public interface ApiConstants {
 

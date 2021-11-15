@@ -14,7 +14,7 @@ import java.util.Locale;
 
 import gov.anzong.androidnga.R;
 import gov.anzong.androidnga.base.util.ContextUtils;
-import sp.phone.common.ApiConstants;
+import nosc.api.constants.ApiConstants;
 import sp.phone.mvp.model.entity.ThreadPageInfo;
 import sp.phone.util.StringUtils;
 

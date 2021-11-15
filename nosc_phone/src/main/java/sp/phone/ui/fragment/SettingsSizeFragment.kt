@@ -9,7 +9,7 @@ import android.os.Bundle
 import android.view.View
 import gov.anzong.androidnga.R
 import android.widget.SeekBar
-import sp.phone.common.Constants
+import nosc.api.constants.Constants
 
 class SettingsSizeFragment : BaseFragment(), OnSeekBarChangeListener {
     private val mConfiguration = PhoneConfiguration.getInstance()

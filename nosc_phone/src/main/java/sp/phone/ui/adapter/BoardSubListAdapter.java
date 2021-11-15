@@ -65,7 +65,7 @@ public class BoardSubListAdapter extends RecyclerView.Adapter<BoardSubListAdapte
         return mBoardList == null ? 0 : mBoardList.size();
     }
 
-    public class ViewHolderEx extends RecyclerView.ViewHolder {
+    public static class ViewHolderEx extends RecyclerView.ViewHolder {
 
         public TextView mTitleView;
 

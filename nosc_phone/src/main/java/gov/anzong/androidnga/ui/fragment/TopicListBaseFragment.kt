@@ -11,13 +11,11 @@ import gov.anzong.androidnga.R
 import gov.anzong.androidnga.base.util.ToastUtils
 import gov.anzong.androidnga.base.widget.DividerItemDecorationEx
 import sp.phone.mvp.model.entity.ThreadPageInfo
-import sp.phone.mvp.presenter.TopicListPresenter
+import nosc.viewmodel.TopicListViewModel
 import sp.phone.param.ParamKey
 import sp.phone.param.TopicListParam
 import sp.phone.ui.adapter.BaseAppendableAdapter
 import sp.phone.ui.adapter.TopicListAdapter
-import sp.phone.ui.fragment.TopicListFragment
-import sp.phone.ui.fragment.TopicSearchFragment
 import sp.phone.ui.fragment.TopicSearchFragment.handleClickEvent
 import sp.phone.view.RecyclerViewEx
 
@@ -32,30 +30,30 @@ open class TopicListBaseFragment : BaseFragment(R.layout.fragment_topic_list_bas
 
     protected var mRequestParam: TopicListParam? = null
 
-    protected lateinit var mPresenter: TopicListPresenter
+    protected lateinit var viewModel: TopicListViewModel
 
     protected lateinit var mAdapter: BaseAppendableAdapter<ThreadPageInfo, *>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mRequestParam = requireArguments().getParcelable(ParamKey.KEY_PARAM)
-        mPresenter = onCreatePresenter()
-        lifecycle.addObserver(mPresenter)
+        viewModel = onCreatePresenter()
+        lifecycle.addObserver(viewModel)
         initState()
     }
 
     private fun initState() {
-        mPresenter.isRefreshing.observe(this, Observer {
+        viewModel.isRefreshing.observe(this, Observer {
             mRefreshLayout.isRefreshing = it
         })
-        mPresenter.errorMsg.observe(this, Observer {
+        viewModel.errorMsg.observe(this, Observer {
             ToastUtils.error(it)
         })
-        mPresenter.firstTopicList.observe(this, Observer {
+        viewModel.firstTopicList.observe(this, Observer {
             setData(it.threadPageList, false)
         })
 
-        mPresenter.nextTopicList.observe(this, Observer {
+        viewModel.nextTopicList.observe(this, Observer {
             setData(it.threadPageList, true)
         })
     }
@@ -68,9 +66,9 @@ open class TopicListBaseFragment : BaseFragment(R.layout.fragment_topic_list_bas
         mRefreshLayout.isRefreshing = false
     }
 
-    protected open fun onCreatePresenter(): TopicListPresenter {
+    protected open fun onCreatePresenter(): TopicListViewModel {
         val viewModelProvider = ViewModelProvider(this)
-        val topicListPresenter = viewModelProvider[TopicListPresenter::class.java]
+        val topicListPresenter = viewModelProvider[TopicListViewModel::class.java]
         topicListPresenter.setRequestParam(mRequestParam)
         return topicListPresenter
     }
@@ -78,7 +76,7 @@ open class TopicListBaseFragment : BaseFragment(R.layout.fragment_topic_list_bas
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mRefreshLayout = view.findViewById(R.id.swipe_refresh)
-        mRefreshLayout.setOnRefreshListener { mPresenter.loadPage(1, mRequestParam) }
+        mRefreshLayout.setOnRefreshListener { viewModel.loadPage(1, mRequestParam) }
 
         mAdapter = createAdapter()
         mAdapter.setOnClickListener(this)
@@ -90,7 +88,7 @@ open class TopicListBaseFragment : BaseFragment(R.layout.fragment_topic_list_bas
         mListView.setOnNextPageLoadListener {
             mRequestParam?.let{
                 if (!mRefreshLayout.isRefreshing) {
-                    mPresenter.loadNextPage(mAdapter.nextPage, it)
+                    viewModel.loadNextPage(mAdapter.nextPage, it)
                 }
             }
 

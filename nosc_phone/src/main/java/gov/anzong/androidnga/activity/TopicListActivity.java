@@ -70,7 +70,7 @@ public class TopicListActivity extends BaseActivity {
         }
 
         if (requestParam != null && TextUtils.isEmpty(requestParam.title)) {
-            requestParam.title = BoardModel.getInstance().getBoardName(requestParam.fid,requestParam.stid);
+            requestParam.title = BoardModel.INSTANCE.getBoardName(requestParam.fid,requestParam.stid);
         }
         return requestParam;
     }

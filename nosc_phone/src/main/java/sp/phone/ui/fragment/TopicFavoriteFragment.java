@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Toast;
 
 import gov.anzong.androidnga.R;
 import gov.anzong.androidnga.base.util.ToastUtils;
@@ -26,7 +25,7 @@ public class TopicFavoriteFragment extends TopicSearchFragment implements View.O
         super.onViewCreated(view, savedInstanceState);
         ToastUtils.info("长按可删除收藏的帖子");
         mAdapter.setOnLongClickListener(this);
-        mPresenter.getRemovedTopic().observe(getViewLifecycleOwner(), this::removeTopic);
+        viewModel.getRemovedTopic().observe(getViewLifecycleOwner(), this::removeTopic);
     }
 
 
@@ -43,7 +42,7 @@ public class TopicFavoriteFragment extends TopicSearchFragment implements View.O
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         ThreadPageInfo info = (ThreadPageInfo) view.getTag();
-                        mPresenter.removeTopic(info, info.getPosition());
+                        viewModel.removeTopic(info, info.getPosition());
                     }
                 })
                 .setNegativeButton(android.R.string.cancel, null)
