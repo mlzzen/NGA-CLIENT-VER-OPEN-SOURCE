@@ -1,20 +1,19 @@
 package sp.phone.mvp.model
 
 import android.text.TextUtils
-import sp.phone.mvp.contract.BoardContract
 import sp.phone.mvp.model.entity.BoardCategory
 import sp.phone.mvp.model.entity.Board
 import sp.phone.mvp.model.entity.Board.BoardKey
 import nosc.api.bean.CategoryBean
 import com.alibaba.fastjson.JSON
+import gov.anzong.androidnga.base.util.ContextUtils
 import gov.anzong.androidnga.base.util.PreferenceUtils
 import gov.anzong.androidnga.base.util.ToastUtils
 import gov.anzong.androidnga.common.PreferenceKey
 import okhttp3.*
-import sp.phone.mvp.model.BoardModel.addBookmark
-import sp.phone.mvp.model.BoardModel.isBookmark
-import sp.phone.util.StringUtils
+import java.io.File
 import java.io.IOException
+import java.nio.charset.Charset
 import java.util.*
 
 /**
@@ -43,45 +42,27 @@ object BoardModel : BaseModel() {
     }
 
     fun queryBoard(callback:(List<BoardCategory>)->Unit) {
-        mBoardCategoryList.clear()
-        mBoardCategoryList.add(mBookmarkCategory)
-        upgradeBookmarkBoard(mBoardCategoryList)
-
         OkHttpClient.Builder().build()
             .newCall(Request.Builder().url("https://bbs.nga.cn/app_api.php?&__lib=home&__act=category").build())
             .enqueue(object :Callback{
                 override fun onFailure(call: Call, e: IOException) {
-                    callback.invoke(mBoardCategoryList)
+                    buildCategory(
+                        try {
+                            File(ContextUtils.getApplication().getExternalFilesDir("categoryCache"),"category.json").readText(
+                                Charset.defaultCharset())
+                        }catch (e:Throwable){ "" }
+                    )
+                    callback.invoke(mBoardCategoryList.toList())
                 }
 
                 override fun onResponse(call: Call, response: Response) {
-
-                    val beans = try{
-                        val categoryJson = response.body()?.string()
-                        JSON.parseArray(
-                            JSON.parseObject(
-                                categoryJson
-                            ).getJSONArray("result").toJSONString(), CategoryBean::class.java
-                        )
-                    } catch (e:Throwable){ listOf<CategoryBean>() }
-
-                    for (categoryBean in beans) {
-                        val category = BoardCategory(categoryBean.name)
-                        categoryBean.groups?.forEach { group->
-                            val subCategory = BoardCategory(group.name)
-                            group.forums?.forEach {forum->
-                                val boardName: String? =
-                                    if (TextUtils.isEmpty(forum.nameS)) { forum.name } else { forum.nameS }
-                                val board = Board(forum.fid, forum.stid, boardName)
-                                board.boardHead = forum.head
-                                subCategory.addBoard(board)
-                            }
-                            category.addSubCategory(subCategory)
-                        }
-                        mBoardCategoryList.add(category)
-                    }
-
-                    callback.invoke(mBoardCategoryList)
+                    try{
+                        buildCategory(response.body()?.string()?.also {
+                            File(ContextUtils.getApplication().getExternalFilesDir("categoryCache"),"category.json").writeText(it,
+                                Charset.defaultCharset())
+                        } ?: "")
+                    }catch (e:Throwable){}
+                    callback.invoke(mBoardCategoryList.toList())
                 }
         })
     }
@@ -143,7 +124,35 @@ object BoardModel : BaseModel() {
 
 
 
+    private fun buildCategory(json:String){
+        mBoardCategoryList.clear()
+        mBoardCategoryList.add(mBookmarkCategory)
+        upgradeBookmarkBoard(mBoardCategoryList)
 
+        val beans = try{
+            JSON.parseArray(
+                JSON.parseObject(
+                    json
+                ).getJSONArray("result").toJSONString(), CategoryBean::class.java
+            )
+        } catch (e:Throwable){ listOf<CategoryBean>() }
+
+        for (categoryBean in beans) {
+            val category = BoardCategory(categoryBean.name)
+            categoryBean.groups?.forEach { group->
+                val subCategory = BoardCategory(group.name)
+                group.forums?.forEach {forum->
+                    val boardName: String? =
+                        if (TextUtils.isEmpty(forum.nameS)) { forum.name } else { forum.nameS }
+                    val board = Board(forum.fid, forum.stid, boardName)
+                    board.boardHead = forum.head
+                    subCategory.addBoard(board)
+                }
+                category.addSubCategory(subCategory)
+            }
+            mBoardCategoryList.add(category)
+        }
+    }
 
     private fun addBookmark(boardKey: BoardKey, boardName: String) {
         if (!mBookmarkCategory.contains(boardKey)) {

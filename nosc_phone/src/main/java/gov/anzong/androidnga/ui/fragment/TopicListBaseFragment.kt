@@ -28,7 +28,7 @@ open class TopicListBaseFragment : BaseFragment(R.layout.fragment_topic_list_bas
 
     protected lateinit var mListView: RecyclerViewEx;
 
-    protected var mRequestParam: TopicListParam? = null
+    protected lateinit var mRequestParam: TopicListParam
 
     protected lateinit var viewModel: TopicListViewModel
 
@@ -36,8 +36,11 @@ open class TopicListBaseFragment : BaseFragment(R.layout.fragment_topic_list_bas
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mRequestParam = requireArguments().getParcelable(ParamKey.KEY_PARAM)
-        viewModel = onCreatePresenter()
+        mRequestParam = requireArguments().getParcelable(ParamKey.KEY_PARAM) ?: let{
+            activity?.finish()
+            TopicListParam()
+        }
+        viewModel = onCreateViewModel()
         lifecycle.addObserver(viewModel)
         initState()
     }
@@ -66,7 +69,7 @@ open class TopicListBaseFragment : BaseFragment(R.layout.fragment_topic_list_bas
         mRefreshLayout.isRefreshing = false
     }
 
-    protected open fun onCreatePresenter(): TopicListViewModel {
+    protected open fun onCreateViewModel(): TopicListViewModel {
         val viewModelProvider = ViewModelProvider(this)
         val topicListPresenter = viewModelProvider[TopicListViewModel::class.java]
         topicListPresenter.setRequestParam(mRequestParam)
@@ -86,7 +89,7 @@ open class TopicListBaseFragment : BaseFragment(R.layout.fragment_topic_list_bas
         val padding = resources.getDimension(R.dimen.topic_list_item_padding)
         mListView.addItemDecoration(DividerItemDecorationEx(view.context, padding.toInt(), DividerItemDecoration.VERTICAL))
         mListView.setOnNextPageLoadListener {
-            mRequestParam?.let{
+            mRequestParam.let{
                 if (!mRefreshLayout.isRefreshing) {
                     viewModel.loadNextPage(mAdapter.nextPage, it)
                 }

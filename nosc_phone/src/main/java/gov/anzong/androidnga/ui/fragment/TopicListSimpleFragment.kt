@@ -14,7 +14,7 @@ import sp.phone.util.StringUtils
 /**
  * 提供了带ActionBar主题列表Fragment
  */
-class TopicListSimpleFragment() : TopicListBaseFragment() {
+class TopicListSimpleFragment : TopicListBaseFragment() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,7 +33,7 @@ class TopicListSimpleFragment() : TopicListBaseFragment() {
     }
 
     override fun createAdapter(): BaseAppendableAdapter<ThreadPageInfo, *> {
-        return if (mRequestParam!!.searchPost > 0) {
+        return if (mRequestParam.searchPost > 0) {
             ReplyListAdapter(context)
         } else {
             super.createAdapter()
@@ -41,34 +41,34 @@ class TopicListSimpleFragment() : TopicListBaseFragment() {
     }
 
     private fun setTitle() {
-        if (!StringUtils.isEmpty(mRequestParam!!.key)) {
-            if (mRequestParam!!.content == 1) {
-                if (!StringUtils.isEmpty(mRequestParam!!.fidGroup)) {
-                    setTitle("搜索全站(包含正文):" + mRequestParam!!.key)
+        if (!mRequestParam.key.isNullOrEmpty()) {
+            if (mRequestParam.content == 1) {
+                if (!StringUtils.isEmpty(mRequestParam.fidGroup)) {
+                    setTitle("搜索全站(包含正文):" + mRequestParam.key)
                 } else {
-                    setTitle("搜索(包含正文):" + mRequestParam!!.key)
+                    setTitle("搜索(包含正文):" + mRequestParam.key)
                 }
             } else {
-                if (!StringUtils.isEmpty(mRequestParam!!.fidGroup)) {
-                    setTitle("搜索全站:" + mRequestParam!!.key)
+                if (!StringUtils.isEmpty(mRequestParam.fidGroup)) {
+                    setTitle("搜索全站:" + mRequestParam.key)
                 } else {
-                    setTitle("搜索:" + mRequestParam!!.key)
+                    setTitle("搜索:" + mRequestParam.key)
                 }
             }
-        } else if (!StringUtils.isEmpty(mRequestParam!!.author)) {
-            if (mRequestParam!!.searchPost > 0) {
-                val title = "搜索" + mRequestParam!!.author + "的回复"
+        } else if (!StringUtils.isEmpty(mRequestParam.author)) {
+            if (mRequestParam.searchPost > 0) {
+                val title = "搜索" + mRequestParam.author + "的回复"
                 setTitle(title)
             } else {
-                val title = "搜索" + mRequestParam!!.author + "的主题"
+                val title = "搜索" + mRequestParam.author + "的主题"
                 setTitle(title)
             }
-        } else if (mRequestParam!!.recommend == 1) {
-            setTitle(mRequestParam!!.title + " - 精华区")
-        } else if (mRequestParam!!.twentyfour == 1) {
-            setTitle(mRequestParam!!.title + " - 24小时热帖")
-        } else if (!TextUtils.isEmpty(mRequestParam!!.title)) {
-            setTitle(mRequestParam!!.title)
+        } else if (mRequestParam.recommend == 1) {
+            setTitle(mRequestParam.title + " - 精华区")
+        } else if (mRequestParam.twentyfour == 1) {
+            setTitle(mRequestParam.title + " - 24小时热帖")
+        } else if (!TextUtils.isEmpty(mRequestParam.title)) {
+            setTitle(mRequestParam.title)
         }
     }
 

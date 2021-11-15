@@ -53,7 +53,7 @@ public class StringUtils {
     public static String unescape(String src) {
         if (isEmpty(src))
             return "";
-        StringBuffer tmp = new StringBuffer();
+        StringBuilder tmp = new StringBuilder();
         tmp.ensureCapacity(src.length());
         int lastPos = 0, pos = 0;
         char ch;
@@ -62,15 +62,16 @@ public class StringUtils {
             pos = src.indexOf("%", lastPos);
             if (pos == lastPos) {
                 if (pos > src.length() - 3) {
-                    tmp.append(src.substring(pos, src.length()));
+                    tmp.append(src.substring(pos));
                     lastPos = pos + 3;
                 } else {
                     if (src.charAt(pos + 1) == 'u') {
                         try {
+                            String substring = src.substring(pos + 2, pos + 6);
                             if (Pattern.matches(patternStr,
-                                    src.substring(pos + 2, pos + 6))) {
+                                    substring)) {
                                 ch = (char) Integer.parseInt(
-                                        src.substring(pos + 2, pos + 6), 16);
+                                        substring, 16);
                                 tmp.append(ch);
                                 lastPos = pos + 6;
                             } else {
@@ -159,9 +160,8 @@ public class StringUtils {
          *
          * return ""; }
          */
-        String ret = UriEncoderWithCharset.encode(s, null, charset);
         // NLog.i("111111", s+"----->"+ret);
-        return ret;
+        return UriEncoderWithCharset.encode(s, null, charset);
     }
 /*
     public static String parseHTML(String s) {
@@ -275,17 +275,17 @@ public class StringUtils {
         return new SimpleDateFormat(format, Locale.getDefault()).format(calendar.getTime());
     }
 
-    public static String getStringFromAssets(String path) {
-        AssetManager assetManager = ContextUtils.getContext().getAssets();
-        try (InputStream is = assetManager.open(path)) {
-            int length = is.available();
-            byte[] buffer = new byte[length];
-            is.read(buffer);
-            return new String(buffer, StandardCharsets.UTF_8);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return "";
-        }
-    }
+//    public static String getStringFromAssets(String path) {
+//        AssetManager assetManager = ContextUtils.getContext().getAssets();
+//        try (InputStream is = assetManager.open(path)) {
+//            int length = is.available();
+//            byte[] buffer = new byte[length];
+//            is.read(buffer);
+//            return new String(buffer, StandardCharsets.UTF_8);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            return "";
+//        }
+//    }
 
 }

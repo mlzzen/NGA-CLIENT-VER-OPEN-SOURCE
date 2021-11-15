@@ -58,6 +58,9 @@
             android:name=".activity.AvatarPostActivity"
             android:windowSoftInputMode="adjustResize" />
         <activity
+            android:name=".activity.CrashReportActivity"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
             android:name=".activity.SignPostActivity"
             android:windowSoftInputMode="adjustResize" />
         <activity

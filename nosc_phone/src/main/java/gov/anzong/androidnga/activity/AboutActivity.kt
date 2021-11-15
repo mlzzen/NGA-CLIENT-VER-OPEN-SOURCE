@@ -14,6 +14,7 @@ import android.content.Context
 import android.net.Uri
 import gov.anzong.androidnga.BuildConfig
 import gov.anzong.androidnga.debug.Debugger
+import java.lang.RuntimeException
 
 class AboutActivity : MaterialAboutActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,6 +43,9 @@ class AboutActivity : MaterialAboutActivity() {
             .text("版本")
             .subText(BuildConfig.VERSION_NAME)
             .icon(if (BuildConfig.DEBUG) R.drawable.ic_about_debug else R.drawable.ic_about)
+            .setOnLongClickAction {
+                startActivity(Intent(this,CrashReportActivity::class.java))
+            }
 //            .setOnClickAction {
 //                try {
 //                    val url = "market://details?id=$packageName"

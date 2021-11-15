@@ -15,6 +15,7 @@ import android.text.TextPaint
 import android.view.View
 import android.widget.TextView
 import gov.anzong.androidnga.base.util.ContextUtils
+import gov.anzong.androidnga.databinding.ListMessageBinding
 import sp.phone.util.StringUtils
 import java.util.ArrayList
 
@@ -49,7 +50,7 @@ class MessageListAdapter(private val mContext: Context) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MessageViewHolder {
         return MessageViewHolder(
-            LayoutInflater.from(mContext).inflate(R.layout.list_message, parent, false)
+            ListMessageBinding.inflate(LayoutInflater.from(mContext), parent, false)
         )
     }
 
@@ -81,29 +82,29 @@ class MessageListAdapter(private val mContext: Context) :
         if (StringUtils.isEmpty(fromUser)) {
             fromUser = "#SYSTEM#"
         }
-        holder.author!!.text = fromUser
-        holder.time!!.text = entry.time
-        holder.lastTime!!.text = entry.lastTime
+        holder.author.text = fromUser
+        holder.time.text = entry.time
+        holder.lastTime.text = entry.lastTime
         var lastPoster = entry.last_from_username
         if (StringUtils.isEmpty(lastPoster)) {
             lastPoster = fromUser
         }
-        holder.lastReply!!.text = lastPoster
-        holder.num!!.text = entry.posts.toString()
-        holder.title!!.setTextColor(ContextUtils.getColor(theme.foregroundColor))
+        holder.lastReply.text = lastPoster
+        holder.num.text = entry.posts.toString()
+        holder.title.setTextColor(ContextUtils.getColor(theme.foregroundColor))
         val size = PhoneConfiguration.getInstance().topicTitleSize
         var title = entry.subject
         if (StringUtils.isEmpty(title)) {
             title = entry.subject
-            holder.title!!.text = StringUtils.unEscapeHtml(title)
+            holder.title.text = StringUtils.unEscapeHtml(title)
         } else {
-            holder.title!!.text = StringUtils.removeBrTag(
+            holder.title.text = StringUtils.removeBrTag(
                 StringUtils
                     .unEscapeHtml(title)
             )
         }
-        holder.title!!.textSize = size
-        val tp = holder.title!!.paint
+        holder.title.textSize = size
+        val tp = holder.title.paint
         tp.isFakeBoldText = false
         val colorId = theme.getBackgroundColor(position)
         holder.itemView.setBackgroundResource(colorId)
@@ -135,19 +136,14 @@ class MessageListAdapter(private val mContext: Context) :
         notifyDataSetChanged()
     }
 
-    class MessageViewHolder(itemView: View) : RecyclerView.ViewHolder(
-        itemView
+    class MessageViewHolder(binding: ListMessageBinding) : RecyclerView.ViewHolder(
+        binding.root
     ) {
-        var num: TextView? = itemView.findViewById(R.id.num)
-
-        var title: TextView? = itemView.findViewById(R.id.title)
-
-        var author: TextView? = itemView.findViewById(R.id.author)
-
-        var lastReply: TextView? = itemView.findViewById(R.id.last_reply)
-
-        var time: TextView? = itemView.findViewById(R.id.time)
-
-        var lastTime: TextView? = itemView.findViewById(R.id.lasttime)
+        var num: TextView = binding.num
+        var title: TextView = binding.title
+        var author: TextView = binding.author
+        var lastReply: TextView = binding.lastReply
+        var time: TextView = binding.time
+        var lastTime: TextView = binding.lasttime
     }
 }

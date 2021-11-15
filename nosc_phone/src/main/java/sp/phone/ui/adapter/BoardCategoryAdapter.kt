@@ -26,7 +26,7 @@ class BoardCategoryAdapter(private val mActivity: Activity, private val mCategor
     private var mTitlePositions: MutableList<Int>  = ArrayList()
     private var mTotalCount = 0
 
-    inner class BoardViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class BoardViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         val icon: ImageView? = itemView.findViewById(R.id.icon_board_img)
 

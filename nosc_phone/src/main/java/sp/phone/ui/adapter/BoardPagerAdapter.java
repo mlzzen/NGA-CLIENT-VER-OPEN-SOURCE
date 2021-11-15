@@ -24,6 +24,7 @@ public class BoardPagerAdapter extends FragmentStatePagerAdapter {
         mBoardCategories = categories;
     }
 
+    @NonNull
     @Override
     public Fragment getItem(int index) {
         BoardCategoryFragment fragment = new BoardCategoryFragment();

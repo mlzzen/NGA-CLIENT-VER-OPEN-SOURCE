@@ -1,51 +1,44 @@
-package gov.anzong.androidnga;
+package gov.anzong.androidnga
 
-import android.os.DeadSystemException;
-import android.os.Process;
-
-import androidx.annotation.NonNull;
-
-import java.lang.Thread.UncaughtExceptionHandler;
-import java.util.concurrent.TimeoutException;
-
-import gov.anzong.androidnga.base.util.PreferenceUtils;
-import gov.anzong.androidnga.common.PreferenceKey;
-
+import android.os.DeadSystemException
+import android.os.Process
+import gov.anzong.androidnga.base.util.ContextUtils
+import gov.anzong.androidnga.base.util.PreferenceUtils
+import gov.anzong.androidnga.common.PreferenceKey
+import java.io.File
+import java.lang.IllegalStateException
+import java.lang.RuntimeException
+import java.nio.charset.Charset
+import java.util.concurrent.TimeoutException
 
 /**
  * UncaughtException处理类,当程序发生Uncaught异常的时候,有该类
  * 来接管程序,并记录 发送错误报告.
  */
-public class ExceptionHandlerProxy implements UncaughtExceptionHandler {
-
-    private UncaughtExceptionHandler mOrigExceptionHandler;
-
-    public ExceptionHandlerProxy(UncaughtExceptionHandler defaultHandler) {
-        mOrigExceptionHandler = defaultHandler;
-    }
-
+class ExceptionHandlerProxy(private val mOrigExceptionHandler: Thread.UncaughtExceptionHandler?) :
+    Thread.UncaughtExceptionHandler {
     /**
      * 当UncaughtException发生时会转入该函数来处理
      */
-    @Override
-    public void uncaughtException(@NonNull Thread thread, @NonNull Throwable ex) {
-        if (ex instanceof TimeoutException && thread.getName().equals("FinalizerWatchdogDaemon")
-                || ex instanceof IllegalStateException && thread.getName().equals("GoogleApiHandler")) {
-            return;
+    override fun uncaughtException(thread: Thread, ex: Throwable) {
+        File(ContextUtils.getApplication().externalCacheDir,"CrashReport_${System.currentTimeMillis()}_${thread.name}_${BuildConfig.VERSION_CODE}.crash")
+            .writeText(ex.stackTraceToString(), Charset.defaultCharset())
+        if (ex is TimeoutException && thread.name == "FinalizerWatchdogDaemon"
+            || ex is IllegalStateException && thread.name == "GoogleApiHandler"
+        ) {
+            return
         }
-
-        if (ex instanceof RuntimeException
-                && ex.getMessage() != null
-                && ex.getMessage().contains("Using WebView from more than one process at once with the same data directory is not supported")) {
-            int index = PreferenceUtils.getData(PreferenceKey.KEY_WEBVIEW_DATA_INDEX, 0);
-            index++;
-            PreferenceUtils.edit().putInt(PreferenceKey.KEY_WEBVIEW_DATA_INDEX, index).commit();
+        if (ex is RuntimeException
+            && ex.message?.contains("Using WebView from more than one process at once with the same data directory is not supported") == true
+        ) {
+            var index = PreferenceUtils.getData(PreferenceKey.KEY_WEBVIEW_DATA_INDEX, 0)
+            index++
+            PreferenceUtils.edit().putInt(PreferenceKey.KEY_WEBVIEW_DATA_INDEX, index).commit()
         }
-
-        if (mOrigExceptionHandler == null || ex instanceof DeadSystemException) {
-            Process.killProcess(Process.myPid());
+        if (mOrigExceptionHandler == null || ex is DeadSystemException) {
+            Process.killProcess(Process.myPid())
         } else {
-            mOrigExceptionHandler.uncaughtException(thread, ex);
+            mOrigExceptionHandler.uncaughtException(thread, ex)
         }
     }
 }
