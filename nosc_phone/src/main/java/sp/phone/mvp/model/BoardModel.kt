@@ -9,7 +9,9 @@ import nosc.api.bean.CategoryBean
 import com.alibaba.fastjson.JSON
 import gov.anzong.androidnga.base.util.PreferenceUtils
 import gov.anzong.androidnga.common.PreferenceKey
+import okhttp3.*
 import sp.phone.util.StringUtils
+import java.io.IOException
 import java.util.*
 
 /**
@@ -17,7 +19,14 @@ import java.util.*
  */
 object BoardModel : BaseModel(), BoardContract.Model {
     private val mBoardCategoryList: MutableList<BoardCategory> = ArrayList()
-    private val mBookmarkCategory: BoardCategory
+    private val mBookmarkCategory: BoardCategory by lazy{
+        BoardCategory("我的收藏").apply {
+            val bookmarkBoards =
+                PreferenceUtils.getData(PreferenceKey.BOOKMARK_BOARD, Board::class.java)
+            addBoards(bookmarkBoards)
+            isBookmarkCategory = true
+        }
+    }
     fun findBoard(fid: String): Board? {
         val boardKey = BoardKey(fid.toInt(), 0)
         for (boardCategory in mBoardCategoryList) {
@@ -32,30 +41,50 @@ object BoardModel : BaseModel(), BoardContract.Model {
     @JvmStatic
     fun getInstance() = this
 
-    private fun loadPreloadBoards(): List<BoardCategory> {
-        val categoryJson = StringUtils.getStringFromAssets("json/category.json")
-        val beans = JSON.parseArray(categoryJson, CategoryBean::class.java)
-        val categories: MutableList<BoardCategory> = ArrayList()
-        for (categoryBean in beans) {
-            val category = BoardCategory(categoryBean.name)
-            categoryBean?.groups?.forEach { group->
-                val subCategory = BoardCategory(group.name)
-                group.forums?.forEach {forum->
-                    val boardName: String? = if (TextUtils.isEmpty(forum.nameS)) {
-                        forum.name
-                    } else {
-                        forum.nameS
-                    }
-                    val board = Board(forum.fid, forum.stid, boardName)
-                    board.boardHead = forum.head
-                    subCategory.addBoard(board)
-                }
-                category.addSubCategory(subCategory)
+    fun queryBoard(callback:(List<BoardCategory>)->Unit) {
+        mBoardCategoryList.clear()
+        mBoardCategoryList.add(mBookmarkCategory)
+
+        OkHttpClient.Builder().build().newCall(Request.Builder().url("https://bbs.nga.cn/app_api.php?&__lib=home&__act=category").build()).enqueue(object :Callback{
+            override fun onFailure(call: Call, e: IOException) {
+                callback.invoke(mBoardCategoryList)
             }
-            categories.add(category)
-        }
-        upgradeBookmarkBoard(categories)
-        return categories
+
+            override fun onResponse(call: Call, response: Response) {
+
+                val beans = try{
+                    val categoryJson = response.body()?.string()
+                    JSON.parseArray(
+                        JSON.parseObject(
+                            categoryJson
+                        ).getJSONArray("result").toJSONString(), CategoryBean::class.java
+                    )
+                } catch (e:Throwable){
+                    listOf<CategoryBean>()
+                }
+
+                val categories: MutableList<BoardCategory> = ArrayList()
+                for (categoryBean in beans) {
+                    val category = BoardCategory(categoryBean.name)
+                    categoryBean.groups?.forEach { group->
+                        val subCategory = BoardCategory(group.name)
+                        group.forums?.forEach {forum->
+                            val boardName: String? =
+                                if (TextUtils.isEmpty(forum.nameS)) { forum.name } else { forum.nameS }
+                            val board = Board(forum.fid, forum.stid, boardName)
+                            board.boardHead = forum.head
+                            subCategory.addBoard(board)
+                        }
+                        category.addSubCategory(subCategory)
+                    }
+                    categories.add(category)
+                }
+                upgradeBookmarkBoard(categories)
+                mBoardCategoryList.addAll(categories)
+                callback.invoke(mBoardCategoryList)
+            }
+
+        })
     }
 
     private fun upgradeBookmarkBoard(preloadCategory: List<BoardCategory>) {
@@ -75,15 +104,6 @@ object BoardModel : BaseModel(), BoardContract.Model {
             saveBookmark()
             PreferenceUtils.putData(PreferenceKey.KEY_PRELOAD_BOARD_VERSION, PRELOAD_BOARD_VERSION)
         }
-    }
-
-    private fun loadBookmarkBoards(): BoardCategory {
-        val category = BoardCategory("我的收藏")
-        val bookmarkBoards =
-            PreferenceUtils.getData(PreferenceKey.BOOKMARK_BOARD, Board::class.java)
-        category.addBoards(bookmarkBoards)
-        category.isBookmarkCategory = true
-        return category
     }
 
     override fun addBookmark(board: Board) {
@@ -140,18 +160,6 @@ object BoardModel : BaseModel(), BoardContract.Model {
         )
     }
 
-    override fun getCategorySize(): Int {
-        return mBoardCategoryList.size
-    }
-
-    override fun getBoardCategory(index: Int): BoardCategory {
-        return mBoardCategoryList[index]
-    }
-
-    override fun getBoardCategories(): List<BoardCategory> {
-        return mBoardCategoryList
-    }
-
     override fun getBoardName(boardKey: BoardKey): String {
         for (boardCategory in mBoardCategoryList) {
             val board = boardCategory.getBoard(boardKey)
@@ -166,16 +174,7 @@ object BoardModel : BaseModel(), BoardContract.Model {
         return getBoardName(BoardKey(fid, stid))
     }
 
-    override fun getBookmarkCategory(): BoardCategory {
-        return mBookmarkCategory
-    }
-
 
     private const val PRELOAD_BOARD_VERSION = 1
 
-    init {
-        mBookmarkCategory = loadBookmarkBoards()
-        mBoardCategoryList.add(mBookmarkCategory)
-        mBoardCategoryList.addAll(loadPreloadBoards())
-    }
 }

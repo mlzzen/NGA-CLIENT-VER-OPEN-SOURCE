@@ -35,14 +35,14 @@ task clean(type: Delete) {
 project.ext {
     minSdkVersion = 23
     targetSdkVersion = 29
-    compileSdkVersion = 30
-    appVersionName = 'Y202110.3'
-    appVersionCode = 20211003
+    compileSdkVersion = 31
+    appVersionName = 'Y202111.0'
+    appVersionCode = 20211100
 
     fastJson = '1.1.72.android'
     rxAndroid = '2.1.1'
 
-    lifecycle_version = "2.3.1"
+    lifecycle_version = "2.4.0"
     androidxAppcompat = '1.3.1'
     androidxMaterial = '1.4.0'
 }

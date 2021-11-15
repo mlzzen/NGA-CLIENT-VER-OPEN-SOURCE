@@ -17,7 +17,7 @@ import gov.anzong.androidnga.common.PreferenceKey;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.schedulers.Schedulers;
-import gov.anzong.androidnga.http.OnHttpCallBack;
+import nosc.api.callbacks.OnHttpCallBack;
 import nosc.api.pojo.AdminForumsData;
 import nosc.api.bean.ProfileData;
 import nosc.api.bean.ReputationData;

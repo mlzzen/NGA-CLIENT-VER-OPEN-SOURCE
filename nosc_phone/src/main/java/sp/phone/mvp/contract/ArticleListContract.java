@@ -6,7 +6,7 @@ import android.os.Bundle;
 import nosc.api.bean.ThreadData;
 import nosc.api.bean.ThreadRowInfo;
 import sp.phone.param.ArticleListParam;
-import gov.anzong.androidnga.http.OnHttpCallBack;
+import nosc.api.callbacks.OnHttpCallBack;
 
 /**
  *

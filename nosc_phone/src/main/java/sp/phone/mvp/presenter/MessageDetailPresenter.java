@@ -5,7 +5,7 @@ import android.text.TextUtils;
 import gov.anzong.androidnga.R;
 import nosc.api.bean.MessageDetailInfo;
 import sp.phone.ui.fragment.MessageDetailFragment;
-import gov.anzong.androidnga.http.OnHttpCallBack;
+import nosc.api.callbacks.OnHttpCallBack;
 import sp.phone.mvp.model.MessageDetailModel;
 import sp.phone.mvp.contract.MessageDetailContract;
 
@@ -13,6 +13,7 @@ import sp.phone.mvp.contract.MessageDetailContract;
  * Created by Justwen on 2017/10/11.
  */
 
+@Deprecated
 public class MessageDetailPresenter extends BasePresenter<MessageDetailFragment,MessageDetailModel> implements MessageDetailContract.IMessagePresenter {
 
 

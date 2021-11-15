@@ -31,7 +31,7 @@ import sp.phone.util.StringUtils;
  * 版块管理
  * Created by Justwen on 2017/6/29.
  */
-
+@Deprecated
 public class BoardPresenter extends BasePresenter<NavigationDrawerFragment, BoardModel> implements BoardContract.Presenter {
 
     private UserManager mUserManager;
@@ -154,27 +154,6 @@ public class BoardPresenter extends BasePresenter<NavigationDrawerFragment, Boar
     }
 
     @Override
-    public BoardCategory getBookmarkCategory() {
-        return mBaseModel.getBookmarkCategory();
-    }
-
-    @Override
-    public List<BoardCategory> getBoardCategories() {
-        return mBaseModel.getBoardCategories();
-    }
-
-    @Override
-    public void clearAllBookmarkBoards() {
-        mBaseModel.removeAllBookmarks();
-        mBaseView.notifyDataSetChanged();
-    }
-
-    @Override
-    public void swapBookmarkBoard(int from, int to) {
-        mBaseModel.swapBookmark(from, to);
-    }
-
-    @Override
     public void addBookmarkBoard(int fid, int stid, String name) {
         if (mBaseModel.isBookmark(fid, stid)) {
             ToastUtils.info("该版面已存在");
@@ -193,33 +172,6 @@ public class BoardPresenter extends BasePresenter<NavigationDrawerFragment, Boar
                 .withString(ParamKey.KEY_TITLE, board.getName())
                 .withString(ParamKey.BOARD_HEAD, board.getBoardHead())
                 .navigation(mBaseView.getContext());
-    }
-
-    @Override
-    public void showTopicList(int fid, int stid, String boardName) {
-        ARouterUtils.build(ARouterConstants.ACTIVITY_TOPIC_LIST)
-                .withInt(ParamKey.KEY_FID, fid)
-                .withInt(ParamKey.KEY_STID, stid)
-                .withString(ParamKey.KEY_TITLE, boardName)
-                .navigation(mBaseView.getContext());
-    }
-
-    @Override
-    public void showTopicList(String url) {
-        Intent intent = new Intent(mBaseView.getContext(), TopicListActivity.class);
-        intent.setData(Uri.parse(url));
-        if (mBaseView.getContext() != null) {
-            mBaseView.getContext().startActivity(intent);
-        }
-    }
-
-    @Override
-    public void showTopicContent(String url) {
-        Intent intent = new Intent(mBaseView.getContext(), ArticleListActivity.class);
-        intent.setData(Uri.parse(url));
-        if (mBaseView.getContext() != null) {
-            mBaseView.getContext().startActivity(intent);
-        }
     }
 
     @Override

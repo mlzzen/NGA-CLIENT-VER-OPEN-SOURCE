@@ -10,7 +10,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import nosc.api.bean.MessageDetailInfo;
-import gov.anzong.androidnga.http.OnHttpCallBack;
+import nosc.api.callbacks.OnHttpCallBack;
 import sp.phone.mvp.contract.MessageDetailContract;
 import sp.phone.mvp.model.convert.MessageConvertFactory;
 import nosc.api.retrofit.RetrofitHelper;

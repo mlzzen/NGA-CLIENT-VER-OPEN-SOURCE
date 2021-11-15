@@ -42,16 +42,6 @@ dependencies {
     api 'io.reactivex.rxjava2:rxjava:2.2.6'
     implementation 'me.imid.swipebacklayout.lib:library:1.1.0'
     implementation 'com.github.GrenderG:Toasty:1.4.1'
-    /*
-    api('com.zhouyou:signseekbar:1.0.8') {
-        exclude group: 'com.android.support'
-    }
-
-    api('com.nshmura:recyclertablayout:1.5.0') {
-        exclude group: 'com.android.support'
-    }
-     */
-
 
 
     api "com.alibaba:fastjson:$project.fastJson"

@@ -1,4 +1,4 @@
-package gov.anzong.androidnga.http;
+package nosc.api.callbacks;
 
 
 public interface OnHttpCallBack<T> {

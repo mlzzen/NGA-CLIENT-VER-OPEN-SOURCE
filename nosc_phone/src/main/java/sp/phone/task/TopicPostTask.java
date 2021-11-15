@@ -1,6 +1,5 @@
 package sp.phone.task;
 
-import android.content.Context;
 import android.os.AsyncTask;
 
 import org.apache.commons.io.IOUtils;

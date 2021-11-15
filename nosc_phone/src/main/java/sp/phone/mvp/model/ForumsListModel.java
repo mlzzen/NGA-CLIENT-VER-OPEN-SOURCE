@@ -1,6 +1,7 @@
 package sp.phone.mvp.model;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * 获取版块列表
@@ -134,7 +135,7 @@ public class ForumsListModel {
             Forum forum = (Forum) o;
 
             if (id != forum.id) return false;
-            return name != null ? name.equals(forum.name) : forum.name == null;
+            return Objects.equals(name, forum.name);
 
         }
 

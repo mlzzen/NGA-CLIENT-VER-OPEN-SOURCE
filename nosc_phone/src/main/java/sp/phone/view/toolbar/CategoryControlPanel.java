@@ -13,7 +13,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import gov.anzong.androidnga.R;
-import gov.anzong.androidnga.http.OnHttpCallBack;
+import nosc.api.callbacks.OnHttpCallBack;
 import sp.phone.mvp.contract.TopicPostContract.Presenter;
 
 public class CategoryControlPanel extends FrameLayout implements OnHttpCallBack<List<String>> {

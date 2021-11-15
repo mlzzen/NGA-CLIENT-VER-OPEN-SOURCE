@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSON;
 
 import java.util.Map;
 
-import gov.anzong.androidnga.http.OnHttpCallBack;
+import nosc.api.callbacks.OnHttpCallBack;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import nosc.api.retrofit.RetrofitHelper;

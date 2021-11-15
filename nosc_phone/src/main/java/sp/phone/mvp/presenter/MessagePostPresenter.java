@@ -12,6 +12,7 @@ import sp.phone.util.ActivityUtils;
  * Created by Justwen on 2017/5/28.
  */
 
+@Deprecated
 public class MessagePostPresenter extends BasePresenter<MessagePostFragment, MessagePostModel> implements MessagePostContract.Presenter, MessagePostTask.CallBack {
 
     private final static Object COMMIT_LOCK = new Object();

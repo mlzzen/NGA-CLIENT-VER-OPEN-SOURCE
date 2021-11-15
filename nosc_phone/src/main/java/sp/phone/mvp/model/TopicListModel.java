@@ -22,7 +22,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
-import gov.anzong.androidnga.http.OnHttpCallBack;
+import nosc.api.callbacks.OnHttpCallBack;
 import nosc.api.retrofit.RetrofitHelper;
 import nosc.api.retrofit.RetrofitService;
 import sp.phone.mvp.contract.TopicListContract;

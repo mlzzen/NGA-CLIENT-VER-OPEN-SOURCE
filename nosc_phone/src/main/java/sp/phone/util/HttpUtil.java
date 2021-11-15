@@ -81,45 +81,45 @@ public class HttpUtil {
 
 
 
-    public static String getHtml(String uri, String cookie) {
-        InputStream is = null;
-        String machine = "";
-        if (MODEL.contains(MANUFACTURER)) {
-            machine = android.os.Build.MODEL;
-        } else {
-            machine = android.os.Build.MANUFACTURER + " " + android.os.Build.MODEL;
-        }
-        if (machine.length() < 19) {
-            machine = "[" + machine + "]";
-        }
-        final String USER_AGENT = "Nga_Official/" + 573 + "(" + machine + ";Android" + Build.VERSION.RELEASE + ")";
-        try {
-            URL url = new URL(uri);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            if (!StringUtils.isEmpty(cookie))
-                conn.setRequestProperty("Cookie", cookie);
-            conn.setRequestProperty("User-Agent", USER_AGENT);
-            conn.setRequestProperty("Accept-Charset", "GBK");
-            conn.setRequestProperty("Connection", "close");
-            conn.setRequestProperty("Accept-Encoding", "gzip,deflate");
-            conn.setConnectTimeout(5000);
-            conn.setReadTimeout(10000);
-            conn.connect();
-            if (conn.getResponseCode() == 200)
-                is = conn.getInputStream();
-            else
-                is = conn.getErrorStream();
-            if ("gzip".equals(conn.getHeaderField("Content-Encoding")))
-                is = new GZIPInputStream(is);
-            String encoding = getCharset(conn, "GBK");
-            return IOUtils.toString(is, encoding);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            IOUtils.closeQuietly(is);
-        }
-        return null;
-    }
+//    public static String getHtml(String uri, String cookie) {
+//        InputStream is = null;
+//        String machine = "";
+//        if (MODEL.contains(MANUFACTURER)) {
+//            machine = android.os.Build.MODEL;
+//        } else {
+//            machine = android.os.Build.MANUFACTURER + " " + android.os.Build.MODEL;
+//        }
+//        if (machine.length() < 19) {
+//            machine = "[" + machine + "]";
+//        }
+//        final String USER_AGENT = "Nga_Official/" + 573 + "(" + machine + ";Android" + Build.VERSION.RELEASE + ")";
+//        try {
+//            URL url = new URL(uri);
+//            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+//            if (!StringUtils.isEmpty(cookie))
+//                conn.setRequestProperty("Cookie", cookie);
+//            conn.setRequestProperty("User-Agent", USER_AGENT);
+//            conn.setRequestProperty("Accept-Charset", "GBK");
+//            conn.setRequestProperty("Connection", "close");
+//            conn.setRequestProperty("Accept-Encoding", "gzip,deflate");
+//            conn.setConnectTimeout(5000);
+//            conn.setReadTimeout(10000);
+//            conn.connect();
+//            if (conn.getResponseCode() == 200)
+//                is = conn.getInputStream();
+//            else
+//                is = conn.getErrorStream();
+//            if ("gzip".equals(conn.getHeaderField("Content-Encoding")))
+//                is = new GZIPInputStream(is);
+//            String encoding = getCharset(conn, "GBK");
+//            return IOUtils.toString(is, encoding);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        } finally {
+//            IOUtils.closeQuietly(is);
+//        }
+//        return null;
+//    }
 
     public static String getCharset(HttpURLConnection conn, String defaultValue) {
         if (conn == null)

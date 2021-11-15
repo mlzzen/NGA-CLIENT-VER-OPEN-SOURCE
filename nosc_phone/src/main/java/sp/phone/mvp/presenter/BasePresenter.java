@@ -13,6 +13,7 @@ import sp.phone.ui.fragment.BaseMvpFragment;
  * @date 2017/11/25
  */
 
+@Deprecated
 public abstract class BasePresenter<T extends BaseMvpFragment, E extends BaseModel> extends ViewModel
         implements LifecycleObserver {
 

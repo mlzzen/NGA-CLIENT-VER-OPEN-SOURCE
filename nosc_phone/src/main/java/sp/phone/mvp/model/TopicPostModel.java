@@ -35,7 +35,7 @@ import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
-import gov.anzong.androidnga.http.OnHttpCallBack;
+import nosc.api.callbacks.OnHttpCallBack;
 import nosc.api.bean.TopicPostBean;
 import nosc.api.retrofit.RetrofitHelper;
 import nosc.api.retrofit.RetrofitService;

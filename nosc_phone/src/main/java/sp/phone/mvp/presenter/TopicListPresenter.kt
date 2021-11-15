@@ -8,10 +8,9 @@ import sp.phone.mvp.model.entity.TopicListInfo
 import sp.phone.param.TopicListParam
 import sp.phone.mvp.model.entity.ThreadPageInfo
 import sp.phone.mvp.model.TopicListModel
-import gov.anzong.androidnga.http.OnHttpCallBack
+import nosc.api.callbacks.OnHttpCallBack
 import gov.anzong.androidnga.base.util.ToastUtils
 import gov.anzong.androidnga.base.util.DeviceUtils
-import sp.phone.mvp.model.BoardModel
 import sp.phone.mvp.model.entity.Board
 import sp.phone.util.ARouterUtils
 import gov.anzong.androidnga.arouter.ARouterConstants
@@ -21,7 +20,6 @@ import android.os.Environment
 import android.content.Intent
 import sp.phone.ui.fragment.TopicCacheFragment
 import android.content.ActivityNotFoundException
-import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
 import androidx.fragment.app.Fragment
@@ -41,6 +39,7 @@ import java.util.*
  * @author Justwen
  * @date 2017/6/3
  */
+@Deprecated("Use mvvm")
 class TopicListPresenter : ViewModel(), LifecycleObserver {
     // Following variables are for the 24 hour hot topic feature
     // How many pages we query for twenty four hour hot topic
@@ -59,7 +58,8 @@ class TopicListPresenter : ViewModel(), LifecycleObserver {
     val isRefreshing = MutableLiveData<Boolean>()
     val removedTopic = MutableLiveData<ThreadPageInfo>()
     private var mBaseModel: TopicListModel
-    private val mCallBack: OnHttpCallBack<TopicListInfo> = object : OnHttpCallBack<TopicListInfo> {
+    private val mCallBack: OnHttpCallBack<TopicListInfo> = object :
+        OnHttpCallBack<TopicListInfo> {
         override fun onError(text: String) {
             errorMsg.value = text
             isRefreshing.value = false
@@ -137,7 +137,8 @@ class TopicListPresenter : ViewModel(), LifecycleObserver {
     }
 
     fun removeTopic(info: ThreadPageInfo, position: Int) {
-        mBaseModel.removeTopic(info, object : OnHttpCallBack<String> {
+        mBaseModel.removeTopic(info, object :
+            OnHttpCallBack<String> {
             override fun onError(text: String) {
                 errorMsg.value = text
             }
@@ -150,7 +151,8 @@ class TopicListPresenter : ViewModel(), LifecycleObserver {
     }
 
     fun removeCacheTopic(info: ThreadPageInfo) {
-        mBaseModel.removeCacheTopic(info, object : OnHttpCallBack<String> {
+        mBaseModel.removeCacheTopic(info, object :
+            OnHttpCallBack<String> {
             override fun onError(text: String) {
                 errorMsg.value = "删除失败！"
             }

@@ -3,7 +3,7 @@ package gov.anzong.androidnga.mvvm.model;
 import java.util.HashMap;
 import java.util.Map;
 
-import gov.anzong.androidnga.http.OnHttpCallBack;
+import nosc.api.callbacks.OnHttpCallBack;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;

@@ -30,25 +30,9 @@ public interface BoardContract {
 
         void startLogin();
 
-
-
-        BoardCategory getBookmarkCategory();
-
-        List<BoardCategory> getBoardCategories();
-
-        void clearAllBookmarkBoards();
-
-        void swapBookmarkBoard(int from, int to);
-
         void addBookmarkBoard(int fid, int stid, String name);
 
         void showTopicList(Board board);
-
-        void showTopicList(int fid, int stid, String boardName);
-
-        void showTopicList(String url);
-
-        void showTopicContent(String url);
 
     }
 
@@ -62,7 +46,6 @@ public interface BoardContract {
 
         void notifyDataSetChanged();
 
-        int getCurrentItem();
     }
 
     interface Model {
@@ -81,16 +64,9 @@ public interface BoardContract {
 
         void swapBookmark(int from, int to);
 
-        int getCategorySize();
-
-        BoardCategory getBoardCategory(int index);
-
-        List<BoardCategory> getBoardCategories();
-
         String getBoardName(Board.BoardKey boardKey);
 
         String getBoardName(int fid, int stid);
 
-        BoardCategory getBookmarkCategory();
     }
 }

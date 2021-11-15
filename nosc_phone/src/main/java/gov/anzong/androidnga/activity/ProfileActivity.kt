@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.webkit.WebView
 import android.widget.FrameLayout
 import android.widget.ImageView
 import androidx.appcompat.widget.Toolbar
@@ -22,7 +21,7 @@ import gov.anzong.androidnga.base.util.ToastUtils
 import gov.anzong.androidnga.core.data.HtmlData
 import gov.anzong.androidnga.core.decode.ForumDecoder
 import gov.anzong.androidnga.databinding.ActivityUserProfileBinding
-import gov.anzong.androidnga.http.OnHttpCallBack
+import nosc.api.callbacks.OnHttpCallBack
 import kotlinx.android.synthetic.main.activity_user_profile_content.*
 import nosc.api.bean.ProfileData
 import sp.phone.common.PhoneConfiguration
@@ -37,7 +36,8 @@ import sp.phone.util.StringUtils
 import sp.phone.view.webview.WebViewEx
 
 @Route(path = ARouterConstants.ACTIVITY_PROFILE)
-class ProfileActivity : BaseActivity(), OnHttpCallBack<ProfileData?> {
+class ProfileActivity : BaseActivity(),
+    OnHttpCallBack<ProfileData?> {
     private var mProfileData: ProfileData? = null
     private var binding: ActivityUserProfileBinding? = null
     private val mThemeManager = ThemeManager.getInstance()

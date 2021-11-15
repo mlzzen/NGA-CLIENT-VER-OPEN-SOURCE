@@ -19,7 +19,7 @@ import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import sp.phone.common.UserManagerImpl;
-import gov.anzong.androidnga.http.OnHttpCallBack;
+import nosc.api.callbacks.OnHttpCallBack;
 import nosc.api.bean.ThreadData;
 import nosc.api.retrofit.RetrofitHelper;
 import nosc.api.retrofit.RetrofitService;

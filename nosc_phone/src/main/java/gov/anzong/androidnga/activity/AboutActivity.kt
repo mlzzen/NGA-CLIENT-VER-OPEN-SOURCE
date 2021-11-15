@@ -67,6 +67,18 @@ class AboutActivity : MaterialAboutActivity() {
             .icon(R.drawable.ic_license)
             .build())
         builder.addItem(MaterialAboutActionItem.Builder()
+            .text("代码")
+            .subText("[@Yricky]")
+//            .setOnLongClickAction { Debugger.toggleDebugMode() }
+            .icon(R.drawable.ic_code)
+            .build())
+        builder.addItem(
+            MaterialAboutActionItem.Builder()
+                .text("感谢MNGA作者提供的新图标")
+                .icon(R.drawable.ic_color_lens)
+                .build()
+        )
+        builder.addItem(MaterialAboutActionItem.Builder()
             .text("来康康有没有更新")
             .setOnClickAction {
                 FunctionUtils.openUrlByDefaultBrowser(
@@ -76,6 +88,7 @@ class AboutActivity : MaterialAboutActivity() {
             }
             .icon(R.drawable.ic_update_24dp)
             .build())
+
         return builder.build()
     }
 
@@ -97,7 +110,6 @@ class AboutActivity : MaterialAboutActivity() {
         )
         builder.addItem(MaterialAboutActionItem.Builder()
             .text("Github")
-            .subText("bug & 建议")
             .setOnClickAction {
                 FunctionUtils.openUrlByDefaultBrowser(
                     this@AboutActivity,
@@ -106,41 +118,31 @@ class AboutActivity : MaterialAboutActivity() {
             }
             .icon(R.drawable.ic_github)
             .build())
-        builder.addItem(MaterialAboutActionItem.Builder()
-            .text("客户端吐槽QQ群,欢迎加入捡肥皂")
-            .subText("1065310118")
-            .setOnClickAction {
-                FunctionUtils.copyToClipboard(
-                    this@AboutActivity,
-                    "1065310118"
-                )
-            }
-            .icon(R.drawable.ic_qq)
-            .build())
-        builder.addItem(MaterialAboutActionItem.Builder()
-            .text("客户端问题反馈群，请勿开车！")
-            .subText("1077054628")
-            .setOnClickAction {
-                FunctionUtils.copyToClipboard(
-                    this@AboutActivity,
-                    "1077054628"
-                )
-            }
-            .icon(R.drawable.ic_qq)
-            .build())
+//        builder.addItem(MaterialAboutActionItem.Builder()
+//            .text("客户端吐槽QQ群,欢迎加入捡肥皂")
+//            .subText("1065310118")
+//            .setOnClickAction {
+//                FunctionUtils.copyToClipboard(
+//                    this@AboutActivity,
+//                    "1065310118"
+//                )
+//            }
+//            .icon(R.drawable.ic_qq)
+//            .build())
+//        builder.addItem(MaterialAboutActionItem.Builder()
+//            .text("客户端问题反馈群，请勿开车！")
+//            .subText("1077054628")
+//            .setOnClickAction {
+//                FunctionUtils.copyToClipboard(
+//                    this@AboutActivity,
+//                    "1077054628"
+//                )
+//            }
+//            .icon(R.drawable.ic_qq)
+//            .build())
         return builder.build()
     }
 
-    /*
-    private MaterialAboutCard buildExtraCard() {
-        MaterialAboutCard.Builder builder = new MaterialAboutCard.Builder();
-        builder.title("赞美片总!感谢[@force0119]");
-
-
-        return builder.build();
-    }
-
- */
     override fun getActivityTitle(): CharSequence {
         return getString(R.string.title_about)
     }

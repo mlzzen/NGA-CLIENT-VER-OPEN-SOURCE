@@ -7,7 +7,7 @@ import gov.anzong.androidnga.R;
 import gov.anzong.androidnga.base.util.ToastUtils;
 import sp.phone.common.UserManager;
 import sp.phone.common.UserManagerImpl;
-import gov.anzong.androidnga.http.OnHttpCallBack;
+import nosc.api.callbacks.OnHttpCallBack;
 import nosc.api.bean.ThreadData;
 import nosc.api.bean.ThreadRowInfo;
 import sp.phone.mvp.contract.ArticleListContract;
@@ -24,6 +24,7 @@ import sp.phone.util.StringUtils;
  * Created by Justwen on 2017/11/22.
  */
 
+@Deprecated
 public class ArticleListPresenter extends BasePresenter<ArticleListFragment, ArticleListModel> implements ArticleListContract.Presenter {
 
     private LikeTask mLikeTask;
@@ -75,8 +76,6 @@ public class ArticleListPresenter extends BasePresenter<ArticleListFragment, Art
         mRequestParam = articleListParam;
     }
 
-    public ArticleListPresenter() {
-    }
 
     @Override
     public void banThisSB(ThreadRowInfo row) {

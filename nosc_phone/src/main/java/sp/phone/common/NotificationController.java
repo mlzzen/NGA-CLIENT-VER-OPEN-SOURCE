@@ -21,7 +21,7 @@ import gov.anzong.androidnga.activity.MessageListActivity;
 import gov.anzong.androidnga.activity.RecentNotificationActivity;
 import gov.anzong.androidnga.base.util.ContextUtils;
 import gov.anzong.androidnga.common.PreferenceKey;
-import gov.anzong.androidnga.http.OnHttpCallBack;
+import nosc.api.callbacks.OnHttpCallBack;
 import sp.phone.mvp.model.entity.NotificationInfo;
 import sp.phone.mvp.model.entity.RecentReplyInfo;
 import sp.phone.task.ForumNotificationTask;

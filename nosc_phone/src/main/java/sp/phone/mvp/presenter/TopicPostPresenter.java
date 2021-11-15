@@ -27,7 +27,7 @@ import gov.anzong.androidnga.base.util.ContextUtils;;
 import gov.anzong.androidnga.rxjava.BaseSubscriber;
 import sp.phone.param.PostParam;
 import sp.phone.ui.fragment.TopicPostFragment;
-import gov.anzong.androidnga.http.OnHttpCallBack;
+import nosc.api.callbacks.OnHttpCallBack;
 import sp.phone.mvp.contract.TopicPostContract;
 import sp.phone.mvp.model.TopicPostModel;
 import sp.phone.task.TopicPostTask;
@@ -35,6 +35,7 @@ import sp.phone.util.ActivityUtils;
 import sp.phone.util.FunctionUtils;
 import sp.phone.util.StringUtils;
 
+@Deprecated
 public class TopicPostPresenter extends BasePresenter<TopicPostFragment, TopicPostModel>
         implements TopicPostContract.Presenter, TopicPostTask.CallBack {
 

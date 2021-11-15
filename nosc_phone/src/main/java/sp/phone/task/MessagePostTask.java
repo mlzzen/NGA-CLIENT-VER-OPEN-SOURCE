@@ -139,7 +139,7 @@ public class MessagePostTask extends AsyncTask<String, Integer, String> {
 
     @Override
     protected void onPostExecute(String result) {
-        String success_results[] = {"发送完毕 ...", " @提醒每24小时不能超过50个", "操作成功"};
+        String[] success_results = {"发送完毕 ...", " @提醒每24小时不能超过50个", "操作成功"};
         if (mSuccess) {
             boolean success = false;
             for (int i = 0; i < success_results.length; ++i) {

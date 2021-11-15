@@ -52,9 +52,6 @@ public class PostActivity extends BaseActivity {
     }
 
     private int getTitleResId(String action) {
-        if (action == null) {
-            //CloudServerManager.putCrashData(this, "post_intent", getIntent().toString());
-        }
         switch (action) {
             case "reply":
                 return R.string.reply_thread;
