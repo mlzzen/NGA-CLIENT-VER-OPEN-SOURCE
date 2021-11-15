@@ -1,193 +1,180 @@
-package sp.phone.ui.fragment;
+package sp.phone.ui.fragment
 
-import android.app.Activity;
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.widget.Toolbar;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-
-import com.alibaba.android.arouter.launcher.ARouter;
-import com.getbase.floatingactionbutton.FloatingActionsMenu;
-import com.google.android.material.appbar.AppBarLayout;
-
-import butterknife.BindView;
-import butterknife.OnClick;
-import gov.anzong.androidnga.R;
-import gov.anzong.androidnga.activity.LauncherSubActivity;
-import gov.anzong.androidnga.arouter.ARouterConstants;
-import gov.anzong.androidnga.base.util.ToastUtils;
-import sp.phone.mvp.model.entity.Board;
-import sp.phone.param.ParamKey;
-import sp.phone.util.ActivityUtils;
+import gov.anzong.androidnga.R
+import com.getbase.floatingactionbutton.FloatingActionsMenu
+import com.google.android.material.appbar.AppBarLayout
+import android.os.Bundle
+import androidx.coordinatorlayout.widget.CoordinatorLayout
+import com.alibaba.android.arouter.launcher.ARouter
+import gov.anzong.androidnga.arouter.ARouterConstants
+import sp.phone.param.ParamKey
+import sp.phone.mvp.model.entity.Board
+import gov.anzong.androidnga.base.util.ToastUtils
+import android.content.Intent
+import gov.anzong.androidnga.activity.LauncherSubActivity
+import sp.phone.ui.fragment.BoardSubListFragment
+import sp.phone.util.ActivityUtils
+import android.app.Activity
+import android.view.*
+import androidx.appcompat.widget.Toolbar
 
 /**
  * Created by Justwen on 2017/11/19.
  */
+class TopicListFragment : TopicSearchFragment() {
+    private var mOptionMenu: Menu? = null
 
-public class TopicListFragment extends TopicSearchFragment {
+    var mFam: FloatingActionsMenu? = null
 
-    private Menu mOptionMenu;
+    var mAppBarLayout: AppBarLayout? = null
 
-    @BindView(R.id.fab_menu)
-    public FloatingActionsMenu mFam;
-
-    @BindView(R.id.appbar)
-    public AppBarLayout mAppBarLayout;
-
-    @BindView(R.id.toolbar)
-    public Toolbar mToolbar;
-
-    @Override
-    protected void setTitle() {
+    var mToolbar: Toolbar? = null
+    override fun setTitle() {
         if (mRequestParam.title != null) {
-            setTitle(mRequestParam.title);
+            setTitle(mRequestParam.title)
         }
     }
 
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        int layoutId = R.layout.fragment_topic_list_board;
-        return inflater.inflate(layoutId, container, false);
-    }
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val layoutId = R.layout.fragment_topic_list_board
+        return inflater.inflate(layoutId, container, false).apply {
+            mFam = findViewById(R.id.fab_menu)
+            mAppBarLayout = findViewById(R.id.appbar)
+            mToolbar = findViewById(R.id.toolbar)
+            findViewById<View>(R.id.fab_post).setOnClickListener {
+                startPostActivity()
+            }
 
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        updateFloatingMenu();
-    }
-
-    private void updateFloatingMenu() {
-        if (mConfig.isLeftHandMode()) {
-            CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams) mFam.getLayoutParams();
-            lp.gravity = Gravity.START | Gravity.BOTTOM;
-            mFam.setExpandDirection(FloatingActionsMenu.EXPAND_UP, FloatingActionsMenu.LABELS_ON_RIGHT_SIDE);
-            mFam.setLayoutParams(lp);
+            findViewById<View>(R.id.fab_refresh).setOnClickListener {
+                refresh()
+            }
         }
     }
 
-    @Override
-    public void hideLoadingView() {
-        AppBarLayout.LayoutParams lp = (AppBarLayout.LayoutParams) mToolbar.getLayoutParams();
-        lp.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS);
-        super.hideLoadingView();
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        updateFloatingMenu()
     }
 
-    @Override
-    public void scrollTo(int position) {
+    private fun updateFloatingMenu() {
+        if (mConfig.isLeftHandMode) {
+            val lp = mFam!!.layoutParams as CoordinatorLayout.LayoutParams
+            lp.gravity = Gravity.START or Gravity.BOTTOM
+            mFam!!.setExpandDirection(
+                FloatingActionsMenu.EXPAND_UP,
+                FloatingActionsMenu.LABELS_ON_RIGHT_SIDE
+            )
+            mFam!!.layoutParams = lp
+        }
+    }
+
+    override fun hideLoadingView() {
+        val lp = mToolbar!!.layoutParams as AppBarLayout.LayoutParams
+        lp.scrollFlags =
+            AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL or AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS
+        super.hideLoadingView()
+    }
+
+    override fun scrollTo(position: Int) {
         if (position == 0) {
-            mAppBarLayout.setExpanded(true, true);
+            mAppBarLayout!!.setExpanded(true, true)
         }
-        super.scrollTo(position);
+        super.scrollTo(position)
     }
 
-    @Override
-    public void onResume() {
-        mFam.collapse();
-        super.onResume();
+    override fun onResume() {
+        mFam!!.collapse()
+        super.onResume()
     }
 
-    @OnClick(R.id.fab_refresh)
-    public void refresh() {
-        mFam.collapse();
-        mPresenter.loadPage(1, mRequestParam);
+    fun refresh() {
+        mFam!!.collapse()
+        mPresenter.loadPage(1, mRequestParam)
     }
 
-    @OnClick(R.id.fab_post)
-    public void startPostActivity() {
+    fun startPostActivity() {
         ARouter.getInstance()
-                .build(ARouterConstants.ACTIVITY_POST)
-                .withInt(ParamKey.KEY_FID, mRequestParam.fid)
-                .withString(ParamKey.KEY_STID, mRequestParam.stid != 0 ? String.valueOf(mRequestParam.stid) : null)
-                .withString(ParamKey.KEY_ACTION, "new")
-                .navigation();
+            .build(ARouterConstants.ACTIVITY_POST)
+            .withInt(ParamKey.KEY_FID, mRequestParam.fid)
+            .withString(
+                ParamKey.KEY_STID,
+                if (mRequestParam.stid != 0) mRequestParam.stid.toString() else null
+            )
+            .withString(ParamKey.KEY_ACTION, "new")
+            .navigation()
     }
 
-    @Override
-    public void onPrepareOptionsMenu(Menu menu) {
+    override fun onPrepareOptionsMenu(menu: Menu) {
         if (mPresenter.isBookmarkBoard(mRequestParam.fid, mRequestParam.stid)) {
-            menu.findItem(R.id.menu_add_bookmark).setVisible(false);
-            menu.findItem(R.id.menu_remove_bookmark).setVisible(true);
+            menu.findItem(R.id.menu_add_bookmark).isVisible = false
+            menu.findItem(R.id.menu_remove_bookmark).isVisible = true
         } else {
-            menu.findItem(R.id.menu_add_bookmark).setVisible(true);
-            menu.findItem(R.id.menu_remove_bookmark).setVisible(false);
+            menu.findItem(R.id.menu_add_bookmark).isVisible = true
+            menu.findItem(R.id.menu_remove_bookmark).isVisible = false
         }
-
         if (mTopicListInfo != null) {
-            menu.findItem(R.id.menu_sub_board).setVisible(!mTopicListInfo.getSubBoardList().isEmpty());
+            menu.findItem(R.id.menu_sub_board).isVisible = !mTopicListInfo.subBoardList.isEmpty()
         } else {
-            menu.findItem(R.id.menu_sub_board).setVisible(false);
+            menu.findItem(R.id.menu_sub_board).isVisible = false
         }
-
         if (mRequestParam.fid == 0 && mRequestParam.stid == 0) {
-            menu.findItem(R.id.menu_add_bookmark).setVisible(false);
-            menu.findItem(R.id.menu_remove_bookmark).setVisible(false);
+            menu.findItem(R.id.menu_add_bookmark).isVisible = false
+            menu.findItem(R.id.menu_remove_bookmark).isVisible = false
         }
-
-        menu.findItem(R.id.menu_board_head).setVisible(mRequestParam.boardHead != null);
-
-        super.onPrepareOptionsMenu(menu);
+        menu.findItem(R.id.menu_board_head).isVisible = mRequestParam.boardHead != null
+        super.onPrepareOptionsMenu(menu)
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.topic_list_menu, menu);
-        mOptionMenu = menu;
-        super.onCreateOptionsMenu(menu, inflater);
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.topic_list_menu, menu)
+        mOptionMenu = menu
+        super.onCreateOptionsMenu(menu, inflater)
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_add_bookmark:
-                Board board = new Board(mRequestParam.fid,mRequestParam.stid,mRequestParam.title);
-                board.setBoardHead(mRequestParam.boardHead);
-                mPresenter.addBookmarkBoard(board);
-                item.setVisible(false);
-                mOptionMenu.findItem(R.id.menu_remove_bookmark).setVisible(true);
-                ToastUtils.info(R.string.toast_add_bookmark_board);
-                break;
-            case R.id.menu_remove_bookmark:
-                mPresenter.removeBookmarkBoard(mRequestParam.fid, mRequestParam.stid);
-                item.setVisible(false);
-                mOptionMenu.findItem(R.id.menu_add_bookmark).setVisible(true);
-                ToastUtils.info(R.string.toast_remove_bookmark_board);
-                break;
-            case R.id.menu_sub_board:
-                showSubBoardList();
-                break;
-            case R.id.menu_board_head:
-                mPresenter.startArticleActivity(mRequestParam.boardHead, mRequestParam.title + " - 版头");
-                break;
-            default:
-                return super.onOptionsItemSelected(item);
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.menu_add_bookmark -> {
+                val board = Board(mRequestParam.fid, mRequestParam.stid, mRequestParam.title)
+                board.boardHead = mRequestParam.boardHead
+                mPresenter.addBookmarkBoard(board)
+                item.isVisible = false
+                mOptionMenu!!.findItem(R.id.menu_remove_bookmark).isVisible = true
+                ToastUtils.info(R.string.toast_add_bookmark_board)
+            }
+            R.id.menu_remove_bookmark -> {
+                mPresenter.removeBookmarkBoard(mRequestParam.fid, mRequestParam.stid)
+                item.isVisible = false
+                mOptionMenu!!.findItem(R.id.menu_add_bookmark).isVisible = true
+                ToastUtils.info(R.string.toast_remove_bookmark_board)
+            }
+            R.id.menu_sub_board -> showSubBoardList()
+            R.id.menu_board_head -> mPresenter.startArticleActivity(
+                mRequestParam.boardHead,
+                mRequestParam.title + " - 版头"
+            )
+            else -> return super.onOptionsItemSelected(item)
         }
-        return true;
+        return true
     }
 
-    private void showSubBoardList() {
-        Intent intent = new Intent(getContext(), LauncherSubActivity.class);
-        intent.putExtra("fragment", BoardSubListFragment.class.getName());
-        intent.putExtra(ParamKey.KEY_TITLE, mRequestParam.title);
-        intent.putExtra(ParamKey.KEY_FID, mRequestParam.fid);
-
-        intent.putParcelableArrayListExtra("subBoard", mTopicListInfo.getSubBoardList());
-        startActivityForResult(intent, ActivityUtils.REQUEST_CODE_SUB_BOARD);
+    private fun showSubBoardList() {
+        val intent = Intent(context, LauncherSubActivity::class.java)
+        intent.putExtra("fragment", BoardSubListFragment::class.java.name)
+        intent.putExtra(ParamKey.KEY_TITLE, mRequestParam.title)
+        intent.putExtra(ParamKey.KEY_FID, mRequestParam.fid)
+        intent.putParcelableArrayListExtra("subBoard", mTopicListInfo.subBoardList)
+        startActivityForResult(intent, ActivityUtils.REQUEST_CODE_SUB_BOARD)
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == ActivityUtils.REQUEST_CODE_SUB_BOARD && resultCode == Activity.RESULT_OK) {
-            mPresenter.loadPage(1, mRequestParam);
+            mPresenter.loadPage(1, mRequestParam)
         }
-        super.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data)
     }
 }

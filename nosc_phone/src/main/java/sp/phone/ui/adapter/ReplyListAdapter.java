@@ -9,8 +9,6 @@ import android.widget.TextView;
 import java.util.Iterator;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import gov.anzong.androidnga.R;
 import sp.phone.mvp.model.entity.ThreadPageInfo;
 import sp.phone.util.StringUtils;
@@ -68,18 +66,17 @@ public class ReplyListAdapter extends BaseAppendableAdapter<ThreadPageInfo, Repl
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.tv_content)
         public TextView mContentTv;
 
-        @BindView(R.id.tv_time)
         public TextView mPostDateTv;
 
-        @BindView(R.id.tv_topic)
         public TextView mSubjectTv;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            ButterKnife.bind(this, itemView);
+            mContentTv = itemView.findViewById(R.id.tv_content);
+            mPostDateTv = itemView.findViewById(R.id.tv_time);
+            mSubjectTv = itemView.findViewById(R.id.tv_topic);
         }
     }
 

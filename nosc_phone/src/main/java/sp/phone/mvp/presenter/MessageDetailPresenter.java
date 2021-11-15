@@ -3,7 +3,7 @@ package sp.phone.mvp.presenter;
 import android.text.TextUtils;
 
 import gov.anzong.androidnga.R;
-import sp.phone.http.bean.MessageDetailInfo;
+import nosc.api.bean.MessageDetailInfo;
 import sp.phone.ui.fragment.MessageDetailFragment;
 import gov.anzong.androidnga.http.OnHttpCallBack;
 import sp.phone.mvp.model.MessageDetailModel;

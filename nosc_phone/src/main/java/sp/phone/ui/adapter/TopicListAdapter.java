@@ -11,8 +11,6 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import gov.anzong.androidnga.R;
 import sp.phone.common.PhoneConfiguration;
 import sp.phone.param.TopicTitleHelper;
@@ -71,21 +69,20 @@ public class TopicListAdapter extends BaseAppendableAdapter<ThreadPageInfo, Topi
 
     public class TopicViewHolder extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.num)
         public TextView num;
 
-        @BindView(R.id.title)
         public TextView title;
 
-        @BindView(R.id.author)
         public TextView author;
 
-        @BindView(R.id.last_reply)
         public TextView lastReply;
 
         public TopicViewHolder(View itemView) {
             super(itemView);
-            ButterKnife.bind(this, itemView);
+            num = itemView.findViewById(R.id.num);
+            title = itemView.findViewById(R.id.title);
+            author = itemView.findViewById(R.id.author);
+            lastReply = itemView.findViewById(R.id.last_reply);
         }
     }
 }

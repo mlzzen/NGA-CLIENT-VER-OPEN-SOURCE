@@ -8,8 +8,8 @@ import io.reactivex.annotations.NonNull;
 import io.reactivex.schedulers.Schedulers;
 import sp.phone.mvp.model.entity.SubBoard;
 import gov.anzong.androidnga.http.OnHttpCallBack;
-import sp.phone.http.retrofit.RetrofitHelper;
-import sp.phone.http.retrofit.RetrofitService;
+import nosc.api.retrofit.RetrofitHelper;
+import nosc.api.retrofit.RetrofitService;
 import sp.phone.rxjava.BaseSubscriber;
 
 /**

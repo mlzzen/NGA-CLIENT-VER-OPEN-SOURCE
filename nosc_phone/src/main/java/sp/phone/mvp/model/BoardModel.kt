@@ -1,208 +1,181 @@
-package sp.phone.mvp.model;
+package sp.phone.mvp.model
 
-import android.text.TextUtils;
-
-import com.alibaba.fastjson.JSON;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import gov.anzong.androidnga.base.util.PreferenceUtils;
-import gov.anzong.androidnga.common.PreferenceKey;
-import sp.phone.http.bean.CategoryBean;
-import sp.phone.mvp.contract.BoardContract;
-import sp.phone.mvp.model.entity.Board;
-import sp.phone.mvp.model.entity.BoardCategory;
-import sp.phone.util.StringUtils;
+import android.text.TextUtils
+import sp.phone.mvp.contract.BoardContract
+import sp.phone.mvp.model.entity.BoardCategory
+import sp.phone.mvp.model.entity.Board
+import sp.phone.mvp.model.entity.Board.BoardKey
+import nosc.api.bean.CategoryBean
+import com.alibaba.fastjson.JSON
+import gov.anzong.androidnga.base.util.PreferenceUtils
+import gov.anzong.androidnga.common.PreferenceKey
+import sp.phone.util.StringUtils
+import java.util.*
 
 /**
  * Created by Justwen on 2019/6/23.
  */
-public class BoardModel extends BaseModel implements BoardContract.Model {
-
-    private static final int PRELOAD_BOARD_VERSION = 1;
-
-    private final List<BoardCategory> mBoardCategoryList = new ArrayList<>();
-
-    private final BoardCategory mBookmarkCategory;
-
-    private BoardModel() {
-        mBookmarkCategory = loadBookmarkBoards();
-        mBoardCategoryList.add(mBookmarkCategory);
-        mBoardCategoryList.addAll(loadPreloadBoards());
-    }
-
-    public Board findBoard(String fid) {
-        Board.BoardKey boardKey = new Board.BoardKey(Integer.parseInt(fid), 0);
-        for (BoardCategory boardCategory : mBoardCategoryList) {
-            Board board = boardCategory.getBoard(boardKey);
+object BoardModel : BaseModel(), BoardContract.Model {
+    private val mBoardCategoryList: MutableList<BoardCategory> = ArrayList()
+    private val mBookmarkCategory: BoardCategory
+    fun findBoard(fid: String): Board? {
+        val boardKey = BoardKey(fid.toInt(), 0)
+        for (boardCategory in mBoardCategoryList) {
+            val board = boardCategory.getBoard(boardKey)
             if (board != null) {
-                return board;
+                return board
             }
         }
-        return null;
+        return null
     }
 
-    private List<BoardCategory> loadPreloadBoards() {
-        String categoryJson = StringUtils.getStringFromAssets("json/category.json");
-        List<CategoryBean> beans = JSON.parseArray(categoryJson, CategoryBean.class);
-        List<BoardCategory> categories = new ArrayList<>();
+    @JvmStatic
+    fun getInstance() = this
 
-        for (CategoryBean categoryBean : beans) {
-            BoardCategory category = new BoardCategory(categoryBean.getName());
-            for (CategoryBean.SubBean subBean : categoryBean.getSub()) {
-                BoardCategory subCategory = new BoardCategory(subBean.getName());
-                for (CategoryBean.SubBean.ContentBean contentBean : subBean.getContent()) {
-                    String boardName;
-                    if (TextUtils.isEmpty(contentBean.getNameS())) {
-                        boardName = contentBean.getName();
+    private fun loadPreloadBoards(): List<BoardCategory> {
+        val categoryJson = StringUtils.getStringFromAssets("json/category.json")
+        val beans = JSON.parseArray(categoryJson, CategoryBean::class.java)
+        val categories: MutableList<BoardCategory> = ArrayList()
+        for (categoryBean in beans) {
+            val category = BoardCategory(categoryBean.name)
+            categoryBean?.groups?.forEach { group->
+                val subCategory = BoardCategory(group.name)
+                group.forums?.forEach {forum->
+                    val boardName: String? = if (TextUtils.isEmpty(forum.nameS)) {
+                        forum.name
                     } else {
-                        boardName = contentBean.getNameS();
+                        forum.nameS
                     }
-
-                    Board board = new Board(contentBean.getFid(), contentBean.getStid(), boardName);
-                    board.setBoardHead(contentBean.getHead());
-                    subCategory.addBoard(board);
-
+                    val board = Board(forum.fid, forum.stid, boardName)
+                    board.boardHead = forum.head
+                    subCategory.addBoard(board)
                 }
-                category.addSubCategory(subCategory);
+                category.addSubCategory(subCategory)
             }
-            categories.add(category);
+            categories.add(category)
         }
-        upgradeBookmarkBoard(categories);
-        return categories;
+        upgradeBookmarkBoard(categories)
+        return categories
     }
 
-    private void upgradeBookmarkBoard(List<BoardCategory> preloadCategory) {
-        int boardVersion = PreferenceUtils.getData(PreferenceKey.KEY_PRELOAD_BOARD_VERSION, 0);
+    private fun upgradeBookmarkBoard(preloadCategory: List<BoardCategory>) {
+        val boardVersion = PreferenceUtils.getData(PreferenceKey.KEY_PRELOAD_BOARD_VERSION, 0)
         if (boardVersion < PRELOAD_BOARD_VERSION) {
-            List<Board> bookmarkBoards = mBookmarkCategory.getBoardList();
-            for (int i = 0; i < bookmarkBoards.size(); i++) {
-                Board board = bookmarkBoards.get(i);
-                for (BoardCategory category : preloadCategory) {
-                    Board fixBoard = category.getBoard(board.getBoardKey());
+            val bookmarkBoards = mBookmarkCategory.boardList
+            for (i in bookmarkBoards.indices) {
+                val board = bookmarkBoards[i]
+                for (category in preloadCategory) {
+                    val fixBoard = category.getBoard(board.boardKey)
                     if (fixBoard != null) {
-                        bookmarkBoards.set(i, fixBoard);
-                        break;
+                        bookmarkBoards[i] = fixBoard
+                        break
                     }
                 }
-
             }
-            saveBookmark();
-            PreferenceUtils.putData(PreferenceKey.KEY_PRELOAD_BOARD_VERSION, PRELOAD_BOARD_VERSION);
+            saveBookmark()
+            PreferenceUtils.putData(PreferenceKey.KEY_PRELOAD_BOARD_VERSION, PRELOAD_BOARD_VERSION)
         }
     }
 
-
-    private BoardCategory loadBookmarkBoards() {
-        BoardCategory category = new BoardCategory("我的收藏");
-        List<Board> bookmarkBoards = PreferenceUtils.getData(PreferenceKey.BOOKMARK_BOARD, Board.class);
-        category.addBoards(bookmarkBoards);
-        category.setBookmarkCategory(true);
-        return category;
+    private fun loadBookmarkBoards(): BoardCategory {
+        val category = BoardCategory("我的收藏")
+        val bookmarkBoards =
+            PreferenceUtils.getData(PreferenceKey.BOOKMARK_BOARD, Board::class.java)
+        category.addBoards(bookmarkBoards)
+        category.isBookmarkCategory = true
+        return category
     }
 
-    @Override
-    public void addBookmark(Board board) {
+    override fun addBookmark(board: Board) {
         if (!mBookmarkCategory.contains(board)) {
-            mBookmarkCategory.addBoard(board);
-            saveBookmark();
+            mBookmarkCategory.addBoard(board)
+            saveBookmark()
         }
     }
 
-    @Override
-    public void addBookmark(int fid, int stid, String boardName) {
-        addBookmark(new Board.BoardKey(fid, stid), boardName);
+    override fun addBookmark(fid: Int, stid: Int, boardName: String) {
+        addBookmark(BoardKey(fid, stid), boardName)
     }
 
-    @Override
-    public void addBookmark(Board.BoardKey boardKey, String boardName) {
+    override fun addBookmark(boardKey: BoardKey, boardName: String) {
         if (!mBookmarkCategory.contains(boardKey)) {
-            mBookmarkCategory.addBoard(new Board(boardKey, boardName));
-            saveBookmark();
+            mBookmarkCategory.addBoard(Board(boardKey, boardName))
+            saveBookmark()
         }
     }
 
-    @Override
-    public void removeBookmark(int fid, int stid) {
-        if (mBookmarkCategory.removeBoard(new Board.BoardKey(fid, stid))) {
-            saveBookmark();
+    override fun removeBookmark(fid: Int, stid: Int) {
+        if (mBookmarkCategory.removeBoard(BoardKey(fid, stid))) {
+            saveBookmark()
         }
     }
 
-    @Override
-    public void removeAllBookmarks() {
-        mBookmarkCategory.removeAllBoards();
-        saveBookmark();
+    override fun removeAllBookmarks() {
+        mBookmarkCategory.removeAllBoards()
+        saveBookmark()
     }
 
-    @Override
-    public boolean isBookmark(int fid, int stid) {
-        return mBookmarkCategory.contains(new Board.BoardKey(fid, stid));
+    override fun isBookmark(fid: Int, stid: Int): Boolean {
+        return mBookmarkCategory.contains(BoardKey(fid, stid))
     }
 
-    @Override
-    public void swapBookmark(int from, int to) {
-        List<Board> boards = mBookmarkCategory.getBoardList();
+    override fun swapBookmark(from: Int, to: Int) {
+        val boards = mBookmarkCategory.boardList
         if (from < to) {
-            for (int i = from; i < to; i++) {
-                Collections.swap(boards, i, i + 1);
+            for (i in from until to) {
+                Collections.swap(boards, i, i + 1)
             }
         } else {
-            for (int i = from; i > to; i--) {
-                Collections.swap(boards, i, i - 1);
+            for (i in from downTo to + 1) {
+                Collections.swap(boards, i, i - 1)
             }
         }
-        saveBookmark();
+        saveBookmark()
     }
 
-    private void saveBookmark() {
-        PreferenceUtils.putData(PreferenceKey.BOOKMARK_BOARD, JSON.toJSONString(mBookmarkCategory.getBoardList()));
+    private fun saveBookmark() {
+        PreferenceUtils.putData(
+            PreferenceKey.BOOKMARK_BOARD,
+            JSON.toJSONString(mBookmarkCategory.boardList)
+        )
     }
 
-    @Override
-    public int getCategorySize() {
-        return mBoardCategoryList.size();
+    override fun getCategorySize(): Int {
+        return mBoardCategoryList.size
     }
 
-    @Override
-    public BoardCategory getBoardCategory(int index) {
-        return mBoardCategoryList.get(index);
+    override fun getBoardCategory(index: Int): BoardCategory {
+        return mBoardCategoryList[index]
     }
 
-    @Override
-    public List<BoardCategory> getBoardCategories() {
-        return mBoardCategoryList;
+    override fun getBoardCategories(): List<BoardCategory> {
+        return mBoardCategoryList
     }
 
-    @Override
-    public String getBoardName(Board.BoardKey boardKey) {
-        for (BoardCategory boardCategory : mBoardCategoryList) {
-            Board board = boardCategory.getBoard(boardKey);
+    override fun getBoardName(boardKey: BoardKey): String {
+        for (boardCategory in mBoardCategoryList) {
+            val board = boardCategory.getBoard(boardKey)
             if (board != null) {
-                return board.getName();
+                return board.name
             }
         }
-        return null;
+        return ""
     }
 
-    @Override
-    public String getBoardName(int fid, int stid) {
-        return getBoardName(new Board.BoardKey(fid, stid));
+    override fun getBoardName(fid: Int, stid: Int): String {
+        return getBoardName(BoardKey(fid, stid))
     }
 
-    @Override
-    public BoardCategory getBookmarkCategory() {
-        return mBookmarkCategory;
+    override fun getBookmarkCategory(): BoardCategory {
+        return mBookmarkCategory
     }
 
-    private static class SingletonHolder {
-        private static final BoardModel sInstance = new BoardModel();
-    }
 
-    public static BoardModel getInstance() {
-        return SingletonHolder.sInstance;
-    }
+    private const val PRELOAD_BOARD_VERSION = 1
 
+    init {
+        mBookmarkCategory = loadBookmarkBoards()
+        mBoardCategoryList.add(mBookmarkCategory)
+        mBoardCategoryList.addAll(loadPreloadBoards())
+    }
 }

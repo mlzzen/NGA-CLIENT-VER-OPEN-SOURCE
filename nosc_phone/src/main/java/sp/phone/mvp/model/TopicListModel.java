@@ -2,7 +2,6 @@ package sp.phone.mvp.model;
 
 import com.alibaba.fastjson.JSON;
 //import com.justwen.androidnga.cloud.CloudServerManager;
-import com.trello.rxlifecycle2.android.FragmentEvent;
 
 import org.apache.commons.io.FileUtils;
 
@@ -24,8 +23,8 @@ import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import gov.anzong.androidnga.http.OnHttpCallBack;
-import sp.phone.http.retrofit.RetrofitHelper;
-import sp.phone.http.retrofit.RetrofitService;
+import nosc.api.retrofit.RetrofitHelper;
+import nosc.api.retrofit.RetrofitService;
 import sp.phone.mvp.contract.TopicListContract;
 import sp.phone.mvp.model.convert.ErrorConvertFactory;
 import sp.phone.mvp.model.convert.TopicConvertFactory;

@@ -1,352 +1,306 @@
-package sp.phone.mvp.presenter;
+package sp.phone.mvp.presenter
 
-import android.Manifest;
-import android.content.ActivityNotFoundException;
-import android.content.ContentResolver;
-import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
-import android.os.Environment;
-
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Lifecycle;
-import androidx.lifecycle.LifecycleObserver;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.OnLifecycleEvent;
-import androidx.lifecycle.ViewModel;
-
-import java.io.File;
-import java.io.InputStream;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Collections;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-
-import gov.anzong.androidnga.BuildConfig;
-import gov.anzong.androidnga.arouter.ARouterConstants;
-import gov.anzong.androidnga.base.util.ContextUtils;
-import gov.anzong.androidnga.base.util.DeviceUtils;
-import gov.anzong.androidnga.base.util.PermissionUtils;
-import gov.anzong.androidnga.base.util.ToastUtils;
-import gov.anzong.androidnga.common.util.FileUtils;
-import gov.anzong.androidnga.common.util.LogUtils;
-import gov.anzong.androidnga.http.OnHttpCallBack;
-import sp.phone.mvp.model.BoardModel;
-import sp.phone.mvp.model.TopicListModel;
-import sp.phone.mvp.model.entity.Board;
-import sp.phone.mvp.model.entity.ThreadPageInfo;
-import sp.phone.mvp.model.entity.TopicListInfo;
-import sp.phone.param.ParamKey;
-import sp.phone.param.TopicListParam;
-import sp.phone.rxjava.BaseSubscriber;
-import sp.phone.ui.fragment.TopicCacheFragment;
-import sp.phone.util.ARouterUtils;
+import android.Manifest
+import sp.phone.mvp.model.BoardModel.isBookmark
+import sp.phone.mvp.model.BoardModel.addBookmark
+import sp.phone.mvp.model.BoardModel.removeBookmark
+import sp.phone.mvp.model.entity.TopicListInfo
+import sp.phone.param.TopicListParam
+import sp.phone.mvp.model.entity.ThreadPageInfo
+import sp.phone.mvp.model.TopicListModel
+import gov.anzong.androidnga.http.OnHttpCallBack
+import gov.anzong.androidnga.base.util.ToastUtils
+import gov.anzong.androidnga.base.util.DeviceUtils
+import sp.phone.mvp.model.BoardModel
+import sp.phone.mvp.model.entity.Board
+import sp.phone.util.ARouterUtils
+import gov.anzong.androidnga.arouter.ARouterConstants
+import sp.phone.param.ParamKey
+import gov.anzong.androidnga.base.util.PermissionUtils
+import android.os.Environment
+import android.content.Intent
+import sp.phone.ui.fragment.TopicCacheFragment
+import android.content.ActivityNotFoundException
+import android.content.ContentResolver
+import android.content.Context
+import android.net.Uri
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.*
+import gov.anzong.androidnga.BuildConfig
+import gov.anzong.androidnga.base.util.ContextUtils
+import gov.anzong.androidnga.common.util.FileUtils
+import gov.anzong.androidnga.common.util.LogUtils
+import sp.phone.rxjava.BaseSubscriber
+import java.io.File
+import java.lang.Exception
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  * @author Justwen
  * @date 2017/6/3
  */
-
-public class TopicListPresenter extends ViewModel implements LifecycleObserver {
-
+class TopicListPresenter : ViewModel(), LifecycleObserver {
     // Following variables are for the 24 hour hot topic feature
     // How many pages we query for twenty four hour hot topic
-    protected final int twentyFourPageCount = 5;
+    protected val twentyFourPageCount = 5
+
     // How many total topics we want to show
-    protected final int twentyFourTopicCount = 50;
-    protected int pageQueriedCounter = 0;
-    protected int twentyFourCurPos = 0;
-    protected TopicListInfo twentyFourList = new TopicListInfo();
-    protected TopicListInfo twentyFourCurList = new TopicListInfo();
-
-    private TopicListParam mRequestParam;
-
-    private MutableLiveData<TopicListInfo> mFirstTopicList = new MutableLiveData<>();
-
-    private MutableLiveData<TopicListInfo> mNextTopicList = new MutableLiveData<>();
-
-    private MutableLiveData<String> mErrorMsg = new MutableLiveData<>();
-
-    private MutableLiveData<Boolean> mRefreshingState = new MutableLiveData<>();
-
-    private final MutableLiveData<ThreadPageInfo> mRemovedTopic = new MutableLiveData<>();
-
-    private TopicListModel mBaseModel;
-
-    private final OnHttpCallBack<TopicListInfo> mCallBack = new OnHttpCallBack<TopicListInfo>() {
-        @Override
-        public void onError(String text) {
-            mErrorMsg.setValue(text);
-            mRefreshingState.setValue(false);
+    protected val twentyFourTopicCount = 50
+    protected var pageQueriedCounter = 0
+    protected var twentyFourCurPos = 0
+    protected var twentyFourList = TopicListInfo()
+    protected var twentyFourCurList = TopicListInfo()
+    private var mRequestParam: TopicListParam? = null
+    val firstTopicList = MutableLiveData<TopicListInfo>()
+    val nextTopicList = MutableLiveData<TopicListInfo>()
+    val errorMsg = MutableLiveData<String>()
+    val isRefreshing = MutableLiveData<Boolean>()
+    val removedTopic = MutableLiveData<ThreadPageInfo>()
+    private var mBaseModel: TopicListModel
+    private val mCallBack: OnHttpCallBack<TopicListInfo> = object : OnHttpCallBack<TopicListInfo> {
+        override fun onError(text: String) {
+            errorMsg.value = text
+            isRefreshing.value = false
         }
 
-        @Override
-        public void onSuccess(TopicListInfo data) {
-            mRefreshingState.setValue(false);
-            mFirstTopicList.setValue(data);
+        override fun onSuccess(data: TopicListInfo) {
+            isRefreshing.value = false
+            firstTopicList.value = data
         }
-    };
+    }
+    private val mNextPageCallBack: OnHttpCallBack<TopicListInfo> =
+        object : OnHttpCallBack<TopicListInfo> {
+            override fun onError(text: String) {
+                if ("HTTP 404 Not Found" == text) ToastUtils.warn("已无更多") else errorMsg.setValue(
+                    text
+                )
+                isRefreshing.value = false
+            }
 
-    private final OnHttpCallBack<TopicListInfo> mNextPageCallBack = new OnHttpCallBack<TopicListInfo>() {
-        @Override
-        public void onError(String text) {
-            if("HTTP 404 Not Found".equals(text))
-                ToastUtils.warn("已无更多");
-            else
-                mErrorMsg.setValue(text);
-            mRefreshingState.setValue(false);
+            override fun onSuccess(data: TopicListInfo) {
+                isRefreshing.value = false
+                nextTopicList.value = data
+            }
         }
-
-        @Override
-        public void onSuccess(TopicListInfo data) {
-            mRefreshingState.setValue(false);
-            mNextTopicList.setValue(data);
-        }
-    };
 
     /* callback for the twenty four hour hot topic list */
-    private final OnHttpCallBack<TopicListInfo> mTwentyFourCallBack = new OnHttpCallBack<TopicListInfo>() {
-        @Override
-        public void onError(String text) {
-            mErrorMsg.setValue(text);
-            mRefreshingState.setValue(false);
-        }
+    private val mTwentyFourCallBack: OnHttpCallBack<TopicListInfo> =
+        object : OnHttpCallBack<TopicListInfo> {
+            override fun onError(text: String) {
+                errorMsg.value = text
+                isRefreshing.value = false
+            }
 
-        @Override
-        public void onSuccess(TopicListInfo data) {
-            /* Concatenate the pages */
-            twentyFourList.getThreadPageList().addAll(data.getThreadPageList());
-            pageQueriedCounter++;
-
-            if (pageQueriedCounter == twentyFourPageCount) {
-                twentyFourCurPos = 0;
-                List<ThreadPageInfo> threadPageList = twentyFourList.getThreadPageList();
-                if (DeviceUtils.isGreaterEqual_7_0()) {
-                    threadPageList.removeIf(item -> (data.curTime - item.getPostDate() > 24 * 60 * 60));
-                } else {
-                    final Iterator<ThreadPageInfo> each = threadPageList.iterator();
-                    while (each.hasNext()) {
-                        ThreadPageInfo item = each.next();
-                        if (data.curTime - item.getPostDate() > 24 * 60 * 60) {
-                            each.remove();
+            override fun onSuccess(data: TopicListInfo) {
+                /* Concatenate the pages */
+                twentyFourList.threadPageList.addAll(data.threadPageList)
+                pageQueriedCounter++
+                if (pageQueriedCounter == twentyFourPageCount) {
+                    twentyFourCurPos = 0
+                    val threadPageList = twentyFourList.threadPageList
+                    if (DeviceUtils.isGreaterEqual_7_0()) {
+                        threadPageList.removeIf { item: ThreadPageInfo -> data.curTime - item.postDate > 24 * 60 * 60 }
+                    } else {
+                        val each = threadPageList.iterator()
+                        while (each.hasNext()) {
+                            val item = each.next()
+                            if (data.curTime - item.postDate > 24 * 60 * 60) {
+                                each.remove()
+                            }
                         }
                     }
+                    if (threadPageList.size > twentyFourTopicCount) {
+                        threadPageList.subList(twentyFourTopicCount, threadPageList.size)
+                    }
+                    twentyFourList.threadPageList.sortWith(Comparator { o1: ThreadPageInfo, o2: ThreadPageInfo ->
+                        o2.replies.compareTo(o1.replies)
+                    })
+                    // We list 20 topics each time
+                    val endPos = Math.min(twentyFourCurPos + 20, twentyFourList.threadPageList.size)
+                    twentyFourCurList.threadPageList =
+                        twentyFourList.threadPageList.subList(0, endPos)
+                    twentyFourCurPos = endPos
+                    isRefreshing.setValue(false)
+                    nextTopicList.setValue(twentyFourCurList)
                 }
-
-                if (threadPageList.size() > twentyFourTopicCount) {
-                    threadPageList.subList(twentyFourTopicCount, threadPageList.size());
-                }
-                Collections.sort(twentyFourList.getThreadPageList(), (o1, o2) -> Integer.compare(o2.getReplies(), o1.getReplies()));
-                // We list 20 topics each time
-                int endPos = Math.min(twentyFourCurPos + 20, twentyFourList.getThreadPageList().size());
-                twentyFourCurList.setThreadPageList(twentyFourList.getThreadPageList().subList(0, endPos));
-                twentyFourCurPos = endPos;
-
-                mRefreshingState.setValue(false);
-                mNextTopicList.setValue(twentyFourCurList);
             }
         }
-    };
 
-    public TopicListPresenter() {
-        mBaseModel = new TopicListModel();
-        mBaseModel = onCreateModel();
+    fun setRequestParam(requestParam: TopicListParam?) {
+        mRequestParam = requestParam
     }
 
-    public void setRequestParam(TopicListParam requestParam) {
-        mRequestParam = requestParam;
+    protected fun onCreateModel(): TopicListModel {
+        return TopicListModel()
     }
 
-    public MutableLiveData<TopicListInfo> getFirstTopicList() {
-        return mFirstTopicList;
-    }
-
-    public MutableLiveData<TopicListInfo> getNextTopicList() {
-        return mNextTopicList;
-    }
-
-    public MutableLiveData<Boolean> isRefreshing() {
-        return mRefreshingState;
-    }
-
-    public MutableLiveData<String> getErrorMsg() {
-        return mErrorMsg;
-    }
-
-    public MutableLiveData<ThreadPageInfo> getRemovedTopic() {
-        return mRemovedTopic;
-    }
-
-    protected TopicListModel onCreateModel() {
-        return new TopicListModel();
-    }
-
-    public void removeTopic(ThreadPageInfo info, final int position) {
-        mBaseModel.removeTopic(info, new OnHttpCallBack<String>() {
-            @Override
-            public void onError(String text) {
-                mErrorMsg.setValue(text);
+    fun removeTopic(info: ThreadPageInfo, position: Int) {
+        mBaseModel.removeTopic(info, object : OnHttpCallBack<String> {
+            override fun onError(text: String) {
+                errorMsg.value = text
             }
 
-            @Override
-            public void onSuccess(String data) {
-                ToastUtils.flat(data);
-                mRemovedTopic.setValue(info);
+            override fun onSuccess(data: String) {
+                ToastUtils.flat(data)
+                removedTopic.value = info
             }
-        });
+        })
     }
 
-    public void removeCacheTopic(ThreadPageInfo info) {
-        mBaseModel.removeCacheTopic(info, new OnHttpCallBack<String>() {
-            @Override
-            public void onError(String text) {
-                mErrorMsg.setValue("删除失败！");
+    fun removeCacheTopic(info: ThreadPageInfo) {
+        mBaseModel.removeCacheTopic(info, object : OnHttpCallBack<String> {
+            override fun onError(text: String) {
+                errorMsg.value = "删除失败！"
             }
 
-            @Override
-            public void onSuccess(String data) {
-                ToastUtils.info("删除成功！");
-                mRemovedTopic.postValue(info);
+            override fun onSuccess(data: String) {
+                ToastUtils.info("删除成功！")
+                removedTopic.postValue(info)
             }
-        });
-
+        })
     }
 
-    public void loadPage(int page, TopicListParam requestInfo) {
-        mRefreshingState.setValue(true);
-        if (requestInfo.twentyfour == 1) {
+    fun loadPage(page: Int, requestInfo: TopicListParam?) {
+        isRefreshing.value = true
+        if (requestInfo!!.twentyfour == 1) {
             // preload pages
-            twentyFourList.getThreadPageList().clear();
-            pageQueriedCounter = 0;
-            mBaseModel.loadTwentyFourList(requestInfo, mTwentyFourCallBack, twentyFourPageCount);
+            twentyFourList.threadPageList.clear()
+            pageQueriedCounter = 0
+            mBaseModel.loadTwentyFourList(requestInfo, mTwentyFourCallBack, twentyFourPageCount)
         } else {
-            mBaseModel.loadTopicList(page, requestInfo, mCallBack);
+            mBaseModel.loadTopicList(page, requestInfo, mCallBack)
         }
     }
 
-    public void loadCachePage() {
-        mBaseModel.loadCache(mCallBack);
+    fun loadCachePage() {
+        mBaseModel.loadCache(mCallBack)
     }
 
-    public void loadNextPage(int page, TopicListParam requestInfo) {
-        mRefreshingState.setValue(true);
+    fun loadNextPage(page: Int, requestInfo: TopicListParam) {
+        isRefreshing.value = true
         if (requestInfo.twentyfour == 1) {
-            int endPos = Math.min(twentyFourCurPos + 20, twentyFourList.getThreadPageList().size());
-            twentyFourCurList.setThreadPageList(twentyFourList.getThreadPageList().subList(0, endPos));
-            twentyFourCurPos = endPos;
-            mRefreshingState.setValue(false);
-            mNextTopicList.setValue(twentyFourCurList);
+            val endPos = Math.min(twentyFourCurPos + 20, twentyFourList.threadPageList.size)
+            twentyFourCurList.threadPageList = twentyFourList.threadPageList.subList(0, endPos)
+            twentyFourCurPos = endPos
+            isRefreshing.value = false
+            nextTopicList.setValue(twentyFourCurList)
         } else {
-            mBaseModel.loadTopicList(page, requestInfo, mNextPageCallBack);
+            mBaseModel.loadTopicList(page, requestInfo, mNextPageCallBack)
         }
     }
 
-    public boolean isBookmarkBoard(int fid, int stid) {
-        return BoardModel.getInstance().isBookmark(fid, stid);
+    fun isBookmarkBoard(fid: Int, stid: Int): Boolean {
+        return isBookmark(fid, stid)
     }
 
-    public void addBookmarkBoard(int fid, int stid, String boardName) {
-        BoardModel.getInstance().addBookmark(fid, stid, boardName);
+    fun addBookmarkBoard(fid: Int, stid: Int, boardName: String?) {
+        addBookmark(fid, stid, boardName!!)
     }
 
-    public void addBookmarkBoard(Board board) {
-        BoardModel.getInstance().addBookmark(board);
+    fun addBookmarkBoard(board: Board?) {
+        addBookmark(board!!)
     }
 
-    public void removeBookmarkBoard(int fid, int stid) {
-        BoardModel.getInstance().removeBookmark(fid, stid);
+    fun removeBookmarkBoard(fid: Int, stid: Int) {
+        removeBookmark(fid, stid)
     }
 
-    public void startArticleActivity(String tid, String title) {
+    fun startArticleActivity(tid: String, title: String?) {
         ARouterUtils.build(ARouterConstants.ACTIVITY_TOPIC_CONTENT)
-                .withInt(ParamKey.KEY_TID, Integer.parseInt(tid))
-                .withString(ParamKey.KEY_TITLE, title)
-                .navigation(ContextUtils.getContext());
+            .withInt(ParamKey.KEY_TID, tid.toInt())
+            .withString(ParamKey.KEY_TITLE, title)
+            .navigation(ContextUtils.getContext())
     }
 
     @OnLifecycleEvent(value = Lifecycle.Event.ON_CREATE)
-    public void onViewCreated() {
-        if (mRequestParam != null && mRequestParam.loadCache) {
-            loadCachePage();
+    fun onViewCreated() {
+        if (mRequestParam != null && mRequestParam!!.loadCache) {
+            loadCachePage()
         } else {
-            loadPage(1, mRequestParam);
+            loadPage(1, mRequestParam)
         }
     }
 
-    public void exportCacheTopic(Fragment fragment) {
-        PermissionUtils.requestAsync(fragment, new BaseSubscriber<Boolean>() {
-            @Override
-            public void onNext(Boolean aBoolean) {
+    fun exportCacheTopic(fragment: Fragment?) {
+        PermissionUtils.requestAsync(fragment, object : BaseSubscriber<Boolean?>() {
+            override fun onNext(aBoolean: Boolean) {
                 if (aBoolean) {
-                    String srcDir = ContextUtils.getExternalDir("articleCache");
-
-                    DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss", Locale.getDefault());
-                    String dateStr = dateFormat.format(new Date(System.currentTimeMillis()));
-                    String destDir = Environment.getExternalStorageDirectory() + File.separator
-                            + BuildConfig.APPLICATION_ID + File.separator + "cache/cache_" + dateStr + ".zip";
-
+                    val srcDir = ContextUtils.getExternalDir("articleCache")
+                    val dateFormat: DateFormat =
+                        SimpleDateFormat("yyyyMMddHHmmss", Locale.getDefault())
+                    val dateStr = dateFormat.format(Date(System.currentTimeMillis()))
+                    val destDir =
+                        (Environment.getExternalStorageDirectory().toString() + File.separator
+                                + BuildConfig.APPLICATION_ID + File.separator + "cache/cache_" + dateStr + ".zip")
                     if (FileUtils.zipFiles(srcDir, destDir)) {
-                        ToastUtils.success("导出成功至" + destDir);
+                        ToastUtils.success("导出成功至$destDir")
                     } else {
-                        ToastUtils.error("导出失败");
+                        ToastUtils.error("导出失败")
                     }
                 } else {
-                    ToastUtils.warn("无存储权限，无法导出！");
+                    ToastUtils.warn("无存储权限，无法导出！")
                 }
             }
-        }, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        }, Manifest.permission.WRITE_EXTERNAL_STORAGE)
     }
 
-    public void showFileChooser(Fragment fragment) {
-        PermissionUtils.request(fragment, new BaseSubscriber<Boolean>() {
-            @Override
-            public void onNext(Boolean aBoolean) {
+    fun showFileChooser(fragment: Fragment) {
+        PermissionUtils.request(fragment, object : BaseSubscriber<Boolean?>() {
+            override fun onNext(aBoolean: Boolean) {
                 if (aBoolean) {
                     try {
-                        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                        intent.addCategory(Intent.CATEGORY_OPENABLE);
-                        intent.setType("*/*");
-                        fragment.startActivityForResult(intent, TopicCacheFragment.REQUEST_IMPORT_CACHE);
-                    } catch (ActivityNotFoundException e) {
-                        ToastUtils.warn("系统不支持导入");
+                        val intent = Intent(Intent.ACTION_GET_CONTENT)
+                        intent.addCategory(Intent.CATEGORY_OPENABLE)
+                        intent.type = "*/*"
+                        fragment.startActivityForResult(
+                            intent,
+                            TopicCacheFragment.REQUEST_IMPORT_CACHE
+                        )
+                    } catch (e: ActivityNotFoundException) {
+                        ToastUtils.warn("系统不支持导入")
                     }
                 } else {
-                    ToastUtils.warn("无存储权限，无法导入！");
+                    ToastUtils.warn("无存储权限，无法导入！")
                 }
             }
-        }, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-
+        }, Manifest.permission.WRITE_EXTERNAL_STORAGE)
     }
 
-    public void importCacheTopic(Uri uri) {
-        Context context = ContextUtils.getContext();
+    fun importCacheTopic(uri: Uri) {
+        val context = ContextUtils.getContext()
         if (!checkCacheZipFile(context, uri)) {
-            ToastUtils.error("选择非法文件");
-            return;
+            ToastUtils.error("选择非法文件")
+            return
         }
-        ContentResolver cr = context.getContentResolver();
-        String destDir = context.getFilesDir().getAbsolutePath();
-        File tempZipFile = new File(destDir , "temp.zip");
-        try(InputStream is = cr.openInputStream(uri)) {
-            if (is == null) {
-                return;
+        val cr = context.contentResolver
+        val destDir = context.filesDir.absolutePath
+        val tempZipFile = File(destDir, "temp.zip")
+        try {
+            cr.openInputStream(uri).use { `is` ->
+                if (`is` == null) {
+                    return
+                }
+                org.apache.commons.io.FileUtils.copyInputStreamToFile(`is`, tempZipFile)
+                FileUtils.unzip(tempZipFile.absolutePath, destDir)
+                loadCachePage()
+                ToastUtils.success("导入成功！！")
             }
-            org.apache.commons.io.FileUtils.copyInputStreamToFile(is, tempZipFile);
-            FileUtils.unzip(tempZipFile.getAbsolutePath(), destDir);
-            loadCachePage();
-            ToastUtils.success("导入成功！！");
-        } catch (Exception e) {
-            LogUtils.print(e);
+        } catch (e: Exception) {
+            LogUtils.print(e)
         }
-        tempZipFile.delete();
+        tempZipFile.delete()
     }
 
-    private boolean checkCacheZipFile(Context context, Uri uri) {
-        ContentResolver cr = context.getContentResolver();
-        String contentType = cr.getType(uri);
-        return contentType != null && contentType.contains("zip");
+    private fun checkCacheZipFile(context: Context, uri: Uri): Boolean {
+        val cr = context.contentResolver
+        val contentType = cr.getType(uri)
+        return contentType != null && contentType.contains("zip")
+    }
+
+    init {
+        mBaseModel = TopicListModel()
+        mBaseModel = onCreateModel()
     }
 }

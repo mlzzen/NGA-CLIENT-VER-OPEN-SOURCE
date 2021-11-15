@@ -66,6 +66,8 @@
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <include layout="@layout/activity_user_profile_content"/>
+    <include
+        android:id="@+id/content"
+        layout="@layout/activity_user_profile_content"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

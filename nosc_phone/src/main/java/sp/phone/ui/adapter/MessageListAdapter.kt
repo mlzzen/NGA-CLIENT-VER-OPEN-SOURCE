@@ -1,193 +1,153 @@
-package sp.phone.ui.adapter;
+package sp.phone.ui.adapter
 
-import android.content.Context;
-import androidx.recyclerview.widget.RecyclerView;
-import android.text.TextPaint;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import gov.anzong.androidnga.R;
-import gov.anzong.androidnga.base.util.ToastUtils;
-import sp.phone.http.bean.MessageListInfo;
-import sp.phone.http.bean.MessageThreadPageInfo;
-import sp.phone.common.PhoneConfiguration;
-import sp.phone.theme.ThemeManager;
-import gov.anzong.androidnga.base.util.ContextUtils;;
-import sp.phone.util.StringUtils;
-import sp.phone.view.RecyclerViewEx;
+import android.content.Context
+import androidx.recyclerview.widget.RecyclerView
+import sp.phone.view.RecyclerViewEx.IAppendableAdapter
+import nosc.api.bean.MessageListInfo
+import nosc.api.bean.MessageThreadPageInfo
+import android.view.ViewGroup
+import android.view.LayoutInflater
+import gov.anzong.androidnga.R
+import gov.anzong.androidnga.base.util.ToastUtils
+import sp.phone.theme.ThemeManager
+import sp.phone.common.PhoneConfiguration
+import android.text.TextPaint
+import android.view.View
+import android.widget.TextView
+import gov.anzong.androidnga.base.util.ContextUtils
+import sp.phone.util.StringUtils
+import java.util.ArrayList
 
 /**
  * Created by Justwen on 2017/10/1.
  */
-
-public class MessageListAdapter extends RecyclerView.Adapter<MessageListAdapter.MessageViewHolder> implements RecyclerViewEx.IAppendableAdapter {
-
-    private List<MessageListInfo> mInfoList = new ArrayList<>();
-
-    private boolean mPrompted;
-
-    private boolean mEndOfList;
-
-    private int mTotalCount;
-
-    private Context mContext;
-
-    private View.OnClickListener mClickListener;
-
-    public MessageListAdapter(Context context) {
-        mContext = context;
-    }
-
-    protected MessageThreadPageInfo getEntry(int position) {
-        for (int i = 0; i < mInfoList.size(); i++) {
-            if (position < (mInfoList.get(i).get__currentPage() * mInfoList.get(i).get__rowsPerPage())) {
-                return mInfoList.get(i).getMessageEntryList().get(position);
+class MessageListAdapter(private val mContext: Context) :
+    RecyclerView.Adapter<MessageListAdapter.MessageViewHolder>(), IAppendableAdapter {
+    private val mInfoList: MutableList<MessageListInfo> = ArrayList()
+    private var mPrompted = false
+    private var mEndOfList = false
+    private var mTotalCount = 0
+    private var mClickListener: View.OnClickListener? = null
+    protected fun getEntry(position: Int): MessageThreadPageInfo? {
+        var position = position
+        for (i in mInfoList.indices) {
+            if (position < mInfoList[i].__currentPage * mInfoList[i].__rowsPerPage) {
+                return mInfoList[i].messageEntryList[position]
             }
-            position -= mInfoList.get(i).get__rowsPerPage();
+            position -= mInfoList[i].__rowsPerPage
         }
-        return null;
+        return null
     }
 
-    @Override
-    public int getNextPage() {
-        return mInfoList.size() + 1;
+    override fun getNextPage(): Int {
+        return mInfoList.size + 1
     }
 
-    @Override
-    public boolean hasNextPage() {
-        return !mEndOfList;
+    override fun hasNextPage(): Boolean {
+        return !mEndOfList
     }
 
-    @Override
-    public MessageViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new MessageViewHolder(LayoutInflater.from(mContext).inflate(R.layout.list_message, parent, false));
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MessageViewHolder {
+        return MessageViewHolder(
+            LayoutInflater.from(mContext).inflate(R.layout.list_message, parent, false)
+        )
     }
 
-    @Override
-    public void onBindViewHolder(MessageViewHolder holder, int position) {
-        handleJsonList(holder, position);
+    override fun onBindViewHolder(holder: MessageViewHolder, position: Int) {
+        handleJsonList(holder, position)
         if (mClickListener != null) {
-            holder.itemView.setOnClickListener(mClickListener);
+            holder.itemView.setOnClickListener(mClickListener)
         }
-        holder.itemView.setTag(getMidString(position));
-
-        if (position + 1 == getItemCount()
-                && !hasNextPage()
-                && !mPrompted) {
-            ToastUtils.info(R.string.last_page_prompt_message);
-            mPrompted = true;
+        holder.itemView.tag = getMidString(position)
+        if (position + 1 == itemCount && !hasNextPage()
+            && !mPrompted
+        ) {
+            ToastUtils.info(R.string.last_page_prompt_message)
+            mPrompted = true
         }
     }
 
-    private String getMidString(int position) {
-        MessageThreadPageInfo entry = getEntry(position);
-        if (entry == null || entry.getMid() == 0) {
-            return null;
-        }
-        return "mid=" + entry.getMid();
-
+    private fun getMidString(position: Int): String? {
+        val entry = getEntry(position)
+        return if (entry == null || entry.mid == 0) {
+            null
+        } else "mid=" + entry.mid
     }
 
-    private void handleJsonList(MessageViewHolder holder, int position) {
-        MessageThreadPageInfo entry = getEntry(position);
-        if (entry == null) {
-            return;
-        }
-        ThemeManager theme = ThemeManager.getInstance();
-        String fromUser = entry.getFrom_username();
+    private fun handleJsonList(holder: MessageViewHolder, position: Int) {
+        val entry = getEntry(position) ?: return
+        val theme = ThemeManager.getInstance()
+        var fromUser = entry.from_username
         if (StringUtils.isEmpty(fromUser)) {
-            fromUser = "#SYSTEM#";
+            fromUser = "#SYSTEM#"
         }
-        holder.author.setText(fromUser);
-        holder.time.setText(entry.getTime());
-        holder.lastTime.setText(entry.getLastTime());
-        String lastPoster = entry.getLast_from_username();
+        holder.author!!.text = fromUser
+        holder.time!!.text = entry.time
+        holder.lastTime!!.text = entry.lastTime
+        var lastPoster = entry.last_from_username
         if (StringUtils.isEmpty(lastPoster)) {
-            lastPoster = fromUser;
+            lastPoster = fromUser
         }
-        holder.lastReply.setText(lastPoster);
-        holder.num.setText(String.valueOf(entry.getPosts()));
-        holder.title.setTextColor(ContextUtils.getColor(theme.getForegroundColor()));
-        float size = PhoneConfiguration.getInstance().getTopicTitleSize();
-
-        String title = entry.getSubject();
+        holder.lastReply!!.text = lastPoster
+        holder.num!!.text = entry.posts.toString()
+        holder.title!!.setTextColor(ContextUtils.getColor(theme.foregroundColor))
+        val size = PhoneConfiguration.getInstance().topicTitleSize
+        var title = entry.subject
         if (StringUtils.isEmpty(title)) {
-            title = entry.getSubject();
-            holder.title.setText(StringUtils.unEscapeHtml(title));
-
+            title = entry.subject
+            holder.title!!.text = StringUtils.unEscapeHtml(title)
         } else {
-            holder.title.setText(StringUtils.removeBrTag(StringUtils
-                    .unEscapeHtml(title)));
+            holder.title!!.text = StringUtils.removeBrTag(
+                StringUtils
+                    .unEscapeHtml(title)
+            )
         }
-
-        holder.title.setTextSize(size);
-        final TextPaint tp = holder.title.getPaint();
-        tp.setFakeBoldText(false);
-
-        int colorId = theme.getBackgroundColor(position);
-        holder.itemView.setBackgroundResource(colorId);
-
+        holder.title!!.textSize = size
+        val tp = holder.title!!.paint
+        tp.isFakeBoldText = false
+        val colorId = theme.getBackgroundColor(position)
+        holder.itemView.setBackgroundResource(colorId)
     }
 
-    public void setOnClickListener(View.OnClickListener listener) {
-        mClickListener = listener;
+    fun setOnClickListener(listener: View.OnClickListener?) {
+        mClickListener = listener
     }
 
-    @Override
-    public int getItemCount() {
-        return mTotalCount;
+    override fun getItemCount(): Int {
+        return mTotalCount
     }
 
-    private void reset() {
-        mTotalCount = 0;
-        mPrompted = false;
-        mInfoList.clear();
+    private fun reset() {
+        mTotalCount = 0
+        mPrompted = false
+        mInfoList.clear()
     }
 
-    public void setData(MessageListInfo result) {
+    fun setData(result: MessageListInfo?) {
         if (result == null) {
-            return;
-        } else if (result.get__currentPage() == 1) {
-            reset();
+            return
+        } else if (result.__currentPage == 1) {
+            reset()
         }
-
-        mInfoList.add(result);
-        mTotalCount += result.getMessageEntryList().size();
-        mEndOfList = result.get__nextPage() <= 0;
-        notifyDataSetChanged();
-
+        mInfoList.add(result)
+        mTotalCount += result.messageEntryList.size
+        mEndOfList = result.__nextPage <= 0
+        notifyDataSetChanged()
     }
 
-    public static class MessageViewHolder extends RecyclerView.ViewHolder {
+    class MessageViewHolder(itemView: View) : RecyclerView.ViewHolder(
+        itemView
+    ) {
+        var num: TextView? = itemView.findViewById(R.id.num)
 
-        @BindView(R.id.num)
-        TextView num;
+        var title: TextView? = itemView.findViewById(R.id.title)
 
-        @BindView(R.id.title)
-        TextView title;
+        var author: TextView? = itemView.findViewById(R.id.author)
 
-        @BindView(R.id.author)
-        TextView author;
+        var lastReply: TextView? = itemView.findViewById(R.id.last_reply)
 
-        @BindView(R.id.last_reply)
-        TextView lastReply;
+        var time: TextView? = itemView.findViewById(R.id.time)
 
-        @BindView(R.id.time)
-        TextView time;
-
-        @BindView(R.id.lasttime)
-        TextView lastTime;
-
-        public MessageViewHolder(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
-        }
+        var lastTime: TextView? = itemView.findViewById(R.id.lasttime)
     }
 }

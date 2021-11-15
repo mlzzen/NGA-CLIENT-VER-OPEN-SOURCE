@@ -1,5 +1,7 @@
 package sp.phone.mvp.model.convert;
 
+import static nosc.api.pojo.DiceDataKt.rnd;
+
 import android.text.TextUtils;
 
 import com.alibaba.fastjson.JSON;
@@ -19,10 +21,10 @@ import gov.anzong.androidnga.core.data.CommentData;
 import gov.anzong.androidnga.core.data.HtmlData;
 import gov.anzong.androidnga.base.util.ContextUtils;
 import sp.phone.common.PhoneConfiguration;
-import sp.phone.http.bean.Attachment;
-import sp.phone.http.bean.DiceData;
-import sp.phone.http.bean.ThreadData;
-import sp.phone.http.bean.ThreadRowInfo;
+import nosc.api.bean.Attachment;
+import nosc.api.pojo.DiceData;
+import nosc.api.bean.ThreadData;
+import nosc.api.bean.ThreadRowInfo;
 import sp.phone.common.ForumConstants;
 import sp.phone.common.UserManagerImpl;
 import sp.phone.mvp.model.entity.ThreadPageInfo;
@@ -138,15 +140,15 @@ public abstract class ArticleConvertFactory {
         }
         List<String> imageUrls = new ArrayList<>();
         String ngaHtml = HtmlConvertFactory.convert(buildHtmlData(row),imageUrls);
-        DiceData arg = new DiceData();
-        arg.setSeed(2110032.0);
-        arg.setAuthorId(row.getAuthorid());
-        arg.settId(row.getTid());
-        arg.setpId(row.getPid());
-        arg.setId("postcontent0");
-        arg.setTxt(ngaHtml);
-        String argsId = arg.getId() != null ? arg.getId() : randDigi("bbcode", 10000);
-        arg.setArgsId(argsId);
+        DiceData arg = new DiceData(
+                ngaHtml,
+                row.getAuthorid(),
+                row.getTid(),
+                row.getPid(),
+                0,
+                0.0
+        );
+
         ngaHtml = getRealDice(arg);
         row.getImageUrls().addAll(imageUrls);
         row.setFormattedHtmlData(ngaHtml);
@@ -293,7 +295,7 @@ public abstract class ArticleConvertFactory {
             row.setPostCount(userInfo.getString("postnum"));
             row.setReputation(Float.parseFloat(userInfo.getString("rvrc")) / 10.0f);
             row.setMemberGroup(groupObj.getJSONObject(userInfo.getString("memberid")).getString("0"));
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
 
         JSONObject obj = userInfo.getJSONObject("buffs");
@@ -308,25 +310,23 @@ public abstract class ArticleConvertFactory {
     }
 
 
-    public static String randDigi(String p, int l) {
-        return p + Math.floor(Math.random() * l);
-    }
 
-    public static double rnd(DiceData arg) {
-        double seed = arg.getSeed();
-        if (arg.getArgsId() != null) {
-            if (arg.getRndSeed() == 0.0) {
-                arg.setRndSeed(arg.getAuthorId() + arg.gettId() + arg.getpId() +
-                        (arg.gettId() > 10246184 || arg.getpId() > 200188932 ? arg.getSeedOffset() : 0));
-                if (arg.getRndSeed() == 0.0) arg.setRndSeed(Math.floor(Math.random() * 10000));
-            }
-            arg.setRndSeed((arg.getRndSeed() * 9301 + 49297) % 233280);
-            return arg.getRndSeed() / 233280.0;
-        }
-        seed = (seed * 9301 + 49297) % 233280;
-        arg.setSeed(seed);
-        return seed / 233280.0;
-    }
+
+//    public static double rnd(DiceData arg) {
+//        double seed = arg.getSeed();
+//        if (arg.getArgsId() != null) {
+//            if (arg.getRndSeed() == 0.0) {
+//                arg.setRndSeed(arg.getAuthorId() + arg.gettId() + arg.getpId() +
+//                        (arg.gettId() > 10246184 || arg.getpId() > 200188932 ? arg.getSeedOffset() : 0));
+//                if (arg.getRndSeed() == 0.0) arg.setRndSeed(Math.floor(Math.random() * 10000));
+//            }
+//            arg.setRndSeed((arg.getRndSeed() * 9301 + 49297) % 233280);
+//            return arg.getRndSeed() / 233280.0;
+//        }
+//        seed = (seed * 9301 + 49297) % 233280;
+//        arg.setSeed(seed);
+//        return seed / 233280.0;
+//    }
 
     // 计算掷骰子结果
     public static String getRealDice(DiceData arg) {

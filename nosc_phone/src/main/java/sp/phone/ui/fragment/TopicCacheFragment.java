@@ -42,10 +42,6 @@ public class TopicCacheFragment extends TopicSearchFragment implements View.OnLo
         mSwipeRefreshLayout.setEnabled(false);
     }
 
-    @Override
-    public void removeTopic(int position) {
-        mAdapter.removeItem(position);
-    }
 
     @Override
     public void removeTopic(ThreadPageInfo pageInfo) {

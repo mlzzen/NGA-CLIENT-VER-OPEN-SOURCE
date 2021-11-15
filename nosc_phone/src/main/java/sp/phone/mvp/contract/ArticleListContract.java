@@ -3,8 +3,8 @@ package sp.phone.mvp.contract;
 import android.content.Intent;
 import android.os.Bundle;
 
-import sp.phone.http.bean.ThreadData;
-import sp.phone.http.bean.ThreadRowInfo;
+import nosc.api.bean.ThreadData;
+import nosc.api.bean.ThreadRowInfo;
 import sp.phone.param.ArticleListParam;
 import gov.anzong.androidnga.http.OnHttpCallBack;
 

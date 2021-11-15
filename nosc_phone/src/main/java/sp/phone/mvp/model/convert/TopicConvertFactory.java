@@ -12,12 +12,11 @@ import java.util.Map;
 import java.util.Objects;
 
 import sp.phone.common.FilterKeyword;
-import sp.phone.common.FilterKeywordsManager;
 import sp.phone.common.FilterKeywordsManagerImpl;
 import sp.phone.common.PhoneConfiguration;
 import sp.phone.common.User;
 import sp.phone.common.UserManagerImpl;
-import sp.phone.http.bean.TopicListBean;
+import nosc.api.bean.TopicListBean;
 import sp.phone.mvp.model.entity.SubBoard;
 import sp.phone.mvp.model.entity.ThreadPageInfo;
 import sp.phone.mvp.model.entity.TopicListInfo;

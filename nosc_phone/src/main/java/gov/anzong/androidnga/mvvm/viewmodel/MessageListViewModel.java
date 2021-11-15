@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel;
 
 import gov.anzong.androidnga.http.OnHttpCallBack;
 import gov.anzong.androidnga.mvvm.model.MessageListModel;
-import sp.phone.http.bean.MessageListInfo;
+import nosc.api.bean.MessageListInfo;
 
 /**
  * @author yangyihang

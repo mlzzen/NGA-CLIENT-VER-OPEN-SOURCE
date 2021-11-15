@@ -20,9 +20,9 @@ import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import sp.phone.common.UserManagerImpl;
 import gov.anzong.androidnga.http.OnHttpCallBack;
-import sp.phone.http.bean.ThreadData;
-import sp.phone.http.retrofit.RetrofitHelper;
-import sp.phone.http.retrofit.RetrofitService;
+import nosc.api.bean.ThreadData;
+import nosc.api.retrofit.RetrofitHelper;
+import nosc.api.retrofit.RetrofitService;
 import sp.phone.mvp.contract.ArticleListContract;
 import sp.phone.mvp.model.convert.ArticleConvertFactory;
 import sp.phone.mvp.model.convert.ErrorConvertFactory;
@@ -40,7 +40,7 @@ public class ArticleListModel extends BaseModel implements ArticleListContract.M
 
     private static final String TAG = ArticleListModel.class.getSimpleName();
 
-    private RetrofitService mService;
+    private final RetrofitService mService;
 
     public ArticleListModel() {
         mService = (RetrofitService) RetrofitHelper.getInstance().getService(RetrofitService.class);

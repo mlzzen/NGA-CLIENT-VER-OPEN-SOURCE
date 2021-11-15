@@ -9,8 +9,8 @@ import gov.anzong.androidnga.R;
 import gov.anzong.androidnga.Utils;
 import gov.anzong.androidnga.core.data.HtmlData;
 import gov.anzong.androidnga.core.decode.ForumDecoder;
-import sp.phone.http.bean.MessageArticlePageInfo;
-import sp.phone.http.bean.MessageDetailInfo;
+import nosc.api.bean.MessageArticlePageInfo;
+import nosc.api.bean.MessageDetailInfo;
 import gov.anzong.androidnga.base.util.ContextUtils;;
 import sp.phone.theme.ThemeManager;
 

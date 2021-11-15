@@ -66,13 +66,13 @@
                     android:id="@+id/tv_user_tel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
                     android:layout_alignTop="@+id/tv_user_email_title"
+                    android:layout_alignParentEnd="true"
                     android:ellipsize="end"
                     android:singleLine="true"
                     android:text="N/A"
                     android:textColor="#808080"
-                    android:textIsSelectable="false"/>
+                    android:textIsSelectable="false" />
 
                 <TextView
                     android:id="@+id/user_tel_title"
@@ -300,7 +300,7 @@
                     android:id="@+id/wv_sign"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/tv_sign_title"/>
+                    android:layout_below="@+id/tv_sign_title" />
             </RelativeLayout>
         </androidx.cardview.widget.CardView>
 

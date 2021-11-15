@@ -26,7 +26,7 @@ import gov.anzong.androidnga.BuildConfig;
 import gov.anzong.androidnga.R;
 import gov.anzong.androidnga.activity.BaseActivity;
 import gov.anzong.androidnga.base.util.ToastUtils;
-import sp.phone.http.OnSimpleHttpCallBack;
+import nosc.api.callbacks.OnSimpleHttpCallBack;
 import gov.anzong.androidnga.base.util.DeviceUtils;
 
 /**

@@ -16,16 +16,14 @@ import gov.anzong.androidnga.base.util.ToastUtils;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
-import okhttp3.FormBody;
 import okhttp3.MultipartBody;
 import okhttp3.ResponseBody;
 import sp.phone.param.LoginParam;
 import gov.anzong.androidnga.http.OnHttpCallBack;
 import sp.phone.mvp.contract.LoginContract;
-import sp.phone.http.retrofit.RetrofitHelper;
-import sp.phone.http.retrofit.RetrofitService;
+import nosc.api.retrofit.RetrofitHelper;
+import nosc.api.retrofit.RetrofitService;
 import sp.phone.rxjava.BaseSubscriber;
-import sp.phone.util.ActivityUtils;
 
 /**
  * Created by Justwen on 2017/6/16.

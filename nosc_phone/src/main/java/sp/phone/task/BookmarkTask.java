@@ -5,8 +5,8 @@ import gov.anzong.androidnga.Utils;
 import gov.anzong.androidnga.base.util.ToastUtils;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import sp.phone.http.retrofit.RetrofitHelper;
-import sp.phone.http.retrofit.RetrofitService;
+import nosc.api.retrofit.RetrofitHelper;
+import nosc.api.retrofit.RetrofitService;
 import sp.phone.rxjava.BaseSubscriber;
 import sp.phone.util.StringUtils;
 

@@ -1,569 +1,484 @@
-package gov.anzong.androidnga.activity;
+package gov.anzong.androidnga.activity
 
-import android.app.Activity;
-import android.content.Intent;
-import android.content.res.Resources;
-import android.graphics.Color;
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.Window;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.TextView;
-
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
-
-import com.alibaba.android.arouter.facade.annotation.Route;
-import com.alibaba.android.arouter.launcher.ARouter;
-import com.google.android.material.appbar.AppBarLayout;
-import com.google.android.material.appbar.CollapsingToolbarLayout;
-
-import java.util.List;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import gov.anzong.androidnga.R;
-import gov.anzong.androidnga.Utils;
-import gov.anzong.androidnga.arouter.ARouterConstants;
-import gov.anzong.androidnga.base.util.DeviceUtils;
-import gov.anzong.androidnga.base.util.ToastUtils;
-import gov.anzong.androidnga.core.data.HtmlData;
-import gov.anzong.androidnga.core.decode.ForumDecoder;
-import gov.anzong.androidnga.http.OnHttpCallBack;
-import sp.phone.common.PhoneConfiguration;
-import sp.phone.common.UserManager;
-import sp.phone.common.UserManagerImpl;
-import sp.phone.http.bean.AdminForumsData;
-import sp.phone.http.bean.ProfileData;
-import sp.phone.http.bean.ReputationData;
-import sp.phone.param.ParamKey;
-import sp.phone.task.JsonProfileLoadTask;
-import sp.phone.theme.ThemeManager;
-import sp.phone.util.ActivityUtils;
-import sp.phone.util.FunctionUtils;
-import sp.phone.util.ImageUtils;
-import sp.phone.util.StringUtils;
-import sp.phone.view.webview.WebViewEx;
+import android.content.Intent
+import android.graphics.Color
+import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
+import android.webkit.WebView
+import android.widget.FrameLayout
+import android.widget.ImageView
+import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
+import com.alibaba.android.arouter.facade.annotation.Route
+import com.alibaba.android.arouter.launcher.ARouter
+import com.google.android.material.appbar.AppBarLayout
+import gov.anzong.androidnga.R
+import gov.anzong.androidnga.Utils
+import gov.anzong.androidnga.arouter.ARouterConstants
+import gov.anzong.androidnga.base.util.DeviceUtils
+import gov.anzong.androidnga.base.util.ToastUtils
+import gov.anzong.androidnga.core.data.HtmlData
+import gov.anzong.androidnga.core.decode.ForumDecoder
+import gov.anzong.androidnga.databinding.ActivityUserProfileBinding
+import gov.anzong.androidnga.http.OnHttpCallBack
+import kotlinx.android.synthetic.main.activity_user_profile_content.*
+import nosc.api.bean.ProfileData
+import sp.phone.common.PhoneConfiguration
+import sp.phone.common.UserManagerImpl
+import sp.phone.param.ParamKey
+import sp.phone.task.JsonProfileLoadTask
+import sp.phone.theme.ThemeManager
+import sp.phone.util.ActivityUtils
+import sp.phone.util.FunctionUtils
+import sp.phone.util.ImageUtils
+import sp.phone.util.StringUtils
+import sp.phone.view.webview.WebViewEx
 
 @Route(path = ARouterConstants.ACTIVITY_PROFILE)
-public class ProfileActivity extends BaseActivity implements OnHttpCallBack<ProfileData> {
+class ProfileActivity : BaseActivity(), OnHttpCallBack<ProfileData?> {
+    private var mProfileData: ProfileData? = null
+    private var binding: ActivityUserProfileBinding? = null
+    private val mThemeManager = ThemeManager.getInstance()
+    private var mParams: String? = null
+    private var mCurrentUser = false
+    private var mProfileLoadTask: JsonProfileLoadTask? = null
+    private var mOptionMenu: Menu? = null//获取状态栏高度的资源id
 
-    private static final String TAG = "ProfileActivity";
-
-    private ProfileData mProfileData;
-
-    private ThemeManager mThemeManager = ThemeManager.getInstance();
-
-    private String mParams;
-
-    private boolean mCurrentUser;
-
-    @BindView(R.id.tv_user_money_copper)
-    public TextView mMoneyCopperTv;
-
-    @BindView(R.id.tv_user_money_silver)
-    public TextView mMoneySilverTv;
-
-    @BindView(R.id.tv_user_money_gold)
-    public TextView mMoneyGoldTv;
-
-    @BindView(R.id.tv_user_state)
-    public TextView mUserStateTv;
-
-    @BindView(R.id.tv_user_mute_time)
-    public TextView mUserMuteTime;
-
-    @BindView(R.id.tv_user_group)
-    public TextView mUserGroupTv;
-
-    @BindView(R.id.tv_user_register_time)
-    public TextView mRegisterTimeTv;
-
-    @BindView(R.id.tv_user_tel)
-    public TextView mUserTelTv;
-
-    @BindView(R.id.tv_user_email)
-    public TextView mUserEmailTv;
-
-    @BindView(R.id.tv_post_count)
-    public TextView mPostCountTv;
-
-    @BindView(R.id.btn_modify_sign)
-    public TextView mModifySignBtn;
-
-    @BindView(R.id.iv_avatar)
-    public ImageView mAvatarIv;
-
-    @BindView(R.id.toolbar_layout)
-    public CollapsingToolbarLayout mToolbarLayout;
-
-    @BindView(R.id.tv_uid)
-    public TextView mUidTv;
-
-    @BindView(R.id.wv_admin)
-    public WebViewEx mAdminWebView;
-
-    @BindView(R.id.wv_fame)
-    public WebViewEx mFameWebView;
-
-    @BindView(R.id.wv_sign)
-    public WebViewEx mSignWebView;
-
-    private JsonProfileLoadTask mProfileLoadTask;
-
-    private Menu mOptionMenu;
+    private val mSignWebView:WebViewEx get() = binding?.content?.wvSign!!
+    private val mAdminWebView:WebViewEx get() = binding?.content?.wvAdmin!!
+    private val mFameWebView:WebViewEx get() = binding?.content?.wvFame!!
 
     /**
      * 利用反射获取状态栏高度
      */
-    public int getStatusBarHeight() {
-        int result;
-        Resources res = getResources();
-        //获取状态栏高度的资源id
-        int resourceId = res.getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            result = res.getDimensionPixelSize(resourceId);
-        } else {
-            result = res.getDimensionPixelSize(R.dimen.status_bar_height);
+    private val statusBarHeight: Int
+        get() {
+            val result: Int
+            val res = resources
+            //获取状态栏高度的资源id
+            val resourceId = res.getIdentifier("status_bar_height", "dimen", "android")
+            result = if (resourceId > 0) {
+                res.getDimensionPixelSize(resourceId)
+            } else {
+                res.getDimensionPixelSize(R.dimen.status_bar_height)
+            }
+            return result
         }
-        return result;
-    }
 
-    private void updateToolbarLayout() {
-        AppBarLayout appBarLayout = findViewById(R.id.app_bar);
+    private fun updateToolbarLayout() {
+        val appBarLayout = findViewById<AppBarLayout>(R.id.app_bar)
         if (DeviceUtils.isFullScreenDevice()) {
-            appBarLayout.getLayoutParams().height = getResources().getDimensionPixelSize(R.dimen.app_bar_height_full_screen);
+            appBarLayout.layoutParams.height =
+                resources.getDimensionPixelSize(R.dimen.app_bar_height_full_screen)
         }
-        int statusBarHeight = getStatusBarHeight();
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) toolbar.getLayoutParams();
-        lp.setMargins(0, statusBarHeight, 0, 0);
-
-        View parentView = (View) mAvatarIv.getParent();
-        parentView.setPadding(0, statusBarHeight, 0, 0);
-
+        val statusBarHeight = statusBarHeight
+        val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
+        val lp = toolbar.layoutParams as FrameLayout.LayoutParams
+        lp.setMargins(0, statusBarHeight, 0, 0)
+        val parentView = binding!!.ivAvatar.parent as View
+        parentView.setPadding(0, statusBarHeight, 0, 0)
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        setToolbarEnabled(true);
-        super.onCreate(savedInstanceState);
-
-        Intent intent = getIntent();
-        UserManager um = UserManagerImpl.getInstance();
+    override fun onCreate(savedInstanceState: Bundle?) {
+        setToolbarEnabled(true)
+        super.onCreate(savedInstanceState)
+        val intent = intent
+        val um = UserManagerImpl.getInstance()
         if (intent.hasExtra("uid")) {
-            String uid = intent.getStringExtra("uid");
-            mCurrentUser = uid.equals(um.getUserId());
-            mParams = "uid=" + uid;
+            val uid = intent.getStringExtra("uid")
+            mCurrentUser = uid == um.userId
+            mParams = "uid=$uid"
         } else if (intent.hasExtra("username")) {
-            String userName = intent.getStringExtra("username");
-            mCurrentUser = userName.endsWith(um.getUserName());
-            if (userName.startsWith("UID")) {
-                mParams = "uid=" + userName.substring(3);
+            val userName = intent.getStringExtra("username")
+            mCurrentUser = userName!!.endsWith(um.userName)
+            mParams = if (userName.startsWith("UID")) {
+                "uid=" + userName.substring(3)
             } else {
-                mParams = "username=" + StringUtils.encodeUrl(userName, "gbk");
+                "username=" + StringUtils.encodeUrl(userName, "gbk")
             }
         }
-
-        setContentView(R.layout.activity_user_profile);
-        ButterKnife.bind(this);
-        setupActionBar();
-        updateToolbarLayout();
-        setupStatusBar();
-        refresh();
+        binding = ActivityUserProfileBinding.inflate(layoutInflater)
+        binding?.content?.btnModifySign?.setOnClickListener {
+            startChangeSignActivity()
+        }
+        setContentView(binding!!.root)
+        setupActionBar()
+        updateToolbarLayout()
+        setupStatusBar()
+        refresh()
     }
 
-    private void setupStatusBar() {
-        Window window = getWindow();
-        View decorView = window.getDecorView();
+    private fun setupStatusBar() {
+        val window = window
+        val decorView = window.decorView
         //两个 flag 要结合使用，表示让应用的主体内容占用系统状态栏的空间
-        int option = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
-        decorView.setSystemUiVisibility(option);
-        getWindow().setStatusBarColor(Color.TRANSPARENT);
+        val option = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+        decorView.systemUiVisibility = option
+        getWindow().statusBarColor = Color.TRANSPARENT
     }
 
-    private void refresh() {
-        ActivityUtils.getInstance().noticeSaying(this);
-        mProfileLoadTask = new JsonProfileLoadTask(this);
-        mProfileLoadTask.execute(mParams);
+    private fun refresh() {
+        ActivityUtils.getInstance().noticeSaying(this)
+        mProfileLoadTask = JsonProfileLoadTask(this)
+        mProfileLoadTask!!.execute(mParams)
     }
 
-
-    @Override
-    protected void onDestroy() {
-        mProfileLoadTask.cancel();
-        super.onDestroy();
+    override fun onDestroy() {
+        mProfileLoadTask!!.cancel()
+        super.onDestroy()
     }
 
-    private void loadBasicProfile(ProfileData profileInfo) {
-        mToolbarLayout.setTitle(profileInfo.getUserName());
-        mUidTv.setText(String.format("用户ID : %s", profileInfo.getUid()));
-        mPostCountTv.setText(profileInfo.getPostCount());
-        mRegisterTimeTv.setText(profileInfo.getRegisterDate());
-        mUserEmailTv.setText(profileInfo.getEmailAddress());
-        mUserTelTv.setText(profileInfo.getPhoneNumber());
-        mUserGroupTv.setText(profileInfo.getMemberGroup());
-        if (mCurrentUser) {
-            mModifySignBtn.setVisibility(View.VISIBLE);
-        } else {
-            mModifySignBtn.setVisibility(View.GONE);
-        }
-        handleAvatar(profileInfo);
-        handleUserState(profileInfo);
-        handleUserMoney(profileInfo);
-    }
-
-    private void handleUserState(ProfileData profileInfo) {
-        if (profileInfo.isMuted()) {
-            mUserStateTv.setText("已禁言");
-            mUserStateTv.setTextColor(ContextCompat.getColor(this, R.color.color_state_muted));
-            if (!StringUtils.isEmpty(profileInfo.getMutedTime())) {
-                mUserMuteTime.setText(profileInfo.getMutedTime());
-                //  mUserMuteTime.setVisibility(View.VISIBLE);
-            }
-        } else if (profileInfo.isNuked()) {
-            mUserStateTv.setText("NUKED(?)");
-            mUserStateTv.setTextColor(ContextCompat.getColor(this, R.color.color_state_nuked));
-        } else {
-            mUserStateTv.setText("已激活");
-            mUserStateTv.setTextColor(ContextCompat.getColor(this, R.color.color_state_active));
-        }
-    }
-
-    private void handleUserMoney(ProfileData profileInfo) {
-
-        int money = Integer.parseInt(profileInfo.getMoney());
-        int gold = money / 10000;
-        int silver = (money - gold * 10000) / 100;
-        int copper = (money - gold * 10000 - silver * 100);
-        mMoneyGoldTv.setText(String.valueOf(gold));
-        mMoneySilverTv.setText(String.valueOf(silver));
-        mMoneyCopperTv.setText(String.valueOf(copper));
-    }
-
-    protected String getUrl() {
-        return "http://bbs.ngacn.cc/nuke.php?func=ucp&" + mParams;
-    }
-
-    private String createAdminHtml(ProfileData ret) {
-        StringBuilder builder = new StringBuilder();
-        List<AdminForumsData> adminForumsEntryList = ret.getAdminForums();
-        if (adminForumsEntryList == null) {
-            builder.append("无管理板块");
-        } else {
-            for (AdminForumsData data : adminForumsEntryList) {
-                builder.append("<a style=\"color:#551200;\" href=\"http://nga.178.com/thread.php?fid=")
-                        .append(data.getFid()).append("\">[")
-                        .append(data.getForumName())
-                        .append("]</a>&nbsp;");
-            }
-            builder.append("<br>");
-        }
-        return builder.toString();
-    }
-
-    @OnClick(R.id.btn_modify_sign)
-    public void startChangeSignActivity() {
-        Intent intent = new Intent();
-        intent.putExtra("prefix", mProfileData.getSign());
-        intent.setClass(this, PhoneConfiguration.getInstance().signPostActivityClass);
-        startActivityForResult(intent, 321);
-    }
-
-    private void loadProfileInfo(ProfileData profileInfo) {
-        loadBasicProfile(profileInfo);
-        handleSignWebView(mSignWebView, profileInfo);
-        handleAdminWebView(mAdminWebView, profileInfo);
-        handleFameWebView(mFameWebView, profileInfo);
-        if (mOptionMenu != null) {
-            onPrepareOptionsMenu(mOptionMenu);
-        }
-    }
-
-    private String createFameHtml(ProfileData ret, String color) {
-        String frame = ret.getFrame();
-        try {
-            frame = String.valueOf(Double.parseDouble(ret.getFrame()) / 10.0d);
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
-        }
-        StringBuilder builder = new StringBuilder("<ul style=\"padding: 0px; margin: 0px;\">");
-        builder.append("<li style=\"display: block;float: left;width: 33%;\">")
-                .append("<label style=\"float: left;color: ").append(color).append(";\">威望</label>")
-                .append("<span style=\"float: left; color: #808080;\">:</span>")
-                .append("<span style=\"float: left; color: #808080;\">")
-                .append(frame)
-                .append("</span></li>");
-        List<ReputationData> reputationEntryList = ret.getReputationEntryList();
-        if (reputationEntryList != null) {
-            for (ReputationData data : reputationEntryList) {
-                builder.append("<li style=\"display: block;float: left;width: 33%;\">")
-                        .append("<label style=\"float: left;color: ")
-                        .append(color).append(";\">").append(data.getName()).append("</label>")
-                        .append("<span style=\"float: left; color: #808080;\">:</span>")
-                        .append("<span style=\"float: left; color: #808080;\">")
-                        .append(data.getData()).append("</span></li>");
-            }
-        }
-        builder.append("</ul><br>");
-        return builder.toString();
-    }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_user_profile, menu);
-        getMenuInflater().inflate(R.menu.menu_default, menu);
-        mOptionMenu = menu;
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        menu.findItem(R.id.menu_copy_url).setVisible(true);
-        menu.findItem(R.id.menu_open_by_browser).setVisible(true);
-
-        menu.findItem(R.id.menu_search_post).setVisible(mProfileData != null);
-        menu.findItem(R.id.menu_search_reply).setVisible(mProfileData != null);
-        menu.findItem(R.id.menu_send_message).setVisible(mProfileData != null && !mCurrentUser);
-        menu.findItem(R.id.menu_modify_avatar).setVisible(mProfileData != null && mCurrentUser);
-
-        MenuItem item = menu.findItem(R.id.menu_ban_this_one);
-        if (item != null) {
-
-            if (mProfileData == null) {
-                item.setVisible(false);
+    private fun loadBasicProfile(profileInfo: ProfileData) {
+        binding?.apply {
+            toolbarLayout.title = profileInfo.userName
+            tvUid.text = String.format("用户ID : %s", profileInfo.uid)
+            tv_post_count.text = profileInfo.postCount
+            tv_user_register_time.text = profileInfo.registerDate
+            tv_user_email.text = profileInfo.emailAddress
+            tv_user_tel.text = profileInfo.phoneNumber
+            tv_user_group.text = profileInfo.memberGroup
+            if (mCurrentUser) {
+                btn_modify_sign.visibility = View.VISIBLE
             } else {
-                item.setVisible(true);
-                boolean ban = UserManagerImpl.getInstance().checkBlackList(mProfileData.getUid());
-                item.setTitle(ban ? R.string.cancel_ban_thisone : R.string.ban_thisone);
+                btn_modify_sign.visibility = View.GONE
             }
         }
-        return super.onPrepareOptionsMenu(menu);
+
+        handleAvatar(profileInfo)
+        handleUserState(profileInfo)
+        handleUserMoney(profileInfo)
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_send_message:
-                sendShortMessage();
-                break;
-            case R.id.menu_search_post:
-                searchPost();
-                break;
-            case R.id.menu_search_reply:
-                searchReply();
-                break;
-            case R.id.menu_modify_avatar:
-                startModifyAvatar();
-                break;
-            case R.id.menu_copy_url:
-                FunctionUtils.copyToClipboard(this, getUrl());
-                break;
-            case R.id.menu_open_by_browser:
-                FunctionUtils.openUrlByDefaultBrowser(this, getUrl());
-                break;
-            case R.id.menu_ban_this_one:
-                banThisSB();
-                break;
-            default:
-                return super.onOptionsItemSelected(item);
+    private fun handleUserState(profileInfo: ProfileData) {
+        binding?.content?.let{
+            if (profileInfo.isMuted) {
+                it.tvUserState.setText("已禁言")
+                it.tvUserState.setTextColor(ContextCompat.getColor(this, R.color.color_state_muted))
+                if (!StringUtils.isEmpty(profileInfo.mutedTime)) {
+                    it.tvUserMuteTime.setText(profileInfo.mutedTime)
+                    //  mUserMuteTime.setVisibility(View.VISIBLE);
+                }
+            } else if (profileInfo.isNuked) {
+                it.tvUserState.setText("NUKED(?)")
+                it.tvUserState.setTextColor(ContextCompat.getColor(this, R.color.color_state_nuked))
+            } else {
+                it.tvUserState.setText("已激活")
+                it.tvUserState.setTextColor(ContextCompat.getColor(this, R.color.color_state_active))
+            }
+        }
+
+    }
+
+    private fun handleUserMoney(profileInfo: ProfileData) {
+        val money = profileInfo.money.toInt()
+        val gold = money / 10000
+        val silver = (money - gold * 10000) / 100
+        val copper = money - gold * 10000 - silver * 100
+        binding?.content?.apply {
+            tvUserMoneyGold.text = gold.toString()
+            tvUserMoneySilver.text = silver.toString()
+            tvUserMoneyCopper.text = copper.toString()
 
         }
-        return true;
+
     }
 
-    public void banThisSB() {
-        UserManager um = UserManagerImpl.getInstance();
-        if (um.checkBlackList(mProfileData.getUid())) {
-            um.removeFromBlackList(mProfileData.getUid());
-            ToastUtils.success(R.string.remove_from_blacklist_success);
+    private val url: String get() = "http://bbs.ngacn.cc/nuke.php?func=ucp&$mParams"
+
+    private fun createAdminHtml(ret: ProfileData): String {
+        val builder = StringBuilder()
+        val adminForumsEntryList = ret.adminForums
+        if (adminForumsEntryList == null) {
+            builder.append("无管理板块")
         } else {
-            um.addToBlackList(mProfileData.getUserName(), mProfileData.getUid());
-            ToastUtils.success(R.string.add_to_blacklist_success);
+            for (data in adminForumsEntryList) {
+                builder.append("<a style=\"color:#551200;\" href=\"http://nga.178.com/thread.php?fid=")
+                    .append(data.fid).append("\">[")
+                    .append(data.forumName)
+                    .append("]</a>&nbsp;")
+            }
+            builder.append("<br>")
+        }
+        return builder.toString()
+    }
+
+    fun startChangeSignActivity() {
+        val intent = Intent()
+        intent.putExtra("prefix", mProfileData!!.sign)
+        intent.setClass(this, PhoneConfiguration.getInstance().signPostActivityClass)
+        startActivityForResult(intent, 321)
+    }
+
+    private fun loadProfileInfo(profileInfo: ProfileData) {
+        loadBasicProfile(profileInfo)
+        handleSignWebView(mSignWebView, profileInfo)
+        handleAdminWebView(mAdminWebView, profileInfo)
+        handleFameWebView(mFameWebView, profileInfo)
+        if (mOptionMenu != null) {
+            onPrepareOptionsMenu(mOptionMenu!!)
         }
     }
 
-    private void startModifyAvatar() {
-        Intent intent = new Intent();
-        intent.putExtra("prefix", mProfileData.getSign());
-        intent.setClass(this, AvatarPostActivity.class);
-        startActivity(intent);
-    }
-
-    private void sendShortMessage() {
-        ARouter.getInstance()
-                .build(ARouterConstants.ACTIVITY_MESSAGE_POST)
-                .withString("to", mProfileData.getUserName())
-                .withString(ParamKey.KEY_ACTION, "new")
-                .withString("messagemode", "yes")
-                .navigation(this);
-    }
-
-    private void searchPost() {
-        Intent intent = new Intent(this, PhoneConfiguration.getInstance().topicActivityClass);
-        intent.putExtra(ParamKey.KEY_AUTHOR_ID, Integer.parseInt(mProfileData.getUid()));
-        intent.putExtra(ParamKey.KEY_AUTHOR, mProfileData.getUserName());
-        startActivity(intent);
-    }
-
-    private void searchReply() {
-        Intent intent = new Intent(this, PhoneConfiguration.getInstance().topicActivityClass);
-        intent.putExtra(ParamKey.KEY_AUTHOR_ID, Integer.parseInt(mProfileData.getUid()));
-        intent.putExtra(ParamKey.KEY_SEARCH_POST, 1);
-        intent.putExtra(ParamKey.KEY_AUTHOR, mProfileData.getUserName());
-        startActivity(intent);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 321 && resultCode == Activity.RESULT_OK) {
-            String signData = data.getStringExtra("sign");
-            if (mProfileData != null) {
-                mProfileData.setSign(signData);
-                mSignWebView.requestLayout();
-                handleSignWebView(mSignWebView, mProfileData);
+    private fun createFameHtml(ret: ProfileData, color: String): String {
+        var frame = ret.frame
+        try {
+            frame = (ret.frame.toDouble() / 10.0).toString()
+        } catch (e: IllegalStateException) {
+            e.printStackTrace()
+        }
+        val builder = StringBuilder("<ul style=\"padding: 0px; margin: 0px;\">")
+        builder.append("<li style=\"display: block;float: left;width: 33%;\">")
+            .append("<label style=\"float: left;color: ").append(color).append(";\">威望</label>")
+            .append("<span style=\"float: left; color: #808080;\">:</span>")
+            .append("<span style=\"float: left; color: #808080;\">")
+            .append(frame)
+            .append("</span></li>")
+        val reputationEntryList = ret.reputationEntryList
+        if (reputationEntryList != null) {
+            for (data in reputationEntryList) {
+                builder.append("<li style=\"display: block;float: left;width: 33%;\">")
+                    .append("<label style=\"float: left;color: ")
+                    .append(color).append(";\">").append(data.name).append("</label>")
+                    .append("<span style=\"float: left; color: #808080;\">:</span>")
+                    .append("<span style=\"float: left; color: #808080;\">")
+                    .append(data.data).append("</span></li>")
             }
-        } else if (requestCode == 123 && resultCode == Activity.RESULT_OK) {
-            String avatarData = data.getStringExtra("avatar");
-            mProfileData.setAvatarUrl(avatarData);
-            mSignWebView.requestLayout();
+        }
+        builder.append("</ul><br>")
+        return builder.toString()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu_user_profile, menu)
+        menuInflater.inflate(R.menu.menu_default, menu)
+        mOptionMenu = menu
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
+        menu.findItem(R.id.menu_copy_url).isVisible = true
+        menu.findItem(R.id.menu_open_by_browser).isVisible = true
+        menu.findItem(R.id.menu_search_post).isVisible = mProfileData != null
+        menu.findItem(R.id.menu_search_reply).isVisible = mProfileData != null
+        menu.findItem(R.id.menu_send_message).isVisible = mProfileData != null && !mCurrentUser
+        menu.findItem(R.id.menu_modify_avatar).isVisible = mProfileData != null && mCurrentUser
+        val item = menu.findItem(R.id.menu_ban_this_one)
+        if (item != null) {
+            if (mProfileData == null) {
+                item.isVisible = false
+            } else {
+                item.isVisible = true
+                val ban = UserManagerImpl.getInstance().checkBlackList(
+                    mProfileData!!.uid
+                )
+                item.setTitle(if (ban) R.string.cancel_ban_thisone else R.string.ban_thisone)
+            }
+        }
+        return super.onPrepareOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.menu_send_message -> sendShortMessage()
+            R.id.menu_search_post -> searchPost()
+            R.id.menu_search_reply -> searchReply()
+            R.id.menu_modify_avatar -> startModifyAvatar()
+            R.id.menu_copy_url -> FunctionUtils.copyToClipboard(this, url)
+            R.id.menu_open_by_browser -> FunctionUtils.openUrlByDefaultBrowser(this, url)
+            R.id.menu_ban_this_one -> banThisSB()
+            else -> return super.onOptionsItemSelected(item)
+        }
+        return true
+    }
+
+    fun banThisSB() {
+        val um = UserManagerImpl.getInstance()
+        if (um.checkBlackList(mProfileData!!.uid)) {
+            um.removeFromBlackList(mProfileData!!.uid)
+            ToastUtils.success(R.string.remove_from_blacklist_success)
+        } else {
+            um.addToBlackList(mProfileData!!.userName, mProfileData!!.uid)
+            ToastUtils.success(R.string.add_to_blacklist_success)
+        }
+    }
+
+    private fun startModifyAvatar() {
+        val intent = Intent()
+        intent.putExtra("prefix", mProfileData!!.sign)
+        intent.setClass(this, AvatarPostActivity::class.java)
+        startActivity(intent)
+    }
+
+    private fun sendShortMessage() {
+        ARouter.getInstance()
+            .build(ARouterConstants.ACTIVITY_MESSAGE_POST)
+            .withString("to", mProfileData!!.userName)
+            .withString(ParamKey.KEY_ACTION, "new")
+            .withString("messagemode", "yes")
+            .navigation(this)
+    }
+
+    private fun searchPost() {
+        val intent = Intent(this, PhoneConfiguration.getInstance().topicActivityClass)
+        intent.putExtra(ParamKey.KEY_AUTHOR_ID, mProfileData!!.uid.toInt())
+        intent.putExtra(ParamKey.KEY_AUTHOR, mProfileData!!.userName)
+        startActivity(intent)
+    }
+
+    private fun searchReply() {
+        val intent = Intent(this, PhoneConfiguration.getInstance().topicActivityClass)
+        intent.putExtra(ParamKey.KEY_AUTHOR_ID, mProfileData!!.uid.toInt())
+        intent.putExtra(ParamKey.KEY_SEARCH_POST, 1)
+        intent.putExtra(ParamKey.KEY_AUTHOR, mProfileData!!.userName)
+        startActivity(intent)
+    }
+
+    public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 321 && resultCode == RESULT_OK) {
+            val signData = data!!.getStringExtra("sign")
+            if (mProfileData != null) {
+                mProfileData!!.sign = signData
+                mSignWebView.requestLayout()
+                handleSignWebView(mSignWebView, mProfileData!!)
+            }
+        } else if (requestCode == 123 && resultCode == RESULT_OK) {
+            val avatarData = data!!.getStringExtra("avatar")
+            mProfileData!!.avatarUrl = avatarData
+            mSignWebView.requestLayout()
             //  handleAvatar(avatarImage, mProfileData);
         }
     }
 
-    private void handleSignWebView(WebViewEx contentTV, ProfileData ret) {
-        ThemeManager theme = ThemeManager.getInstance();
-        int bgColor, fgColor = getResources().getColor(theme.getForegroundColor());
-        if (mThemeManager.isNightMode()) {
-            bgColor = getResources().getColor(theme.getBackgroundColor(0));
+    private fun handleSignWebView(contentTV: WebViewEx, ret: ProfileData) {
+        val theme = ThemeManager.getInstance()
+        var bgColor: Int
+        val fgColor = resources.getColor(theme.foregroundColor)
+        bgColor = if (mThemeManager.isNightMode) {
+            resources.getColor(theme.getBackgroundColor(0))
         } else {
-            bgColor = getResources().getColor(R.color.profilebgcolor);
+            resources.getColor(R.color.profilebgcolor)
         }
-        bgColor = bgColor & 0xffffff;
-        final String bgcolorStr = String.format("%06x", bgColor);
-
-        int htmlfgColor = fgColor & 0xffffff;
-        final String fgColorStr = String.format("%06x", htmlfgColor);
-
-        contentTV.setLocalMode();
+        bgColor = bgColor and 0xffffff
+        val bgcolorStr = String.format("%06x", bgColor)
+        val htmlfgColor = fgColor and 0xffffff
+        val fgColorStr = String.format("%06x", htmlfgColor)
+        contentTV.setLocalMode()
         contentTV.loadDataWithBaseURL(
-                null,
-                signatureToHtmlText(ret, fgColorStr, bgcolorStr),
-                "text/html", "utf-8", null);
+            null,
+            signatureToHtmlText(ret, fgColorStr, bgcolorStr),
+            "text/html", "utf-8", null
+        )
     }
 
-    private void handleAdminWebView(WebViewEx contentTV, ProfileData ret) {
-        int bgColor, fgColor;
-        ThemeManager theme = ThemeManager.getInstance();
-        if (mThemeManager.isNightMode()) {
-            bgColor = getResources().getColor(theme.getBackgroundColor(0));
-            fgColor = getResources().getColor(theme.getForegroundColor());
+    private fun handleAdminWebView(contentTV: WebViewEx, ret: ProfileData) {
+        var bgColor: Int
+        val fgColor: Int
+        val theme = ThemeManager.getInstance()
+        if (mThemeManager.isNightMode) {
+            bgColor = resources.getColor(theme.getBackgroundColor(0))
+            fgColor = resources.getColor(theme.foregroundColor)
         } else {
-            bgColor = getResources().getColor(R.color.profilebgcolor);
-            fgColor = getResources().getColor(R.color.profilefcolor);
+            bgColor = resources.getColor(R.color.profilebgcolor)
+            fgColor = resources.getColor(R.color.profilefcolor)
         }
-        bgColor = bgColor & 0xffffff;
-        final String bgcolorStr = String.format("%06x", bgColor);
-
-        int htmlfgColor = fgColor & 0xffffff;
-        final String fgColorStr = String.format("%06x", htmlfgColor);
-
-        contentTV.setLocalMode();
+        bgColor = bgColor and 0xffffff
+        val bgcolorStr = String.format("%06x", bgColor)
+        val htmlfgColor = fgColor and 0xffffff
+        val fgColorStr = String.format("%06x", htmlfgColor)
+        contentTV.setLocalMode()
         contentTV.loadDataWithBaseURL(
-                null,
-                adminToHtmlText(ret, fgColorStr, bgcolorStr), "text/html", "utf-8", null);
+            null,
+            adminToHtmlText(ret, fgColorStr, bgcolorStr), "text/html", "utf-8", null
+        )
     }
 
-    private void handleFameWebView(WebViewEx contentTV, ProfileData ret) {
-        int bgColor, fgColor;
-        ThemeManager theme = ThemeManager.getInstance();
-        if (mThemeManager.isNightMode()) {
-            bgColor = getResources().getColor(theme.getBackgroundColor(0));
-            fgColor = getResources().getColor(theme.getForegroundColor());
+    private fun handleFameWebView(contentTV: WebViewEx, ret: ProfileData) {
+        var bgColor: Int
+        val fgColor: Int
+        val theme = ThemeManager.getInstance()
+        if (mThemeManager.isNightMode) {
+            bgColor = resources.getColor(theme.getBackgroundColor(0))
+            fgColor = resources.getColor(theme.foregroundColor)
         } else {
-            bgColor = getResources().getColor(R.color.profilebgcolor);
-            fgColor = getResources().getColor(R.color.profilefcolor);
+            bgColor = resources.getColor(R.color.profilebgcolor)
+            fgColor = resources.getColor(R.color.profilefcolor)
         }
-        bgColor = bgColor & 0xffffff;
-        final String bgcolorStr = String.format("%06x", bgColor);
-
-        int htmlfgColor = fgColor & 0xffffff;
-        final String fgColorStr = String.format("%06x", htmlfgColor);
-
-        contentTV.setLocalMode();
+        bgColor = bgColor and 0xffffff
+        val bgcolorStr = String.format("%06x", bgColor)
+        val htmlfgColor = fgColor and 0xffffff
+        val fgColorStr = String.format("%06x", htmlfgColor)
+        contentTV.setLocalMode()
         contentTV.loadDataWithBaseURL(
-                null,
-                fameToHtmlText(ret, fgColorStr, bgcolorStr), "text/html", "utf-8", null);
+            null,
+            fameToHtmlText(ret, fgColorStr, bgcolorStr), "text/html", "utf-8", null
+        )
     }
 
-    public String fameToHtmlText(final ProfileData ret, final String fgColorStr, final String bgcolorStr) {
-        String color = "#121C46";
-        if (mThemeManager.isNightMode()) {
-            color = "#712D08";
+    fun fameToHtmlText(ret: ProfileData, fgColorStr: String, bgcolorStr: String): String {
+        var color = "#121C46"
+        if (mThemeManager.isNightMode) {
+            color = "#712D08"
         }
-        String ngaHtml = createFameHtml(ret, color);
-        ngaHtml = "<HTML> <HEAD><META   http-equiv=Content-Type   content= \"text/html;   charset=utf-8 \">"
-                + "<body bgcolor= '#"
-                + bgcolorStr
-                + "'>"
-                + "<font color='#"
-                + fgColorStr + "' size='2'>" + ngaHtml + "</font></body>";
-
-        return ngaHtml;
+        var ngaHtml = createFameHtml(ret, color)
+        ngaHtml =
+            ("<HTML> <HEAD><META   http-equiv=Content-Type   content= \"text/html;   charset=utf-8 \">"
+                    + "<body bgcolor= '#"
+                    + bgcolorStr
+                    + "'>"
+                    + "<font color='#"
+                    + fgColorStr + "' size='2'>" + ngaHtml + "</font></body>")
+        return ngaHtml
     }
 
-    public String adminToHtmlText(final ProfileData ret, final String fgColorStr, final String bgcolorStr) {
-        String ngaHtml = createAdminHtml(ret);
-        ngaHtml = "<HTML> <HEAD><META   http-equiv=Content-Type   content= \"text/html;   charset=utf-8 \">"
-                + "<body bgcolor= '#"
-                + bgcolorStr
-                + "'>"
-                + "<font color='#"
-                + fgColorStr + "' size='2'>" + ngaHtml + "</font></body>";
-
-        return ngaHtml;
+    fun adminToHtmlText(ret: ProfileData, fgColorStr: String, bgcolorStr: String): String {
+        var ngaHtml = createAdminHtml(ret)
+        ngaHtml =
+            ("<HTML> <HEAD><META   http-equiv=Content-Type   content= \"text/html;   charset=utf-8 \">"
+                    + "<body bgcolor= '#"
+                    + bgcolorStr
+                    + "'>"
+                    + "<font color='#"
+                    + fgColorStr + "' size='2'>" + ngaHtml + "</font></body>")
+        return ngaHtml
     }
 
-    public String signatureToHtmlText(final ProfileData ret, final String fgColorStr, final String bgcolorStr) {
-        String ngaHtml = ForumDecoder.decode(ret.getSign(), HtmlData.create(ret.getSign(), Utils.getNGAHost()));
-
-        ngaHtml = "<HTML> <HEAD><META   http-equiv=Content-Type   content= \"text/html;   charset=utf-8 \">"
-                + "<body bgcolor= '#"
-                + bgcolorStr
-                + "'>"
-                + "<font color='#"
-                + fgColorStr
-                + "' size='2'>"
-                + "<div style=\"border: 3px solid rgb(204, 204, 204);padding: 2px; \">"
-                + ngaHtml + "</div>" + "</font></body>"
-                + "<script type=\"text/javascript\" src=\"file:///android_asset/html/script.js\"></script>";
-
-        return ngaHtml;
+    fun signatureToHtmlText(ret: ProfileData, fgColorStr: String, bgcolorStr: String): String {
+        var ngaHtml = ForumDecoder.decode(ret.sign, HtmlData.create(ret.sign, Utils.getNGAHost()))
+        ngaHtml =
+            ("<HTML> <HEAD><META   http-equiv=Content-Type   content= \"text/html;   charset=utf-8 \">"
+                    + "<body bgcolor= '#"
+                    + bgcolorStr
+                    + "'>"
+                    + "<font color='#"
+                    + fgColorStr
+                    + "' size='2'>"
+                    + "<div style=\"border: 3px solid rgb(204, 204, 204);padding: 2px; \">"
+                    + ngaHtml + "</div>" + "</font></body>"
+                    + "<script type=\"text/javascript\" src=\"file:///android_asset/html/script.js\"></script>")
+        return ngaHtml
     }
 
-    private void handleAvatar(ProfileData row) {
-        final String avatarUrl = FunctionUtils.parseAvatarUrl(row.getAvatarUrl());//
-        ImageUtils.loadRoundCornerAvatar(mAvatarIv, avatarUrl);
-        ImageUtils.loadAvatar((ImageView) findViewById(R.id.iv_toolbar_layout_bg), avatarUrl);
-
+    private fun handleAvatar(row: ProfileData) {
+        val avatarUrl = FunctionUtils.parseAvatarUrl(row.avatarUrl) //
+        ImageUtils.loadRoundCornerAvatar(binding?.ivAvatar, avatarUrl)
+        ImageUtils.loadAvatar(findViewById<View>(R.id.iv_toolbar_layout_bg) as ImageView, avatarUrl)
     }
 
-    @Override
-    public void onError(String text) {
-        ToastUtils.error(text);
+    override fun onError(text: String) {
+        ToastUtils.error(text)
     }
 
-    @Override
-    public void onSuccess(ProfileData data) {
-        mProfileData = data;
+    override fun onSuccess(data: ProfileData?) {
+        mProfileData = data
         if (data != null) {
-            loadProfileInfo(data);
+            loadProfileInfo(data)
         }
+    }
+
+    companion object {
+        private const val TAG = "ProfileActivity"
     }
 }

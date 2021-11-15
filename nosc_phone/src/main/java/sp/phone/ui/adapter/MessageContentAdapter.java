@@ -12,13 +12,12 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import gov.anzong.androidnga.R;
 import gov.anzong.androidnga.base.util.ToastUtils;
+import gov.anzong.androidnga.databinding.ListMessageContentBinding;
 import sp.phone.ui.adapter.beta.BaseAppendableAdapterEx;
-import sp.phone.http.bean.MessageArticlePageInfo;
-import sp.phone.http.bean.MessageDetailInfo;
+import nosc.api.bean.MessageArticlePageInfo;
+import nosc.api.bean.MessageDetailInfo;
 import sp.phone.theme.ThemeManager;
 import sp.phone.util.FunctionUtils;
 import sp.phone.view.RecyclerViewEx;
@@ -37,21 +36,20 @@ public class MessageContentAdapter extends BaseAppendableAdapterEx<MessageDetail
 
     static class MessageViewHolder extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.nickName)
         public TextView nickName;
 
-        @BindView(R.id.floor)
         public TextView floor;
 
-        @BindView(R.id.postTime)
         public TextView postTime;
 
-        @BindView(R.id.content)
         public WebView content;
 
-        public MessageViewHolder(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
+        public MessageViewHolder(ListMessageContentBinding binding) {
+            super(binding.getRoot());
+            nickName = binding.nickName;
+            floor = binding.floor;
+            postTime = binding.postTime;
+            content = binding.content;
         }
     }
 
@@ -72,7 +70,7 @@ public class MessageContentAdapter extends BaseAppendableAdapterEx<MessageDetail
 
     @Override
     protected MessageViewHolder onCreateItemViewHolder(ViewGroup parent, LayoutInflater inflater) {
-        return new MessageViewHolder(inflater.inflate(R.layout.list_message_content, parent, false));
+        return new MessageViewHolder(ListMessageContentBinding.inflate(inflater, parent, false));
     }
 
     private MessageArticlePageInfo getEntry(int position) {

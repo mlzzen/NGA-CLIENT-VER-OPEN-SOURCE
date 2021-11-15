@@ -106,7 +106,7 @@
                 android:gravity="center_horizontal|bottom"
                 android:padding="12dp"
                 android:text="@string/delline"
-                app:drawableTopCompat="@drawable/ic_format_strike_through_black" />
+                />
 
 
             <TextView

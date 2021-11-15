@@ -1,6 +1,6 @@
 package sp.phone.mvp.contract;
 
-import sp.phone.http.bean.MessageDetailInfo;
+import nosc.api.bean.MessageDetailInfo;
 import gov.anzong.androidnga.http.OnHttpCallBack;
 
 /**

@@ -1,38 +1,31 @@
 package sp.phone.ui.fragment;
 
-import android.app.Activity;
-import android.app.UiModeManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.alibaba.fastjson.JSON;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import gov.anzong.androidnga.R;
 import gov.anzong.androidnga.activity.BaseActivity;
 import gov.anzong.androidnga.arouter.ARouterConstants;
 import gov.anzong.androidnga.base.util.ContextUtils;
-import gov.anzong.androidnga.base.util.DeviceUtils;
 import gov.anzong.androidnga.base.widget.DividerItemDecorationEx;
 import sp.phone.common.ApiConstants;
 import sp.phone.common.PhoneConfiguration;
 import sp.phone.common.TopicHistoryManager;
-import sp.phone.mvp.contract.TopicListContract;
 import sp.phone.mvp.model.entity.ThreadPageInfo;
 import sp.phone.mvp.model.entity.TopicListInfo;
 import sp.phone.mvp.presenter.TopicListPresenter;
@@ -59,13 +52,10 @@ public class TopicSearchFragment extends BaseFragment implements View.OnClickLis
 
     protected TopicListInfo mTopicListInfo;
 
-    @BindView(R.id.swipe_refresh)
     public SwipeRefreshLayout mSwipeRefreshLayout;
 
-    @BindView(R.id.list)
     public RecyclerViewEx mListView;
 
-    @BindView(R.id.loading_view)
     public View mLoadingView;
 
     protected TopicListPresenter mPresenter;
@@ -128,7 +118,9 @@ public class TopicSearchFragment extends BaseFragment implements View.OnClickLis
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        ButterKnife.bind(this, view);
+        mSwipeRefreshLayout = view.findViewById(R.id.swipe_refresh);
+        mListView = view.findViewById(R.id.list);
+        mLoadingView = view.findViewById(R.id.loading_view);
         ((BaseActivity) getActivity()).setupToolbar();
 
         if (mRequestParam.searchPost > 0) {
@@ -163,7 +155,7 @@ public class TopicSearchFragment extends BaseFragment implements View.OnClickLis
 
         super.onViewCreated(view, savedInstanceState);
 
-        mPresenter.getFirstTopicList().observe(this, topicListInfo -> {
+        mPresenter.getFirstTopicList().observe(getViewLifecycleOwner(), topicListInfo -> {
             scrollTo(0);
             clearData();
             if (topicListInfo != null) {
@@ -171,14 +163,14 @@ public class TopicSearchFragment extends BaseFragment implements View.OnClickLis
             }
         });
 
-        mPresenter.getNextTopicList().observe(this, this::setData);
+        mPresenter.getNextTopicList().observe(getViewLifecycleOwner(), this::setData);
 
-        mPresenter.getErrorMsg().observe(this, res -> {
+        mPresenter.getErrorMsg().observe(getViewLifecycleOwner(), res -> {
             showToast(res);
             setNextPageEnabled(false);
         });
 
-        mPresenter.isRefreshing().observe(this, aBoolean -> {
+        mPresenter.isRefreshing().observe(getViewLifecycleOwner(), aBoolean -> {
             setRefreshing(aBoolean);
             if (!aBoolean) {
                 hideLoadingView();
@@ -194,10 +186,6 @@ public class TopicSearchFragment extends BaseFragment implements View.OnClickLis
 
     public void setNextPageEnabled(boolean enabled) {
         mAdapter.setNextPageEnabled(enabled);
-    }
-
-    public void removeTopic(int position) {
-
     }
 
     public void removeTopic(ThreadPageInfo pageInfo) {

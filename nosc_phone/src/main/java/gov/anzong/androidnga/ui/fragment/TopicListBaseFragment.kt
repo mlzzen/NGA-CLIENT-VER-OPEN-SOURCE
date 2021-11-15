@@ -17,6 +17,8 @@ import sp.phone.param.TopicListParam
 import sp.phone.ui.adapter.BaseAppendableAdapter
 import sp.phone.ui.adapter.TopicListAdapter
 import sp.phone.ui.fragment.TopicListFragment
+import sp.phone.ui.fragment.TopicSearchFragment
+import sp.phone.ui.fragment.TopicSearchFragment.handleClickEvent
 import sp.phone.view.RecyclerViewEx
 
 /**
@@ -86,9 +88,12 @@ open class TopicListBaseFragment : BaseFragment(R.layout.fragment_topic_list_bas
         val padding = resources.getDimension(R.dimen.topic_list_item_padding)
         mListView.addItemDecoration(DividerItemDecorationEx(view.context, padding.toInt(), DividerItemDecoration.VERTICAL))
         mListView.setOnNextPageLoadListener {
-            if (!mRefreshLayout.isRefreshing) {
-                mPresenter.loadNextPage(mAdapter.nextPage, mRequestParam)
+            mRequestParam?.let{
+                if (!mRefreshLayout.isRefreshing) {
+                    mPresenter.loadNextPage(mAdapter.nextPage, it)
+                }
             }
+
         }
     }
 
@@ -97,7 +102,7 @@ open class TopicListBaseFragment : BaseFragment(R.layout.fragment_topic_list_bas
     }
 
     override fun onClick(v: View?) {
-        TopicListFragment.handleClickEvent(context, v?.tag as ThreadPageInfo?, mRequestParam)
+        handleClickEvent(context, v?.tag as ThreadPageInfo?, mRequestParam)
     }
 
 

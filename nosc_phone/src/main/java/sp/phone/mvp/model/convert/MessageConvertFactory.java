@@ -7,9 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import gov.anzong.androidnga.R;
-import sp.phone.http.bean.MessageDetailInfo;
-import sp.phone.http.bean.MessageListInfo;
-import sp.phone.http.bean.MessageThreadPageInfo;
+import nosc.api.bean.MessageDetailInfo;
+import nosc.api.bean.MessageListInfo;
+import nosc.api.bean.MessageThreadPageInfo;
 import gov.anzong.androidnga.base.util.ContextUtils;;
 import sp.phone.util.MessageUtil;
 import sp.phone.util.NLog;

@@ -1,545 +1,464 @@
-package sp.phone.ui.adapter;
+package sp.phone.ui.adapter
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.text.TextUtils;
-import android.util.TypedValue;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.TextView;
-
-import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
-import androidx.fragment.app.FragmentManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.alibaba.android.arouter.launcher.ARouter;
-
-import java.text.MessageFormat;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import gov.anzong.androidnga.R;
-import gov.anzong.androidnga.arouter.ARouterConstants;
-import gov.anzong.androidnga.base.util.ContextUtils;
-import gov.anzong.androidnga.base.util.DeviceUtils;
-import gov.anzong.androidnga.base.util.ToastUtils;
-import io.reactivex.Observable;
-import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
-import sp.phone.common.PhoneConfiguration;
-import sp.phone.common.UserManagerImpl;
-import sp.phone.http.bean.ThreadData;
-import sp.phone.http.bean.ThreadRowInfo;
-import sp.phone.rxjava.BaseSubscriber;
-import sp.phone.rxjava.RxUtils;
-import sp.phone.theme.ThemeManager;
-import sp.phone.ui.fragment.dialog.AvatarDialogFragment;
-import sp.phone.ui.fragment.dialog.BaseDialogFragment;
-import sp.phone.util.ActivityUtils;
-import sp.phone.util.FunctionUtils;
-import sp.phone.util.HtmlUtils;
-import sp.phone.util.ImageUtils;
-import sp.phone.util.StringUtils;
-import sp.phone.view.webview.LocalWebView;
+import androidx.recyclerview.widget.RecyclerView
+import sp.phone.ui.adapter.ArticleListAdapter.ArticleViewHolder
+import nosc.api.bean.ThreadData
+import android.view.LayoutInflater
+import sp.phone.theme.ThemeManager
+import sp.phone.view.webview.LocalWebView
+import nosc.api.bean.ThreadRowInfo
+import gov.anzong.androidnga.base.util.ToastUtils
+import android.content.Intent
+import sp.phone.common.UserManagerImpl
+import sp.phone.common.PhoneConfiguration
+import io.reactivex.ObservableOnSubscribe
+import io.reactivex.ObservableEmitter
+import io.reactivex.schedulers.Schedulers
+import io.reactivex.android.schedulers.AndroidSchedulers
+import android.app.Activity
+import android.content.Context
+import com.alibaba.android.arouter.launcher.ARouter
+import gov.anzong.androidnga.arouter.ARouterConstants
+import android.os.Bundle
+import android.text.TextUtils
+import android.view.View
+import sp.phone.ui.fragment.dialog.BaseDialogFragment
+import sp.phone.ui.fragment.dialog.AvatarDialogFragment
+import gov.anzong.androidnga.R
+import android.widget.TextView
+import android.widget.FrameLayout
+import sp.phone.ui.adapter.ArticleListAdapter
+import android.view.ViewGroup
+import android.widget.ImageView
+import sp.phone.rxjava.RxUtils
+import androidx.cardview.widget.CardView
+import androidx.fragment.app.FragmentManager
+import gov.anzong.androidnga.base.util.ContextUtils
+import gov.anzong.androidnga.base.util.DeviceUtils
+import io.reactivex.Observable
+import sp.phone.rxjava.BaseSubscriber
+import sp.phone.util.*
+import java.lang.Exception
+import java.lang.StringBuilder
+import java.text.MessageFormat
 
 /**
  * 帖子详情列表Adapter
  */
-public class ArticleListAdapter extends RecyclerView.Adapter<ArticleListAdapter.ArticleViewHolder> {
-
-    private static final String DEVICE_TYPE_IOS = "ios";
-
-    private static final String DEVICE_TYPE_ANDROID = "android";
-
-    private static final String DEVICE_TYPE_WP = "wp";
-
-    private static final int VIEW_TYPE_WEB_VIEW = 0;
-
-    private static final int VIEW_TYPE_NATIVE_VIEW = 1;
-
-    private Context mContext;
-
-    private FragmentManager mFragmentManager;
-
-    private ThreadData mData;
-
-    private LayoutInflater mLayoutInflater;
-
-    private ThemeManager mThemeManager = ThemeManager.getInstance();
-
-    private LocalWebView[] mLocalWebViews = new LocalWebView[20];
-
-    private String mTopicOwner;
-
-    private View.OnClickListener mOnClientClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-
-            ThreadRowInfo row = (ThreadRowInfo) v.getTag();
-            String fromClient = row.getFromClient();
-            String clientModel = row.getFromClientModel();
-            String deviceInfo;
-            if (!StringUtils.isEmpty(clientModel)) {
-                String clientAppCode;
-                if (!fromClient.contains(" ")) {
-                    clientAppCode = fromClient;
-                } else {
-                    clientAppCode = fromClient.substring(0,
-                            fromClient.indexOf(' '));
-                }
-                switch (clientAppCode) {
-                    case "1":
-                        if (fromClient.length() <= 2) {
-                            deviceInfo = "发送自Life Style苹果客户端 机型及系统:未知";
-                        } else {
-                            deviceInfo = "发送自Life Style苹果客户端 机型及系统:"
-                                    + fromClient.substring(2);
-                        }
-                        break;
-                    case "7":
-                        if (fromClient.length() <= 2) {
-                            deviceInfo = "发送自NGA苹果官方客户端 机型及系统:未知";
-                        } else {
-                            deviceInfo = "发送自NGA苹果官方客户端 机型及系统:"
-                                    + fromClient.substring(2);
-                        }
-                        break;
-                    case "8":
-                        if (fromClient.length() <= 2) {
-                            deviceInfo = "发送自NGA安卓客户端 机型及系统:未知";
-                        } else {
-                            String fromData = fromClient.substring(2);
-                            if (fromData.startsWith("[")
-                                    && fromData.contains("](Android")) {
-                                deviceInfo = "发送自NGA安卓开源版客户端 机型及系统:"
-                                        + fromData.substring(1).replace(
-                                        "](Android", "(Android");
-                            } else {
-                                deviceInfo = "发送自NGA安卓官方客户端 机型及系统:" + fromData;
-                            }
-                        }
-                        break;
-                    case "9":
-                        if (fromClient.length() <= 2) {
-                            deviceInfo = "发送自NGA Windows Phone官方客户端 机型及系统:未知";
-                        } else {
-                            deviceInfo = "发送自NGA Windows Phone官方客户端 机型及系统:"
-                                    + fromClient.substring(2);
-                        }
-                        break;
-                    case "100":
-                        if (fromClient.length() <= 4) {
-                            deviceInfo = "发送自安卓浏览器 机型及系统:未知";
-                        } else {
-                            deviceInfo = "发送自安卓浏览器 机型及系统:"
-                                    + fromClient.substring(4);
-                        }
-                        break;
-                    case "101":
-                        if (fromClient.length() <= 4) {
-                            deviceInfo = "发送自苹果浏览器 机型及系统:未知";
-                        } else {
-                            deviceInfo = "发送自苹果浏览器 机型及系统:"
-                                    + fromClient.substring(4);
-                        }
-                        break;
-                    case "102":
-                        if (fromClient.length() <= 4) {
-                            deviceInfo = "发送自Blackberry浏览器 机型及系统:未知";
-                        } else {
-                            deviceInfo = "发送自Blackberry浏览器 机型及系统:"
-                                    + fromClient.substring(4);
-                        }
-                        break;
-                    case "103":
-                        if (fromClient.length() <= 4) {
-                            deviceInfo = "发送自Windows Phone客户端 机型及系统:未知";
-                        } else {
-                            deviceInfo = "发送自Windows Phone客户端 机型及系统:"
-                                    + fromClient.substring(4);
-                        }
-                        break;
-                    default:
-                        if (!fromClient.contains(" ")) {
-                            deviceInfo = "发送自未知浏览器 机型及系统:未知";
-                        } else {
-                            if (fromClient.length() == (fromClient.indexOf(' ') + 1)) {
-                                deviceInfo = "发送自未知浏览器 机型及系统:未知";
-                            } else {
-                                deviceInfo = "发送自未知浏览器 机型及系统:"
-                                        + fromClient.substring(fromClient
-                                        .indexOf(' ') + 1);
-                            }
-                        }
-                        break;
-                }
-                ToastUtils.info(deviceInfo);
-            }
-        }
-    };
-
-    private View.OnClickListener mOnReplyClickListener = new View.OnClickListener() {
-
-        private Intent getReplyIntent(ThreadRowInfo row) {
-            Intent intent = new Intent();
-            StringBuilder postPrefix = new StringBuilder();
-            String mention = null;
-
-            final String quote_regex = "\\[quote\\]([\\s\\S])*\\[/quote\\]";
-            final String replay_regex = "\\[b\\]Reply to \\[pid=\\d+,\\d+,\\d+\\]Reply\\[/pid\\] Post by .+?\\[/b\\]";
-            String content = row.getContent();
-            final String name = row.getAuthor();
-            final String uid = String.valueOf(row.getAuthorid());
-            int page = (row.getLou() + 20) / 20;// 以楼数计算page
-            content = content.replaceAll(quote_regex, "");
-            content = content.replaceAll(replay_regex, "");
-            final String postTime = row.getPostdate();
-            final String tidStr = String.valueOf(row.getTid());
-            content = FunctionUtils.checkContent(content);
-            content = StringUtils.unEscapeHtml(content);
-            if (row.getPid() != 0 || row.getLou() == 0) {
-                mention = name;
-                postPrefix.append("[quote][pid=");
-                postPrefix.append(row.getPid());
-                postPrefix.append(',');
-                postPrefix.append(tidStr);
-                postPrefix.append(",");
-                if (page > 0)
-                    postPrefix.append(page);
-                postPrefix.append("]");// Topic
-                postPrefix.append("Reply");
-                if (row.getISANONYMOUS()) {// 是匿名的人
-                    postPrefix.append("[/pid] [b]Post by [uid=");
-                    postPrefix.append("-1");
-                    postPrefix.append("]");
-                    postPrefix.append(name);
-                    postPrefix.append("[/uid][color=gray](");
-                    postPrefix.append(row.getLou());
-                    postPrefix.append("楼)[/color] (");
-                } else {
-                    postPrefix.append("[/pid] [b]Post by [uid=");
-                    postPrefix.append(uid);
-                    postPrefix.append("]");
-                    postPrefix.append(name);
-                    postPrefix.append("[/uid] (");
-                }
-                postPrefix.append(postTime);
-                postPrefix.append("):[/b]\n");
-                postPrefix.append(content);
-                postPrefix.append("[/quote]\n");
-            }
-            if (!StringUtils.isEmpty(mention))
-                intent.putExtra("mention", mention);
-            intent.putExtra("prefix",
-                    StringUtils.removeBrTag(postPrefix.toString()));
-            intent.putExtra("tid", tidStr);
-            intent.putExtra("action", "reply");
-
-            if (UserManagerImpl.getInstance().getActiveUser() != null) {// 登入了才能发
-                intent.setClass(
-                        ContextUtils.getContext(),
-                        PhoneConfiguration.getInstance().postActivityClass);
+class ArticleListAdapter(
+    private val mContext: Context,
+    private val mFragmentManager: FragmentManager
+) : RecyclerView.Adapter<ArticleViewHolder>() {
+    private var mData: ThreadData? = null
+    private val mLayoutInflater: LayoutInflater
+    private val mThemeManager = ThemeManager.getInstance()
+    private val mLocalWebViews: Array<LocalWebView?>? = arrayOfNulls(20)
+    private var mTopicOwner: String? = null
+    private val mOnClientClickListener = View.OnClickListener { v ->
+        val row = v.tag as ThreadRowInfo
+        val fromClient = row.fromClient
+        val clientModel = row.fromClientModel
+        val deviceInfo: String
+        if (!StringUtils.isEmpty(clientModel)) {
+            val clientAppCode: String
+            clientAppCode = if (!fromClient.contains(" ")) {
+                fromClient
             } else {
-                intent.setClass(
-                        ContextUtils.getContext(),
-                        PhoneConfiguration.getInstance().loginActivityClass);
+                fromClient.substring(
+                    0,
+                    fromClient.indexOf(' ')
+                )
             }
-            return intent;
-        }
-
-        @Override
-        public void onClick(View view) {
-
-            ThreadRowInfo row = (ThreadRowInfo) view.getTag();
-
-            Observable.create((ObservableOnSubscribe<Intent>) emitter -> {
-                emitter.onNext(getReplyIntent(row));
-                emitter.onComplete();
-
-            }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new BaseSubscriber<Intent>() {
-                @Override
-                public void onNext(@io.reactivex.annotations.NonNull Intent intent) {
-                    try {
-                        view.setEnabled(true);
-                        ((Activity) view.getContext()).startActivityForResult(intent, ActivityUtils.REQUEST_CODE_TOPIC_POST);
-                    } catch (Exception e) {
-                        e.printStackTrace();
+            deviceInfo = when (clientAppCode) {
+                "1" -> if (fromClient.length <= 2) {
+                    "发送自Life Style苹果客户端 机型及系统:未知"
+                } else {
+                    ("发送自Life Style苹果客户端 机型及系统:"
+                            + fromClient.substring(2))
+                }
+                "7" -> if (fromClient.length <= 2) {
+                    "发送自NGA苹果官方客户端 机型及系统:未知"
+                } else {
+                    ("发送自NGA苹果官方客户端 机型及系统:"
+                            + fromClient.substring(2))
+                }
+                "8" -> if (fromClient.length <= 2) {
+                    "发送自NGA安卓客户端 机型及系统:未知"
+                } else {
+                    val fromData = fromClient.substring(2)
+                    if (fromData.startsWith("[")
+                        && fromData.contains("](Android")
+                    ) {
+                        ("发送自NGA安卓开源版客户端 机型及系统:"
+                                + fromData.substring(1).replace(
+                            "](Android", "(Android"
+                        ))
+                    } else {
+                        "发送自NGA安卓官方客户端 机型及系统:$fromData"
                     }
-                    super.onNext(intent);
                 }
-            });
-        }
-    };
-
-    private View.OnClickListener mOnProfileClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            ThreadRowInfo row = (ThreadRowInfo) view.getTag();
-
-            if (row.getISANONYMOUS()) {
-                ToastUtils.info("这白痴匿名了,神马都看不到");
-            } else if (row.getAuthor() != null){
-                ARouter.getInstance()
-                        .build(ARouterConstants.ACTIVITY_PROFILE)
-                        .withString("uid", ""+row.getAuthorid())
-                        .navigation();
+                "9" -> if (fromClient.length <= 2) {
+                    "发送自NGA Windows Phone官方客户端 机型及系统:未知"
+                } else {
+                    ("发送自NGA Windows Phone官方客户端 机型及系统:"
+                            + fromClient.substring(2))
+                }
+                "100" -> if (fromClient.length <= 4) {
+                    "发送自安卓浏览器 机型及系统:未知"
+                } else {
+                    ("发送自安卓浏览器 机型及系统:"
+                            + fromClient.substring(4))
+                }
+                "101" -> if (fromClient.length <= 4) {
+                    "发送自苹果浏览器 机型及系统:未知"
+                } else {
+                    ("发送自苹果浏览器 机型及系统:"
+                            + fromClient.substring(4))
+                }
+                "102" -> if (fromClient.length <= 4) {
+                    "发送自Blackberry浏览器 机型及系统:未知"
+                } else {
+                    ("发送自Blackberry浏览器 机型及系统:"
+                            + fromClient.substring(4))
+                }
+                "103" -> if (fromClient.length <= 4) {
+                    "发送自Windows Phone客户端 机型及系统:未知"
+                } else {
+                    ("发送自Windows Phone客户端 机型及系统:"
+                            + fromClient.substring(4))
+                }
+                else -> if (!fromClient.contains(" ")) {
+                    "发送自未知浏览器 机型及系统:未知"
+                } else {
+                    if (fromClient.length == fromClient.indexOf(' ') + 1) {
+                        "发送自未知浏览器 机型及系统:未知"
+                    } else {
+                        ("发送自未知浏览器 机型及系统:"
+                                + fromClient.substring(
+                            fromClient
+                                .indexOf(' ') + 1
+                        ))
+                    }
+                }
             }
+            ToastUtils.info(deviceInfo)
         }
-    };
-
-    private View.OnClickListener mOnAvatarClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            ThreadRowInfo row = (ThreadRowInfo) view.getTag();
-            if (row.getISANONYMOUS()) {
-                ToastUtils.info("这白痴匿名了,神马都看不到");
+    }
+    private val mOnReplyClickListener: View.OnClickListener = object : View.OnClickListener {
+        private fun getReplyIntent(row: ThreadRowInfo): Intent {
+            val intent = Intent()
+            val postPrefix = StringBuilder()
+            var mention: String? = null
+            val quote_regex = "\\[quote\\]([\\s\\S])*\\[/quote\\]"
+            val replay_regex =
+                "\\[b\\]Reply to \\[pid=\\d+,\\d+,\\d+\\]Reply\\[/pid\\] Post by .+?\\[/b\\]"
+            var content = row.content
+            val name = row.author
+            val uid = row.authorid.toString()
+            val page = (row.lou + 20) / 20 // 以楼数计算page
+            content = content.replace(quote_regex.toRegex(), "")
+            content = content.replace(replay_regex.toRegex(), "")
+            val postTime = row.postdate
+            val tidStr = row.tid.toString()
+            content = FunctionUtils.checkContent(content)
+            content = StringUtils.unEscapeHtml(content)
+            if (row.pid != 0 || row.lou == 0) {
+                mention = name
+                postPrefix.append("[quote][pid=")
+                postPrefix.append(row.pid)
+                postPrefix.append(',')
+                postPrefix.append(tidStr)
+                postPrefix.append(",")
+                if (page > 0) postPrefix.append(page)
+                postPrefix.append("]") // Topic
+                postPrefix.append("Reply")
+                if (row.isanonymous) { // 是匿名的人
+                    postPrefix.append("[/pid] [b]Post by [uid=")
+                    postPrefix.append("-1")
+                    postPrefix.append("]")
+                    postPrefix.append(name)
+                    postPrefix.append("[/uid][color=gray](")
+                    postPrefix.append(row.lou)
+                    postPrefix.append("楼)[/color] (")
+                } else {
+                    postPrefix.append("[/pid] [b]Post by [uid=")
+                    postPrefix.append(uid)
+                    postPrefix.append("]")
+                    postPrefix.append(name)
+                    postPrefix.append("[/uid] (")
+                }
+                postPrefix.append(postTime)
+                postPrefix.append("):[/b]\n")
+                postPrefix.append(content)
+                postPrefix.append("[/quote]\n")
+            }
+            if (!StringUtils.isEmpty(mention)) intent.putExtra("mention", mention)
+            intent.putExtra(
+                "prefix",
+                StringUtils.removeBrTag(postPrefix.toString())
+            )
+            intent.putExtra("tid", tidStr)
+            intent.putExtra("action", "reply")
+            if (UserManagerImpl.getInstance().activeUser != null) { // 登入了才能发
+                intent.setClass(
+                    ContextUtils.getContext(),
+                    PhoneConfiguration.getInstance().postActivityClass
+                )
             } else {
-                Bundle bundle = new Bundle();
-                bundle.putString("name", row.getAuthor());
-                bundle.putString("url", FunctionUtils.parseAvatarUrl(row.getJs_escap_avatar()));
-                BaseDialogFragment.show(mFragmentManager, bundle, AvatarDialogFragment.class);
-                //FunctionUtils.Create_Avatar_Dialog(row, view.getContext(), null);
+                intent.setClass(
+                    ContextUtils.getContext(),
+                    PhoneConfiguration.getInstance().loginActivityClass
+                )
             }
+            return intent
         }
-    };
 
-    private View.OnClickListener mMenuTogglerListener;
-    private View.OnClickListener mSupportListener;
-    private View.OnClickListener mOpposeListener;
-
-    public static class ArticleViewHolder extends RecyclerView.ViewHolder {
-
-        @BindView(R.id.tv_nickName)
-        TextView nickNameTV;
-
-        LocalWebView contentTV;
-
-        @BindView(R.id.wv_container)
-        FrameLayout contentContainer;
-
-        @BindView(R.id.tv_floor)
-        TextView floorTv;
-
-        @BindView(R.id.tv_post_time)
-        TextView postTimeTv;
-
-        @BindView(R.id.iv_reply)
-        ImageView replyBtn;
-
-        @BindView(R.id.iv_favour)
-        ImageView favourBtn;
-
-        @BindView(R.id.iv_tread)
-        ImageView treadBtn;
-
-        @BindView(R.id.iv_avatar)
-        ImageView avatarIv;
-
-        @BindView(R.id.iv_client)
-        ImageView clientIv;
-
-        @BindView(R.id.tv_score)
-        TextView scoreTv;
-
-        @BindView(R.id.iv_more)
-        ImageView menuIv;
-
-        @BindView(R.id.fl_avatar)
-        FrameLayout avatarPanel;
-
-        @BindView(R.id.tv_detail)
-        TextView detailTv;
-
-//        @BindView(R.id.tv_content)
-//        TextView contentTextView;
-
-        public ArticleViewHolder(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
+        override fun onClick(view: View) {
+            val row = view.tag as ThreadRowInfo
+            Observable.create(ObservableOnSubscribe { emitter: ObservableEmitter<Intent?> ->
+                emitter.onNext(getReplyIntent(row))
+                emitter.onComplete()
+            }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(object : BaseSubscriber<Intent?>() {
+                    override fun onNext(intent: Intent) {
+                        try {
+                            view.isEnabled = true
+                            (view.context as Activity).startActivityForResult(
+                                intent,
+                                ActivityUtils.REQUEST_CODE_TOPIC_POST
+                            )
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                        }
+                        super.onNext(intent)
+                    }
+                })
         }
     }
-
-    public ArticleListAdapter(Context context, FragmentManager fm) {
-        mContext = context;
-        mFragmentManager = fm;
-        if (HtmlUtils.hide == null) {
-            HtmlUtils.initStaticStrings(mContext);
+    private val mOnProfileClickListener = View.OnClickListener { view ->
+        val row = view.tag as ThreadRowInfo
+        if (row.isanonymous) {
+            ToastUtils.info("这白痴匿名了,神马都看不到")
+        } else if (row.author != null) {
+            ARouter.getInstance()
+                .build(ARouterConstants.ACTIVITY_PROFILE)
+                .withString("uid", "" + row.authorid)
+                .navigation()
         }
-        mLayoutInflater = LayoutInflater.from(mContext);
+    }
+    private val mOnAvatarClickListener = View.OnClickListener { view ->
+        val row = view.tag as ThreadRowInfo
+        if (row.isanonymous) {
+            ToastUtils.info("这白痴匿名了,神马都看不到")
+        } else {
+            val bundle = Bundle()
+            bundle.putString("name", row.author)
+            bundle.putString("url", FunctionUtils.parseAvatarUrl(row.js_escap_avatar))
+            BaseDialogFragment.show(mFragmentManager, bundle, AvatarDialogFragment::class.java)
+            //FunctionUtils.Create_Avatar_Dialog(row, view.getContext(), null);
+        }
+    }
+    private var mMenuTogglerListener: View.OnClickListener? = null
+    private var mSupportListener: View.OnClickListener? = null
+    private var mOpposeListener: View.OnClickListener? = null
+
+    class ArticleViewHolder
+        (itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val nickNameTV: TextView? = itemView.findViewById(R.id.tv_nickName)
+        var contentTV: LocalWebView? = null
+
+        val contentContainer: FrameLayout? = itemView.findViewById(R.id.wv_container)
+
+        val floorTv: TextView? = itemView.findViewById(R.id.tv_floor)
+
+        val postTimeTv: TextView? = itemView.findViewById(R.id.tv_post_time)
+
+        val replyBtn: ImageView? = itemView.findViewById(R.id.iv_reply)
+
+        val favourBtn: ImageView? = itemView.findViewById(R.id.iv_favour)
+
+        val treadBtn: ImageView? = itemView.findViewById(R.id.iv_tread)
+
+        val avatarIv: ImageView? = itemView.findViewById(R.id.iv_avatar)
+
+        val clientIv: ImageView? = itemView.findViewById(R.id.iv_client)
+
+        val scoreTv: TextView? = itemView.findViewById(R.id.tv_score)
+
+        val menuIv: ImageView? = itemView.findViewById(R.id.iv_more)
+
+        val avatarPanel: FrameLayout? = itemView.findViewById(R.id.fl_avatar)
+
+        val detailTv: TextView? = itemView.findViewById(R.id.tv_detail)
     }
 
-    public void setTopicOwner(String topicOwner) {
-        mTopicOwner = topicOwner;
+    fun setTopicOwner(topicOwner: String?) {
+        mTopicOwner = topicOwner
     }
 
-    public void setData(ThreadData data) {
-        mData = data;
+    fun setData(data: ThreadData?) {
+        mData = data
     }
 
-    public void setMenuTogglerListener(View.OnClickListener menuTogglerListener) {
-        mMenuTogglerListener = menuTogglerListener;
-    }
-    public void setSupportListener(View.OnClickListener listener) {
-        mSupportListener = listener;
-    }
-    public void setOpposeListener(View.OnClickListener listener) {
-        mOpposeListener = listener;
+    fun setMenuTogglerListener(menuTogglerListener: View.OnClickListener?) {
+        mMenuTogglerListener = menuTogglerListener
     }
 
-    @Override
-    public int getItemViewType(int position) {
-        ThreadRowInfo row = mData.getRowList().get(position);
-        return TextUtils.isEmpty(row.getFormattedHtmlData()) ? VIEW_TYPE_NATIVE_VIEW : VIEW_TYPE_WEB_VIEW;
+    fun setSupportListener(listener: View.OnClickListener?) {
+        mSupportListener = listener
     }
 
-    @Override
-    public ArticleViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = mLayoutInflater.inflate(R.layout.fragment_article_list_item, parent, false);
-        ArticleViewHolder viewHolder = new ArticleViewHolder(view);
-        ViewGroup.LayoutParams lp = viewHolder.avatarIv.getLayoutParams();
-        lp.width = lp.height = PhoneConfiguration.getInstance().getAvatarSize();
-//        if (viewType == VIEW_TYPE_WEB_VIEW) {
+    fun setOpposeListener(listener: View.OnClickListener?) {
+        mOpposeListener = listener
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        val row = mData!!.rowList[position]
+        return if (TextUtils.isEmpty(row.formattedHtmlData)) VIEW_TYPE_NATIVE_VIEW else VIEW_TYPE_WEB_VIEW
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArticleViewHolder {
+        val view = mLayoutInflater.inflate(R.layout.fragment_article_list_item, parent, false)
+        val viewHolder = ArticleViewHolder(view)
+        val lp = viewHolder.avatarIv!!.layoutParams
+        lp.height = PhoneConfiguration.getInstance().avatarSize
+        lp.width = lp.height
+        //        if (viewType == VIEW_TYPE_WEB_VIEW) {
 //            viewHolder.contentTextView.setVisibility(View.GONE);
 //            // viewHolder.contentTV.setVisibility(View.VISIBLE);
 //        } else {
 //            viewHolder.contentTextView.setVisibility(View.VISIBLE);
 //            //  viewHolder.contentTV.setVisibility(View.GONE);
 //        }
-        RxUtils.clicks(viewHolder.nickNameTV, mOnProfileClickListener);
-        RxUtils.clicks(viewHolder.replyBtn, mOnReplyClickListener);
-        RxUtils.clicks(viewHolder.clientIv, mOnClientClickListener);
-        RxUtils.clicks(viewHolder.menuIv, mMenuTogglerListener);
-        RxUtils.clicks(viewHolder.avatarPanel, mOnAvatarClickListener);
-        RxUtils.clicks(viewHolder.favourBtn,mSupportListener);
-        RxUtils.clicks(viewHolder.treadBtn,mOpposeListener);
+        RxUtils.clicks(viewHolder.nickNameTV, mOnProfileClickListener)
+        RxUtils.clicks(viewHolder.replyBtn, mOnReplyClickListener)
+        RxUtils.clicks(viewHolder.clientIv, mOnClientClickListener)
+        RxUtils.clicks(viewHolder.menuIv, mMenuTogglerListener)
+        RxUtils.clicks(viewHolder.avatarPanel, mOnAvatarClickListener)
+        RxUtils.clicks(viewHolder.favourBtn, mSupportListener)
+        RxUtils.clicks(viewHolder.treadBtn, mOpposeListener)
         //viewHolder.contentTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, PhoneConfiguration.getInstance().getTopicContentSize());
         // viewHolder.contentTV.setTextSize(PhoneConfiguration.getInstance().getTopicContentSize());
-        return viewHolder;
+        return viewHolder
     }
 
-    @Override
-    public void onBindViewHolder(@NonNull final ArticleViewHolder holder, final int position) {
-
-        final ThreadRowInfo row = mData.getRowList().get(position);
-
-        if (row == null) {
-            return;
-        }
-        int  color = holder.itemView.getContext().getColor(ThemeManager.getInstance().getBackgroundColor(
-                PhoneConfiguration.getInstance().useSolidColorBackground()?1:position));
-        ((CardView)holder.itemView).setCardBackgroundColor(color);
-
-        holder.replyBtn.setTag(row);
-        holder.nickNameTV.setTag(row);
-        holder.menuIv.setTag(row);
-        holder.avatarPanel.setTag(row);
-        holder.favourBtn.setTag(row);
-        holder.treadBtn.setTag(row);
-
-        onBindAvatarView(holder.avatarIv, row);
-        onBindDeviceType(holder.clientIv, row);
-        onBindContentView(holder, row, position);
-
-        int fgColor = mThemeManager.getAccentColor(mContext);
-        FunctionUtils.handleNickName(row, fgColor, holder.nickNameTV, mTopicOwner, mContext);
-
-        holder.floorTv.setText(MessageFormat.format("#{0}", String.valueOf(row.getLou())));
-        holder.postTimeTv.setText(row.getPostdate());
-        holder.scoreTv.setText(MessageFormat.format("{0}", row.getScore()));
+    override fun onBindViewHolder(holder: ArticleViewHolder, position: Int) {
+        val row = mData!!.rowList[position] ?: return
+        val color = holder.itemView.context.getColor(
+            ThemeManager.getInstance().getBackgroundColor(
+                if (PhoneConfiguration.getInstance().useSolidColorBackground()) 1 else position
+            )
+        )
+        (holder.itemView as CardView).setCardBackgroundColor(color)
+        holder.replyBtn!!.tag = row
+        holder.nickNameTV!!.tag = row
+        holder.menuIv!!.tag = row
+        holder.avatarPanel!!.tag = row
+        holder.favourBtn!!.tag = row
+        holder.treadBtn!!.tag = row
+        onBindAvatarView(holder.avatarIv, row)
+        onBindDeviceType(holder.clientIv, row)
+        onBindContentView(holder, row, position)
+        val fgColor = mThemeManager.getAccentColor(mContext)
+        FunctionUtils.handleNickName(row, fgColor, holder.nickNameTV, mTopicOwner, mContext)
+        holder.floorTv!!.text = MessageFormat.format("#{0}", row.lou.toString())
+        holder.postTimeTv!!.text = row.postdate
+        holder.scoreTv!!.text = MessageFormat.format("{0}", row.score)
         //todo 赞多加粗
-        holder.detailTv.setText(String.format("级别:%s   威望:%s   发帖:%s", row.getMemberGroup(), row.getReputation(), row.getPostCount()));
-
+        holder.detailTv!!.text = String.format(
+            "级别:%s   威望:%s   发帖:%s",
+            row.memberGroup,
+            row.reputation,
+            row.postCount
+        )
     }
 
-    private LocalWebView createLocalWebView() {
-        LocalWebView localWebView = new LocalWebView(mContext);
-        FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        lp.setMarginStart(mContext.getResources().getDimensionPixelSize(R.dimen.material_standard_half));
-        lp.setMarginEnd(mContext.getResources().getDimensionPixelSize(R.dimen.material_standard_half));
-        localWebView.setLayoutParams(lp);
-        localWebView.setVerticalScrollBarEnabled(false);
-        localWebView.setHorizontalScrollBarEnabled(false);
-        return localWebView;
+    private fun createLocalWebView(): LocalWebView {
+        val localWebView = LocalWebView(mContext)
+        val lp = FrameLayout.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+        lp.marginStart = mContext.resources.getDimensionPixelSize(R.dimen.material_standard_half)
+        lp.marginEnd = mContext.resources.getDimensionPixelSize(R.dimen.material_standard_half)
+        localWebView.layoutParams = lp
+        localWebView.isVerticalScrollBarEnabled = false
+        localWebView.isHorizontalScrollBarEnabled = false
+        return localWebView
     }
 
-    private void onBindContentView(ArticleViewHolder holder, ThreadRowInfo row, int position) {
-        String html = row.getFormattedHtmlData();
+    private fun onBindContentView(holder: ArticleViewHolder, row: ThreadRowInfo, position: Int) {
+        val html = row.formattedHtmlData
         if (html != null) {
             if (mLocalWebViews != null) {
-                LocalWebView localWebView = mLocalWebViews[position];
+                var localWebView = mLocalWebViews[position]
                 if (localWebView == null) {
-                    localWebView = createLocalWebView();
-                    mLocalWebViews[position] = localWebView;
+                    localWebView = createLocalWebView()
+                    mLocalWebViews[position] = localWebView
                 }
-                if (localWebView != holder.contentTV) {
-                    holder.contentContainer.removeView(holder.contentTV);
-                    if (localWebView.getParent() != null) {
-                        ((ViewGroup) localWebView.getParent()).removeView(localWebView);
+                if (localWebView !== holder.contentTV) {
+                    holder.contentContainer!!.removeView(holder.contentTV)
+                    if (localWebView.parent != null) {
+                        (localWebView.parent as ViewGroup).removeView(localWebView)
                     }
-                    holder.contentTV = localWebView;
-                    holder.contentContainer.addView(localWebView);
+                    holder.contentTV = localWebView
+                    holder.contentContainer!!.addView(localWebView)
                 }
             } else if (holder.contentTV == null) {
-                holder.contentTV = createLocalWebView();
-                holder.contentContainer.addView(holder.contentTV);
+                holder.contentTV = createLocalWebView()
+                holder.contentContainer!!.addView(holder.contentTV)
             }
-            holder.contentTV.getWebViewClientEx().setImgUrls(row.getImageUrls());
-            holder.contentTV.loadDataWithBaseURL(null, html, "text/html", "utf-8", null);
+            holder.contentTV!!.webViewClientEx.setImgUrls(row.imageUrls)
+            holder.contentTV!!.loadDataWithBaseURL(null, html, "text/html", "utf-8", null)
         } else {
             //holder.contentTextView.setText(row.getContent());
         }
     }
 
-    private void onBindDeviceType(ImageView clientBtn, ThreadRowInfo row) {
-        String deviceType = row.getFromClientModel();
-
+    private fun onBindDeviceType(clientBtn: ImageView?, row: ThreadRowInfo) {
+        val deviceType = row.fromClientModel
         if (TextUtils.isEmpty(deviceType)) {
-            clientBtn.setVisibility(View.GONE);
+            clientBtn!!.visibility = View.GONE
         } else {
-            switch (deviceType) {
-                case DEVICE_TYPE_IOS:
-                    clientBtn.setImageResource(R.drawable.ic_apple_12dp);
-                    break;
-                case DEVICE_TYPE_WP:
-                    clientBtn.setImageResource(R.drawable.ic_windows_12dp);
-                    break;
-                case DEVICE_TYPE_ANDROID:
-                    clientBtn.setImageResource(R.drawable.ic_android_12dp);
-                    break;
-                default:
-                    clientBtn.setImageResource(R.drawable.ic_smartphone_12dp);
-                    break;
+            when (deviceType) {
+                DEVICE_TYPE_IOS -> clientBtn!!.setImageResource(R.drawable.ic_apple_12dp)
+                DEVICE_TYPE_WP -> clientBtn!!.setImageResource(R.drawable.ic_windows_12dp)
+                DEVICE_TYPE_ANDROID -> clientBtn!!.setImageResource(R.drawable.ic_android_12dp)
+                else -> clientBtn!!.setImageResource(R.drawable.ic_smartphone_12dp)
             }
-            clientBtn.setTag(row);
-            clientBtn.setVisibility(View.VISIBLE);
+            clientBtn.tag = row
+            clientBtn.visibility = View.VISIBLE
         }
     }
 
-    @Override
-    public long getItemId(int position) {
-        return position;
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
     }
 
-    @Override
-    public int getItemCount() {
-        return mData == null ? 0 : mData.getRowNum();
+    override fun getItemCount(): Int {
+        return if (mData == null) 0 else mData!!.rowNum
     }
 
-    private void onBindAvatarView(ImageView avatarIv, ThreadRowInfo row) {
-        final String avatarUrl = FunctionUtils.parseAvatarUrl(row.getJs_escap_avatar());
-        final boolean downImg = DeviceUtils.isWifiConnected(mContext)
+    private fun onBindAvatarView(avatarIv: ImageView?, row: ThreadRowInfo) {
+        val avatarUrl = FunctionUtils.parseAvatarUrl(row.js_escap_avatar)
+        val downImg = (DeviceUtils.isWifiConnected(mContext)
                 || PhoneConfiguration.getInstance()
-                .isDownAvatarNoWifi();
-
-        ImageUtils.loadRoundCornerAvatar(avatarIv, avatarUrl, !downImg);
+            .isDownAvatarNoWifi)
+        ImageUtils.loadRoundCornerAvatar(avatarIv, avatarUrl, !downImg)
     }
 
+    companion object {
+        private const val DEVICE_TYPE_IOS = "ios"
+        private const val DEVICE_TYPE_ANDROID = "android"
+        private const val DEVICE_TYPE_WP = "wp"
+        private const val VIEW_TYPE_WEB_VIEW = 0
+        private const val VIEW_TYPE_NATIVE_VIEW = 1
+    }
+
+    init {
+        if (HtmlUtils.hide == null) {
+            HtmlUtils.initStaticStrings(mContext)
+        }
+        mLayoutInflater = LayoutInflater.from(mContext)
+    }
 }

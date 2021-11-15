@@ -15,8 +15,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import gov.anzong.androidnga.R;
 import gov.anzong.androidnga.GlideApp;
 import sp.phone.common.User;
@@ -36,18 +34,18 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.UserVi
 
     public static class UserViewHolder extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.user_name)
         TextView userNameView;
 
-        @BindView(R.id.avatar)
         ImageView avatarView;
 
-        @BindView(R.id.check)
         Switch checkView;
 
         public UserViewHolder(View itemView) {
             super(itemView);
-            ButterKnife.bind(this, itemView);
+            userNameView = itemView.findViewById(R.id.user_name);
+            avatarView = itemView.findViewById(R.id.avatar);
+            checkView = itemView.findViewById(R.id.check);
+
         }
     }
 

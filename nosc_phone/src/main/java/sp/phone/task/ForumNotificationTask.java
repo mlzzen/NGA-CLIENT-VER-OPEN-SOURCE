@@ -15,8 +15,8 @@ import gov.anzong.androidnga.http.OnHttpCallBack;
 import sp.phone.mvp.model.convert.ForumNotificationFactory;
 import sp.phone.mvp.model.entity.NotificationInfo;
 import sp.phone.mvp.model.entity.RecentReplyInfo;
-import sp.phone.http.retrofit.RetrofitHelper;
-import sp.phone.http.retrofit.RetrofitService;
+import nosc.api.retrofit.RetrofitHelper;
+import nosc.api.retrofit.RetrofitService;
 import sp.phone.rxjava.BaseSubscriber;
 import sp.phone.util.NLog;
 

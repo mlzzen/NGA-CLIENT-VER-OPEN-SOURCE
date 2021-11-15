@@ -11,8 +11,6 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import gov.anzong.androidnga.R;
 import sp.phone.util.ImageUtils;
 import sp.phone.common.User;
@@ -30,15 +28,14 @@ public class BlackListAdapter extends RecyclerView.Adapter<BlackListAdapter.User
 
     public static class UserViewHolder extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.user_name)
         TextView userNameView;
 
-        @BindView(R.id.avatar)
         ImageView avatarView;
 
         public UserViewHolder(View itemView) {
             super(itemView);
-            ButterKnife.bind(this, itemView);
+            userNameView = itemView.findViewById(R.id.user_name);
+            avatarView = itemView.findViewById(R.id.avatar);
         }
     }
 

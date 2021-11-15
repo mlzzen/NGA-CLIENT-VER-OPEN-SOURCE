@@ -11,8 +11,6 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import gov.anzong.androidnga.R;
 import gov.anzong.androidnga.base.util.ContextUtils;
 import gov.anzong.androidnga.GlideApp;
@@ -64,15 +62,14 @@ public class ForumListAdapter extends RecyclerView.Adapter<ForumListAdapter.View
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.icon_board_img)
         public ImageView icon;
-        @BindView(R.id.text_board_name)
         public TextView name;
         public String fid;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            ButterKnife.bind(this, itemView);
+            icon = itemView.findViewById(R.id.icon_board_img);
+            name = itemView.findViewById(R.id.text_board_name);
             name.setTextColor(mColor);
         }
     }

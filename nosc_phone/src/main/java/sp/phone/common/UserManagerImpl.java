@@ -13,8 +13,8 @@ import java.util.Collections;
 import java.util.List;
 
 import gov.anzong.androidnga.common.PreferenceKey;
-import sp.phone.http.bean.ThreadData;
-import sp.phone.http.bean.ThreadRowInfo;
+import nosc.api.bean.ThreadData;
+import nosc.api.bean.ThreadRowInfo;
 
 
 public class UserManagerImpl implements UserManager {

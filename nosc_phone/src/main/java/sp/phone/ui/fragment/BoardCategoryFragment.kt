@@ -27,7 +27,7 @@ class BoardCategoryFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (arguments != null) {
-            mBoardCategory = arguments!!.getParcelable("category")
+            mBoardCategory = requireArguments().getParcelable("category")
         }
     }
 
@@ -41,7 +41,7 @@ class BoardCategoryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         mListView = view.findViewById(R.id.list)
-        mAdapter = BoardCategoryAdapter(activity, mBoardCategory)
+        mAdapter = BoardCategoryAdapter(requireActivity(), mBoardCategory!!)
         mListView?.adapter = mAdapter
         setLayoutManager()
         if (mBoardCategory!!.isBookmarkCategory) {
@@ -54,7 +54,7 @@ class BoardCategoryFragment : Fragment() {
                     viewHolder: RecyclerView.ViewHolder,
                     target: RecyclerView.ViewHolder
                 ): Boolean {
-                    BoardModel.getInstance()
+                    BoardModel
                         .swapBookmark(viewHolder.adapterPosition, target.adapterPosition)
                     mListView?.adapter!!
                         .notifyItemMoved(viewHolder.adapterPosition, target.adapterPosition)
@@ -63,7 +63,7 @@ class BoardCategoryFragment : Fragment() {
 
                 override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                     val board = mBoardCategory!!.getBoard(viewHolder.adapterPosition)
-                    BoardModel.getInstance().removeBookmark(board.fid, board.stid)
+                    BoardModel.removeBookmark(board.fid, board.stid)
                     mListView?.adapter!!.notifyItemRemoved(viewHolder.adapterPosition)
                 }
             })
@@ -73,7 +73,7 @@ class BoardCategoryFragment : Fragment() {
     }
 
     fun setLayoutManager(){
-        val layoutManager:GridLayoutManager = getDefaultLayoutManager(context!!) as GridLayoutManager
+        val layoutManager:GridLayoutManager = getDefaultLayoutManager(requireContext()) as GridLayoutManager
         layoutManager.spanSizeLookup = object : SpanSizeLookup() {
             override fun getSpanSize(position: Int): Int {
                 return if (mAdapter!!.getItemViewType(position) == BoardCategoryAdapter.TITLE_ITEM) layoutManager.spanCount else 1

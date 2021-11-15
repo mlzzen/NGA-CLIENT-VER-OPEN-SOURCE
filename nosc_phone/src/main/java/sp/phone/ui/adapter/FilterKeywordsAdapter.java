@@ -11,8 +11,6 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import gov.anzong.androidnga.R;
 import sp.phone.common.FilterKeyword;
 import sp.phone.view.RecyclerViewEx;
@@ -61,15 +59,14 @@ public class FilterKeywordsAdapter extends RecyclerViewEx.Adapter<FilterKeywords
 
   public static class FilterKeywordsViewHodler extends RecyclerView.ViewHolder {
 
-    @BindView(R.id.filter_keyword)
     TextView filterKeywordView;
 
-    @BindView(R.id.check)
     Switch checkView;
 
     public FilterKeywordsViewHodler(@NonNull View itemView) {
       super(itemView);
-      ButterKnife.bind(this, itemView);
+      filterKeywordView = itemView.findViewById(R.id.filter_keyword);
+      checkView = itemView.findViewById(R.id.check);
     }
   }
 }

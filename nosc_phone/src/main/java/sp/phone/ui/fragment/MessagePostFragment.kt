@@ -1,105 +1,89 @@
-package sp.phone.ui.fragment;
+package sp.phone.ui.fragment
 
-import android.os.Bundle;
-import androidx.annotation.Nullable;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.EditText;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import gov.anzong.androidnga.R;
-import sp.phone.mvp.contract.MessagePostContract;
-import sp.phone.mvp.presenter.MessagePostPresenter;
-import sp.phone.util.StringUtils;
+import sp.phone.ui.fragment.BaseMvpFragment
+import sp.phone.mvp.presenter.MessagePostPresenter
+import sp.phone.mvp.contract.MessagePostContract
+import gov.anzong.androidnga.R
+import android.widget.EditText
+import android.os.Bundle
+import android.view.*
+import gov.anzong.androidnga.databinding.FragmentMessagePostBinding
+import sp.phone.util.StringUtils
 
 /**
  * Created by Justwen on 2017/5/28.
  */
+class MessagePostFragment : BaseMvpFragment<MessagePostPresenter?>(), MessagePostContract.View {
+    var binding:FragmentMessagePostBinding? = null
 
-public class MessagePostFragment extends BaseMvpFragment<MessagePostPresenter> implements MessagePostContract.View {
+    val mTitleEditor: EditText? get() = binding?.etTitle
 
-    @BindView(R.id.et_title)
-    public EditText mTitleEditor;
+    val mRecipientEditor: EditText? get() = binding?.etRecipient
 
-    @BindView(R.id.et_recipient)
-    public EditText mRecipientEditor;
+    val mBodyEditor: EditText? get() = binding?.etBody
 
-    @BindView(R.id.et_body)
-    public EditText mBodyEditor;
+    val mRecipientPanel: ViewGroup? get() = binding?.panelRecipient
 
-    @BindView(R.id.panel_recipient)
-    public ViewGroup mRecipientPanel;
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mPresenter.setPostParam(getArguments().getParcelable("param"));
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        mPresenter!!.setPostParam(requireArguments().getParcelable("param"))
     }
 
-    @Override
-    protected MessagePostPresenter onCreatePresenter() {
-        return new MessagePostPresenter();
+    override fun onCreatePresenter(): MessagePostPresenter {
+        return MessagePostPresenter()
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_message_post, container, false);
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        return FragmentMessagePostBinding.inflate(inflater, container, false).also{
+            binding = it
+        }.root
     }
 
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        ButterKnife.bind(this, view);
-        mBodyEditor.requestFocus();
-        super.onViewCreated(view, savedInstanceState);
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        //ButterKnife.bind(this, view);
+        mBodyEditor!!.requestFocus()
+        super.onViewCreated(view, savedInstanceState)
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.message_post_menu, menu);
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.message_post_menu, menu)
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.send:
-                String title = mTitleEditor.getText().toString();
-                String recipient = mRecipientEditor.getText().toString();
-                String body = mBodyEditor.getText().toString();
-                if (StringUtils.isEmpty(recipient) && mRecipientPanel.isShown()) {
-                    mRecipientEditor.setError("请输入收件人");
-                    mRecipientEditor.requestFocus();
-                } else if (StringUtils.isEmpty(body) && body.length() < 6) {
-                    mBodyEditor.setError("请输入内容或者内容字数少于6");
-                    mBodyEditor.requestFocus();
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.send -> {
+                val title = mTitleEditor!!.text.toString()
+                val recipient = mRecipientEditor!!.text.toString()
+                val body = mBodyEditor!!.text.toString()
+                if (StringUtils.isEmpty(recipient) && mRecipientPanel!!.isShown) {
+                    mRecipientEditor!!.error = "请输入收件人"
+                    mRecipientEditor!!.requestFocus()
+                } else if (StringUtils.isEmpty(body) && body.length < 6) {
+                    mBodyEditor!!.error = "请输入内容或者内容字数少于6"
+                    mBodyEditor!!.requestFocus()
                 } else {
-                    mPresenter.commit(title, recipient, body);
+                    mPresenter!!.commit(title, recipient, body)
                 }
-                break;
+            }
         }
-        return true;
+        return true
     }
 
-    @Override
-    public void setRecipient(String recipient) {
-        mRecipientEditor.setText(recipient);
-        if (recipient != null) {
-            mRecipientEditor.setSelection(recipient.length());
-        }
+    override fun setRecipient(recipient: String) {
+        mRecipientEditor!!.setText(recipient)
+        mRecipientEditor!!.setSelection(recipient.length)
     }
 
-    @Override
-    public void finish(int resultCode) {
-        getActivity().setResult(resultCode);
-        getActivity().finish();
+    override fun finish(resultCode: Int) {
+        requireActivity().setResult(resultCode)
+        requireActivity().finish()
     }
 
-    @Override
-    public void hideRecipientEditor() {
-        mRecipientPanel.setVisibility(View.GONE);
+    override fun hideRecipientEditor() {
+        mRecipientPanel!!.visibility = View.GONE
     }
 }

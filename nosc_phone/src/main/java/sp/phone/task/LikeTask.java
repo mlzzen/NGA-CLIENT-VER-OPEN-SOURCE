@@ -10,9 +10,9 @@ import gov.anzong.androidnga.R;
 import gov.anzong.androidnga.base.util.ContextUtils;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import sp.phone.http.OnSimpleHttpCallBack;
-import sp.phone.http.retrofit.RetrofitHelper;
-import sp.phone.http.retrofit.RetrofitService;
+import nosc.api.callbacks.OnSimpleHttpCallBack;
+import nosc.api.retrofit.RetrofitHelper;
+import nosc.api.retrofit.RetrofitService;
 import sp.phone.rxjava.BaseSubscriber;
 
 /**

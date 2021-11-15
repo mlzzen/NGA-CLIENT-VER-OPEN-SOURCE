@@ -12,19 +12,16 @@ import android.view.ViewGroup;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import gov.anzong.androidnga.R;
 import gov.anzong.androidnga.arouter.ARouterConstants;
 import sp.phone.ui.adapter.MessageContentAdapter;
-import sp.phone.http.bean.MessageDetailInfo;
+import nosc.api.bean.MessageDetailInfo;
 import sp.phone.mvp.contract.MessageDetailContract;
 import sp.phone.mvp.presenter.MessageDetailPresenter;
 import sp.phone.view.RecyclerViewEx;
 
 public class MessageDetailFragment extends BaseMvpFragment<MessageDetailPresenter> implements MessageDetailContract.IMessageView {
 
-    @BindView(R.id.swipe_refresh)
     SwipeRefreshLayout mSwipeRefreshLayout;
 
     private int mMid;
@@ -59,7 +56,7 @@ public class MessageDetailFragment extends BaseMvpFragment<MessageDetailPresente
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_message_detail, container, false);
-        ButterKnife.bind(this, view);
+        mSwipeRefreshLayout = view.findViewById(R.id.swipe_refresh);
 
         mAdapter = new MessageContentAdapter(getContext());
 

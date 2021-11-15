@@ -2,28 +2,20 @@ package sp.phone.util;
 
 import android.annotation.SuppressLint;
 import android.content.res.AssetManager;
-import androidx.annotation.Nullable;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.DateFormat;
-import java.text.ParseException;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 import java.util.Random;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import gov.anzong.androidnga.R;
-import gov.anzong.androidnga.Utils;
 import gov.anzong.androidnga.base.util.ContextUtils;
-import gov.anzong.androidnga.common.util.EmoticonUtils;
-import sp.phone.http.bean.StringFindResult;
-import gov.anzong.androidnga.base.util.ContextUtils;;
-import sp.phone.theme.ThemeManager;
+import nosc.api.bean.StringFindResult;
+;
 
 @SuppressLint("SimpleDateFormat")
 public class StringUtils {
@@ -289,7 +281,7 @@ public class StringUtils {
             int length = is.available();
             byte[] buffer = new byte[length];
             is.read(buffer);
-            return new String(buffer, "utf-8");
+            return new String(buffer, StandardCharsets.UTF_8);
         } catch (IOException e) {
             e.printStackTrace();
             return "";

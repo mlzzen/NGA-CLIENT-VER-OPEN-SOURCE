@@ -9,12 +9,12 @@ import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
-import sp.phone.http.bean.MessageDetailInfo;
+import nosc.api.bean.MessageDetailInfo;
 import gov.anzong.androidnga.http.OnHttpCallBack;
 import sp.phone.mvp.contract.MessageDetailContract;
 import sp.phone.mvp.model.convert.MessageConvertFactory;
-import sp.phone.http.retrofit.RetrofitHelper;
-import sp.phone.http.retrofit.RetrofitService;
+import nosc.api.retrofit.RetrofitHelper;
+import nosc.api.retrofit.RetrofitService;
 
 /**
  * Created by Justwen on 2017/10/11.
