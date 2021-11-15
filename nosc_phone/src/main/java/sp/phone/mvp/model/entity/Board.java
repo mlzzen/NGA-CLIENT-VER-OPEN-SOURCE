@@ -2,6 +2,8 @@ package sp.phone.mvp.model.entity;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 public class Board implements Parcelable {
@@ -66,6 +68,7 @@ public class Board implements Parcelable {
             dest.writeInt(stid);
         }
 
+        @NonNull
         @Override
         public String toString() {
             if (stid != 0) {

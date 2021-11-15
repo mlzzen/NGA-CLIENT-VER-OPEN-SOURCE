@@ -28,6 +28,7 @@ import android.text.TextUtils
 import android.view.*
 import androidx.fragment.app.DialogFragment
 import gov.anzong.androidnga.Utils
+import nosc.utils.startArticleActivity
 import sp.phone.rxjava.RxBus
 import sp.phone.rxjava.RxEvent
 import sp.phone.util.StringUtils
@@ -42,7 +43,7 @@ import kotlin.math.ceil
 class ArticleTabFragment : BaseRxFragment() {
     var mViewPager: ViewPager? = null
     private var mPagerAdapter: ArticlePagerAdapter? = null
-    private var mRequestParam: ArticleListParam? = null
+     var mRequestParam: ArticleListParam? = null
 
     var mTabLayout: PageSelector? = null
 
@@ -161,6 +162,7 @@ class ArticleTabFragment : BaseRxFragment() {
             R.id.menu_open_by_browser -> openByBrowser()
             R.id.menu_nightmode -> ThemeManager.getInstance().isNightMode = true
             R.id.menu_daymode -> ThemeManager.getInstance().isNightMode = false
+            R.id.menu_return -> requireActivity().startArticleActivity("${mRequestParam?.tid}",mRequestParam?.title)
             R.id.menu_download -> {
                 mRequestParam!!.page = mViewPager!!.currentItem + 1
                 activityViewModel.setCachePage(mRequestParam!!.page)
@@ -187,11 +189,9 @@ class ArticleTabFragment : BaseRxFragment() {
     private fun copyUrl() {
         val clipboardManager =
             requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-        if (clipboardManager != null) {
-            val clipData = ClipData.newPlainText("text", url)
-            clipboardManager.setPrimaryClip(clipData)
-            showToast("已经复制至粘贴板")
-        }
+        val clipData = ClipData.newPlainText("text", url)
+        clipboardManager.setPrimaryClip(clipData)
+        showToast("已经复制至粘贴板")
     }
 
     private fun openByBrowser() {
@@ -237,8 +237,11 @@ class ArticleTabFragment : BaseRxFragment() {
             menu.findItem(R.id.menu_nightmode).isVisible = true
             menu.findItem(R.id.menu_daymode).isVisible = false
         }
-        if (mRequestParam!!.pid != 0 || mRequestParam!!.topicInfo == null) {
+        if (mRequestParam?.pid != 0 || mRequestParam?.topicInfo == null) {
             menu.findItem(R.id.menu_download).isVisible = false
+        }
+        if(mRequestParam?.pid != 0 && mRequestParam?.tid != 0){
+            menu.findItem(R.id.menu_return).isVisible = true
         }
         super.onPrepareOptionsMenu(menu)
     }

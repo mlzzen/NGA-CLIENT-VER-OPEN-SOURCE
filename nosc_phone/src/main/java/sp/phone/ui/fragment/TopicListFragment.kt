@@ -17,6 +17,7 @@ import sp.phone.util.ActivityUtils
 import android.app.Activity
 import android.view.*
 import androidx.appcompat.widget.Toolbar
+import nosc.utils.startArticleActivity
 import sp.phone.mvp.model.BoardModel
 
 /**
@@ -153,7 +154,7 @@ class TopicListFragment : TopicSearchFragment() {
                 ToastUtils.info(R.string.toast_remove_bookmark_board)
             }
             R.id.menu_sub_board -> showSubBoardList()
-            R.id.menu_board_head -> viewModel.startArticleActivity(
+            R.id.menu_board_head -> requireActivity().startArticleActivity(
                 mRequestParam.boardHead,
                 mRequestParam.title + " - 版头"
             )

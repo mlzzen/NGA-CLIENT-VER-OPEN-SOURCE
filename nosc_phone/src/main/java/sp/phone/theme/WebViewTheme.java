@@ -10,9 +10,9 @@ import gov.anzong.androidnga.R;
  */
 public class WebViewTheme {
 
-    private int mWebTextColor;
+    private final int mWebTextColor;
 
-    private int mQuoteBackgroundColor;
+    private final int mQuoteBackgroundColor;
 
     public WebViewTheme(Context context) {
         mWebTextColor = ContextCompat.getColor(context, R.color.web_text_color);

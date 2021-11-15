@@ -114,8 +114,7 @@ open class ArticleListFragment : BaseMvpFragment<ArticleListPresenter?>(),
     private val mMenuTogglerListener: View.OnClickListener = object : View.OnClickListener {
         override fun onClick(view: View) {
             mMenuItemClickListener.setThreadRowInfo(view.tag as ThreadRowInfo)
-            val menuId: Int
-            menuId = if (mRequestParam!!.pid == 0) {
+            val menuId: Int = if (mRequestParam!!.pid == 0) {
                 R.menu.article_list_context_menu
             } else {
                 R.menu.article_list_context_menu_with_tid

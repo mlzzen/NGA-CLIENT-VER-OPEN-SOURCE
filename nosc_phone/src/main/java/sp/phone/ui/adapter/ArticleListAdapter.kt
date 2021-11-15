@@ -52,7 +52,7 @@ class ArticleListAdapter(
     private var mData: ThreadData? = null
     private val mLayoutInflater: LayoutInflater
     private val mThemeManager = ThemeManager.getInstance()
-    private val mLocalWebViews: Array<LocalWebView?>? = arrayOfNulls(20)
+    private val mLocalWebViews: Array<LocalWebView?> = arrayOfNulls(20)
     private var mTopicOwner: String? = null
     private val mOnClientClickListener = View.OnClickListener { v ->
         val row = v.tag as ThreadRowInfo
@@ -390,29 +390,25 @@ class ArticleListAdapter(
     private fun onBindContentView(holder: ArticleViewHolder, row: ThreadRowInfo, position: Int) {
         val html = row.formattedHtmlData
         if (html != null) {
-            if (mLocalWebViews != null) {
-                var localWebView = mLocalWebViews[position]
-                if (localWebView == null) {
-                    localWebView = createLocalWebView()
-                    mLocalWebViews[position] = localWebView
+            var localWebView = mLocalWebViews[position]
+            if (localWebView == null) {
+                localWebView = createLocalWebView()
+                mLocalWebViews[position] = localWebView
+            }
+            if (localWebView !== holder.contentTV) {
+                holder.contentContainer!!.removeView(holder.contentTV)
+                if (localWebView.parent != null) {
+                    (localWebView.parent as ViewGroup).removeView(localWebView)
                 }
-                if (localWebView !== holder.contentTV) {
-                    holder.contentContainer!!.removeView(holder.contentTV)
-                    if (localWebView.parent != null) {
-                        (localWebView.parent as ViewGroup).removeView(localWebView)
-                    }
-                    holder.contentTV = localWebView
-                    holder.contentContainer!!.addView(localWebView)
-                }
-            } else if (holder.contentTV == null) {
-                holder.contentTV = createLocalWebView()
-                holder.contentContainer!!.addView(holder.contentTV)
+                holder.contentTV = localWebView
+                holder.contentContainer.addView(localWebView)
             }
             holder.contentTV!!.webViewClientEx.setImgUrls(row.imageUrls)
             holder.contentTV!!.loadDataWithBaseURL(null, html, "text/html", "utf-8", null)
-        } else {
-            //holder.contentTextView.setText(row.getContent());
         }
+//        else {
+//            //holder.contentTextView.setText(row.getContent());
+//        }
     }
 
     private fun onBindDeviceType(clientBtn: ImageView?, row: ThreadRowInfo) {

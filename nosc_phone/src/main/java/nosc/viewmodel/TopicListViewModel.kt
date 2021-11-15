@@ -187,13 +187,6 @@ class TopicListViewModel : ViewModel(),LifecycleObserver{
         }
     }
 
-    fun startArticleActivity(tid: String, title: String?) {
-        ARouterUtils.build(ARouterConstants.ACTIVITY_TOPIC_CONTENT)
-            .withInt(ParamKey.KEY_TID, tid.toInt())
-            .withString(ParamKey.KEY_TITLE, title)
-            .navigation(ContextUtils.getContext())
-    }
-
     @OnLifecycleEvent(value = Lifecycle.Event.ON_CREATE)
     fun onViewCreated() {
         if (mRequestParam != null && mRequestParam!!.loadCache) {

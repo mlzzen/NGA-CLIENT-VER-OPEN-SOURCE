@@ -14,7 +14,6 @@ import gov.anzong.androidnga.arouter.ARouterConstants;
 import gov.anzong.androidnga.common.PreferenceKey;
 import sp.phone.param.ArticleListParam;
 import sp.phone.param.ParamKey;
-import sp.phone.ui.fragment.ArticleSearchFragment;
 import sp.phone.ui.fragment.ArticleTabFragment;
 import sp.phone.util.StringUtils;
 
@@ -34,7 +33,7 @@ public class ArticleListActivity extends BaseActivity implements PreferenceKey {
             if (mRequestParam.searchPost == 0) {
                 fragment = new ArticleTabFragment();
             } else {
-                fragment = new ArticleSearchFragment();
+                fragment = new ArticleTabFragment();
             }
             fragment.setHasOptionsMenu(true);
             Bundle bundle = new Bundle();

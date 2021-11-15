@@ -6,6 +6,7 @@ import android.content.Intent
 import android.view.View
 import com.alibaba.android.arouter.launcher.ARouter
 import gov.anzong.androidnga.arouter.ARouterConstants
+import gov.anzong.androidnga.base.util.ContextUtils
 import gov.anzong.androidnga.base.util.ToastUtils
 import sp.phone.common.PhoneConfiguration
 import sp.phone.common.User
@@ -81,5 +82,13 @@ fun Activity.toTopicListPage(position: Int, fidString: String) {
 fun Activity.startUserProfile(userId: String?) {
     ARouterUtils.build(ARouterConstants.ACTIVITY_PROFILE)
         .withString("uid", userId)
+        .navigation(this)
+}
+
+
+fun Activity.startArticleActivity(tid: String, title: String?) {
+    ARouterUtils.build(ARouterConstants.ACTIVITY_TOPIC_CONTENT)
+        .withInt(ParamKey.KEY_TID, tid.toInt())
+        .withString(ParamKey.KEY_TITLE, title)
         .navigation(this)
 }

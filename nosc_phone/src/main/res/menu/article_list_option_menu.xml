@@ -1,11 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:androidnga="http://schemas.android.com/apk/res-auto">
+
+
     <item
         android:id="@+id/menu_share"
         android:icon="@drawable/btn_ic_share"
         android:title="@string/share"
         androidnga:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/menu_return"
+        android:title="返回原贴"
+        android:visible="false"
+        androidnga:showAsAction="never"/>
 
     <item
         android:id="@+id/menu_copy_url"
