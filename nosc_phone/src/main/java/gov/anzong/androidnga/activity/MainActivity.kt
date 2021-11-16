@@ -1,31 +1,24 @@
 package gov.anzong.androidnga.activity
 
 import android.Manifest
-import gov.anzong.androidnga.activity.BaseActivity
-import android.os.Bundle
-import sp.phone.theme.ThemeManager
-import gov.anzong.androidnga.R
-import gov.anzong.androidnga.base.util.PermissionUtils
-import gov.anzong.androidnga.NgaClientApp
-import sp.phone.ui.fragment.dialog.VersionUpgradeDialogFragment
-import sp.phone.ui.fragment.NavigationDrawerFragment
-import sp.phone.ui.fragment.dialog.UrlInputDialogFragment
 import android.content.Intent
-import gov.anzong.androidnga.activity.TopicCacheActivity
-import com.alibaba.android.arouter.launcher.ARouter
-import gov.anzong.androidnga.arouter.ARouterConstants
-import sp.phone.util.ARouterUtils
-import gov.anzong.androidnga.activity.AboutActivity
-import gov.anzong.androidnga.activity.SettingsActivity
-import sp.phone.util.ActivityUtils
-import android.app.Activity
+import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import sp.phone.common.UserManagerImpl
-import com.alibaba.android.arouter.facade.Postcard
+import com.alibaba.android.arouter.launcher.ARouter
+import gov.anzong.androidnga.NgaClientApp
+import gov.anzong.androidnga.R
+import gov.anzong.androidnga.arouter.ARouterConstants
+import gov.anzong.androidnga.base.util.PermissionUtils
 import gov.anzong.androidnga.base.util.ThemeUtils
+import sp.phone.common.UserManagerImpl
 import sp.phone.param.ParamKey
-import sp.phone.ui.fragment.BaseFragment
+import sp.phone.theme.ThemeManager
+import sp.phone.ui.fragment.NavigationDrawerFragment
+import sp.phone.ui.fragment.dialog.UrlInputDialogFragment
+import sp.phone.ui.fragment.dialog.VersionUpgradeDialogFragment
+import sp.phone.util.ARouterUtils
+import sp.phone.util.ActivityUtils
 
 class MainActivity : BaseActivity() {
     private var mIsNightMode = false
@@ -80,7 +73,6 @@ class MainActivity : BaseActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.main_option_menu, menu)
         return super.onCreateOptionsMenu(menu)
     }
 

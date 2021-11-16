@@ -8,8 +8,6 @@ import sp.phone.ui.adapter.BoardPagerAdapter
 import android.os.Bundle
 import sp.phone.rxjava.RxEvent
 import sp.phone.mvp.model.entity.Board
-import android.view.LayoutInflater
-import android.view.ViewGroup
 import gov.anzong.androidnga.R
 import com.google.android.material.tabs.TabLayout
 import androidx.drawerlayout.widget.DrawerLayout
@@ -24,8 +22,7 @@ import sp.phone.util.ActivityUtils
 import android.app.Activity
 import android.preference.PreferenceManager
 import android.text.TextUtils
-import android.view.MenuItem
-import android.view.View
+import android.view.*
 import android.view.animation.AnimationUtils
 import gov.anzong.androidnga.common.PreferenceKey
 import android.widget.AdapterView
@@ -62,7 +59,7 @@ class NavigationDrawerFragment : BaseRxFragment(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         registerRxBus()
-
+        setHasOptionsMenu(true)
         viewModel.boardCategoryList.observe(this){
 //            if (mBoardPagerAdapter == null) {
             mBoardPagerAdapter =
@@ -123,9 +120,7 @@ class NavigationDrawerFragment : BaseRxFragment(),
     private fun initNavigationView(rootView: View) {
         val navigationView: NavigationView = rootView.findViewById(R.id.nav_view)
         navigationView.setNavigationItemSelectedListener { item: MenuItem ->
-            onOptionsItemSelected(
-                item
-            )
+            onOptionsItemSelected(item)
         }
         val menuItem = navigationView.menu.findItem(R.id.menu_gun)
         val menuView = navigationView.getChildAt(0) as NavigationMenuView
@@ -154,11 +149,16 @@ class NavigationDrawerFragment : BaseRxFragment(),
         mHeaderView.displayedChild = UserManagerImpl.getInstance().activeUserIndex
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.main_option_menu, menu)
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_add_id -> showAddBoardDialog()
             R.id.menu_login -> requireActivity().jumpToLogin()
             R.id.menu_clear_recent -> clearFavoriteBoards()
+            R.id.menu_category_refresh -> viewModel.query()
             else -> return requireActivity().onOptionsItemSelected(item)
         }
         return true

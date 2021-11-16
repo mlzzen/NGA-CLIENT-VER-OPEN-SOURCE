@@ -1,42 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:androidnga="http://schemas.android.com/apk/res-auto">
-
     <item
         android:id="@+id/menu_search"
         android:icon="@drawable/btn_ic_search"
-        android:title="搜索用户"
+        android:title="搜索"
         androidnga:showAsAction="ifRoom" />
     <item
-        android:id="@+id/menu_post"
-        android:icon="@drawable/btn_ic_search"
-        android:title="我的主题"
-        androidnga:showAsAction="never" />
-    <item
-        android:id="@+id/menu_reply"
-        android:icon="@drawable/btn_ic_search"
-        android:title="我的回复"
-        androidnga:showAsAction="never" />
-
-    <item
         android:id="@+id/menu_download"
-        android:icon="@drawable/btn_ic_search"
-        android:title="我的缓存"
+        android:icon="@drawable/ic_file_download"
+        android:title="缓存的帖子"
         androidnga:showAsAction="never" />
+    <item
+        android:id="@+id/menu_category_refresh"
+        android:icon="@drawable/ic_file_download"
+        android:title="重新拉取版面"
+        androidnga:showAsAction="never" />
+    <item
+        android:id="@+id/menu_add_id"
+        android:icon="@drawable/ic_action_add_to_queue"
+        android:title="@string/add_fid_id"/>
+    <item
+        android:id="@+id/menu_forward"
+        android:icon="@drawable/ic_action_forward"
+        android:title="由URL读取"/>
 
     <item
-        android:id="@+id/menu_msg"
-        android:icon="@drawable/btn_ic_mail"
-        android:title="短消息"
-        androidnga:showAsAction="never" />
-    <item
-        android:id="@+id/menu_bookmark"
-        android:icon="@drawable/btn_ic_search"
-        android:title="收藏夹"
-        androidnga:showAsAction="never" />
-    <item
-        android:id="@+id/menu_setting"
-        android:icon="@drawable/btn_ic_settings"
-        android:title="@string/menu_setting"
-        androidnga:showAsAction="never" />
+        android:id="@+id/menu_clear_recent"
+        android:icon="@drawable/ic_action_warning"
+        android:title="清空我的收藏"/>
+
+
 </menu>

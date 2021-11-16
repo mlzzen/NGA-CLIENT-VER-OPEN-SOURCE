@@ -1,38 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:androidnga="http://schemas.android.com/apk/res-auto">
 
     <item android:title="论坛功能">
         <menu>
-            <item
-                android:id="@+id/menu_login"
-                android:icon="@drawable/ic_login"
-                android:title="登录账号"/>
+
 <!--            <item-->
 <!--                android:id="@+id/menu_add"-->
 <!--                android:icon="@drawable/ic_action_add_to_queue"-->
 <!--                android:title="@string/add_fid"/>-->
             <item
-                android:id="@+id/menu_add_id"
-                android:icon="@drawable/ic_action_add_to_queue"
-                android:title="@string/add_fid_id"/>
+                android:id="@+id/menu_post"
+                android:icon="@drawable/btn_ic_collections"
+                android:title="我的主题"
+                androidnga:showAsAction="never" />
             <item
-                android:id="@+id/menu_forward"
-                android:icon="@drawable/ic_action_forward"
-                android:title="由URL读取"/>
+                android:id="@+id/menu_reply"
+                android:icon="@drawable/btn_ic_send"
+                android:title="我的回复"
+                androidnga:showAsAction="never" />
 
             <item
-                android:id="@+id/menu_clear_recent"
-                android:icon="@drawable/ic_action_warning"
-                android:title="清空我的收藏"/>
+                android:id="@+id/menu_msg"
+                android:icon="@drawable/btn_ic_mail"
+                android:title="短消息"
+                androidnga:showAsAction="never" />
+            <item
+                android:id="@+id/menu_bookmark"
+                android:icon="@drawable/btn_ic_star_off"
+                android:title="收藏夹"
+                androidnga:showAsAction="never" />
+
             <item
                 android:id="@+id/menu_gun"
                 android:icon="@drawable/ic_action_gun"
                 android:title="最近被喷"/>
+            <item
+                android:id="@+id/menu_login"
+                android:icon="@drawable/ic_login"
+                android:title="登录账号"/>
         </menu>
     </item>
 
-    <item android:title="私货">
+    <item android:title="@string/label_activity_main">
         <menu>
+            <item
+                android:id="@+id/menu_setting"
+                android:icon="@drawable/btn_ic_settings"
+                android:title="@string/menu_setting"
+                androidnga:showAsAction="never" />
             <item
                 android:id="@+id/menu_about"
                 android:icon="@drawable/ic_action_about"
