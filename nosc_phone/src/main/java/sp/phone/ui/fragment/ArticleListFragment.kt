@@ -82,7 +82,7 @@ open class ArticleListFragment : BaseMvpFragment<ArticleListPresenter?>(),
                             )
                             .navigation(activity, ActivityUtils.REQUEST_CODE_LOGIN)
                     }
-                    R.id.menu_post_comment -> mPresenter!!.postComment(mRequestParam, row)
+                    R.id.menu_post_comment -> mPresenter?.postComment(mRequestParam, row)
                     R.id.menu_report -> FunctionUtils.handleReport(
                         row,
                         mRequestParam!!.tid,
@@ -96,7 +96,7 @@ open class ArticleListFragment : BaseMvpFragment<ArticleListPresenter?>(),
                             mListView
                         )
                     }
-                    R.id.menu_ban_this_one -> mPresenter!!.banThisSB(row)
+                    R.id.menu_ban_this_one -> mPresenter?.banThisSB(row)
                     R.id.menu_show_this_person_only -> ARouter.getInstance()
                         .build(ARouterConstants.ACTIVITY_TOPIC_CONTENT)
                         .withString("tab", "1")
@@ -114,11 +114,7 @@ open class ArticleListFragment : BaseMvpFragment<ArticleListPresenter?>(),
     private val mMenuTogglerListener: View.OnClickListener = object : View.OnClickListener {
         override fun onClick(view: View) {
             mMenuItemClickListener.setThreadRowInfo(view.tag as ThreadRowInfo)
-            val menuId: Int = if (mRequestParam!!.pid == 0) {
-                R.menu.article_list_context_menu
-            } else {
-                R.menu.article_list_context_menu_with_tid
-            }
+            val menuId: Int = R.menu.article_list_context_menu
             val popupMenu = PopupMenu(context, view)
             popupMenu.inflate(menuId)
             onPrepareOptionsMenu(popupMenu.menu, view.tag as ThreadRowInfo)

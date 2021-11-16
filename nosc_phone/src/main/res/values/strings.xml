@@ -3,11 +3,8 @@
 
     <string name="app_name">NGA客户端</string>
     <string name="menu_setting">设置</string>
-    <string name="login_user_hint">输入邮箱或者NGA昵称</string>
-    <string name="login">登录</string>
     <string name="submit">提交</string>
     <string name="selectpic">选择图片</string>
-    <string name="login_successfully">登录成功</string>
     <string name="title">(这里填可以引喷的标题)</string>
     <string name="avataraddtitle">(这里填炫酷的头像URL地址)</string>
     <string name="messageto">(这里填ID/用户名,多人用逗号分隔)</string>
@@ -46,14 +43,9 @@
     <string name="edit">编辑</string>
     <string name="show_whole_thread">显示全部</string>
     <string name="search_hint">输入要搜索的内容/用户名</string>
-    <string name="profile_search_hint">输入要查看的用户名或ID</string>
-    <string name="image_saved">图片已经保存在</string>
-    <string name="invalid_url">链接不合法</string>
-    <string name="mkdir_fail">无法创建目录，sd卡未挂载？</string>
     <string name="share">分享到…</string>
     <string name="image_to_big2">图片宽高超过180*255分辨率，自动缩小</string>
     <string name="search">搜索</string>
-    <string name="add_fid">添加版面</string>
     <string name="add_fid_id">添加版面ID</string>
     <string name="sample_nick_name">骷髅党</string>
     <string name="sample_user_level">级别:骷髅党</string>
@@ -112,7 +104,6 @@
     <string name="fontsize">字号</string>
     <string name="delline">删除线</string>
     <string name="collapse">折叠</string>
-    <string name="filter_hint">(输入文字过滤你想要的标题)</string>
     <string name="filter_keywords_hint">(输入关键字后按回车添加)</string>
     <string name="clientua">Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.125 Safari/537.36 NOSCAndroid/</string>
     <!-- string name="checksecret">4103ca8d364d2402e5e304ea07454a2a</string -->

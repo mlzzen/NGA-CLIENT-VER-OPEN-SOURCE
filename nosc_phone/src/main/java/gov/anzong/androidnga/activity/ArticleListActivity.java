@@ -30,11 +30,9 @@ public class ArticleListActivity extends BaseActivity implements PreferenceKey {
         Fragment fragment = fm.findFragmentById(android.R.id.content);
 
         if (fragment == null) {
-            if (mRequestParam.searchPost == 0) {
-                fragment = new ArticleTabFragment();
-            } else {
-                fragment = new ArticleTabFragment();
-            }
+
+            fragment = new ArticleTabFragment();
+
             fragment.setHasOptionsMenu(true);
             Bundle bundle = new Bundle();
             bundle.putParcelable(ParamKey.KEY_PARAM, mRequestParam);

@@ -54,6 +54,7 @@ android {
         }
         debug {
             versionNameSuffix ".0"
+            applicationIdSuffix ".debug"
             debuggable true
             minifyEnabled false
         }
@@ -67,8 +68,10 @@ android {
         abortOnError false
         disable 'MissingTranslation'
     }
-    viewBinding{
-        enabled = true
+
+    buildFeatures {
+        viewBinding true
+        //compose true
     }
     android.applicationVariants.all { variant ->
         variant.outputs.all {

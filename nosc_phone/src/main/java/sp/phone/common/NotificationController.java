@@ -33,15 +33,15 @@ public class NotificationController {
 
     private static final String NOTIFICATION_NAME = "NGA_CLIENT";
 
-    private ForumNotificationTask mNotificationTask;
+    private final ForumNotificationTask mNotificationTask;
 
-    private PhoneConfiguration mConfiguration;
+    private final PhoneConfiguration mConfiguration;
 
-    private static final int DELAY_TIME = 30 * 1000;
+    private static final int DELAY_TIME = 5 * 1000;
 
     private long mLastQueryTime;
 
-    private Handler mHandler = new Handler(new Handler.Callback() {
+    private final Handler mHandler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message msg) {
 
@@ -132,7 +132,7 @@ public class NotificationController {
         }
     }
 
-    private void showMessageNotification() {
+    public void showMessageNotification() {
         Context context = ContextUtils.getContext();
 
         Intent intent = new Intent(context, MessageListActivity.class);
@@ -154,7 +154,7 @@ public class NotificationController {
     private NotificationCompat.Builder buildNotification(Context context) {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, NOTIFICATION_ID);
         builder.setLights(Color.parseColor("#fff0cd"), 2333, 0)
-                .setSmallIcon(R.drawable.nga_bg) //设置图标
+                .setSmallIcon(R.mipmap.ic_launcher) //设置图标
                 .setWhen(System.currentTimeMillis()) //发送时间
                 .setDefaults(mConfiguration.isNotificationSoundEnabled() ? Notification.DEFAULT_ALL : Notification.DEFAULT_LIGHTS) //设置默认的提示音，振动方式，灯光
                 .setAutoCancel(true);//打开程序后图标消失
@@ -169,11 +169,9 @@ public class NotificationController {
         if (!DeviceUtils.isGreaterEqual_8_0() || notificationManager == null) {
             return;
         }
-        String id = NOTIFICATION_ID;
-        CharSequence name = NOTIFICATION_NAME;
         int importance = NotificationManager.IMPORTANCE_HIGH;
 
-        NotificationChannel channel = new NotificationChannel(id, name, importance);
+        NotificationChannel channel = new NotificationChannel(NOTIFICATION_ID, NOTIFICATION_NAME, importance);
         channel.enableLights(true); //是否在桌面icon右上角展示小红点
         channel.setLightColor(Color.GREEN); //小红点颜色
         channel.setShowBadge(true); //是否在久按桌面图标时显示此渠道的通知

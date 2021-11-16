@@ -37,7 +37,7 @@
                 android:title="最近被喷"/>
             <item
                 android:id="@+id/menu_login"
-                android:icon="@drawable/ic_login"
+                android:icon="@drawable/ic_account_add_24"
                 android:title="登录账号"/>
         </menu>
     </item>
@@ -51,7 +51,7 @@
                 androidnga:showAsAction="never" />
             <item
                 android:id="@+id/menu_about"
-                android:icon="@drawable/ic_action_about"
+                android:icon="@drawable/ic_about"
                 android:title="关于"/>
         </menu>
     </item>
