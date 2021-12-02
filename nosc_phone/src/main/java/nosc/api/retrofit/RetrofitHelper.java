@@ -49,9 +49,6 @@ public class RetrofitHelper {
         return createRetrofit(mBaseUrl, null);
     }
 
-    public Retrofit createRetrofit(String baseUrl) {
-        return createRetrofit(baseUrl, null);
-    }
 
     public Retrofit createRetrofit(OkHttpClient.Builder builder) {
         return createRetrofit(mBaseUrl, builder);

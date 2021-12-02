@@ -54,7 +54,7 @@ android {
         }
         debug {
             versionNameSuffix ".0"
-            applicationIdSuffix ".debug"
+//            applicationIdSuffix ".debug"
             debuggable true
             minifyEnabled false
         }

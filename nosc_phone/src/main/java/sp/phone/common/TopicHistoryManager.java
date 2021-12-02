@@ -54,13 +54,6 @@ public class TopicHistoryManager {
         commit();
     }
 
-    public void removeTopicHistory(ThreadPageInfo topic) {
-        if (mTopicList.contains(topic)) {
-            mTopicList.remove(topic);
-            commit();
-        }
-    }
-
     public void removeTopicHistory(int index) {
         mTopicList.remove(index);
         commit();

@@ -10,6 +10,8 @@ import gov.anzong.androidnga.base.util.ContextUtils
 import gov.anzong.androidnga.base.util.PreferenceUtils
 import gov.anzong.androidnga.base.util.ToastUtils
 import gov.anzong.androidnga.common.PreferenceKey
+import nosc.utils.CurrentUserData
+
 import okhttp3.*
 import java.io.File
 import java.io.IOException
@@ -21,14 +23,18 @@ import java.util.*
  */
 object BoardModel : BaseModel() {
     private val mBoardCategoryList: MutableList<BoardCategory> = ArrayList()
-    private val mBookmarkCategory: BoardCategory by lazy{
-        BoardCategory("我的收藏").apply {
-            val bookmarkBoards =
-                PreferenceUtils.getData(PreferenceKey.BOOKMARK_BOARD, Board::class.java)
-            addBoards(bookmarkBoards)
+    private val suggestCategory: BoardCategory by lazy{
+        BoardCategory("推荐内容").apply {
+            addSubCategory(BoardCategory("我的收藏").apply {
+                addBoards(CurrentUserData.favouriteBoard)
+            })
+            addSubCategory(BoardCategory("最近浏览").apply {
+                addBoards(CurrentUserData.recentBoard)
+            })
             isBookmarkCategory = true
         }
     }
+    private val bookMarkList:BoardCategory get() = suggestCategory.getSubCategory(0)
 
     fun findBoard(fid: String): Board? {
         val boardKey = BoardKey(fid.toInt(), 0)
@@ -61,58 +67,36 @@ object BoardModel : BaseModel() {
                             File(ContextUtils.getApplication().getExternalFilesDir("categoryCache"),"category.json").writeText(it,
                                 Charset.defaultCharset())
                         } ?: "")
-                    }catch (e:Throwable){}
+                    }catch (e:Throwable){
+                        e.printStackTrace()
+                    }
                     callback.invoke(mBoardCategoryList.toList())
                 }
         })
     }
 
-    fun addBookmark(board: Board) {
-        if (!mBookmarkCategory.contains(board)) {
-            mBookmarkCategory.addBoard(board)
+    fun addBookmark(board: Board):Boolean {
+        if (!bookMarkList.contains(board)) {
+            bookMarkList.addBoard(board)
             saveBookmark()
+            return true
         }
-    }
-
-    fun addBookmark(fid: Int, stid: Int, boardName: String):Boolean {
-        return if (isBookmark(fid, stid)) {
-            ToastUtils.info("该版面已存在")
-            false
-        } else {
-            addBookmark(BoardKey(fid, stid), boardName)
-            ToastUtils.success("添加成功")
-            true
-        }
-
+        return false
     }
 
     fun removeBookmark(fid: Int, stid: Int) {
-        if (mBookmarkCategory.removeBoard(BoardKey(fid, stid))) {
+        if (bookMarkList.removeBoard(BoardKey(fid, stid))) {
             saveBookmark()
         }
     }
 
     fun removeAllBookmarks() {
-        mBookmarkCategory.removeAllBoards()
+        bookMarkList.removeAllBoards()
         saveBookmark()
     }
 
     fun isBookmark(fid: Int, stid: Int): Boolean {
-        return mBookmarkCategory.contains(BoardKey(fid, stid))
-    }
-
-    fun swapBookmark(from: Int, to: Int) {
-        val boards = mBookmarkCategory.boardList
-        if (from < to) {
-            for (i in from until to) {
-                Collections.swap(boards, i, i + 1)
-            }
-        } else {
-            for (i in from downTo to + 1) {
-                Collections.swap(boards, i, i - 1)
-            }
-        }
-        saveBookmark()
+        return bookMarkList.contains(BoardKey(fid, stid))
     }
 
     fun getBoardName(fid: Int, stid: Int): String {
@@ -124,9 +108,11 @@ object BoardModel : BaseModel() {
 
 
 
+
+
     private fun buildCategory(json:String){
         mBoardCategoryList.clear()
-        mBoardCategoryList.add(mBookmarkCategory)
+        mBoardCategoryList.add(suggestCategory)
         upgradeBookmarkBoard(mBoardCategoryList)
 
         val beans = try{
@@ -154,18 +140,8 @@ object BoardModel : BaseModel() {
         }
     }
 
-    private fun addBookmark(boardKey: BoardKey, boardName: String) {
-        if (!mBookmarkCategory.contains(boardKey)) {
-            mBookmarkCategory.addBoard(Board(boardKey, boardName))
-            saveBookmark()
-        }
-    }
-
     private fun saveBookmark() {
-        PreferenceUtils.putData(
-            PreferenceKey.BOOKMARK_BOARD,
-            JSON.toJSONString(mBookmarkCategory.boardList)
-        )
+        CurrentUserData.favouriteBoard = bookMarkList.boardList
     }
 
     private fun getBoardName(boardKey: BoardKey): String {
@@ -181,7 +157,7 @@ object BoardModel : BaseModel() {
     private fun upgradeBookmarkBoard(preloadCategory: List<BoardCategory>) {
         val boardVersion = PreferenceUtils.getData(PreferenceKey.KEY_PRELOAD_BOARD_VERSION, 0)
         if (boardVersion < PRELOAD_BOARD_VERSION) {
-            val bookmarkBoards = mBookmarkCategory.boardList
+            val bookmarkBoards = suggestCategory.boardList
             for (i in bookmarkBoards.indices) {
                 val board = bookmarkBoards[i]
                 for (category in preloadCategory) {

@@ -17,7 +17,7 @@ import sp.phone.ui.adapter.ActionBarUserListAdapter;
 import sp.phone.common.PhoneConfiguration;
 import sp.phone.common.UserManager;
 import sp.phone.common.UserManagerImpl;
-import sp.phone.ui.fragment.MessageListFragment;
+import gov.anzong.androidnga.ui.fragment.MessageListFragment;
 import sp.phone.util.StringUtils;
 
 @Route(path = ARouterConstants.ACTIVITY_MESSAGE_LIST)

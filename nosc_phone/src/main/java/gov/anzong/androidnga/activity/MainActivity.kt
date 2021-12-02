@@ -14,9 +14,9 @@ import gov.anzong.androidnga.base.util.ThemeUtils
 import sp.phone.common.UserManagerImpl
 import sp.phone.param.ParamKey
 import sp.phone.theme.ThemeManager
-import sp.phone.ui.fragment.NavigationDrawerFragment
-import sp.phone.ui.fragment.dialog.UrlInputDialogFragment
-import sp.phone.ui.fragment.dialog.VersionUpgradeDialogFragment
+import gov.anzong.androidnga.ui.fragment.NavigationDrawerFragment
+import gov.anzong.androidnga.ui.fragment.dialog.UrlInputDialogFragment
+import gov.anzong.androidnga.ui.fragment.dialog.VersionUpgradeDialogFragment
 import sp.phone.util.ARouterUtils
 import sp.phone.util.ActivityUtils
 
@@ -47,7 +47,8 @@ class MainActivity : BaseActivity() {
         val app = application
         if (app is NgaClientApp) {
             if (NgaClientApp.isNewVersion) {
-                VersionUpgradeDialogFragment().show(supportFragmentManager, null)
+                gov.anzong.androidnga.ui.fragment.dialog.VersionUpgradeDialogFragment()
+                    .show(supportFragmentManager, null)
             }
         }
     }
@@ -82,11 +83,12 @@ class MainActivity : BaseActivity() {
             R.id.menu_setting -> startSettingActivity()
             R.id.menu_bookmark -> startFavoriteTopicActivity()
             R.id.menu_msg -> startMessageActivity()
+            R.id.menu_history -> ActivityUtils.startHistoryTopicActivity(this)
             R.id.menu_post -> startPostActivity(false)
             R.id.menu_reply -> startPostActivity(true)
             R.id.menu_about -> aboutNgaClient()
             R.id.menu_search -> startSearchActivity()
-            R.id.menu_forward -> UrlInputDialogFragment().show(supportFragmentManager)
+            R.id.menu_forward -> gov.anzong.androidnga.ui.fragment.dialog.UrlInputDialogFragment().show(supportFragmentManager)
             R.id.menu_gun -> startNotificationActivity()
             R.id.menu_download -> startActivity(Intent(this, TopicCacheActivity::class.java))
             else -> return super.onOptionsItemSelected(item)

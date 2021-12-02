@@ -19,6 +19,11 @@
                 android:icon="@drawable/btn_ic_send"
                 android:title="我的回复"
                 androidnga:showAsAction="never" />
+            <item
+                android:id="@+id/menu_history"
+                android:icon="@drawable/btn_ic_search"
+                android:title="@string/menu_history"
+                androidnga:showAsAction="never"/>
 
             <item
                 android:id="@+id/menu_msg"

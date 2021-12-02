@@ -26,7 +26,7 @@ import gov.anzong.androidnga.common.util.EmoticonUtils;
 import gov.anzong.androidnga.base.util.ContextUtils;;
 import gov.anzong.androidnga.rxjava.BaseSubscriber;
 import sp.phone.param.PostParam;
-import sp.phone.ui.fragment.TopicPostFragment;
+import gov.anzong.androidnga.ui.fragment.TopicPostFragment;
 import nosc.api.callbacks.OnHttpCallBack;
 import sp.phone.mvp.contract.TopicPostContract;
 import sp.phone.mvp.model.TopicPostModel;

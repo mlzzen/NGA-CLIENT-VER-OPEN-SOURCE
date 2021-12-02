@@ -16,7 +16,7 @@ import sp.phone.param.ParamKey
 import sp.phone.param.TopicListParam
 import sp.phone.ui.adapter.BaseAppendableAdapter
 import sp.phone.ui.adapter.TopicListAdapter
-import sp.phone.ui.fragment.TopicSearchFragment.handleClickEvent
+import gov.anzong.androidnga.ui.fragment.TopicSearchFragment.handleClickEvent
 import sp.phone.view.RecyclerViewEx
 
 /**

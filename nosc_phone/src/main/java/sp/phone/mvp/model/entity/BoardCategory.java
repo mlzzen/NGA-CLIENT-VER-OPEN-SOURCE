@@ -110,12 +110,6 @@ public class BoardCategory implements Parcelable {
         mBoardMap.clear();
     }
 
-
-    public void removeBoard(Board board) {
-        mBoardList.remove(board);
-        mBoardMap.remove(board.getBoardKey());
-    }
-
     public boolean removeBoard(Board.BoardKey boardKey) {
         Board board = mBoardMap.remove(boardKey);
         if (board != null) {

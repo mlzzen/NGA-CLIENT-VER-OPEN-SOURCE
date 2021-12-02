@@ -4,7 +4,7 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 
 import gov.anzong.androidnga.R;
-import sp.phone.ui.fragment.MessageDetailFragment;
+import gov.anzong.androidnga.ui.fragment.MessageDetailFragment;
 import sp.phone.util.StringUtils;
 
 public class MessageDetailActivity extends BaseActivity {

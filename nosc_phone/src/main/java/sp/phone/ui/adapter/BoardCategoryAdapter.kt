@@ -24,13 +24,26 @@ import java.util.ArrayList
 class BoardCategoryAdapter(private val mActivity: Activity, private val mCategory: BoardCategory) :
     RecyclerView.Adapter<BoardViewHolder>() {
     private var mTitlePositions: MutableList<Int>  = ArrayList()
-    private var mTotalCount = 0
+    private val mTotalCount:Int get(){
+        mTitlePositions.clear()
+        return if (mCategory.subCategoryList != null) {
+            var count = 0
+            for (subCategory in mCategory.subCategoryList) {
+                mTitlePositions.add(count)
+                count += subCategory.boardList.size
+                count++
+            }
+            count
+        } else {
+            mCategory.boardList.size
+        }
+    }
 
     class BoardViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        val icon: ImageView? = itemView.findViewById(R.id.icon_board_img)
+        val icon: ImageView = itemView.findViewById(R.id.icon_board_img)
 
-        var name: TextView? = itemView.findViewById(R.id.text_board_name)
+        var name: TextView = itemView.findViewById(R.id.text_board_name)
 
     }
 
@@ -72,16 +85,16 @@ class BoardCategoryAdapter(private val mActivity: Activity, private val mCategor
                 .load(url)
                 .placeholder(R.drawable.default_board_icon)
                 .dontAnimate()
-                .into(holder.icon!!)
+                .into(holder.icon)
             holder.itemView.tag = board
-            holder.name?.text = board.name
+            holder.name.text = board.name
             RxUtils.clicks(holder.itemView) {
                 RxBus.getInstance().post(RxEvent(RxEvent.EVENT_SHOW_TOPIC_LIST, board))
             }
         } else {
             val subCategoryIndex = mTitlePositions.indexOf(position)
             val subCategory = mCategory.getSubCategory(subCategoryIndex)
-            holder.name!!.text = subCategory.name
+            holder.name.text = subCategory.name
         }
     }
 
@@ -121,17 +134,5 @@ class BoardCategoryAdapter(private val mActivity: Activity, private val mCategor
     companion object {
         const val BOARD_ITEM = 1
         const val TITLE_ITEM = 0
-    }
-
-    init {
-        if (mCategory.subCategoryList != null) {
-            for (subCategory in mCategory.subCategoryList) {
-                mTitlePositions.add(mTotalCount)
-                mTotalCount += subCategory.boardList.size
-                mTotalCount++
-            }
-        } else {
-            mTotalCount = mCategory.boardList.size
-        }
     }
 }

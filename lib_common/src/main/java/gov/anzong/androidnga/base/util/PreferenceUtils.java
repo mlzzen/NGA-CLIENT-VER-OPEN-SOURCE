@@ -27,22 +27,6 @@ public class PreferenceUtils {
         sPreferences.edit().putInt(key, value).apply();
     }
 
-    public static void putData(String key, boolean value) {
-        sPreferences.edit().putBoolean(key, value).apply();
-    }
-
-    public static void putData(String key, float value) {
-        sPreferences.edit().putFloat(key, value).apply();
-    }
-
-    public static void putData(String key, long value) {
-        sPreferences.edit().putLong(key, value).apply();
-    }
-
-    public static void putData(String key, Set<String> value) {
-        sPreferences.edit().putStringSet(key, value).apply();
-    }
-
     public static String getData(String key, String defValue) {
         return sPreferences.getString(key, defValue);
     }
@@ -65,10 +49,6 @@ public class PreferenceUtils {
 
     public static Set<String> getData(String key, Set<String> defValue) {
         return sPreferences.getStringSet(key, defValue);
-    }
-
-    public static void putData(String key, List list) {
-        sPreferences.edit().putString(key, JSON.toJSONString(list)).apply();
     }
 
     public static <T> List<T> getData(String key, Class<T> clz) {

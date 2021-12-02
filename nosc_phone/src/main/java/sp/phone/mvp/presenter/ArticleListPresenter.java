@@ -16,7 +16,7 @@ import sp.phone.param.ArticleListParam;
 import sp.phone.rxjava.BaseSubscriber;
 import sp.phone.rxjava.RxUtils;
 import sp.phone.task.LikeTask;
-import sp.phone.ui.fragment.ArticleListFragment;
+import gov.anzong.androidnga.ui.fragment.ArticleListFragment;
 import sp.phone.util.FunctionUtils;
 import sp.phone.util.StringUtils;
 

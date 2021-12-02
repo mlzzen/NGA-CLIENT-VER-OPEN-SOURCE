@@ -8,13 +8,10 @@ import sp.phone.mvp.model.TopicListModel
 import nosc.api.callbacks.OnHttpCallBack
 import gov.anzong.androidnga.base.util.ToastUtils
 import gov.anzong.androidnga.base.util.DeviceUtils
-import sp.phone.util.ARouterUtils
-import gov.anzong.androidnga.arouter.ARouterConstants
-import sp.phone.param.ParamKey
 import gov.anzong.androidnga.base.util.PermissionUtils
 import android.os.Environment
 import android.content.Intent
-import sp.phone.ui.fragment.TopicCacheFragment
+import gov.anzong.androidnga.ui.fragment.TopicCacheFragment
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.net.Uri

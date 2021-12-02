@@ -22,12 +22,11 @@ import gov.anzong.androidnga.arouter.ARouterConstants
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
-import sp.phone.ui.fragment.dialog.BaseDialogFragment
-import sp.phone.ui.fragment.dialog.AvatarDialogFragment
+import gov.anzong.androidnga.ui.fragment.dialog.BaseDialogFragment
+import gov.anzong.androidnga.ui.fragment.dialog.AvatarDialogFragment
 import gov.anzong.androidnga.R
 import android.widget.TextView
 import android.widget.FrameLayout
-import sp.phone.ui.adapter.ArticleListAdapter
 import android.view.ViewGroup
 import android.widget.ImageView
 import sp.phone.rxjava.RxUtils
@@ -254,7 +253,7 @@ class ArticleListAdapter(
             val bundle = Bundle()
             bundle.putString("name", row.author)
             bundle.putString("url", FunctionUtils.parseAvatarUrl(row.js_escap_avatar))
-            BaseDialogFragment.show(mFragmentManager, bundle, AvatarDialogFragment::class.java)
+            gov.anzong.androidnga.ui.fragment.dialog.BaseDialogFragment.show(mFragmentManager, bundle, gov.anzong.androidnga.ui.fragment.dialog.AvatarDialogFragment::class.java)
             //FunctionUtils.Create_Avatar_Dialog(row, view.getContext(), null);
         }
     }
