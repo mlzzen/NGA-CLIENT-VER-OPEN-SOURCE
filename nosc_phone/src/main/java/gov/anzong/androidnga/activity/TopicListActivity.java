@@ -14,7 +14,7 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import gov.anzong.androidnga.R;
 import gov.anzong.androidnga.arouter.ARouterConstants;
 import gov.anzong.androidnga.ui.fragment.TopicListSimpleFragment;
-import sp.phone.mvp.model.BoardModel;
+import nosc.api.model.BoardModel;
 import sp.phone.param.ParamKey;
 import sp.phone.param.TopicListParam;
 import gov.anzong.androidnga.ui.fragment.TopicFavoriteFragment;

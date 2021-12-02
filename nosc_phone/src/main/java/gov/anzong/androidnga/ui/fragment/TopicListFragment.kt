@@ -18,7 +18,7 @@ import android.app.Activity
 import android.view.*
 import androidx.appcompat.widget.Toolbar
 import nosc.utils.startArticleActivity
-import sp.phone.mvp.model.BoardModel
+import nosc.api.model.BoardModel
 
 /**
  * Created by Justwen on 2017/11/19.

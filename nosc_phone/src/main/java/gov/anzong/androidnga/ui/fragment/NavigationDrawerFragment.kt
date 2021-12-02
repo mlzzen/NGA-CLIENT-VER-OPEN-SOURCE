@@ -37,8 +37,8 @@ import nosc.utils.showTopicList
 import nosc.utils.toTopicListPage
 import nosc.viewmodel.BoardCategoryViewModel
 import sp.phone.common.User
-import sp.phone.mvp.model.BoardModel
-import sp.phone.mvp.model.BoardModel.addBookmark
+import nosc.api.model.BoardModel
+import nosc.api.model.BoardModel.addBookmark
 import java.lang.NumberFormatException
 
 /**

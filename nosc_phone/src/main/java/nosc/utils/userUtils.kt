@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSON
 import gov.anzong.androidnga.base.util.ContextUtils
 import sp.phone.common.User
 import sp.phone.common.UserManagerImpl
-import sp.phone.mvp.model.BoardModel
 import sp.phone.mvp.model.entity.Board
 import java.io.File
 

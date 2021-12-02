@@ -1,6 +1,6 @@
 package sp.phone.task
 
-import sp.phone.mvp.model.BoardModel.findBoard
+import nosc.api.model.BoardModel.findBoard
 import nosc.api.callbacks.OnSimpleHttpCallBack
 import sp.phone.mvp.model.entity.Board
 import nosc.api.retrofit.RetrofitHelper

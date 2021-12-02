@@ -3,7 +3,7 @@ package nosc.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import gov.anzong.androidnga.base.util.ThreadUtils
-import sp.phone.mvp.model.BoardModel
+import nosc.api.model.BoardModel
 import sp.phone.mvp.model.entity.BoardCategory
 /**
  * @author Yricky

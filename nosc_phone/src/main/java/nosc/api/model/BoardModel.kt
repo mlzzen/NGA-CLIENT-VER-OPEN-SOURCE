@@ -1,4 +1,4 @@
-package sp.phone.mvp.model
+package nosc.api.model
 
 import android.text.TextUtils
 import sp.phone.mvp.model.entity.BoardCategory
@@ -8,11 +8,11 @@ import nosc.api.bean.CategoryBean
 import com.alibaba.fastjson.JSON
 import gov.anzong.androidnga.base.util.ContextUtils
 import gov.anzong.androidnga.base.util.PreferenceUtils
-import gov.anzong.androidnga.base.util.ToastUtils
 import gov.anzong.androidnga.common.PreferenceKey
 import nosc.utils.CurrentUserData
 
 import okhttp3.*
+import sp.phone.mvp.model.BaseModel
 import java.io.File
 import java.io.IOException
 import java.nio.charset.Charset

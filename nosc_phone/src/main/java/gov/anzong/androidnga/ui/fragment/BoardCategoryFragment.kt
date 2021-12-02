@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import gov.anzong.androidnga.R
-import sp.phone.mvp.model.BoardModel
+import nosc.api.model.BoardModel
 import sp.phone.mvp.model.entity.BoardCategory
 import sp.phone.ui.adapter.BoardCategoryAdapter
 
