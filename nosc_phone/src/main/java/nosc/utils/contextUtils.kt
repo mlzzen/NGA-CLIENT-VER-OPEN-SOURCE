@@ -61,7 +61,7 @@ fun Activity.toTopicListPage(position: Int, fidString: String) {
         return
     }
     NLog.i(this.javaClass.simpleName, "set host:" + HttpUtil.HOST)
-    var url = HttpUtil.Server + "/thread.php?fid=" + fidString + "&rss=1"
+    var url = ForumUtils.getAvailableDomain() + "/thread.php?fid=" + fidString + "&rss=1"
     val config = PhoneConfiguration.getInstance()
     if (!StringUtils.isEmpty(config.cookie)) {
         url = url + "&" + config.cookie.replace("; ", "&")

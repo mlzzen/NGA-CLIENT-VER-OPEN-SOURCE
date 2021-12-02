@@ -44,30 +44,30 @@ class BoardCategoryFragment : Fragment() {
         mAdapter = BoardCategoryAdapter(requireActivity(), mBoardCategory!!)
         mListView?.adapter = mAdapter
         setLayoutManager()
-        if (mBoardCategory?.isBookmarkCategory == true) {
-            val touchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
-                ItemTouchHelper.UP or ItemTouchHelper.DOWN or ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT,
-                0
-            ) {
-                override fun onMove(
-                    recyclerView: RecyclerView,
-                    viewHolder: RecyclerView.ViewHolder,
-                    target: RecyclerView.ViewHolder
-                ): Boolean {
+//        if (mBoardCategory?.isBookmarkCategory == true) {
+//            val touchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
+//                ItemTouchHelper.UP or ItemTouchHelper.DOWN or ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT,
+//                0
+//            ) {
+//                override fun onMove(
+//                    recyclerView: RecyclerView,
+//                    viewHolder: RecyclerView.ViewHolder,
+//                    target: RecyclerView.ViewHolder
+//                ): Boolean {
 //                    BoardModel
 //                        .swapBookmark(viewHolder.adapterPosition-1, target.adapterPosition-1)
 //                    mListView?.adapter?.notifyItemMoved(viewHolder.adapterPosition, target.adapterPosition)
-                    return true
-                }
-
-                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                    val board = mBoardCategory!!.getBoard(viewHolder.adapterPosition)
-                    BoardModel.removeBookmark(board.fid, board.stid)
-                    mListView?.adapter?.notifyItemRemoved(viewHolder.adapterPosition)
-                }
-            })
-            touchHelper.attachToRecyclerView(mListView)
-        }
+//                    return true
+//                }
+//
+//                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+//                    val board = mBoardCategory!!.getBoard(viewHolder.adapterPosition)
+//                    BoardModel.removeBookmark(board.fid, board.stid)
+//                    mListView?.adapter?.notifyItemRemoved(viewHolder.adapterPosition)
+//                }
+//            })
+//            touchHelper.attachToRecyclerView(mListView)
+//        }
         mListView?.adapter = mAdapter
     }
 

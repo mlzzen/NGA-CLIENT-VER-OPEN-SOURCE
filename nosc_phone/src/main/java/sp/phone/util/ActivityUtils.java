@@ -80,22 +80,6 @@ public class ActivityUtils {
         }
     }
 
-    public void noticeSaying(String str, Context context) {
-
-        if (str.contains(";")) {
-            notice("", str.replace(";", "-----"), context);
-        } else {
-            notice("", str, context);
-        }
-    }
-
-    public void noticeError(String error, Context context) {
-        if (context != null) {
-            HttpUtil.switchServer();
-            notice(context.getString(R.string.error), error, context);
-        }
-    }
-
     private void notice(String title, String content, Context c) {
 
         if (c == null)

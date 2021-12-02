@@ -20,13 +20,6 @@ import nosc.api.bean.StringFindResult;
 @SuppressLint("SimpleDateFormat")
 public class StringUtils {
     public final static String key = "asdfasdf";
-    private static final String lesserNukeStyle = "<div style='border:1px solid #B63F32;margin:10px 10px 10px 10px;padding:10px' > <span style='color:#EE8A9E'>用户因此贴被暂时禁言，此效果不会累加</span><br/>";
-    private static final String styleAlignRight = "<div style='text-align:right' >";
-    private static final String styleAlignLeft = "<div style='text-align:left' >";
-    private static final String styleAlignCenter = "<div style='text-align:center' >";
-    private static final String styleColor = "<span style='color:$1' >";
-    private static final String ignoreCaseTag = "(?i)";
-    private static final String endDiv = "</div>";
 
     private static final String[] SAYING = ContextUtils.getResources().getStringArray(R.array.saying);
 
@@ -108,47 +101,6 @@ public class StringUtils {
         return tmp.toString();
     }
 
-//    /**
-//     * yy-M-dd hh:mm
-//     */
-//    public static Long sDateToLong(String sDate) {
-//        DateFormat df = new SimpleDateFormat("yy-M-dd hh:mm");
-//        Date date = null;
-//        try {
-//            date = df.parse(sDate);
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
-//        return date.getTime();
-//    }
-//
-//    public static boolean isNumer(String str) {
-//        Pattern pattern = Pattern.compile("[0-9]*");
-//        return pattern.matcher(str).matches();
-//    }
-//
-//    public static Long parseLong(String str) {
-//        if (str == null) {
-//            return null;
-//        } else {
-//            if (str.equals("")) {
-//                return 0l;
-//            } else {
-//                return Long.parseLong(str);
-//            }
-//        }
-//    }
-//
-//    public static Long sDateToLong(String sDate, String dateFormat) {
-//        DateFormat df = new SimpleDateFormat(dateFormat);
-//        Date date = new Date();
-//        try {
-//            date = df.parse(sDate);
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
-//        return date.getTime();
-//    }
 
     public static String encodeUrl(final String s, final String charset) {
 
@@ -163,32 +115,6 @@ public class StringUtils {
         // NLog.i("111111", s+"----->"+ret);
         return UriEncoderWithCharset.encode(s, null, charset);
     }
-/*
-    public static String parseHTML(String s) {
-        // 转换字体
-        if (s.indexOf("[quote]") != -1) {
-            s = s.replace("[quote]", "");
-            s = s.replace("[/quote]", "</font><font color='#1d2a63' size='10'>");
-
-            s = s.replace("[b]", "<font color='red' size='1'>");
-            s = s.replace("[/b]", "</font>");
-            s = s.replace("<br/><br/>", "<br/>");
-            s = s.replace("<br/><br/>", "<br/>");
-
-            s = s.replace("[/pid]", "<font color='blue' size='2'>");
-            s = s + "</font>";
-        } else {
-            s = "<font color='#1d2a63' size='10'>" + s;
-            s = s + "</font>";
-        }
-        // 转换 表情
-
-        s = s.replaceAll("(\\[s:\\d\\])", "<img src='$1'>");
-        return s;
-    }
-
-
- */
 
     public static String removeBrTag(String s) {
         s = s.replaceAll("<br/><br/>", "\n");
@@ -275,17 +201,5 @@ public class StringUtils {
         return new SimpleDateFormat(format, Locale.getDefault()).format(calendar.getTime());
     }
 
-//    public static String getStringFromAssets(String path) {
-//        AssetManager assetManager = ContextUtils.getContext().getAssets();
-//        try (InputStream is = assetManager.open(path)) {
-//            int length = is.available();
-//            byte[] buffer = new byte[length];
-//            is.read(buffer);
-//            return new String(buffer, StandardCharsets.UTF_8);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            return "";
-//        }
-//    }
 
 }

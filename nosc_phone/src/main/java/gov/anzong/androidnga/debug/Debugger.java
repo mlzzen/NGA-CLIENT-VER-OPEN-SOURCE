@@ -11,7 +11,9 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
 import java.io.File;
 import java.io.IOException;
 
+import gov.anzong.androidnga.base.util.ContextUtils;
 import gov.anzong.androidnga.base.util.ToastUtils;
+import nosc.utils.ContextUtilsKt;
 import okhttp3.Request;
 
 /**
@@ -27,7 +29,7 @@ public class Debugger {
         }
         try {
             JSONObject obj = JSONObject.parseObject(body);
-            File debugFile = new File(Environment.getExternalStorageDirectory() + "/gov.anzong.androidnga/debug/body.json");
+            File debugFile = new File(ContextUtils.getExternalDir("debug") , "body.json");
             FileUtils.write(debugFile, JSON.toJSONString(obj, SerializerFeature.PrettyFormat,SerializerFeature.WriteMapNullValue,
                     SerializerFeature.WriteDateUseDateFormat) + "\n\n", true);
         } catch (Exception e) {
@@ -40,7 +42,7 @@ public class Debugger {
             return;
         }
         try {
-            File debugFile = new File(Environment.getExternalStorageDirectory() + "/gov.anzong.androidnga/debug/request.json");
+            File debugFile = new File(ContextUtils.getExternalDir("debug") , "request.json");
             FileUtils.write(debugFile, request + "\n\n", true);
         } catch (IOException e) {
             e.printStackTrace();
@@ -50,7 +52,7 @@ public class Debugger {
 
     public static void setDebugMode(boolean debugMode) {
         sDebugMode = debugMode;
-        ToastUtils.flat(sDebugMode ? "调试模式开启" : "调试模式关闭");
+        ToastUtils.warn(sDebugMode ? "调试模式开启" : "调试模式关闭");
     }
 
     public static void toggleDebugMode() {
