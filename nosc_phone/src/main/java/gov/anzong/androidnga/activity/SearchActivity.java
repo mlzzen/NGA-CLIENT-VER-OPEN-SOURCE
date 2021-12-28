@@ -12,9 +12,9 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 
 import gov.anzong.androidnga.R;
 import gov.anzong.androidnga.arouter.ARouterConstants;
-import gov.anzong.androidnga.ui.fragment.SearchHistoryBoardFragment;
-import gov.anzong.androidnga.ui.fragment.SearchHistoryTopicFragment;
-import gov.anzong.androidnga.ui.fragment.SearchHistoryUserFragment;
+import gov.anzong.androidnga.fragment.SearchHistoryBoardFragment;
+import gov.anzong.androidnga.fragment.SearchHistoryTopicFragment;
+import gov.anzong.androidnga.fragment.SearchHistoryUserFragment;
 
 @Route(path = ARouterConstants.ACTIVITY_SEARCH)
 public class SearchActivity extends BaseActivity {

@@ -13,12 +13,12 @@ import com.alibaba.android.arouter.launcher.ARouter;
 
 import gov.anzong.androidnga.R;
 import gov.anzong.androidnga.arouter.ARouterConstants;
-import gov.anzong.androidnga.ui.fragment.TopicListSimpleFragment;
+import gov.anzong.androidnga.fragment.TopicListSimpleFragment;
 import nosc.api.model.BoardModel;
 import sp.phone.param.ParamKey;
 import sp.phone.param.TopicListParam;
-import gov.anzong.androidnga.ui.fragment.TopicFavoriteFragment;
-import gov.anzong.androidnga.ui.fragment.TopicListFragment;
+import gov.anzong.androidnga.fragment.TopicFavoriteFragment;
+import gov.anzong.androidnga.fragment.TopicListFragment;
 import sp.phone.util.ActivityUtils;
 import sp.phone.util.StringUtils;
 

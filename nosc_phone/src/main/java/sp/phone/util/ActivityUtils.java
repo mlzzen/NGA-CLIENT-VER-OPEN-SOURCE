@@ -12,12 +12,11 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.appcompat.app.AppCompatActivity;
 
-import gov.anzong.androidnga.R;
 import gov.anzong.androidnga.activity.LauncherSubActivity;
-import gov.anzong.androidnga.ui.fragment.dialog.SearchDialogFragment;
+import gov.anzong.androidnga.fragment.dialog.SearchDialogFragment;
 import sp.phone.common.PhoneConfiguration;
 import sp.phone.common.UserManagerImpl;
-import gov.anzong.androidnga.ui.fragment.TopicHistoryFragment;
+import gov.anzong.androidnga.fragment.TopicHistoryFragment;
 
 
 public class ActivityUtils {

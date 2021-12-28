@@ -5,23 +5,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.WindowManager;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-//import com.justwen.androidnga.cloud.CloudServerManager;
-
 import gov.anzong.androidnga.R;
 import gov.anzong.androidnga.base.common.SwipeBackHelper;
 import gov.anzong.androidnga.base.util.ContextUtils;
-import gov.anzong.androidnga.base.util.PreferenceUtils;
 import gov.anzong.androidnga.common.PreferenceKey;
 import sp.phone.common.NotificationController;
 import sp.phone.common.PhoneConfiguration;
@@ -37,8 +31,6 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     private boolean mToolbarEnabled;
 
-    private boolean mHardwareAcceleratedEnabled = true;
-
     private SwipeBackHelper mSwipeBackHelper;
 
     @Override
@@ -47,7 +39,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         updateWindowFlag();
         updateThemeUi();
         setSwipeBackEnable(getSharedPreferences(PreferenceKey.PREFERENCE_SETTINGS, Context.MODE_PRIVATE).getBoolean(PreferenceKey.KEY_SWIPE_BACK, false));
-        onCreateBeforeSuper(savedInstanceState);
+
         super.onCreate(savedInstanceState);
         onCreateAfterSuper(savedInstanceState);
         ThemeManager.getInstance().initializeWebTheme(this);
@@ -93,9 +85,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         return t;
     }
 
-    protected void onCreateBeforeSuper(@Nullable Bundle savedInstanceState) {
-
-    }
 
     protected void onCreateAfterSuper(@Nullable Bundle savedInstanceState) {
 
@@ -103,10 +92,6 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     protected void setToolbarEnabled(boolean enabled) {
         mToolbarEnabled = enabled;
-    }
-
-    protected void setHardwareAcceleratedEnabled(boolean enabled) {
-        mHardwareAcceleratedEnabled = enabled;
     }
 
     public void setupToolbar(Toolbar toolbar) {
@@ -144,9 +129,9 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void updateWindowFlag() {
         int flag = 0;
 
-        if (mHardwareAcceleratedEnabled) {
-            flag = flag | WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED;
-        }
+//        if (mHardwareAcceleratedEnabled) {
+//            flag = flag | WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED;
+//        }
         getWindow().addFlags(flag);
     }
 

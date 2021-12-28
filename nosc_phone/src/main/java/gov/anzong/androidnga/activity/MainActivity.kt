@@ -14,9 +14,7 @@ import gov.anzong.androidnga.base.util.ThemeUtils
 import sp.phone.common.UserManagerImpl
 import sp.phone.param.ParamKey
 import sp.phone.theme.ThemeManager
-import gov.anzong.androidnga.ui.fragment.NavigationDrawerFragment
-import gov.anzong.androidnga.ui.fragment.dialog.UrlInputDialogFragment
-import gov.anzong.androidnga.ui.fragment.dialog.VersionUpgradeDialogFragment
+import gov.anzong.androidnga.fragment.NavigationDrawerFragment
 import sp.phone.util.ARouterUtils
 import sp.phone.util.ActivityUtils
 
@@ -29,7 +27,6 @@ class MainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         ThemeUtils.init(this)
         checkPermission()
-        checkNewVersion()
         initView()
         mIsNightMode = ThemeManager.getInstance().isNightMode
         setTitle(R.string.start_title)
@@ -41,16 +38,6 @@ class MainActivity : BaseActivity() {
 
     private fun checkPermission() {
         PermissionUtils.request(this, null, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-    }
-
-    private fun checkNewVersion() {
-        val app = application
-        if (app is NgaClientApp) {
-            if (NgaClientApp.isNewVersion) {
-                gov.anzong.androidnga.ui.fragment.dialog.VersionUpgradeDialogFragment()
-                    .show(supportFragmentManager, null)
-            }
-        }
     }
 
     override fun onResume() {
@@ -88,7 +75,7 @@ class MainActivity : BaseActivity() {
             R.id.menu_reply -> startPostActivity(true)
             R.id.menu_about -> aboutNgaClient()
             R.id.menu_search -> startSearchActivity()
-            R.id.menu_forward -> gov.anzong.androidnga.ui.fragment.dialog.UrlInputDialogFragment().show(supportFragmentManager)
+            R.id.menu_forward -> gov.anzong.androidnga.fragment.dialog.UrlInputDialogFragment().show(supportFragmentManager)
             R.id.menu_gun -> startNotificationActivity()
             R.id.menu_download -> startActivity(Intent(this, TopicCacheActivity::class.java))
             else -> return super.onOptionsItemSelected(item)

@@ -19,7 +19,7 @@
           {
             "from": "gov.anzong.androidnga.activity.TopicListActivity",
             "to": "*"
-          }, {
+          },{
             "from": "gov.anzong.androidnga.activity.RecentNotificationActivity",
             "to": "*"
           },{
@@ -28,6 +28,9 @@
           },{
             "from": "gov.anzong.androidnga.activity.MainActivity",
             "to": "gov.anzong.androidnga.activity.LoginActivity"
+          },{
+            "from": "gov.anzong.androidnga.activity.MainActivity",
+            "to": "gov.anzong.androidnga.activity.LauncherSubActivity"
           }
         ],
         "UX": {

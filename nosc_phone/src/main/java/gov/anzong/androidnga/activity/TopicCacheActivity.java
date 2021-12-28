@@ -6,7 +6,7 @@ import androidx.fragment.app.Fragment;
 
 import sp.phone.param.ParamKey;
 import sp.phone.param.TopicListParam;
-import gov.anzong.androidnga.ui.fragment.TopicCacheFragment;
+import gov.anzong.androidnga.fragment.TopicCacheFragment;
 
 /**
  * @author Justwen

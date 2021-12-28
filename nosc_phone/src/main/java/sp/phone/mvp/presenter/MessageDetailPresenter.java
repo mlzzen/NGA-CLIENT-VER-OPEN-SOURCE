@@ -4,7 +4,7 @@ import android.text.TextUtils;
 
 import gov.anzong.androidnga.R;
 import nosc.api.bean.MessageDetailInfo;
-import gov.anzong.androidnga.ui.fragment.MessageDetailFragment;
+import gov.anzong.androidnga.fragment.MessageDetailFragment;
 import nosc.api.callbacks.OnHttpCallBack;
 import sp.phone.mvp.model.MessageDetailModel;
 import sp.phone.mvp.contract.MessageDetailContract;

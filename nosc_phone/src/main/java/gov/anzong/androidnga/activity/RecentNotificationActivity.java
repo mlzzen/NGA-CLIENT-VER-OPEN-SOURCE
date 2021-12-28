@@ -8,7 +8,7 @@ import androidx.appcompat.app.ActionBar;
 import com.alibaba.android.arouter.facade.annotation.Route;
 
 import gov.anzong.androidnga.arouter.ARouterConstants;
-import gov.anzong.androidnga.ui.fragment.RecentNotificationFragment;
+import gov.anzong.androidnga.fragment.RecentNotificationFragment;
 
 @Route(path = ARouterConstants.ACTIVITY_NOTIFICATION)
 public class RecentNotificationActivity extends BaseActivity {

@@ -6,7 +6,7 @@ import androidx.lifecycle.OnLifecycleEvent;
 import androidx.lifecycle.ViewModel;
 
 import sp.phone.mvp.model.BaseModel;
-import gov.anzong.androidnga.ui.fragment.BaseMvpFragment;
+import gov.anzong.androidnga.fragment.BaseMvpFragment;
 
 /**
  * @author Justwen

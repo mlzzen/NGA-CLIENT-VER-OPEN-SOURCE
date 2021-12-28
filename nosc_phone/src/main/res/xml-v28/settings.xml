@@ -12,7 +12,7 @@
             android:title="@string/setting_nga_domain" />
 
         <PreferenceScreen
-            android:fragment="gov.anzong.androidnga.ui.fragment.SettingsUserFragment"
+            android:fragment="gov.anzong.androidnga.fragment.SettingsUserFragment"
             android:key="pref_user"
             android:title="@string/setting_title_user" />
 
@@ -63,7 +63,7 @@
             android:title="@string/setting_title_material_theme" />
 
         <PreferenceScreen
-            android:fragment="gov.anzong.androidnga.ui.fragment.SettingsSizeFragment"
+            android:fragment="gov.anzong.androidnga.fragment.SettingsSizeFragment"
             android:key="adjust_size"
             android:title="@string/setting_title_size" />
 
@@ -86,7 +86,7 @@
             android:title="@string/setting_title_filter_sub_board" />
 
         <PreferenceScreen
-            android:fragment="gov.anzong.androidnga.ui.fragment.FilterKeywordsFragment"
+            android:fragment="gov.anzong.androidnga.fragment.FilterKeywordsFragment"
             android:key="pref_keyword"
             android:title="@string/filter_keywords" />
 
@@ -95,7 +95,7 @@
     <PreferenceCategory android:title="主题详情设置">
 
         <PreferenceScreen
-            android:fragment="gov.anzong.androidnga.ui.fragment.SettingsBlackListFragment"
+            android:fragment="gov.anzong.androidnga.fragment.SettingsBlackListFragment"
             android:key="pref_black_list"
             android:title="@string/setting_title_black_list" />
 

@@ -9,7 +9,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 import java.util.List;
 
 import sp.phone.mvp.model.entity.BoardCategory;
-import gov.anzong.androidnga.ui.fragment.BoardCategoryFragment;
+import gov.anzong.androidnga.fragment.BoardCategoryFragment;
 
 
 /**

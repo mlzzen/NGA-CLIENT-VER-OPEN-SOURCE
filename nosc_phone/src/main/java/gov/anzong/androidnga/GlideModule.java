@@ -34,7 +34,10 @@ public class GlideModule extends AppGlideModule {
         requestOptions = requestOptions.format(DecodeFormat.PREFER_ARGB_8888);
         builder.setDefaultRequestOptions(requestOptions);
         int diskCacheSizeBytes = 1024 * 1024 * 32; // 32mb
-        builder.setDiskCache(new DiskLruCacheFactory(ContextUtils.getExternalDir("glideLruCache"), diskCacheSizeBytes));
+        builder.setDiskCache(new DiskLruCacheFactory(
+                ContextUtils.getApplication().getExternalCacheDir()+"/glideLruCache",
+                diskCacheSizeBytes)
+        );
 
     }
 }

@@ -11,7 +11,7 @@ import gov.anzong.androidnga.base.util.DeviceUtils
 import gov.anzong.androidnga.base.util.PermissionUtils
 import android.os.Environment
 import android.content.Intent
-import gov.anzong.androidnga.ui.fragment.TopicCacheFragment
+import gov.anzong.androidnga.fragment.TopicCacheFragment
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.net.Uri

@@ -1,11 +1,10 @@
 package gov.anzong.androidnga.activity
 
-import android.R
 import android.os.Bundle
 import com.alibaba.android.arouter.facade.annotation.Route
 import gov.anzong.androidnga.arouter.ARouterConstants
-import gov.anzong.androidnga.ui.fragment.BaseFragment
-import gov.anzong.androidnga.ui.fragment.LoginWebFragment
+import gov.anzong.androidnga.fragment.BaseFragment
+import gov.anzong.androidnga.fragment.LoginWebFragment
 
 @Route(path = ARouterConstants.ACTIVITY_LOGIN)
 class LoginActivity : BaseActivity() {
@@ -13,7 +12,7 @@ class LoginActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mLoginFragment = LoginWebFragment()
-        supportFragmentManager.beginTransaction().replace(R.id.content, mLoginFragment).commit()
+        supportFragmentManager.beginTransaction().replace(android.R.id.content, mLoginFragment).commit()
         supportActionBar?.let{ actionBar ->
             actionBar.setDisplayHomeAsUpEnabled(true)
             actionBar.setDisplayShowHomeEnabled(true)

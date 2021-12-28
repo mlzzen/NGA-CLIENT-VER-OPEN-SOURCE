@@ -14,7 +14,7 @@ import gov.anzong.androidnga.arouter.ARouterConstants;
 import gov.anzong.androidnga.common.PreferenceKey;
 import sp.phone.param.ArticleListParam;
 import sp.phone.param.ParamKey;
-import gov.anzong.androidnga.ui.fragment.ArticleTabFragment;
+import gov.anzong.androidnga.fragment.ArticleTabFragment;
 import sp.phone.util.StringUtils;
 
 /**

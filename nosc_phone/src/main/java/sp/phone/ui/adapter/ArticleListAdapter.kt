@@ -22,8 +22,6 @@ import gov.anzong.androidnga.arouter.ARouterConstants
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
-import gov.anzong.androidnga.ui.fragment.dialog.BaseDialogFragment
-import gov.anzong.androidnga.ui.fragment.dialog.AvatarDialogFragment
 import gov.anzong.androidnga.R
 import android.widget.TextView
 import android.widget.FrameLayout
@@ -253,7 +251,7 @@ class ArticleListAdapter(
             val bundle = Bundle()
             bundle.putString("name", row.author)
             bundle.putString("url", FunctionUtils.parseAvatarUrl(row.js_escap_avatar))
-            gov.anzong.androidnga.ui.fragment.dialog.BaseDialogFragment.show(mFragmentManager, bundle, gov.anzong.androidnga.ui.fragment.dialog.AvatarDialogFragment::class.java)
+            gov.anzong.androidnga.fragment.dialog.BaseDialogFragment.show(mFragmentManager, bundle, gov.anzong.androidnga.fragment.dialog.AvatarDialogFragment::class.java)
             //FunctionUtils.Create_Avatar_Dialog(row, view.getContext(), null);
         }
     }

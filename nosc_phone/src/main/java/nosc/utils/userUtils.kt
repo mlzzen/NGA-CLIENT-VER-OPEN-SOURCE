@@ -15,7 +15,9 @@ object CurrentUserData{
     private const val FILE_BOOKMARK = "favouriteBoard.json"
     private const val FILE_RECENT = "recentBoard.json"
 
-    val user:User get() = UserManagerImpl.getInstance().activeUser
+    val user:User get() = UserManagerImpl.getInstance().activeUser ?:User().also {
+        it.userId = "notLogin"
+    }
     private val externalDir:File get() =
         File(ContextUtils.getApplication().getExternalFilesDir("userData"),user.userId).also{
             if(!it.exists()){

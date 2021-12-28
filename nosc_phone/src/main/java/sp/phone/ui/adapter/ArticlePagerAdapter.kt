@@ -5,7 +5,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import sp.phone.param.ArticleListParam
 import androidx.fragment.app.FragmentStatePagerAdapter
-import gov.anzong.androidnga.ui.fragment.ArticleListFragment
+import gov.anzong.androidnga.fragment.ArticleListFragment
 import sp.phone.param.ParamKey
 
 /**

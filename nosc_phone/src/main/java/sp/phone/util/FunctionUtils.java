@@ -33,7 +33,7 @@ import gov.anzong.androidnga.Utils;
 import gov.anzong.androidnga.base.util.ToastUtils;
 import gov.anzong.androidnga.core.data.HtmlData;
 import gov.anzong.androidnga.core.decode.ForumDecoder;
-import gov.anzong.androidnga.ui.fragment.dialog.ReportDialogFragment;
+import gov.anzong.androidnga.fragment.dialog.ReportDialogFragment;
 import nosc.api.bean.MessageArticlePageInfo;
 import nosc.api.bean.ThreadRowInfo;
 import sp.phone.common.PhoneConfiguration;

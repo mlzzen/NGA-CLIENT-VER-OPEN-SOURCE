@@ -2,7 +2,7 @@ package sp.phone.mvp.presenter;
 
 import gov.anzong.androidnga.R;
 import sp.phone.param.MessagePostParam;
-import gov.anzong.androidnga.ui.fragment.MessagePostFragment;
+import gov.anzong.androidnga.fragment.MessagePostFragment;
 import sp.phone.mvp.contract.MessagePostContract;
 import sp.phone.mvp.model.MessagePostModel;
 import sp.phone.task.MessagePostTask;

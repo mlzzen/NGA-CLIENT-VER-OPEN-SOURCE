@@ -14,7 +14,7 @@ import gov.anzong.androidnga.R;
 import gov.anzong.androidnga.arouter.ARouterConstants;
 import sp.phone.param.ParamKey;
 import sp.phone.param.PostParam;
-import gov.anzong.androidnga.ui.fragment.TopicPostFragment;
+import gov.anzong.androidnga.fragment.TopicPostFragment;
 
 @Route(path = ARouterConstants.ACTIVITY_POST)
 public class PostActivity extends BaseActivity {
