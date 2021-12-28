@@ -25,15 +25,12 @@ class MainActivity : BaseActivity() {
         setToolbarEnabled(true)
         setSwipeBackEnable(false)
         super.onCreate(savedInstanceState)
+        setSwipeBackEnable(false)
         ThemeUtils.init(this)
         checkPermission()
         initView()
         mIsNightMode = ThemeManager.getInstance().isNightMode
         setTitle(R.string.start_title)
-    }
-
-    override fun onCreateAfterSuper(savedInstanceState: Bundle?) {
-        setSwipeBackEnable(false)
     }
 
     private fun checkPermission() {

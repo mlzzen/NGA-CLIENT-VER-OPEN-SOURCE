@@ -36,12 +36,11 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         mConfig = PhoneConfiguration.getInstance();
-        updateWindowFlag();
         updateThemeUi();
         setSwipeBackEnable(getSharedPreferences(PreferenceKey.PREFERENCE_SETTINGS, Context.MODE_PRIVATE).getBoolean(PreferenceKey.KEY_SWIPE_BACK, false));
 
         super.onCreate(savedInstanceState);
-        onCreateAfterSuper(savedInstanceState);
+//        onCreateAfterSuper(savedInstanceState);
         ThemeManager.getInstance().initializeWebTheme(this);
 
         if (mSwipeBackHelper != null) {
@@ -86,10 +85,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
 
-    protected void onCreateAfterSuper(@Nullable Bundle savedInstanceState) {
-
-    }
-
     protected void setToolbarEnabled(boolean enabled) {
         mToolbarEnabled = enabled;
     }
@@ -126,15 +121,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         setTheme(tm.getTheme(mToolbarEnabled));
     }
 
-    protected void updateWindowFlag() {
-        int flag = 0;
-
-//        if (mHardwareAcceleratedEnabled) {
-//            flag = flag | WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED;
-//        }
-        getWindow().addFlags(flag);
-    }
-
     @Deprecated
     public void setupActionBar(Toolbar toolbar) {
         if (toolbar != null && getSupportActionBar() == null) {
@@ -149,45 +135,18 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                break;
-            default:
-                return super.onOptionsItemSelected(item);
-
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+        } else {
+            return super.onOptionsItemSelected(item);
         }
         return true;
-
     }
 
 
     @Override
     protected void onResume() {
-        //checkUpgrade();
         NotificationController.getInstance().checkNotificationDelay();
         super.onResume();
-    }
-
-    /*
-    private void checkUpgrade() {
-        if (PreferenceUtils.getData(PreferenceKey.KEY_CHECK_UPGRADE_STATE, true)) {
-            long time = PreferenceUtils.getData(PreferenceKey.KEY_CHECK_UPGRADE_TIME, 0L);
-            if (System.currentTimeMillis() - time > 1000 * 60 * 60 * 24) {
-                CloudServerManager.checkUpgrade();
-                PreferenceUtils.putData(PreferenceKey.KEY_CHECK_UPGRADE_TIME, System.currentTimeMillis());
-            }
-        }
-    }
-
-     */
-
-    @Override
-    public void startActivityForResult(Intent intent, int requestCode, @Nullable Bundle options) {
-        try {
-            super.startActivityForResult(intent, requestCode, options);
-        } catch (ActivityNotFoundException e) {
-            e.printStackTrace();
-        }
     }
 }

@@ -46,19 +46,6 @@ class AboutActivity : MaterialAboutActivity() {
             .setOnLongClickAction {
                 startActivity(Intent(this,CrashReportActivity::class.java))
             }
-//            .setOnClickAction {
-//                try {
-//                    val url = "market://details?id=$packageName"
-//                    val intent = Intent("android.intent.action.VIEW")
-//                    intent.data = Uri.parse(url)
-//                    startActivity(intent)
-//                } catch (e: ActivityNotFoundException) {
-//                    FunctionUtils.openUrlByDefaultBrowser(
-//                        this@AboutActivity,
-//                        "https://gitee.com/sjtuYricky/NGA-CLIENT-VER-OPEN-SOURCE"
-//                    )
-//                }
-//            }
             .build())
         builder.addItem(MaterialAboutActionItem.Builder()
             .text("License")

@@ -31,6 +31,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import gov.anzong.androidnga.base.util.ToastUtils
+import gov.anzong.androidnga.databinding.FragmentNavigationDrawerBinding
 import nosc.utils.jumpToLogin
 import nosc.utils.showTopicList
 import nosc.utils.toTopicListPage
@@ -46,8 +47,8 @@ import java.lang.NumberFormatException
  */
 class NavigationDrawerFragment : BaseRxFragment(),
     OnItemClickListener {
-    private var mViewPager: ViewPager2? = null
-    private lateinit var mHeaderView: ViewFlipperEx
+    private var binding:FragmentNavigationDrawerBinding? = null
+    private var mHeaderView: ViewFlipperEx? = null
     private var mReplyCountView: TextView? = null
     private var mBoardPagerAdapter: BoardPagerAdapter? = null
     private var tabLayoutMediator:TabLayoutMediator? = null
@@ -64,14 +65,20 @@ class NavigationDrawerFragment : BaseRxFragment(),
         viewModel.boardCategoryList.observe(this){
             mBoardPagerAdapter =
                 BoardPagerAdapter(this, it)
-            mViewPager?.adapter = mBoardPagerAdapter
-            tabLayoutMediator?.apply {
-                if(isAttached)
-                    detach()
-                attach()
+            binding?.apply {
+                pager.adapter = mBoardPagerAdapter
+                tabLayoutMediator = TabLayoutMediator(tabs,pager){ tab,position ->
+                    tab.text = mBoardPagerAdapter?.getPageTitle(position)
+                    pager.setCurrentItem(tab.position,true)
+                }
+                tabLayoutMediator?.apply {
+                    if(isAttached)
+                        detach()
+                    attach()
+                }
             }
-        }
 
+        }
         viewModel.query()
     }
 
@@ -87,22 +94,38 @@ class NavigationDrawerFragment : BaseRxFragment(),
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_navigation_drawer, container, false)
+    ): View {
+        return FragmentNavigationDrawerBinding.inflate(inflater,container,false).let{
+            binding = it
+            it.root
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val toolbar: Toolbar = view.findViewById(R.id.toolbar)
-        setupToolbar(toolbar)
-        initDrawerLayout(view, toolbar)
-        initNavigationView(view)
-        mViewPager = view.findViewById(R.id.pager)
-        val tabLayout: TabLayout = view.findViewById(R.id.tabs)
-        tabLayoutMediator = TabLayoutMediator(tabLayout,mViewPager!!){ tab,position ->
-            tab.text = mBoardPagerAdapter?.getPageTitle(position)
-            mViewPager?.setCurrentItem(tab.position,true)
+        binding?.apply {
+            setupToolbar(toolbar)
+            initDrawerLayout(view, toolbar)
+            tabs.tabMode = TabLayout.MODE_SCROLLABLE
+
+            navView.apply{
+                setNavigationItemSelectedListener { item: MenuItem ->
+                    onOptionsItemSelected(item)
+                }
+                menu.findItem(R.id.menu_gun).apply {
+                    actionView = layoutInflater.inflate(R.layout.nav_menu_action_view_gun, null)
+                    mReplyCountView = actionView.findViewById(R.id.reply_count)
+                }
+
+                (getChildAt(0) as NavigationMenuView).apply{
+                    isVerticalScrollBarEnabled = false
+                }
+
+                mHeaderView = getHeaderView(0).findViewById(R.id.viewFlipper)
+            }
+
+            updateHeaderView()
         }
-        tabLayout.tabMode = TabLayout.MODE_SCROLLABLE
+
         super.onViewCreated(view, savedInstanceState)
     }
 
@@ -119,36 +142,21 @@ class NavigationDrawerFragment : BaseRxFragment(),
         drawerToggle.syncState()
     }
 
-    private fun initNavigationView(rootView: View) {
-        val navigationView: NavigationView = rootView.findViewById(R.id.nav_view)
-        navigationView.setNavigationItemSelectedListener { item: MenuItem ->
-            onOptionsItemSelected(item)
-        }
-        val menuItem = navigationView.menu.findItem(R.id.menu_gun)
-        val menuView = navigationView.getChildAt(0) as NavigationMenuView
-        menuView.isVerticalScrollBarEnabled = false
-        val actionView = layoutInflater.inflate(R.layout.nav_menu_action_view_gun, null)
-        menuItem.actionView = actionView
-        menuItem.expandActionView()
-        mReplyCountView = actionView.findViewById(R.id.reply_count)
-        mHeaderView = navigationView.getHeaderView(0).findViewById(R.id.viewFlipper)
-        updateHeaderView()
-    }
-
     private fun setReplyCount(count: Int) {
         mReplyCountView?.text = count.toString()
     }
 
      private fun updateHeaderView() {
-        val adapter = FlipperUserAdapter{
-            toggleUser(it)
+        mHeaderView?.apply {
+            adapter = FlipperUserAdapter{
+                toggleUser(it)
+            }
+            inAnimation =
+                AnimationUtils.loadAnimation(context, R.anim.right_in)
+            outAnimation =
+                AnimationUtils.loadAnimation(context, R.anim.right_out)
+            displayedChild = UserManagerImpl.getInstance().activeUserIndex
         }
-        mHeaderView.adapter = adapter
-        mHeaderView.inAnimation =
-            AnimationUtils.loadAnimation(context, R.anim.right_in)
-        mHeaderView.outAnimation =
-            AnimationUtils.loadAnimation(context, R.anim.right_out)
-        mHeaderView.displayedChild = UserManagerImpl.getInstance().activeUserIndex
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -228,8 +236,8 @@ class NavigationDrawerFragment : BaseRxFragment(),
                 .getInt(PreferenceKey.KEY_REPLY_COUNT, 0)
         )
         val um = UserManagerImpl.getInstance()
-        if (um.userSize > 0 && um.activeUserIndex != mHeaderView.displayedChild) {
-            mHeaderView.displayedChild = um.activeUserIndex
+        if (um.userSize > 0 && um.activeUserIndex != mHeaderView?.displayedChild) {
+            mHeaderView?.displayedChild = um.activeUserIndex
         }
         super.onResume()
     }
@@ -246,8 +254,8 @@ class NavigationDrawerFragment : BaseRxFragment(),
     }
 
     private fun switchToNextUser(): Int {
-        mHeaderView.showPrevious()
-        return mHeaderView.displayedChild
+        mHeaderView?.showPrevious()
+        return mHeaderView?.displayedChild ?: 0
     }
 
     override fun onItemClick(parent: AdapterView<*>?, view: View, position: Int, id: Long) {

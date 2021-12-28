@@ -1,5 +1,6 @@
 package gov.anzong.androidnga.fragment.dialog;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 import android.os.Bundle;
 import android.view.View;
@@ -14,7 +15,7 @@ public abstract class NoframeDialogFragment extends DialogFragment {
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         this.getDialog().setCanceledOnTouchOutside(true);
     }

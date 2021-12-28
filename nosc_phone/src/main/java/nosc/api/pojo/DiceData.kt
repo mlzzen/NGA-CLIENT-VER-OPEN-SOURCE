@@ -1,5 +1,7 @@
 package nosc.api.pojo
 
+import kotlin.math.floor
+
 class DiceData (
     val txt: String,
     val authorId:Int,
@@ -14,7 +16,7 @@ class DiceData (
 }
 
 fun randDigi(p: String, l: Int): String {
-    return p + Math.floor(Math.random() * l)
+    return p + floor(Math.random() * l)
 }
 
 fun DiceData.rnd(): Double {
