@@ -74,11 +74,8 @@ public class UserManagerImpl implements UserManager {
             }
         }
 
-        versionUpgrade();
     }
 
-    private void versionUpgrade() {
-    }
 
     @Override
     public int getActiveUserIndex() {

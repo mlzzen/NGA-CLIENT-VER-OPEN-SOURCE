@@ -55,7 +55,8 @@ public abstract class ArticleConvertFactory {
                 js = js.substring(0, js.indexOf("/*error fill content"));
             }
 
-            js = js.replaceAll("/\\*\\$js\\$\\*/", "")
+            js = js
+                    //.replaceAll("/\\*\\$js\\$\\*/", "")
                     .replaceAll("\"content\":\\+(\\d+),", "\"content\":\"+$1\",")
                     .replaceAll("\"subject\":\\+(\\d+),", "\"subject\":\"+$1\",")
                     .replaceAll("\"content\":(0\\d+),", "\"content\":\"$1\",")
@@ -360,7 +361,7 @@ public abstract class ArticleConvertFactory {
                         } else {
                             num = 1;
                         }
-                        covers = parseInt(sstrs[1],0);
+                        covers = parseInt(sstrs[1].trim(),0);
                         if (num > 10 || covers > 100000) {
                             sum = -1;
                             diceStr.append("+OUT OF LIMIT");

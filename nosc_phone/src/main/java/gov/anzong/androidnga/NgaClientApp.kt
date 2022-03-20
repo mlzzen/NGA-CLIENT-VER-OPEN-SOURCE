@@ -14,8 +14,8 @@ import sp.phone.common.FilterKeywordsManagerImpl
 class NgaClientApp : Application() {
     override fun onCreate() {
         NLog.w(TAG, "app nga android start")
+        inst = this
         ContextUtils.setApplication(this)
-        checkNewVersion()
         VersionUpgradeHelper.upgrade()
         initCoreModule()
         initRouter()
@@ -42,22 +42,13 @@ class NgaClientApp : Application() {
     private fun initCoreModule() {
         UserManagerImpl.getInstance().initialize(this)
         FilterKeywordsManagerImpl.getInstance().initialize(this)
-        //        // 注册crashHandler
-//        CrashHandler.getInstance().init(this);
-    }
-
-    private fun checkNewVersion() {
-        val versionCode = PreferenceUtils.getData(PreferenceKey.VERSION_CODE, 0)
-        if (BuildConfig.VERSION_CODE > versionCode) {
-            PreferenceUtils.putData(PreferenceKey.PREVIOUS_VERSION_CODE, versionCode)
-            PreferenceUtils.putData(PreferenceKey.VERSION_CODE, BuildConfig.VERSION_CODE)
-            isNewVersion = true
-            PreferenceUtils.putData(PreferenceKey.KEY_WEBVIEW_DATA_INDEX, 0)
-        }
     }
 
     companion object {
         private val TAG = NgaClientApp::class.java.simpleName
-        var isNewVersion = false
+        lateinit var inst:NgaClientApp
+            private set
     }
 }
+
+val app:NgaClientApp get() = NgaClientApp.inst

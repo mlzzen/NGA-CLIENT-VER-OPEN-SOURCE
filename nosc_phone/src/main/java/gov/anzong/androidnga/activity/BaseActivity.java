@@ -1,8 +1,6 @@
 package gov.anzong.androidnga.activity;
 
-import android.content.ActivityNotFoundException;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -40,7 +38,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         setSwipeBackEnable(getSharedPreferences(PreferenceKey.PREFERENCE_SETTINGS, Context.MODE_PRIVATE).getBoolean(PreferenceKey.KEY_SWIPE_BACK, false));
 
         super.onCreate(savedInstanceState);
-//        onCreateAfterSuper(savedInstanceState);
         ThemeManager.getInstance().initializeWebTheme(this);
 
         if (mSwipeBackHelper != null) {

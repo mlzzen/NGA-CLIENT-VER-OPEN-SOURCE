@@ -19,7 +19,7 @@ import sp.phone.rxjava.RxLifecycleProvider;
 
 public class BaseRxFragment extends BaseFragment {
 
-    private RxLifecycleProvider mRxLifecycleProvider = new RxLifecycleProvider();
+    private final RxLifecycleProvider mRxLifecycleProvider = new RxLifecycleProvider();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

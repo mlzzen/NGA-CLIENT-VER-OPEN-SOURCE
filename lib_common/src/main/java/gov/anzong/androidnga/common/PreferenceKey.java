@@ -68,12 +68,7 @@ public interface PreferenceKey {
 
     public static final String KEY_USE_SOLID_COLOR_BG = "use_solid_color_bg";
 
-
     public static final String KEY_NIGHT_MODE_FOLLOW_SYSTEM = "key_night_mode_follow_system";
-
-    public static final String VERSION_CODE = "version_code";
-
-    public static final String PREVIOUS_VERSION_CODE = "previous_version_code";
 
     public static final String KEY_WEBVIEW_DATA_INDEX = "webview_data_index";
 

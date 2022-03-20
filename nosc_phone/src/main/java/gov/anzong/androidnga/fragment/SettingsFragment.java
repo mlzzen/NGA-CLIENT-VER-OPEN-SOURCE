@@ -49,9 +49,6 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
                 mapping((PreferenceGroup) preference);
             } else {
                 preference.setOnPreferenceChangeListener(this);
-//                if (preference instanceof ListPreference) {
-//                    preference.setSummary(((ListPreference) preference).getEntry());
-//                }
             }
         }
     }
@@ -124,17 +121,6 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
 
         }
         return true;
-    }
-
-    private void setFullScreen(boolean fullScreen) {
-        int flag;
-        if (fullScreen) {
-            flag = WindowManager.LayoutParams.FLAG_FULLSCREEN | WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED;
-        } else {
-            getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-            flag = WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED;
-        }
-        getActivity().getWindow().addFlags(flag);
     }
 
 
