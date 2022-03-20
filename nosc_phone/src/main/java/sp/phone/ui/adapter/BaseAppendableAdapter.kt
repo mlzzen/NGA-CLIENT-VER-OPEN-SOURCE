@@ -1,60 +1,42 @@
-package sp.phone.ui.adapter;
+package sp.phone.ui.adapter
 
-import android.content.Context;
-import androidx.recyclerview.widget.RecyclerView;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import sp.phone.view.RecyclerViewEx;
+import android.content.Context
+import androidx.recyclerview.widget.RecyclerView
+import sp.phone.view.RecyclerViewEx.IAppendableAdapter
+import java.util.ArrayList
 
 /**
  * Created by Justwen on 2018/3/23.
  */
-
-public abstract class BaseAppendableAdapter<E, T extends RecyclerView.ViewHolder> extends BaseAdapter<E, T> implements RecyclerViewEx.IAppendableAdapter {
-
-    private boolean mHaveNextPage = true;
-
-    private int mTotalPage;
-
-    public BaseAppendableAdapter(Context context) {
-        super(context);
+abstract class BaseAppendableAdapter<E, T : RecyclerView.ViewHolder>(context: Context) :
+    BaseAdapter<E, T>(context), IAppendableAdapter {
+    private var mHaveNextPage = true
+    private var mTotalPage = 0
+    override fun getNextPage(): Int {
+        return mTotalPage + 1
     }
 
-    @Override
-    public int getNextPage() {
-        return mTotalPage + 1;
+    override fun hasNextPage(): Boolean {
+        return mHaveNextPage
     }
 
-    @Override
-    public boolean hasNextPage() {
-        return mHaveNextPage;
+    override fun setData(dataList: List<E>) {
+        mTotalPage = 0
+        mHaveNextPage = true
+        super.setData(dataList)
     }
 
-    @Override
-    public void setData(List<E> dataList) {
-        mTotalPage = 0;
-        mHaveNextPage = true;
-        super.setData(dataList);
-    }
-
-    public void appendData(List<E> dataList) {
-        if (mDataList == null) {
-            mDataList = new ArrayList<>();
-        }
-
-        for (E e : dataList) {
+    fun appendData(dataList: List<E>) {
+        for (e in dataList) {
             if (!mDataList.contains(e)) {
-                mDataList.add(e);
+                mDataList.add(e)
             }
         }
-        mTotalPage++;
-        notifyDataSetChanged();
-
+        mTotalPage++
+        notifyDataSetChanged()
     }
 
-    public void setNextPageEnabled(boolean enabled) {
-        mHaveNextPage = enabled;
+    fun setNextPageEnabled(enabled: Boolean) {
+        mHaveNextPage = enabled
     }
 }

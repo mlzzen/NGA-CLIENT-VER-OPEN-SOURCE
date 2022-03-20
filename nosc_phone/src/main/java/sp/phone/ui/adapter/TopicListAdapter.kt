@@ -1,88 +1,74 @@
-package sp.phone.ui.adapter;
+package sp.phone.ui.adapter
 
-import android.content.Context;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-import android.util.TypedValue;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
+import android.content.Context
+import android.util.TypedValue
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.TextView
+import sp.phone.ui.adapter.BaseAppendableAdapter
+import sp.phone.mvp.model.entity.ThreadPageInfo
+import sp.phone.ui.adapter.TopicListAdapter.TopicViewHolder
+import sp.phone.common.PhoneConfiguration
+import sp.phone.rxjava.RxUtils
+import sp.phone.theme.ThemeManager
+import sp.phone.param.TopicTitleHelper
+import androidx.recyclerview.widget.RecyclerView
+import gov.anzong.androidnga.R
 
-import java.util.List;
-
-import gov.anzong.androidnga.R;
-import sp.phone.common.PhoneConfiguration;
-import sp.phone.param.TopicTitleHelper;
-import sp.phone.mvp.model.entity.ThreadPageInfo;
-import sp.phone.rxjava.RxUtils;
-import sp.phone.theme.ThemeManager;
-
-public class TopicListAdapter extends BaseAppendableAdapter<ThreadPageInfo, TopicListAdapter.TopicViewHolder> {
-
-    public TopicListAdapter(Context context) {
-        super(context);
+class TopicListAdapter(context: Context) :
+    BaseAppendableAdapter<ThreadPageInfo, TopicViewHolder>(context) {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TopicViewHolder {
+        val viewHolder = TopicViewHolder(
+            LayoutInflater.from(mContext).inflate(R.layout.list_topic, parent, false)
+        )
+        viewHolder.title.setTextSize(
+            TypedValue.COMPLEX_UNIT_DIP,
+            PhoneConfiguration.getInstance().topicTitleSize
+        )
+        RxUtils.clicks(viewHolder.itemView, mOnClickListener)
+        viewHolder.itemView.setOnLongClickListener(mOnLongClickListener)
+        return viewHolder
     }
 
-    @Override
-    public TopicViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        TopicViewHolder viewHolder = new TopicViewHolder(LayoutInflater.from(mContext).inflate(R.layout.list_topic, parent, false));
-        viewHolder.title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, PhoneConfiguration.getInstance().getTopicTitleSize());
-        RxUtils.clicks(viewHolder.itemView, mOnClickListener);
-        viewHolder.itemView.setOnLongClickListener(mOnLongClickListener);
-        return viewHolder;
+    override fun setData(dataList: List<ThreadPageInfo>) {
+        super.appendData(dataList)
     }
 
-    @Override
-    public void setData(List<ThreadPageInfo> dataList) {
-        if (dataList == null) {
-            super.setData(null);
-        } else {
-            super.appendData(dataList);
-        }
-    }
-
-    @Override
-    public void onBindViewHolder(@NonNull TopicViewHolder holder, int position) {
-
-        ThreadPageInfo info = getItem(position);
-        info.setPosition(position);
-        holder.itemView.setTag(info);
-
-        handleJsonList(holder, info);
+    override fun onBindViewHolder(holder: TopicViewHolder, position: Int) {
+        val info = getItem(position)
+        info.position = position
+        holder.itemView.tag = info
+        handleJsonList(holder, info)
         if (!PhoneConfiguration.getInstance().useSolidColorBackground()) {
-            holder.itemView.setBackgroundResource(ThemeManager.getInstance().getBackgroundColor(position));
+            holder.itemView.setBackgroundResource(
+                ThemeManager.getInstance().getBackgroundColor(position)
+            )
         }
     }
 
-    private void handleJsonList(TopicViewHolder holder, ThreadPageInfo entry) {
-
+    private fun handleJsonList(holder: TopicViewHolder, entry: ThreadPageInfo?) {
         if (entry == null) {
-            return;
+            return
         }
-        holder.author.setText(entry.getAuthor());
-        holder.lastReply.setText(entry.getLastPoster());
-        holder.num.setText(String.valueOf(entry.getReplies()));
-        holder.num.setTextAppearance(entry.getReplies()>99?R.style.text_style_bold:R.style.text_style_normal);
-        holder.title.setText(TopicTitleHelper.handleTitleFormat(entry));
+        holder.author.text = entry.author
+        holder.lastReply.text = entry.lastPoster
+        holder.num.text = entry.replies.toString()
+        holder.num.setTextAppearance(if (entry.replies > 99) R.style.text_style_bold else R.style.text_style_normal)
+        holder.title.text = TopicTitleHelper.handleTitleFormat(entry)
     }
 
-    public class TopicViewHolder extends RecyclerView.ViewHolder {
+    class TopicViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        var num: TextView
+        var title: TextView
+        var author: TextView
+        var lastReply: TextView
 
-        public TextView num;
-
-        public TextView title;
-
-        public TextView author;
-
-        public TextView lastReply;
-
-        public TopicViewHolder(View itemView) {
-            super(itemView);
-            num = itemView.findViewById(R.id.num);
-            title = itemView.findViewById(R.id.title);
-            author = itemView.findViewById(R.id.author);
-            lastReply = itemView.findViewById(R.id.last_reply);
+        init {
+            num = itemView.findViewById(R.id.num)
+            title = itemView.findViewById(R.id.title)
+            author = itemView.findViewById(R.id.author)
+            lastReply = itemView.findViewById(R.id.last_reply)
         }
     }
 }

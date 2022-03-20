@@ -1,7 +1,8 @@
-package nosc.utils
+package nosc.config
 
 import com.alibaba.fastjson.JSON
 import gov.anzong.androidnga.base.util.ContextUtils
+import nosc.utils.parseArray
 import sp.phone.common.User
 import sp.phone.common.UserManagerImpl
 import sp.phone.mvp.model.entity.Board
@@ -19,7 +20,7 @@ object CurrentUserData{
         it.userId = "notLogin"
     }
     private val externalDir:File get() =
-        File(ContextUtils.getApplication().getExternalFilesDir("userData"),user.userId).also{
+        File(ContextUtils.getApplication().getExternalFilesDir("userData"), user.userId).also{
             if(!it.exists()){
                 it.mkdirs()
             }
@@ -33,7 +34,7 @@ object CurrentUserData{
     }catch (e:Throwable){
         listOf()
     }
-    set(favBoard:List<Board>){
+    set(favBoard){
         File(externalDir, FILE_BOOKMARK).writeText(
             JSON.toJSONString(favBoard)
         )

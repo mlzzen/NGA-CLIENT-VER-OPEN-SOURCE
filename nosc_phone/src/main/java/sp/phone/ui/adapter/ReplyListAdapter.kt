@@ -1,84 +1,53 @@
-package sp.phone.ui.adapter;
+package sp.phone.ui.adapter
 
-import android.content.Context;
-import androidx.recyclerview.widget.RecyclerView;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
-
-import java.util.Iterator;
-import java.util.List;
-
-import gov.anzong.androidnga.R;
-import sp.phone.mvp.model.entity.ThreadPageInfo;
-import sp.phone.util.StringUtils;
+import android.content.Context
+import android.view.View
+import android.view.ViewGroup
+import android.widget.TextView
+import sp.phone.mvp.model.entity.ThreadPageInfo
+import androidx.recyclerview.widget.RecyclerView
+import gov.anzong.androidnga.R
+import sp.phone.util.StringUtils
 
 /**
  * Created by Justwen on 2018/3/23.
  */
-
-public class ReplyListAdapter extends BaseAppendableAdapter<ThreadPageInfo, ReplyListAdapter.ViewHolder> {
-
-    public ReplyListAdapter(Context context) {
-        super(context);
+class ReplyListAdapter(context: Context) :
+    BaseAppendableAdapter<ThreadPageInfo, ReplyListAdapter.ViewHolder>(context) {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        return ViewHolder(mLayoutInflater.inflate(R.layout.list_reply_ltem, parent, false))
     }
 
-    @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ViewHolder(mLayoutInflater.inflate(R.layout.list_reply_ltem, parent, false));
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val pageInfo = getItem(position)
+        val replyInfo = pageInfo.replyInfo
+        holder.mContentTv.text = replyInfo.content
+        holder.mSubjectTv.text = replyInfo.subject
+        holder.mPostDateTv.text = StringUtils.timeStamp2Date2(replyInfo.postDate)
+        holder.itemView.setOnClickListener(mOnClickListener)
+        holder.itemView.tag = pageInfo
     }
 
-    @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        ThreadPageInfo pageInfo = getItem(position);
-        ThreadPageInfo.ReplyInfo replyInfo = pageInfo.getReplyInfo();
+    override fun setData(dataList: List<ThreadPageInfo>) {
 
-        holder.mContentTv.setText(replyInfo.getContent());
-        holder.mSubjectTv.setText(replyInfo.getSubject());
-        holder.mPostDateTv.setText(StringUtils.timeStamp2Date2(replyInfo.getPostDate()));
-
-
-        holder.itemView.setOnClickListener(mOnClickListener);
-        holder.itemView.setTag(pageInfo);
-
+        super.appendData(checkData(dataList))
     }
 
-
-    @Override
-    public void setData(List<ThreadPageInfo> dataList) {
-        if (dataList == null) {
-            super.setData(dataList);
-        } else {
-            checkData(dataList);
-            super.appendData(dataList);
+    private fun checkData(dataList: List<ThreadPageInfo>):List<ThreadPageInfo> {
+        return dataList.filter {
+            it.replyInfo == null
         }
     }
 
-    private void checkData(List<ThreadPageInfo> dataList) {
-        Iterator<ThreadPageInfo> iterator = dataList.iterator();
-        while(iterator.hasNext()) {
-            ThreadPageInfo pageInfo = iterator.next();
-            if (pageInfo.getReplyInfo() == null) {
-                iterator.remove();
-            }
+    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        var mContentTv: TextView
+        var mPostDateTv: TextView
+        var mSubjectTv: TextView
+
+        init {
+            mContentTv = itemView.findViewById(R.id.tv_content)
+            mPostDateTv = itemView.findViewById(R.id.tv_time)
+            mSubjectTv = itemView.findViewById(R.id.tv_topic)
         }
     }
-
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-
-        public TextView mContentTv;
-
-        public TextView mPostDateTv;
-
-        public TextView mSubjectTv;
-
-        public ViewHolder(View itemView) {
-            super(itemView);
-            mContentTv = itemView.findViewById(R.id.tv_content);
-            mPostDateTv = itemView.findViewById(R.id.tv_time);
-            mSubjectTv = itemView.findViewById(R.id.tv_topic);
-        }
-    }
-
-
 }

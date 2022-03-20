@@ -127,7 +127,7 @@ class TopicListViewModel : ViewModel(),LifecycleObserver{
         return TopicListModel()
     }
 
-    fun removeTopic(info: ThreadPageInfo, position: Int) {
+    fun removeTopic(info: ThreadPageInfo) {
         mBaseModel.removeTopic(info, object :
             OnHttpCallBack<String> {
             override fun onError(text: String) {
@@ -144,11 +144,11 @@ class TopicListViewModel : ViewModel(),LifecycleObserver{
     fun removeCacheTopic(info: ThreadPageInfo) {
         mBaseModel.removeCacheTopic(info, object :
             OnHttpCallBack<String> {
-            override fun onError(text: String) {
+            override fun onError(text: String?) {
                 errorMsg.value = "删除失败！"
             }
 
-            override fun onSuccess(data: String) {
+            override fun onSuccess(data: String?) {
                 ToastUtils.info("删除成功！")
                 removedTopic.postValue(info)
             }

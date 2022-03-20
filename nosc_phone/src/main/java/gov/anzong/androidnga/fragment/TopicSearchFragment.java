@@ -18,6 +18,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.alibaba.fastjson.JSON;
 
+import java.util.Collections;
+
 import gov.anzong.androidnga.R;
 import gov.anzong.androidnga.activity.BaseActivity;
 import gov.anzong.androidnga.arouter.ARouterConstants;
@@ -124,12 +126,12 @@ public class TopicSearchFragment extends BaseFragment implements View.OnClickLis
         ((BaseActivity) getActivity()).setupToolbar();
 
         if (mRequestParam.searchPost > 0) {
-            mAdapter = new ReplyListAdapter(getContext());
-            mListView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+            mAdapter = new ReplyListAdapter(requireContext());
+            mListView.addItemDecoration(new DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL));
 
         } else {
 
-            mAdapter = new TopicListAdapter(getContext());
+            mAdapter = new TopicListAdapter(requireContext());
         }
 
         mAdapter.setOnClickListener(this);
@@ -215,7 +217,7 @@ public class TopicSearchFragment extends BaseFragment implements View.OnClickLis
     }
 
     public void clearData() {
-        mAdapter.setData(null);
+        mAdapter.setData(Collections.emptyList());
     }
 
     @Override

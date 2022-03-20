@@ -42,7 +42,7 @@ public class TopicFavoriteFragment extends TopicSearchFragment implements View.O
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         ThreadPageInfo info = (ThreadPageInfo) view.getTag();
-                        viewModel.removeTopic(info, info.getPosition());
+                        viewModel.removeTopic(info);
                     }
                 })
                 .setNegativeButton(android.R.string.cancel, null)

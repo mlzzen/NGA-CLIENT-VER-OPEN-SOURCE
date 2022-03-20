@@ -18,9 +18,6 @@ public interface ParamKey {
     //搜索关键字  字符串urlencode
     String KEY_KEY = "key";
 
-    //页  整数
-    String KEY_PAGE = "page";
-
     //搜索的版面组  取值为user时表示全部用户版 无此参数为全部非用户版
     String KEY_FID_GROUP = "fidgroup";
 

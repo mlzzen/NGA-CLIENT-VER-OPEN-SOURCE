@@ -99,7 +99,7 @@ open class TopicListBaseFragment : BaseFragment(R.layout.fragment_topic_list_bas
     }
 
     open fun createAdapter(): BaseAppendableAdapter<ThreadPageInfo, *> {
-        return TopicListAdapter(context)
+        return TopicListAdapter(requireContext())
     }
 
     override fun onClick(v: View?) {

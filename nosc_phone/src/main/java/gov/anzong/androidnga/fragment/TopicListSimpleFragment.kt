@@ -34,7 +34,7 @@ class TopicListSimpleFragment : TopicListBaseFragment() {
 
     override fun createAdapter(): BaseAppendableAdapter<ThreadPageInfo, *> {
         return if (mRequestParam.searchPost > 0) {
-            ReplyListAdapter(context)
+            ReplyListAdapter(requireContext())
         } else {
             super.createAdapter()
         }

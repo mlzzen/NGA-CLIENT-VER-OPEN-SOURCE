@@ -9,7 +9,7 @@ import com.alibaba.fastjson.JSON
 import gov.anzong.androidnga.base.util.ContextUtils
 import gov.anzong.androidnga.base.util.PreferenceUtils
 import gov.anzong.androidnga.common.PreferenceKey
-import nosc.utils.CurrentUserData
+import nosc.config.CurrentUserData
 
 import okhttp3.*
 import sp.phone.mvp.model.BaseModel

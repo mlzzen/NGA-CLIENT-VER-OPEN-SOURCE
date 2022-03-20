@@ -1,69 +1,54 @@
-package sp.phone.ui.adapter;
+package sp.phone.ui.adapter
 
-import android.content.Context;
-import android.view.LayoutInflater;
-import android.view.View;
-
-import androidx.recyclerview.widget.RecyclerView;
-
-import java.util.List;
+import android.content.Context
+import android.view.LayoutInflater
+import android.view.View
+import androidx.recyclerview.widget.RecyclerView
 
 /**
  * Created by Justwen on 2018/3/23.
  */
+abstract class BaseAdapter<E, T : RecyclerView.ViewHolder>(protected var mContext: Context) :
+    RecyclerView.Adapter<T>() {
+    @JvmField
+    protected var mDataList: MutableList<E> = mutableListOf()
+    @JvmField
+    protected var mOnClickListener: View.OnClickListener? = null
+    protected var mOnLongClickListener: View.OnLongClickListener? = null
+    @JvmField
+    protected var mLayoutInflater: LayoutInflater = LayoutInflater.from(mContext)
 
-public abstract class BaseAdapter<E, T extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<T> {
-
-    protected List<E> mDataList;
-
-    protected View.OnClickListener mOnClickListener;
-
-    protected View.OnLongClickListener mOnLongClickListener;
-
-    protected Context mContext;
-
-    protected LayoutInflater mLayoutInflater;
-
-    public BaseAdapter(Context context) {
-        mContext = context;
-        mLayoutInflater = LayoutInflater.from(mContext);
+    fun getItem(position: Int): E {
+        return mDataList[position]
     }
 
-    public E getItem(int position) {
-        return mDataList.get(position);
+    open fun setData(dataList: List<E>) {
+        mDataList.clear()
+        mDataList.addAll(dataList)
+        notifyDataSetChanged()
     }
 
-    public void setData(List<E> dataList) {
-        mDataList = dataList;
-        notifyDataSetChanged();
+    fun removeItem(position: Int) {
+        mDataList.removeAt(position)
+        notifyItemRemoved(position)
     }
 
-    public void removeItem(int position) {
-        mDataList.remove(position);
-        notifyItemRemoved(position);
+    fun removeItem(data: E) {
+        removeItem(mDataList.indexOf(data))
     }
 
-    public void removeItem(E e) {
-        int index = mDataList.indexOf(e);
-        if (index != -1) {
-            removeItem(index);
-        }
+    fun clear() {
+        mDataList.clear()
     }
 
-    public void clear() {
-        setData(null);
+    override fun getItemCount(): Int = mDataList.size
+
+    fun setOnClickListener(onClickListener: View.OnClickListener?) {
+        mOnClickListener = onClickListener
     }
 
-    @Override
-    public int getItemCount() {
-        return mDataList == null ? 0 : mDataList.size();
+    fun setOnLongClickListener(onLongClickListener: View.OnLongClickListener?) {
+        mOnLongClickListener = onLongClickListener
     }
 
-    public void setOnClickListener(View.OnClickListener onClickListener) {
-        mOnClickListener = onClickListener;
-    }
-
-    public void setOnLongClickListener(View.OnLongClickListener onLongClickListener) {
-        mOnLongClickListener = onLongClickListener;
-    }
 }

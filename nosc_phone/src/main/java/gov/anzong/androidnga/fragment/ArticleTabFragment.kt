@@ -56,13 +56,13 @@ class ArticleTabFragment : BaseRxFragment() {
         mRequestParam = requireArguments().getParcelable(ParamKey.KEY_PARAM)
 
         val viewModel = activityViewModel
-        viewModel.replyCount.observe(this, { replyCount: Int ->
+        viewModel.replyCount.observe(this) { replyCount: Int ->
             mReplyCount = replyCount
             val count = ceil((mReplyCount / 20.0f).toDouble()).toInt()
             if (count != mPagerAdapter!!.count) {
                 mPagerAdapter!!.count = count
             }
-        })
+        }
     }
 
     override fun onCreateView(
@@ -148,7 +148,7 @@ class ArticleTabFragment : BaseRxFragment() {
         requireActivity().startActivityForResult(intent, ActivityUtils.REQUEST_CODE_TOPIC_POST)
     }
 
-    fun refresh() {
+    private fun refresh() {
         activityViewModel.setRefreshPage(mViewPager!!.currentItem + 1)
         mRequestParam!!.page = mViewPager!!.currentItem + 1
         mFam!!.collapse()

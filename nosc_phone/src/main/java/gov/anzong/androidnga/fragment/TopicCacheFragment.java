@@ -31,7 +31,7 @@ public class TopicCacheFragment extends TopicSearchFragment implements View.OnLo
         super.onViewCreated(view, savedInstanceState);
         ToastUtils.success("长按可删除缓存的帖子");
         mAdapter.setOnLongClickListener(this);
-        viewModel.getRemovedTopic().observe(this, this::removeTopic);
+        viewModel.getRemovedTopic().observe(getViewLifecycleOwner(), this::removeTopic);
     }
 
     @Override
