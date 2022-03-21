@@ -30,13 +30,9 @@ class ReplyListAdapter(context: Context) :
 
     override fun setData(dataList: List<ThreadPageInfo>) {
 
-        super.appendData(checkData(dataList))
-    }
-
-    private fun checkData(dataList: List<ThreadPageInfo>):List<ThreadPageInfo> {
-        return dataList.filter {
+        super.appendData(dataList.filter {
             it.replyInfo == null
-        }
+        })
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

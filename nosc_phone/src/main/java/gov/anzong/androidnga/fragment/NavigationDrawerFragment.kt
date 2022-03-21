@@ -67,6 +67,7 @@ class NavigationDrawerFragment : BaseRxFragment(),
                 BoardPagerAdapter(this, it)
             binding?.apply {
                 pager.adapter = mBoardPagerAdapter
+
                 tabLayoutMediator = TabLayoutMediator(tabs,pager){ tab,position ->
                     tab.text = mBoardPagerAdapter?.getPageTitle(position)
                     pager.setCurrentItem(tab.position,true)
@@ -75,6 +76,9 @@ class NavigationDrawerFragment : BaseRxFragment(),
                     if(isAttached)
                         detach()
                     attach()
+                }
+                if(BoardModel.isBookMarkEmpty() && mBoardPagerAdapter?.itemCount?:0 > 1){
+                    pager.currentItem = 1
                 }
             }
 

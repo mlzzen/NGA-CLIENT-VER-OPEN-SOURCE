@@ -84,6 +84,13 @@ class BoardCategoryFragment : Fragment() {
         setLayoutManager()
     }
 
+    override fun onResume() {
+        super.onResume()
+        if(mBoardCategory?.isBookmarkCategory == true){
+            mAdapter?.notifyDataSetChanged()
+        }
+    }
+
     companion object {
         private val TAG = BoardCategoryFragment::class.java.simpleName
 

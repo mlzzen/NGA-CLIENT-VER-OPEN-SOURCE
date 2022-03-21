@@ -104,6 +104,10 @@ public class BoardCategory implements Parcelable {
         mBoardMap.put(board.getBoardKey(), board);
     }
 
+    public void addBoard(int index,Board board) {
+        mBoardList.add(index,board);
+        mBoardMap.put(board.getBoardKey(), board);
+    }
 
     public void removeAllBoards() {
         mBoardList.clear();

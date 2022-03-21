@@ -8,10 +8,10 @@ import androidx.recyclerview.widget.RecyclerView
 /**
  * Created by Justwen on 2018/3/23.
  */
-abstract class BaseAdapter<E, T : RecyclerView.ViewHolder>(protected var mContext: Context) :
+abstract class BaseAdapter<E, T : RecyclerView.ViewHolder>(protected val mContext: Context) :
     RecyclerView.Adapter<T>() {
     @JvmField
-    protected var mDataList: MutableList<E> = mutableListOf()
+    protected var mDataList: List<E> = emptyList()
     @JvmField
     protected var mOnClickListener: View.OnClickListener? = null
     protected var mOnLongClickListener: View.OnLongClickListener? = null
@@ -23,22 +23,24 @@ abstract class BaseAdapter<E, T : RecyclerView.ViewHolder>(protected var mContex
     }
 
     open fun setData(dataList: List<E>) {
-        mDataList.clear()
-        mDataList.addAll(dataList)
+        mDataList = dataList
         notifyDataSetChanged()
     }
 
     fun removeItem(position: Int) {
-        mDataList.removeAt(position)
-        notifyItemRemoved(position)
+        mDataList.getOrNull(position)?.let{
+            mDataList = mDataList.minus(it)
+        }
+        notifyDataSetChanged()
     }
 
     fun removeItem(data: E) {
-        removeItem(mDataList.indexOf(data))
+        mDataList = mDataList.minus(data)
     }
 
     fun clear() {
-        mDataList.clear()
+        mDataList = emptyList()
+        notifyDataSetChanged()
     }
 
     override fun getItemCount(): Int = mDataList.size

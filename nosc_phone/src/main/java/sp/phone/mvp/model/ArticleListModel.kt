@@ -102,7 +102,7 @@ class ArticleListModel : BaseModel(), ArticleListContract.Model {
     }
 
     override fun loadCachePage(param: ArticleListParam, callBack: OnHttpCallBack<ThreadData>) {
-        Observable.create(ObservableOnSubscribe { emitter: ObservableEmitter<ThreadData?> ->
+        Observable.create { emitter: ObservableEmitter<ThreadData?> ->
             val cachePath =
                 ContextUtils.getExternalDir("articleCache") + param.tid + "/" + param.page + ".json"
             val cacheFile = File(cachePath)
@@ -114,7 +114,7 @@ class ArticleListModel : BaseModel(), ArticleListContract.Model {
                 emitter.onError(Exception())
             }
             emitter.onComplete()
-        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+        }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
             .subscribe(object : BaseSubscriber<ThreadData?>() {
                 override fun onNext(threadData: ThreadData) {
                     callBack.onSuccess(threadData)

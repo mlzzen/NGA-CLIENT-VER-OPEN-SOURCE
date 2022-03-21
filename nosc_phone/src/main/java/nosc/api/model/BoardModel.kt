@@ -23,18 +23,12 @@ import java.util.*
  */
 object BoardModel : BaseModel() {
     private val mBoardCategoryList: MutableList<BoardCategory> = ArrayList()
-    private val suggestCategory: BoardCategory by lazy{
-        BoardCategory("推荐内容").apply {
-            addSubCategory(BoardCategory("我的收藏").apply {
-                addBoards(CurrentUserData.favouriteBoard)
-            })
-            addSubCategory(BoardCategory("最近浏览").apply {
-                addBoards(CurrentUserData.recentBoard)
-            })
-            isBookmarkCategory = true
-        }
+    private val suggestCategory: BoardCategory = BoardCategory("推荐内容").apply {
+        isBookmarkCategory = true
     }
+
     private val bookMarkList:BoardCategory get() = suggestCategory.getSubCategory(0)
+    private val recentList:BoardCategory get() = suggestCategory.getSubCategory(1)
 
     fun findBoard(fid: String): Board? {
         val boardKey = BoardKey(fid.toInt(), 0)
@@ -48,6 +42,7 @@ object BoardModel : BaseModel() {
     }
 
     fun queryBoard(callback:(List<BoardCategory>)->Unit) {
+        updateSuggestBoardCategory()
         OkHttpClient.Builder().build()
             .newCall(Request.Builder().url("https://bbs.nga.cn/app_api.php?&__lib=home&__act=category").build())
             .enqueue(object :Callback{
@@ -77,6 +72,9 @@ object BoardModel : BaseModel() {
 
     fun addBookmark(board: Board):Boolean {
         if (!bookMarkList.contains(board)) {
+            if(recentList.contains(board)){
+                recentList.removeBoard(board.boardKey)
+            }
             bookMarkList.addBoard(board)
             saveBookmark()
             return true
@@ -85,7 +83,7 @@ object BoardModel : BaseModel() {
     }
 
     fun removeBookmark(fid: Int, stid: Int) {
-        if (bookMarkList.removeBoard(BoardKey(fid, stid))) {
+        if (bookMarkList.removeBoard(BoardKey(fid, stid)) || recentList.removeBoard(BoardKey(fid, stid))) {
             saveBookmark()
         }
     }
@@ -103,12 +101,19 @@ object BoardModel : BaseModel() {
         return getBoardName(BoardKey(fid, stid))
     }
 
+    fun addRecentBoard(board:Board){
+        if(isBookmark(board.fid,board.stid))
+            return
+        if(recentList.contains(board)){
+            recentList.removeBoard(board.boardKey)
+            recentList.addBoard(0,board)
+        }else{
+            recentList.addBoard(0,board)
+        }
+        saveBookmark()
+    }
 
-
-
-
-
-
+    fun isBookMarkEmpty():Boolean = bookMarkList.size() == 0 && recentList.size() == 0
 
     private fun buildCategory(json:String){
         mBoardCategoryList.clear()
@@ -142,6 +147,8 @@ object BoardModel : BaseModel() {
 
     private fun saveBookmark() {
         CurrentUserData.favouriteBoard = bookMarkList.boardList
+        CurrentUserData.recentBoard = recentList.boardList
+        updateSuggestBoardCategory()
     }
 
     private fun getBoardName(boardKey: BoardKey): String {
@@ -174,5 +181,19 @@ object BoardModel : BaseModel() {
     }
 
     private const val PRELOAD_BOARD_VERSION = 1
+
+    private fun updateSuggestBoardCategory(){
+        suggestCategory.apply {
+            subCategoryList?.clear()
+            removeAllBoards()
+            addSubCategory(BoardCategory("我的收藏").apply {
+                addBoards(CurrentUserData.favouriteBoard)
+            })
+            addSubCategory(BoardCategory("最近浏览").apply {
+                addBoards(CurrentUserData.recentBoard)
+            })
+        }
+    }
+
 
 }

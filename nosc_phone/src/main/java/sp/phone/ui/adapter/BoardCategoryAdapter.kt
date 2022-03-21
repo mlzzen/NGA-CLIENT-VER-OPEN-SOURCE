@@ -16,6 +16,7 @@ import sp.phone.rxjava.RxEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
+import nosc.api.model.BoardModel
 import java.util.ArrayList
 
 /**
@@ -56,9 +57,7 @@ class BoardCategoryAdapter(private val mActivity: Activity, private val mCategor
 
     override fun onBindViewHolder(holder: BoardViewHolder, position: Int) {
         if (getItemViewType(position) == BOARD_ITEM) {
-            val board: Board
-            if (mTitlePositions.isNotEmpty()) {
-                var realPosition = 0
+            val board: Board = if (mTitlePositions.isNotEmpty()) {
                 var subCategoryIndex = 0
                 while (subCategoryIndex < mTitlePositions.size) {
                     if (mTitlePositions[subCategoryIndex] > position) {
@@ -67,11 +66,11 @@ class BoardCategoryAdapter(private val mActivity: Activity, private val mCategor
                     subCategoryIndex++
                 }
                 subCategoryIndex--
-                realPosition = position - mTitlePositions[subCategoryIndex] - 1
+                val realPosition = position - mTitlePositions[subCategoryIndex] - 1
                 val subCategory = mCategory.getSubCategory(subCategoryIndex)
-                board = subCategory.getBoard(realPosition)
+                subCategory.getBoard(realPosition)
             } else {
-                board = mCategory.getBoard(position)
+                mCategory.getBoard(position)
             }
 
 
@@ -88,9 +87,21 @@ class BoardCategoryAdapter(private val mActivity: Activity, private val mCategor
                 .into(holder.icon)
             holder.itemView.tag = board
             holder.name.text = board.name
-            RxUtils.clicks(holder.itemView) {
-                RxBus.getInstance().post(RxEvent(RxEvent.EVENT_SHOW_TOPIC_LIST, board))
+
+            if(mCategory.isBookmarkCategory){
+                holder.itemView.setOnLongClickListener {
+                    BoardModel.removeBookmark(board.fid,board.stid)
+                    notifyDataSetChanged()
+                    true
+                }
             }
+            RxUtils.clicks(holder.itemView) {
+                BoardModel.addRecentBoard(board)
+                RxBus.getInstance().post(RxEvent(RxEvent.EVENT_SHOW_TOPIC_LIST, board))
+                notifyDataSetChanged()
+            }
+
+
         } else {
             val subCategoryIndex = mTitlePositions.indexOf(position)
             val subCategory = mCategory.getSubCategory(subCategoryIndex)
@@ -106,28 +117,6 @@ class BoardCategoryAdapter(private val mActivity: Activity, private val mCategor
         return mTotalCount
     }
 
-    /*
-        private int getResId(Board board) {
-            if (board.getStid() != 0) {
-                return 0;
-            }
-            int fid = board.getFid();
-            String resName = fid > 0 ? "p" + fid : "p_" + Math.abs(fid);
-            return mActivity.getResources().getIdentifier(resName, "drawable", mActivi.getPackageName());
-        }
-
-        private Drawable getDrawable(Board board) {
-            Drawable drawable = null;
-            int resId = getResId(board);
-            if (resId != 0) {
-                drawable = ContextCompat.getDrawable(mActivity, resId);
-            }
-
-            return drawable;
-        }
-
-
-     */
     val layoutInflater: LayoutInflater
         get() = mActivity.layoutInflater
 

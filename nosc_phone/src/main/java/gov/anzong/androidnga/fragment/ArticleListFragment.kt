@@ -261,8 +261,8 @@ open class ArticleListFragment : BaseMvpFragment<ArticleListPresenter?>(),
     }
 
     override fun hideLoadingView() {
-        mLoadingView!!.visibility = View.GONE
-        mSwipeRefreshLayout!!.visibility = View.VISIBLE
+        mLoadingView?.visibility = View.GONE
+        mSwipeRefreshLayout?.visibility = View.VISIBLE
     }
 
     internal interface OnTopicMenuItemClickListener : PopupMenu.OnMenuItemClickListener {

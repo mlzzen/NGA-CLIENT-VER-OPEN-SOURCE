@@ -153,13 +153,10 @@ public class Board implements Parcelable {
         return obj instanceof Board && mBoardKey.equals(((Board) obj).getBoardKey());
     }
 
-    public String toUrlString() {
-        return mBoardKey.toString();
-    }
 
     @Override
     public int hashCode() {
-        return mFid != 0 ? mFid : getStid();
+        return (mFid+""+mStd).hashCode();
     }
 
     public static final Creator<Board> CREATOR = new Creator<Board>() {

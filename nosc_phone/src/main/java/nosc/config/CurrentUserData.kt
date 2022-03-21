@@ -39,12 +39,17 @@ object CurrentUserData{
             JSON.toJSONString(favBoard)
         )
     }
-    val recentBoard:List<Board> get() = try {
+    var recentBoard:List<Board> get() = try {
         parseArray(
             File(externalDir, FILE_RECENT).readText(),
             Board::class.java
         )
     }catch (e:Throwable){
         listOf()
+    }
+    set(recentBoard){
+        File(externalDir, FILE_RECENT).writeText(
+            JSON.toJSONString(recentBoard)
+        )
     }
 }
