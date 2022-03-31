@@ -7,6 +7,8 @@ import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.PopupMenu
 import android.widget.TextView
+import androidx.compose.material.Button
+import androidx.compose.material.Text
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.alibaba.android.arouter.launcher.ARouter
@@ -20,6 +22,7 @@ import gov.anzong.androidnga.fragment.dialog.BaseDialogFragment
 import gov.anzong.androidnga.fragment.dialog.PostCommentDialogFragment
 import nosc.api.bean.ThreadData
 import nosc.api.bean.ThreadRowInfo
+import nosc.ui.view.ComposeEmptyView
 import nosc.utils.toUrl
 import sp.phone.common.PhoneConfiguration
 import sp.phone.common.UserManagerImpl
@@ -201,7 +204,13 @@ open class ArticleListFragment : BaseMvpFragment<ArticleListPresenter?>(),
         mListView!!.layoutManager = LinearLayoutManager(context)
         mListView!!.setItemViewCacheSize(20)
         mListView!!.adapter = mArticleAdapter
-        mListView!!.setEmptyView(view.findViewById(R.id.empty_view))
+        mListView!!.setEmptyView(view.findViewById<ComposeEmptyView>(R.id.empty_view).also {
+            it.extraContent = {
+                Button(onClick = { FunctionUtils.openUrlByDefaultBrowser(activity, mRequestParam?.toUrl()) }) {
+                    Text(text = "使用浏览器打开")
+                }
+            }
+        })
         val sayingView = mLoadingView!!.findViewById<View>(R.id.saying) as TextView
         sayingView.text = ActivityUtils.getSaying()
         mSwipeRefreshLayout!!.setOnRefreshListener { loadPage() }

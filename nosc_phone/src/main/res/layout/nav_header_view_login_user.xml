@@ -36,7 +36,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="5dp"
             android:ellipsize="end"
-            android:maxLines="1"
+            android:maxLines="2"
             android:textColor="@color/toolbar_text_color" />
 
     </LinearLayout>

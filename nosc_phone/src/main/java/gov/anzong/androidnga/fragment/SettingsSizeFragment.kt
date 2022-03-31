@@ -41,7 +41,7 @@ class SettingsSizeFragment : BaseFragment(), OnSeekBarChangeListener {
         seekBar.apply {
             max = Constants.TOPIC_TITLE_SIZE_MAX
             min = Constants.TOPIC_CONTENT_SIZE_MIN
-            progress = mConfiguration.topicContentSize
+            progress = mConfiguration.topicTitleSize
         }
         seekBar.setOnSeekBarChangeListener(this)
     }

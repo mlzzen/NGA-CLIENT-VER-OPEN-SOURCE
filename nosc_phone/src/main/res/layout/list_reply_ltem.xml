@@ -13,8 +13,7 @@
         android:layout_height="wrap_content"
         android:maxLines="1"
         android:text="回复 : "
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="?attr/colorPrimary"/>
+        android:textAppearance="?android:attr/textAppearanceMedium"/>
 
     <TextView
         android:id="@+id/tv_content"
@@ -25,8 +24,7 @@
         android:ellipsize="end"
         android:maxLines="2"
         android:text="@string/sample_nick_name"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="?attr/colorPrimary"/>
+        android:textAppearance="?android:attr/textAppearanceMedium"/>
 
 
     <TextView

@@ -179,7 +179,7 @@ public class PhoneConfiguration implements PreferenceKey, SharedPreferences.OnSh
         PreferenceUtils.putData(PreferenceKey.KEY_EMOTICON_SIZE, value);
     }
 
-    public float getTopicTitleSize() {
+    public int getTopicTitleSize() {
         return PreferenceUtils.getData(PreferenceKey.KEY_TOPIC_TITLE_SIZE, Constants.TOPIC_TITLE_SIZE_DEFAULT);
     }
 

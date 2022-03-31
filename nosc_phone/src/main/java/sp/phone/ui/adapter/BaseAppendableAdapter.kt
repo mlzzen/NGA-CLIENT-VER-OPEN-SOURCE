@@ -29,8 +29,8 @@ abstract class BaseAppendableAdapter<E, T : RecyclerView.ViewHolder>(context: Co
     fun appendData(dataList: List<E>) {
         val mutableDataList = mDataList.toMutableList()
         for (e in dataList) {
-            if (!mutableDataList.contains(e)) {
-                mutableDataList.add(0,e)
+            if (true) {
+                mutableDataList.add(e)
             }
         }
         mDataList = mutableDataList

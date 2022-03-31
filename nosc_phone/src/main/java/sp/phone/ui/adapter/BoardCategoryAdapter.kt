@@ -83,7 +83,7 @@ class BoardCategoryAdapter(private val mActivity: Activity, private val mCategor
             GlideApp.with(mActivity)
                 .load(url)
                 .placeholder(R.drawable.default_board_icon)
-                .dontAnimate()
+                .useAnimationPool(true)
                 .into(holder.icon)
             holder.itemView.tag = board
             holder.name.text = board.name

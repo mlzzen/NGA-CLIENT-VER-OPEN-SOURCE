@@ -2,8 +2,7 @@ package nosc.ui.view
 
 import android.content.Context
 import android.util.AttributeSet
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -27,12 +26,15 @@ class ComposeEmptyView @JvmOverloads constructor(
     defStyle: Int = 0
 ) : AbstractComposeView(context, attrs, defStyle) {
     var text by mutableStateOf(context.getString(R.string.error_load_failed))
-
+    var extraContent:@Composable ColumnScope.()->Unit by mutableStateOf({})
     @Composable
     override fun Content() {
         NOSCTheme {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text(text, color = MaterialTheme.colors.onBackground)
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(text, color = MaterialTheme.colors.onBackground)
+                    extraContent(this)
+                }
             }
         }
     }

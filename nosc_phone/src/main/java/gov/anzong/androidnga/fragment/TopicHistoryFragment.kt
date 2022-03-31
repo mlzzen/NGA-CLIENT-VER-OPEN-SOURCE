@@ -84,7 +84,7 @@ class TopicHistoryFragment : BaseFragment(), View.OnClickListener {
     private fun setData(topicLIst: List<ThreadPageInfo>) {
         val listInfo = TopicListInfo()
         listInfo.threadPageList = topicLIst
-        mTopicListAdapter?.setData(listInfo.threadPageList.asReversed())
+        mTopicListAdapter?.setData(listInfo.threadPageList)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

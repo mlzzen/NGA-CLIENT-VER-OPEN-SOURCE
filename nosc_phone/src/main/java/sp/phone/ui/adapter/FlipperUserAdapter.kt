@@ -37,12 +37,13 @@ class FlipperUserAdapter(private val onNextUserCallback:(List<User>)->Unit) :
                 viewHolder.nextImage.visibility = View.GONE
             }
             if (size == 1) {
-                viewHolder.loginState.text = "已登录1个账户"
+                viewHolder.loginState.visibility = View.GONE
             } else {
+                viewHolder.loginState.visibility = View.VISIBLE
                 viewHolder.loginState.text = String.format("已登录%s", size.toString() + "个账户,点击切换")
             }
             val user = mUserManager.userList[i]
-            viewHolder.loginId.text = String.format("当前:%s(%s)", user.nickName, user.userId)
+            viewHolder.loginId.text = String.format("%s(%s)", user.nickName, user.userId)
             handleUserAvatar(viewHolder.avatarImage, user.avatarUrl)
             viewHolder.itemView.setOnClickListener { v: View -> v.getActivity()?.startUserProfile(user.userId) }
             viewHolder.nextImage.setOnClickListener { v: View -> onNextUserCallback.invoke(mUserManager.userList) }

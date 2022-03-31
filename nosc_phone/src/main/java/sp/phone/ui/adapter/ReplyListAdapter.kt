@@ -30,20 +30,14 @@ class ReplyListAdapter(context: Context) :
 
     override fun setData(dataList: List<ThreadPageInfo>) {
 
-        super.appendData(dataList.filter {
-            it.replyInfo == null
+        super.setData(dataList.filter {
+            it.replyInfo != null
         })
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var mContentTv: TextView
-        var mPostDateTv: TextView
-        var mSubjectTv: TextView
-
-        init {
-            mContentTv = itemView.findViewById(R.id.tv_content)
-            mPostDateTv = itemView.findViewById(R.id.tv_time)
-            mSubjectTv = itemView.findViewById(R.id.tv_topic)
-        }
+        val mContentTv: TextView = itemView.findViewById(R.id.tv_content)
+        val mPostDateTv: TextView = itemView.findViewById(R.id.tv_time)
+        val mSubjectTv: TextView = itemView.findViewById(R.id.tv_topic)
     }
 }

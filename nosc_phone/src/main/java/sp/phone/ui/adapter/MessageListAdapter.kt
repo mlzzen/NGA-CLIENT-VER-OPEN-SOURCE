@@ -29,7 +29,7 @@ class MessageListAdapter(private val mContext: Context) :
     private var mEndOfList = false
     private var mTotalCount = 0
     private var mClickListener: View.OnClickListener? = null
-    protected fun getEntry(position: Int): MessageThreadPageInfo? {
+    private fun getEntry(position: Int): MessageThreadPageInfo? {
         var position = position
         for (i in mInfoList.indices) {
             if (position < mInfoList[i].__currentPage * mInfoList[i].__rowsPerPage) {
@@ -103,7 +103,7 @@ class MessageListAdapter(private val mContext: Context) :
                     .unEscapeHtml(title)
             )
         }
-        holder.title.textSize = size
+        holder.title.textSize = size.toFloat()
         val tp = holder.title.paint
         tp.isFakeBoldText = false
         val colorId = theme.getBackgroundColor(position)

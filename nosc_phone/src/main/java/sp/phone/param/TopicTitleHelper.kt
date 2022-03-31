@@ -1,141 +1,158 @@
-package sp.phone.param;
+package sp.phone.param
 
-import android.graphics.Typeface;
-import android.text.Spannable;
-import android.text.SpannableStringBuilder;
-import android.text.TextUtils;
-import android.text.style.ForegroundColorSpan;
-import android.text.style.StyleSpan;
-import android.text.style.UnderlineSpan;
-import android.util.Base64;
+import android.graphics.Typeface
+import android.text.Spannable
+import android.text.SpannableStringBuilder
+import android.text.TextUtils
+import android.text.style.ForegroundColorSpan
+import android.text.style.StyleSpan
+import android.text.style.UnderlineSpan
+import android.util.Base64
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
+import gov.anzong.androidnga.R
+import gov.anzong.androidnga.base.util.ContextUtils
+import nosc.api.constants.ApiConstants
+import sp.phone.mvp.model.entity.ThreadPageInfo
+import sp.phone.param.TopicTitleHelper
+import sp.phone.util.StringUtils
+import java.math.BigInteger
+import java.util.*
 
-import java.math.BigInteger;
-import java.util.Locale;
-
-import gov.anzong.androidnga.R;
-import gov.anzong.androidnga.base.util.ContextUtils;
-import nosc.api.constants.ApiConstants;
-import sp.phone.mvp.model.entity.ThreadPageInfo;
-import sp.phone.util.StringUtils;
-
-public class TopicTitleHelper {
-
-    private static void handleOldFormat(SpannableStringBuilder builder, String misc, int titleLength) {
-        if (misc.equals("~1~~") || misc.equals("~~~1")) {
-            builder.setSpan(new StyleSpan(Typeface.BOLD_ITALIC), 0, titleLength, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+object TopicTitleHelper {
+    private fun AnnotatedString.Builder.handleOldFormat(misc: String, titleLength: Int) {
+        if (misc == "~1~~" || misc == "~~~1") {
+            addStyle(
+                SpanStyle(fontStyle = FontStyle.Italic, fontWeight = FontWeight.Bold),
+                0,
+                titleLength
+            )
         } else {
-            String[] miscArray = misc.toLowerCase(Locale.US).split("~");
-            for (String aMiscArray : miscArray) {
-                switch (aMiscArray) {
-                    case "green":
-                        builder.setSpan(new ForegroundColorSpan(ContextUtils.getColor(R.color.title_green)), 0, titleLength, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                        break;
-                    case "blue":
-                        builder.setSpan(new ForegroundColorSpan(ContextUtils.getColor(R.color.title_blue)), 0, titleLength, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                        break;
-                    case "red":
-                        builder.setSpan(new ForegroundColorSpan(ContextUtils.getColor(R.color.title_red)), 0, titleLength, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                        break;
-                    case "orange":
-                        builder.setSpan(new ForegroundColorSpan(ContextUtils.getColor(R.color.title_orange)), 0, titleLength, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                        break;
-                    case "sliver":
-                        builder.setSpan(new ForegroundColorSpan(ContextUtils.getColor(R.color.silver)), 0, titleLength, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                        break;
-                    case "b":
-                        builder.setSpan(new StyleSpan(Typeface.BOLD), 0, titleLength, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                        break;
-                    case "i":
-                        builder.setSpan(new StyleSpan(Typeface.ITALIC), 0, titleLength, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                        break;
-                    case "u":
-                        builder.setSpan(new UnderlineSpan(), 0, titleLength, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                        break;
-                    default:
-                        break;
+            val miscArray = misc.lowercase().split("~".toRegex()).toTypedArray()
+            for (aMiscArray in miscArray) {
+                when (aMiscArray) {
+                    "green" -> SpanStyle(color = Color(ContextUtils.getColor(R.color.title_green)))
+                    "blue" -> SpanStyle(color = Color(ContextUtils.getColor(R.color.title_blue)))
+                    "red" -> SpanStyle(color = Color(ContextUtils.getColor(R.color.title_red)))
+                    "orange" -> SpanStyle(color = Color(ContextUtils.getColor(R.color.title_orange)))
+                    "sliver" -> SpanStyle(color = Color(ContextUtils.getColor(R.color.silver)))
+                    "b" -> SpanStyle(fontWeight = FontWeight.Bold)
+                    "i" -> SpanStyle(fontStyle = FontStyle.Italic)
+                    "u" -> SpanStyle(textDecoration = TextDecoration.Underline)
+                    else -> null
+                }?.let{
+                    addStyle(
+                        it,
+                        0,
+                        titleLength
+                    )
                 }
+
+
             }
         }
     }
 
-    private static void handleNewFormat(SpannableStringBuilder builder, String misc, int titleLength) {
-        byte[] bytes = Base64.decode(misc, Base64.DEFAULT);
+    private fun AnnotatedString.Builder.handleNewFormat(misc: String, titleLength: Int) {
+        val bytes = Base64.decode(misc, Base64.DEFAULT)
         if (bytes != null) {
-            int pos = 0;
-            while (pos < bytes.length) {
+            var pos = 0
+            while (pos < bytes.size) {
                 // 1 表示主题bit数据
-                if (bytes[pos] == 1) {
-                    String miscStr = StringUtils.toBinaryArray(bytes).substring(8);
-                    int miscValue = new BigInteger(miscStr, 2).intValue();
-                    if ((miscValue & ApiConstants.MASK_FONT_GREEN) == ApiConstants.MASK_FONT_GREEN) {
-                        builder.setSpan(new ForegroundColorSpan(ContextUtils.getColor(R.color.title_green)), 0, titleLength, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    } else if ((miscValue & ApiConstants.MASK_FONT_BLUE) == ApiConstants.MASK_FONT_BLUE) {
-                        builder.setSpan(new ForegroundColorSpan(ContextUtils.getColor(R.color.title_blue)), 0, titleLength, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    } else if ((miscValue & ApiConstants.MASK_FONT_RED) == ApiConstants.MASK_FONT_RED) {
-                        builder.setSpan(new ForegroundColorSpan(ContextUtils.getColor(R.color.title_red)), 0, titleLength, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    } else if ((miscValue & ApiConstants.MASK_FONT_ORANGE) == ApiConstants.MASK_FONT_ORANGE) {
-                        builder.setSpan(new ForegroundColorSpan(ContextUtils.getColor(R.color.title_orange)), 0, titleLength, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    } else if ((miscValue & ApiConstants.MASK_FONT_SILVER) == ApiConstants.MASK_FONT_SILVER) {
-                        builder.setSpan(new ForegroundColorSpan(ContextUtils.getColor(R.color.silver)), 0, titleLength, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                if (bytes[pos] == 1.toByte()) {
+                    val miscStr = StringUtils.toBinaryArray(bytes).substring(8)
+                    val miscValue = BigInteger(miscStr, 2).toInt()
+                    when {
+                        miscValue and ApiConstants.MASK_FONT_GREEN == ApiConstants.MASK_FONT_GREEN -> SpanStyle(color = Color(ContextUtils.getColor(R.color.title_green)))
+                        miscValue and ApiConstants.MASK_FONT_BLUE == ApiConstants.MASK_FONT_BLUE -> SpanStyle(color = Color(ContextUtils.getColor(R.color.title_blue)))
+                        miscValue and ApiConstants.MASK_FONT_RED == ApiConstants.MASK_FONT_RED -> SpanStyle(color = Color(ContextUtils.getColor(R.color.title_red)))
+                        miscValue and ApiConstants.MASK_FONT_ORANGE == ApiConstants.MASK_FONT_ORANGE -> SpanStyle(color = Color(ContextUtils.getColor(R.color.title_orange)))
+                        miscValue and ApiConstants.MASK_FONT_SILVER == ApiConstants.MASK_FONT_SILVER -> SpanStyle(color = Color(ContextUtils.getColor(R.color.silver)))
+                        else -> null
+                    }?.let {
+                        addStyle(
+                            it,
+                            0,
+                            titleLength
+                        )
                     }
-                    if ((miscValue & ApiConstants.MASK_FONT_BOLD) == ApiConstants.MASK_FONT_BOLD && (miscValue & ApiConstants.MASK_FONT_ITALIC) == ApiConstants.MASK_FONT_ITALIC) {
-                        builder.setSpan(new StyleSpan(Typeface.BOLD_ITALIC), 0, titleLength, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    } else if ((miscValue & ApiConstants.MASK_FONT_ITALIC) == ApiConstants.MASK_FONT_ITALIC) {
-                        builder.setSpan(new StyleSpan(Typeface.ITALIC), 0, titleLength, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    } else if ((miscValue & ApiConstants.MASK_FONT_BOLD) == ApiConstants.MASK_FONT_BOLD) {
-                        builder.setSpan(new StyleSpan(Typeface.BOLD), 0, titleLength, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    }
-                    if ((miscValue & ApiConstants.MASK_FONT_UNDERLINE) == ApiConstants.MASK_FONT_UNDERLINE) {
-                        builder.setSpan(new UnderlineSpan(), 0, titleLength, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    addStyle(SpanStyle(
+                        fontWeight = if(miscValue and ApiConstants.MASK_FONT_BOLD == ApiConstants.MASK_FONT_BOLD) FontWeight.Bold else null,
+                        fontStyle = if(miscValue and ApiConstants.MASK_FONT_ITALIC == ApiConstants.MASK_FONT_ITALIC) FontStyle.Italic else null
+                    ),0,titleLength)
+
+                    if (miscValue and ApiConstants.MASK_FONT_UNDERLINE == ApiConstants.MASK_FONT_UNDERLINE) {
+                        addStyle(
+                            SpanStyle(textDecoration = TextDecoration.Underline),
+                            0,
+                            titleLength
+                        )
                     }
                 }
-                pos += 4;
+                pos += 4
             }
         }
     }
 
-    public static CharSequence handleTitleFormat(ThreadPageInfo entry) {
+    fun handleTitleFormat(entry: ThreadPageInfo): AnnotatedString {
+        return buildAnnotatedString {
+            val title = StringUtils.removeBrTag(StringUtils.unEscapeHtml(entry.subject))
+            append(title)
+            val type = entry.type
+            val titleLength = title.length
+            if (type and ApiConstants.MASK_TYPE_ATTACHMENT == ApiConstants.MASK_TYPE_ATTACHMENT) {
+                val typeStr = " +"
+                append(buildAnnotatedString {
+                    append(typeStr)
+                    addStyle(
+                        SpanStyle(Color(ContextUtils.getColor(R.color.title_orange))),0, typeStr.length,
+                    )
+                })
 
-        String title = StringUtils.removeBrTag(StringUtils.unEscapeHtml(entry.getSubject()));
-        SpannableStringBuilder builder = new SpannableStringBuilder(title);
-        int type = entry.getType();
-        int titleLength = title.length();
 
-        if ((type & ApiConstants.MASK_TYPE_ATTACHMENT) == ApiConstants.MASK_TYPE_ATTACHMENT) {
-            String typeStr = " +";
-            builder.append(typeStr);
-            builder.setSpan(new ForegroundColorSpan(ContextUtils.getColor(R.color.title_orange)), builder.length() - typeStr.length(), builder.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        }
-
-        if ((type & ApiConstants.MASK_TYPE_LOCK) == ApiConstants.MASK_TYPE_LOCK) {
-            String typeStr = " [锁定]";
-            builder.append(typeStr);
-            builder.setSpan(new ForegroundColorSpan(ContextUtils.getColor(R.color.title_red)), builder.length() - typeStr.length(), builder.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        }
-
-        if ((type & ApiConstants.MASK_TYPE_ASSEMBLE) == ApiConstants.MASK_TYPE_ASSEMBLE) {
-            String typeStr = " [合集]";
-            builder.append(typeStr);
-            builder.setSpan(new ForegroundColorSpan(ContextUtils.getColor(R.color.title_blue)), builder.length() - typeStr.length(), builder.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        }
-
-        if (!TextUtils.isEmpty(entry.getTopicMisc())) {
-            String misc = entry.getTopicMisc();
-            // ~ 开头的为旧格式
-            if (misc.startsWith("~")) {
-                handleOldFormat(builder, misc, titleLength);
-            } else {
-                handleNewFormat(builder, misc, titleLength);
+            }
+            if (type and ApiConstants.MASK_TYPE_LOCK == ApiConstants.MASK_TYPE_LOCK) {
+                val typeStr = " [锁定]"
+                append(buildAnnotatedString {
+                    append(typeStr)
+                    addStyle(
+                        SpanStyle(Color(ContextUtils.getColor(R.color.title_red))),0, typeStr.length,
+                    )
+                })
+            }
+            if (type and ApiConstants.MASK_TYPE_ASSEMBLE == ApiConstants.MASK_TYPE_ASSEMBLE) {
+                val typeStr = " [锁定]"
+                append(buildAnnotatedString {
+                    append(typeStr)
+                    addStyle(
+                        SpanStyle(Color(ContextUtils.getColor(R.color.title_blue))),0, typeStr.length,
+                    )
+                })
+            }
+            if (!TextUtils.isEmpty(entry.topicMisc)) {
+                val misc = entry.topicMisc
+                // ~ 开头的为旧格式
+                if (misc.startsWith("~")) {
+                    handleOldFormat( misc, titleLength)
+                } else {
+                    handleNewFormat( misc, titleLength)
+                }
+            }
+            if (!TextUtils.isEmpty(entry.board)) {
+                append(buildAnnotatedString {
+                    val str = "  [${entry.board}]"
+                    append(str)
+                    addStyle(
+                        SpanStyle(Color(ContextUtils.getColor(R.color.text_color_disabled))),0, str.length,
+                    )
+                })
             }
         }
 
-        if (!TextUtils.isEmpty(entry.getBoard())) {
-            SpannableStringBuilder boardBuilder = new SpannableStringBuilder();
-            boardBuilder.append("  [").append(entry.getBoard()).append("]");
-            boardBuilder.setSpan(new ForegroundColorSpan(ContextUtils.getColor(R.color.text_color_disabled)), 0, boardBuilder.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            builder.append(boardBuilder);
-        }
-        return builder;
     }
-
 }

@@ -159,13 +159,12 @@ public class TopicSearchFragment extends BaseFragment implements View.OnClickLis
 
         viewModel.getFirstTopicList().observe(getViewLifecycleOwner(), topicListInfo -> {
             scrollTo(0);
-            clearData();
             if (topicListInfo != null) {
                 setData(topicListInfo);
             }
         });
 
-        viewModel.getNextTopicList().observe(getViewLifecycleOwner(), this::setData);
+        viewModel.getNextTopicList().observe(getViewLifecycleOwner(), this::appendData);
 
         viewModel.getErrorMsg().observe(getViewLifecycleOwner(), res -> {
             showToast(res);
@@ -216,9 +215,13 @@ public class TopicSearchFragment extends BaseFragment implements View.OnClickLis
         mAdapter.setData(result.getThreadPageList());
     }
 
-    public void clearData() {
-        mAdapter.setData(Collections.emptyList());
+    public void appendData(TopicListInfo result) {
+        mTopicListInfo = result;
+        mAdapter.appendData(result.getThreadPageList());
     }
+
+
+
 
     @Override
     public void onClick(View view) {

@@ -62,7 +62,9 @@ fun NOSCTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable (
                 primary = Color(context.primaryColor()),
                 primaryVariant = Color(context.primaryColor()),
                 secondary = Color(context.accentColor()),
-                onPrimary = Color.White
+                onPrimary = Color.White,
+                onBackground = Color.Gray
+
             )
         )
     }

@@ -57,8 +57,7 @@ class ArticleListAdapter(
         val clientModel = row.fromClientModel
         val deviceInfo: String
         if (!StringUtils.isEmpty(clientModel)) {
-            val clientAppCode: String
-            clientAppCode = if (!fromClient.contains(" ")) {
+            val clientAppCode: String = if (!fromClient.contains(" ")) {
                 fromClient
             } else {
                 fromClient.substring(

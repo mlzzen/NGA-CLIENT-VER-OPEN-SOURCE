@@ -63,9 +63,11 @@ open class TopicListBaseFragment : BaseFragment(R.layout.fragment_topic_list_bas
 
     private fun setData(data: MutableList<ThreadPageInfo>, append: Boolean) {
         if (!append) {
-            mAdapter.clear()
+            mAdapter.setData(data)
+        }else{
+            mAdapter.appendData(data)
         }
-        mAdapter.setData(data)
+
         mRefreshLayout.isRefreshing = false
     }
 
