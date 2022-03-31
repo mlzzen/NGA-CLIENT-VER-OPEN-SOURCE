@@ -1,6 +1,9 @@
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-kapt'//kapt3插件
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
+}
+
 def static getDate() {
     def date = new Date()
     def formattedDate = date.format('yyyyMMddHHmm')
@@ -60,9 +63,9 @@ android {
         }
     }
 
-    dexOptions {
-        javaMaxHeapSize "2g"
-    }
+//    dexOptions {
+//        javaMaxHeapSize "2g"
+//    }
 
     lintOptions {
         abortOnError false
@@ -71,7 +74,10 @@ android {
 
     buildFeatures {
         viewBinding true
-        //compose true
+        compose true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion compose_version
     }
     android.applicationVariants.all { variant ->
         variant.outputs.all {
@@ -92,6 +98,19 @@ dependencies {
 
     // lifecycle
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
+
+    //compose
+    implementation 'androidx.core:core-ktx:1.7.0'
+    implementation "androidx.compose.ui:ui:$compose_version"
+    implementation "androidx.compose.material:material:$compose_version"
+    implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.4.1'
+    implementation 'androidx.activity:activity-compose:1.4.0'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+    androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
+    debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
 
     //glide
     implementation 'com.github.bumptech.glide:glide:4.12.0'

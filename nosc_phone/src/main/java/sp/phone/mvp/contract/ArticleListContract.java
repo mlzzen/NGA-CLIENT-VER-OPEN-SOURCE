@@ -1,6 +1,5 @@
 package sp.phone.mvp.contract;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import nosc.api.bean.ThreadData;
@@ -28,24 +27,16 @@ public interface ArticleListContract {
 
         void postOpposeTask(int tid, int pid);
 
-        void quote(ArticleListParam param, ThreadRowInfo row);
-
         void cachePage();
-
-        void loadCachePage();
     }
 
     interface View {
 
         void setRefreshing(boolean refreshing);
 
-        boolean isRefreshing();
-
         void hideLoadingView();
 
         void setData(ThreadData data);
-
-        void startPostActivity(Intent intent);
 
         void showPostCommentDialog(String prefix, Bundle bundle);
 

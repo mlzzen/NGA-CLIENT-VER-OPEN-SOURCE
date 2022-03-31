@@ -164,69 +164,64 @@ public class ArticleListPresenter extends BasePresenter<ArticleListFragment, Art
         mLikeTask.execute(tid, pid, LikeTask.OPPOSE, ToastUtils::success);
     }
 
-    @Override
-    public void quote(ArticleListParam param, ThreadRowInfo row) {
-        final String quoteRegex = "\\[quote\\]([\\s\\S])*\\[/quote\\]";
-        final String replayRegex = "\\[b\\]Reply to \\[pid=\\d+,\\d+,\\d+\\]Reply\\[/pid\\] Post by .+?\\[/b\\]";
-        StringBuilder postPrefix = new StringBuilder();
-        String content = row.getContent()
-                .replaceAll(quoteRegex, "")
-                .replaceAll(replayRegex, "");
-        final String postTime = row.getPostdate();
-        String mention = null;
-        final String name = row.getAuthor();
-        final String uid = String.valueOf(row.getAuthorid());
-        content = FunctionUtils.checkContent(content);
-        content = StringUtils.unEscapeHtml(content);
-        String tidStr = String.valueOf(param.tid);
-        if (row.getPid() != 0) {
-            mention = name;
-            postPrefix.append("[quote][pid=")
-                    .append(row.getPid())
-                    .append(',').append(tidStr).append(",").append(param.page)
-                    .append("]")// Topic
-                    .append("Reply");
-            if (row.getISANONYMOUS()) {// 是匿名的人
-                postPrefix.append("[/pid] [b]Post by [uid=")
-                        .append("-1")
-                        .append("]")
-                        .append(name)
-                        .append("[/uid][color=gray](")
-                        .append(row.getLou())
-                        .append("楼)[/color] (");
-            } else {
-                postPrefix.append("[/pid] [b]Post by [uid=")
-                        .append(uid)
-                        .append("]")
-                        .append(name)
-                        .append("[/uid] (");
-            }
-            postPrefix.append(postTime)
-                    .append("):[/b]\n")
-                    .append(content)
-                    .append("[/quote]\n");
-        }
-
-        Intent intent = new Intent();
-        if (!StringUtils.isEmpty(mention)) {
-            intent.putExtra("mention", mention);
-        }
-        intent.putExtra("prefix", StringUtils.removeBrTag(postPrefix.toString()));
-        intent.putExtra("tid", tidStr);
-        intent.putExtra("action", "reply");
-        mBaseView.startPostActivity(intent);
-    }
+//    @Override
+//    public void quote(ArticleListParam param, ThreadRowInfo row) {
+//        final String quoteRegex = "\\[quote\\]([\\s\\S])*\\[/quote\\]";
+//        final String replayRegex = "\\[b\\]Reply to \\[pid=\\d+,\\d+,\\d+\\]Reply\\[/pid\\] Post by .+?\\[/b\\]";
+//        StringBuilder postPrefix = new StringBuilder();
+//        String content = row.getContent()
+//                .replaceAll(quoteRegex, "")
+//                .replaceAll(replayRegex, "");
+//        final String postTime = row.getPostdate();
+//        String mention = null;
+//        final String name = row.getAuthor();
+//        final String uid = String.valueOf(row.getAuthorid());
+//        content = FunctionUtils.checkContent(content);
+//        content = StringUtils.unEscapeHtml(content);
+//        String tidStr = String.valueOf(param.tid);
+//        if (row.getPid() != 0) {
+//            mention = name;
+//            postPrefix.append("[quote][pid=")
+//                    .append(row.getPid())
+//                    .append(',').append(tidStr).append(",").append(param.page)
+//                    .append("]")// Topic
+//                    .append("Reply");
+//            if (row.getISANONYMOUS()) {// 是匿名的人
+//                postPrefix.append("[/pid] [b]Post by [uid=")
+//                        .append("-1")
+//                        .append("]")
+//                        .append(name)
+//                        .append("[/uid][color=gray](")
+//                        .append(row.getLou())
+//                        .append("楼)[/color] (");
+//            } else {
+//                postPrefix.append("[/pid] [b]Post by [uid=")
+//                        .append(uid)
+//                        .append("]")
+//                        .append(name)
+//                        .append("[/uid] (");
+//            }
+//            postPrefix.append(postTime)
+//                    .append("):[/b]\n")
+//                    .append(content)
+//                    .append("[/quote]\n");
+//        }
+//
+//        Intent intent = new Intent();
+//        if (!StringUtils.isEmpty(mention)) {
+//            intent.putExtra("mention", mention);
+//        }
+//        intent.putExtra("prefix", StringUtils.removeBrTag(postPrefix.toString()));
+//        intent.putExtra("tid", tidStr);
+//        intent.putExtra("action", "reply");
+//        mBaseView.startPostActivity(intent);
+//    }
 
     @Override
     public void cachePage() {
         if (mThreadData != null) {
             mBaseModel.cachePage(mRequestParam, mThreadData.getRawData());
         }
-    }
-
-    @Override
-    public void loadCachePage() {
-
     }
 
     @Override

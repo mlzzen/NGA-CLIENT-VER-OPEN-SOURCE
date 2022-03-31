@@ -37,15 +37,13 @@ public class ImageZoomActivity extends BaseActivity {
 
     public static final String KEY_GALLERY_URLS = "keyGalleryUrl";
 
-    public static final String KEY_GALLERY_RECT = "keyGalleryRect";
+//    public static final String KEY_GALLERY_RECT = "keyGalleryRect";
 
     public static final String KEY_GALLERY_CUR_URL = "keyGalleryCurUrl";
 
     private String[] mGalleryUrls;
 
     private int mPageIndex;
-
-    private TextView mTxtView;
 
     private ProgressBar mProgressBar;
 

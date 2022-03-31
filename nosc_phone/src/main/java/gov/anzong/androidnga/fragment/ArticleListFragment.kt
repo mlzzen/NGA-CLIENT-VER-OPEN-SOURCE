@@ -3,6 +3,8 @@ package gov.anzong.androidnga.fragment
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
+import android.widget.Button
+import android.widget.LinearLayout
 import android.widget.PopupMenu
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -10,6 +12,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.alibaba.android.arouter.launcher.ARouter
 import gov.anzong.androidnga.R
 import gov.anzong.androidnga.activity.BaseActivity
+import gov.anzong.androidnga.activity.WebViewActivity
 import gov.anzong.androidnga.arouter.ARouterConstants
 import gov.anzong.androidnga.base.util.ToastUtils
 import gov.anzong.androidnga.databinding.FragmentArticleListBinding
@@ -17,6 +20,7 @@ import gov.anzong.androidnga.fragment.dialog.BaseDialogFragment
 import gov.anzong.androidnga.fragment.dialog.PostCommentDialogFragment
 import nosc.api.bean.ThreadData
 import nosc.api.bean.ThreadRowInfo
+import nosc.utils.toUrl
 import sp.phone.common.PhoneConfiguration
 import sp.phone.common.UserManagerImpl
 import sp.phone.mvp.contract.ArticleListContract
@@ -231,14 +235,14 @@ open class ArticleListFragment : BaseMvpFragment<ArticleListPresenter?>(),
         mArticleAdapter!!.notifyDataSetChanged()
     }
 
-    override fun startPostActivity(intent: Intent) {
-        if (!StringUtils.isEmpty(UserManagerImpl.getInstance().userName)) { // 登入了才能发
-            intent.setClass(requireActivity(), PhoneConfiguration.getInstance().postActivityClass)
-        } else {
-            intent.setClass(requireActivity(), PhoneConfiguration.getInstance().loginActivityClass)
-        }
-        startActivityForResult(intent, ActivityUtils.REQUEST_CODE_TOPIC_POST)
-    }
+//    override fun startPostActivity(intent: Intent) {
+//        if (!StringUtils.isEmpty(UserManagerImpl.getInstance().userName)) { // 登入了才能发
+//            intent.setClass(requireActivity(), PhoneConfiguration.getInstance().postActivityClass)
+//        } else {
+//            intent.setClass(requireActivity(), PhoneConfiguration.getInstance().loginActivityClass)
+//        }
+//        startActivityForResult(intent, ActivityUtils.REQUEST_CODE_TOPIC_POST)
+//    }
 
     override fun showPostCommentDialog(prefix: String, bundle: Bundle) {
         val df: BaseDialogFragment = PostCommentDialogFragment()
@@ -252,9 +256,9 @@ open class ArticleListFragment : BaseMvpFragment<ArticleListPresenter?>(),
         }
     }
 
-    override fun isRefreshing(): Boolean {
-        return if (mSwipeRefreshLayout!!.isShown) mSwipeRefreshLayout!!.isRefreshing else mLoadingView!!.isShown
-    }
+//    override fun isRefreshing(): Boolean {
+//        return if (mSwipeRefreshLayout!!.isShown) mSwipeRefreshLayout!!.isRefreshing else mLoadingView!!.isShown
+//    }
 
     override fun hideLoadingView() {
         mLoadingView?.visibility = View.GONE

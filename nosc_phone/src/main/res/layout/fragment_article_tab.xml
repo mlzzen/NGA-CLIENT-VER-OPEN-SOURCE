@@ -20,7 +20,7 @@
             app:layout_scrollFlags="scroll|snap"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-        <gov.nosc.ui.PageSelector
+        <nosc.ui.view.ComposePageSelector
             android:id="@+id/tabs"
             android:layout_width="match_parent"
             android:layout_height="@dimen/article_list_tab_height" />

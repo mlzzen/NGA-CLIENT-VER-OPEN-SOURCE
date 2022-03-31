@@ -90,15 +90,4 @@ public class ArticleListActivity extends BaseActivity implements PreferenceKey {
         getSupportFragmentManager().findFragmentById(android.R.id.content).onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
     }
-
-    public String getUrl(){
-        StringBuilder builder = new StringBuilder();
-        builder.append(Utils.getNGAHost()).append("read.php?");
-        if (mRequestParam.pid != 0) {
-            builder.append("pid=").append(mRequestParam.pid);
-        } else {
-            builder.append("tid=").append(mRequestParam.tid);
-        }
-        return builder.toString();
-    }
 }

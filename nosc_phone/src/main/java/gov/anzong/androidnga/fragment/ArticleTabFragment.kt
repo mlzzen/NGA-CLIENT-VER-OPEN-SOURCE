@@ -4,7 +4,6 @@ import gov.anzong.androidnga.R
 import androidx.viewpager.widget.ViewPager
 import sp.phone.ui.adapter.ArticlePagerAdapter
 import sp.phone.param.ArticleListParam
-import gov.nosc.ui.PageSelector
 import com.getbase.floatingactionbutton.FloatingActionsMenu
 import android.os.Bundle
 import sp.phone.param.ParamKey
@@ -28,6 +27,7 @@ import android.text.TextUtils
 import android.view.*
 import androidx.fragment.app.DialogFragment
 import gov.anzong.androidnga.Utils
+import nosc.ui.view.ComposePageSelector
 import nosc.utils.startArticleActivity
 import sp.phone.rxjava.RxBus
 import sp.phone.rxjava.RxEvent
@@ -45,7 +45,7 @@ class ArticleTabFragment : BaseRxFragment() {
     private var mPagerAdapter: ArticlePagerAdapter? = null
      var mRequestParam: ArticleListParam? = null
 
-    var mTabLayout: PageSelector? = null
+    var mTabLayout: ComposePageSelector? = null
 
     var mFam: FloatingActionsMenu? = null
     private var mReplyCount = 0

@@ -1,7 +1,5 @@
 package gov.anzong.androidnga.base.util;
 
-import com.google.common.base.Strings;
-
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -42,7 +40,7 @@ public class StringUtils {
         return "";
     }
     public static boolean isEmpty(String content) {
-        return Strings.isNullOrEmpty(content);
+        return content==null || content.isEmpty();
     }
 
 }

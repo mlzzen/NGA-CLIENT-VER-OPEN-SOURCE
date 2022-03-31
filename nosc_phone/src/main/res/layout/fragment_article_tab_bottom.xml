@@ -69,7 +69,7 @@
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-    <gov.nosc.ui.PageSelector
+    <nosc.ui.view.ComposePageSelector
         android:id="@+id/tabs"
         android:theme="@style/AppTheme.AppBarOverlay"
         android:background="@color/cardview_dark_background"

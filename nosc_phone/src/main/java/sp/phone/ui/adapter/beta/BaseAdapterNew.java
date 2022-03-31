@@ -53,38 +53,38 @@ public abstract class BaseAdapterNew<E, T extends RecyclerView.ViewHolder> exten
         mInflater = LayoutInflater.from(mContext);
     }
 
-    public void addHeaderView(View... headerViews) {
-        if (mHeaderViews == null) {
-            mHeaderViews = new SparseArray<>();
-        }
-        for (View view : headerViews) {
-            mHeaderViews.put(VIEW_TYPE_HEADER + mHeaderViews.size(), view);
-        }
-    }
-
-    public void addFooterView(View... footerViews) {
-        if (mFooterViews == null) {
-            mFooterViews = new SparseArray<>();
-        }
-
-        for (View view : footerViews) {
-            mFooterViews.put(VIEW_TYPE_FOOTER + mFooterViews.size(), view);
-        }
-    }
-
-    public void removeFooterView(View... footerViews) {
-        for (View view : footerViews) {
-            int index = mFooterViews.indexOfValue(view);
-            mFooterViews.removeAt(index);
-        }
-    }
-
-    public void removeHeaderView(View... headerViews) {
-        for (View view : headerViews) {
-            int index = mHeaderViews.indexOfValue(view);
-            mHeaderViews.removeAt(index);
-        }
-    }
+//    public void addHeaderView(View... headerViews) {
+//        if (mHeaderViews == null) {
+//            mHeaderViews = new SparseArray<>();
+//        }
+//        for (View view : headerViews) {
+//            mHeaderViews.put(VIEW_TYPE_HEADER + mHeaderViews.size(), view);
+//        }
+//    }
+//
+//    public void addFooterView(View... footerViews) {
+//        if (mFooterViews == null) {
+//            mFooterViews = new SparseArray<>();
+//        }
+//
+//        for (View view : footerViews) {
+//            mFooterViews.put(VIEW_TYPE_FOOTER + mFooterViews.size(), view);
+//        }
+//    }
+//
+//    public void removeFooterView(View... footerViews) {
+//        for (View view : footerViews) {
+//            int index = mFooterViews.indexOfValue(view);
+//            mFooterViews.removeAt(index);
+//        }
+//    }
+//
+//    public void removeHeaderView(View... headerViews) {
+//        for (View view : headerViews) {
+//            int index = mHeaderViews.indexOfValue(view);
+//            mHeaderViews.removeAt(index);
+//        }
+//    }
 
     public void setLoadingView(@LayoutRes int layoutRes) {
         mLoadingViewResId = layoutRes;
