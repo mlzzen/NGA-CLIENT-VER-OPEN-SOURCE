@@ -27,12 +27,13 @@ abstract class BaseAppendableAdapter<E, T : RecyclerView.ViewHolder>(context: Co
     }
 
     fun appendData(dataList: List<E>) {
-        mDataList = mDataList.plus(dataList)
-//        for (e in dataList) {
-//            if (!mDataList.contains(e)) {
-//                mDataList.add(e)
-//            }
-//        }
+        val mutableDataList = mDataList.toMutableList()
+        for (e in dataList) {
+            if (!mutableDataList.contains(e)) {
+                mutableDataList.add(0,e)
+            }
+        }
+        mDataList = mutableDataList
         mTotalPage++
         notifyDataSetChanged()
     }

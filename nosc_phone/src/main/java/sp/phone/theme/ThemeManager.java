@@ -1,6 +1,5 @@
 package sp.phone.theme;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.TypedValue;
@@ -136,17 +135,6 @@ public class ThemeManager implements SharedPreferences.OnSharedPreferenceChangeL
         return ContextCompat.getColor(context, mTypedValue.resourceId);
     }
 
-
-    @ColorInt
-    public int getWebTextColor() {
-        return mWebViewTheme.getWebTextColor();
-    }
-
-    @ColorInt
-    public int getWebQuoteBackgroundColor() {
-        return mWebViewTheme.getQuoteBackgroundColor();
-    }
-
     @StyleRes
     public int getTheme(boolean toolbarEnabled) {
         int index = isNightMode() ? 0 : mThemeIndex;
@@ -156,9 +144,5 @@ public class ThemeManager implements SharedPreferences.OnSharedPreferenceChangeL
     public void applyAboutTheme(AppCompatActivity activity) {
         activity.setTheme(ThemeConstants.THEME_ACTIVITY_ABOUT[isNightMode() ? 0 : mThemeIndex]);
         activity.getDelegate().setLocalNightMode(isNightMode() ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
-    }
-
-    public void applyTheme(Activity activity) {
-
     }
 }

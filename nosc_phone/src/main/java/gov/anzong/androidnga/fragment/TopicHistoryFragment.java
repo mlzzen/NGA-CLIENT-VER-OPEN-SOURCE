@@ -93,7 +93,7 @@ public class TopicHistoryFragment extends BaseFragment implements View.OnClickLi
     private void setData(List<ThreadPageInfo> topicLIst) {
         TopicListInfo listInfo = new TopicListInfo();
         listInfo.setThreadPageList(topicLIst);
-        mTopicListAdapter.setData(listInfo.getThreadPageList());
+        mTopicListAdapter.appendData(listInfo.getThreadPageList());
     }
 
     @Override

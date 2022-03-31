@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
 import com.alibaba.android.arouter.launcher.ARouter
 import gov.anzong.androidnga.NgaClientApp
 import gov.anzong.androidnga.R
@@ -15,6 +16,7 @@ import sp.phone.common.UserManagerImpl
 import sp.phone.param.ParamKey
 import sp.phone.theme.ThemeManager
 import gov.anzong.androidnga.fragment.NavigationDrawerFragment
+import nosc.utils.applyNavBarColor
 import sp.phone.util.ARouterUtils
 import sp.phone.util.ActivityUtils
 
@@ -23,7 +25,6 @@ class MainActivity : BaseActivity() {
     private lateinit var mBoardFragment: NavigationDrawerFragment
     override fun onCreate(savedInstanceState: Bundle?) {
         setToolbarEnabled(true)
-        setSwipeBackEnable(false)
         super.onCreate(savedInstanceState)
         setSwipeBackEnable(false)
         ThemeUtils.init(this)
@@ -39,10 +40,10 @@ class MainActivity : BaseActivity() {
 
     override fun onResume() {
         if (mIsNightMode != ThemeManager.getInstance().isNightMode) {
-            finish()
-            startActivity(intent)
+            recreate()
+        }else{
+            super.onResume()
         }
-        super.onResume()
     }
 
     private fun initView() {

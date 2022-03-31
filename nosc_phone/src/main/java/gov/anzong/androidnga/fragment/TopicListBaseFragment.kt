@@ -24,7 +24,7 @@ import sp.phone.view.RecyclerViewEx
  */
 open class TopicListBaseFragment : BaseFragment(R.layout.fragment_topic_list_base), View.OnClickListener {
 
-    protected lateinit var mRefreshLayout: SwipeRefreshLayout;
+    private lateinit var mRefreshLayout: SwipeRefreshLayout;
 
     protected lateinit var mListView: RecyclerViewEx;
 
@@ -32,7 +32,7 @@ open class TopicListBaseFragment : BaseFragment(R.layout.fragment_topic_list_bas
 
     protected lateinit var viewModel: TopicListViewModel
 
-    protected lateinit var mAdapter: BaseAppendableAdapter<ThreadPageInfo, *>
+    private lateinit var mAdapter: BaseAppendableAdapter<ThreadPageInfo, *>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,19 +46,19 @@ open class TopicListBaseFragment : BaseFragment(R.layout.fragment_topic_list_bas
     }
 
     private fun initState() {
-        viewModel.isRefreshing.observe(this, Observer {
+        viewModel.isRefreshing.observe(this) {
             mRefreshLayout.isRefreshing = it
-        })
-        viewModel.errorMsg.observe(this, Observer {
+        }
+        viewModel.errorMsg.observe(this) {
             ToastUtils.error(it)
-        })
-        viewModel.firstTopicList.observe(this, Observer {
+        }
+        viewModel.firstTopicList.observe(this) {
             setData(it.threadPageList, false)
-        })
+        }
 
-        viewModel.nextTopicList.observe(this, Observer {
+        viewModel.nextTopicList.observe(this) {
             setData(it.threadPageList, true)
-        })
+        }
     }
 
     private fun setData(data: MutableList<ThreadPageInfo>, append: Boolean) {

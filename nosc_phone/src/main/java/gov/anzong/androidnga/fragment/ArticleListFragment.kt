@@ -126,10 +126,6 @@ open class ArticleListFragment : BaseMvpFragment<ArticleListPresenter?>(),
             var item = menu.findItem(R.id.menu_ban_this_one)
             item?.setTitle(if (row._isInBlackList) R.string.cancel_ban_thisone else R.string.ban_thisone)
 
-//            item = menu.findItem(R.id.menu_vote);
-//            if (item != null && StringUtils.isEmpty(row.getVote())) {
-//                item.setVisible(false);
-//            }
             item = menu.findItem(R.id.menu_edit)
             if (item != null) {
                 val user = UserManagerImpl.getInstance().activeUser
@@ -152,16 +148,16 @@ open class ArticleListFragment : BaseMvpFragment<ArticleListPresenter?>(),
         val viewModel = getActivityViewModelProvider().get(
             ArticleShareViewModel::class.java
         )
-        viewModel.refreshPage.observe(this, { page: Int ->
+        viewModel.refreshPage.observe(this) { page: Int ->
             if (page == mRequestParam!!.page) {
                 loadPage()
             }
-        })
-        viewModel.cachePage.observe(this, { page: Int ->
+        }
+        viewModel.cachePage.observe(this) { page: Int ->
             if (page == mRequestParam!!.page) {
                 mPresenter!!.cachePage()
             }
-        })
+        }
     }
 
     override fun accept(rxEvent: RxEvent) {

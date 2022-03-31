@@ -22,10 +22,6 @@ class TopicListAdapter(context: Context) :
         val viewHolder = TopicViewHolder(
             LayoutInflater.from(mContext).inflate(R.layout.list_topic, parent, false)
         )
-        viewHolder.title.setTextSize(
-            TypedValue.COMPLEX_UNIT_DIP,
-            PhoneConfiguration.getInstance().topicTitleSize
-        )
         RxUtils.clicks(viewHolder.itemView, mOnClickListener)
         viewHolder.itemView.setOnLongClickListener(mOnLongClickListener)
         return viewHolder
@@ -38,8 +34,7 @@ class TopicListAdapter(context: Context) :
     override fun onBindViewHolder(holder: TopicViewHolder, position: Int) {
         val info = getItem(position)
         info.position = position
-        holder.itemView.tag = info
-        handleJsonList(holder, info)
+        holder.handleJsonList(info)
         if (!PhoneConfiguration.getInstance().useSolidColorBackground()) {
             holder.itemView.setBackgroundResource(
                 ThemeManager.getInstance().getBackgroundColor(position)
@@ -47,28 +42,27 @@ class TopicListAdapter(context: Context) :
         }
     }
 
-    private fun handleJsonList(holder: TopicViewHolder, entry: ThreadPageInfo?) {
-        if (entry == null) {
-            return
-        }
-        holder.author.text = entry.author
-        holder.lastReply.text = entry.lastPoster
-        holder.num.text = entry.replies.toString()
-        holder.num.setTextAppearance(if (entry.replies > 99) R.style.text_style_bold else R.style.text_style_normal)
-        holder.title.text = TopicTitleHelper.handleTitleFormat(entry)
-    }
-
     class TopicViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var num: TextView
-        var title: TextView
-        var author: TextView
-        var lastReply: TextView
-
+        private val num: TextView = itemView.findViewById(R.id.num)
+        private val title: TextView = itemView.findViewById(R.id.title)
+        private val author: TextView = itemView.findViewById(R.id.author)
+        private val lastReply: TextView = itemView.findViewById(R.id.last_reply)
         init {
-            num = itemView.findViewById(R.id.num)
-            title = itemView.findViewById(R.id.title)
-            author = itemView.findViewById(R.id.author)
-            lastReply = itemView.findViewById(R.id.last_reply)
+            title.setTextSize(
+                TypedValue.COMPLEX_UNIT_DIP,
+                PhoneConfiguration.getInstance().topicTitleSize
+            )
+        }
+        fun handleJsonList(entry: ThreadPageInfo?) {
+            itemView.tag = entry
+            if (entry == null) {
+                return
+            }
+            author.text = entry.author
+            lastReply.text = entry.lastPoster
+            num.text = entry.replies.toString()
+            num.setTextAppearance(if (entry.replies > 99) R.style.text_style_bold else R.style.text_style_normal)
+            title.text = TopicTitleHelper.handleTitleFormat(entry)
         }
     }
 }

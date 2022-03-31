@@ -1,7 +1,6 @@
 package gov.anzong.androidnga.activity;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,12 +12,11 @@ import androidx.appcompat.widget.Toolbar;
 
 import gov.anzong.androidnga.R;
 import gov.anzong.androidnga.base.common.SwipeBackHelper;
-import gov.anzong.androidnga.base.util.ContextUtils;
 import gov.anzong.androidnga.common.PreferenceKey;
+import nosc.utils.ThemeUtilsKt;
 import sp.phone.common.NotificationController;
 import sp.phone.common.PhoneConfiguration;
 import sp.phone.theme.ThemeManager;
-import sp.phone.util.NLog;
 
 /**
  * Created by liuboyu on 16/6/28.
@@ -43,17 +41,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         if (mSwipeBackHelper != null) {
             mSwipeBackHelper.onCreate(this);
         }
-
-        try {
-            if (ThemeManager.getInstance().isNightMode()) {
-                getWindow().setNavigationBarColor(ContextUtils.getColor(R.color.background_color));
-            }else {
-                // Set Transparent as the default color to match the theme
-                getWindow().setNavigationBarColor(Color.TRANSPARENT);
-            }
-        } catch (Exception e) {
-            NLog.e("set navigation bar color exception occur: " + e);
-        }
+        ThemeUtilsKt.applyNavBarColor(this);
     }
 
     protected void setSwipeBackEnable(boolean enable) {
@@ -118,17 +106,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         setTheme(tm.getTheme(mToolbarEnabled));
     }
 
-    @Deprecated
-    public void setupActionBar(Toolbar toolbar) {
-        if (toolbar != null && getSupportActionBar() == null) {
-            setSupportActionBar(toolbar);
-            ActionBar actionBar = getSupportActionBar();
-            if (actionBar != null) {
-                actionBar.setDisplayHomeAsUpEnabled(true);
-                actionBar.setHomeButtonEnabled(true);
-            }
-        }
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

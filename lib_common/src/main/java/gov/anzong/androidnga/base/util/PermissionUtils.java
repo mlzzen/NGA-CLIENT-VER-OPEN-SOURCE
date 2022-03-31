@@ -24,36 +24,14 @@ import io.reactivex.schedulers.Schedulers;
 @SuppressLint("CheckResult")
 public class PermissionUtils {
 
-    private PermissionUtils() {
-
-    }
+    private PermissionUtils() { }
 
     public static boolean hasPermission(Context context, String permission) {
         return ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_GRANTED;
     }
 
-    public static void requestCombined(AppCompatActivity activity, @Nullable Consumer<? super Permission> consumer, String... permissions) {
-        consumer = createIfNull(consumer);
-        new RxPermissions(activity).requestEachCombined(permissions).subscribe(consumer);
-    }
-
-    public static void requestEach(AppCompatActivity activity, @Nullable Consumer<? super Permission> consumer, String... permissions) {
-        consumer = createIfNull(consumer);
-        new RxPermissions(activity).requestEach(permissions).subscribe(consumer);
-    }
-
     public static void request(AppCompatActivity activity, @Nullable Observer<Boolean> consumer, String permission) {
         new RxPermissions(activity).request(permission).subscribe(consumer == null ? new DefaultSubsriber<>() : consumer);
-    }
-
-    public static void requestCombined(Fragment fragment, @Nullable Consumer<? super Permission> consumer, String... permissions) {
-        consumer = createIfNull(consumer);
-        new RxPermissions(fragment).requestEachCombined(permissions).subscribe(consumer);
-    }
-
-    public static void requestEach(Fragment fragment, @Nullable Consumer<? super Permission> consumer, String... permissions) {
-        consumer = createIfNull(consumer);
-        new RxPermissions(fragment).requestEach(permissions).subscribe(consumer);
     }
 
     public static void request(Fragment fragment, @Nullable Observer<Boolean> consumer, String permission) {
@@ -65,15 +43,6 @@ public class PermissionUtils {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(createIfNull(consumer));
-    }
-
-    private static <T> Consumer<T> createIfNull(Consumer<T> consumer) {
-        if (consumer == null) {
-            consumer = t -> {
-
-            };
-        }
-        return consumer;
     }
 
     private static <T> Observer<T> createIfNull(Observer<T> consumer) {

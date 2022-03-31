@@ -21,9 +21,9 @@ import sp.phone.mvp.model.convert.MessageConvertFactory;
 
 public class MessageListModel {
 
-    private RetrofitService mService;
+    private final RetrofitService mService;
 
-    private Map<String,String> mParamMap = new HashMap<>();
+    private final Map<String,String> mParamMap = new HashMap<>();
 
     /**
      *  http://bbs.nga.cn/nuke.php?__lib=message&__act=message&act=list&page=1&lite=js
