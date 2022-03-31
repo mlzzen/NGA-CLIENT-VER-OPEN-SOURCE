@@ -5,18 +5,14 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import androidx.appcompat.app.AppCompatActivity
 import com.alibaba.android.arouter.launcher.ARouter
-import gov.anzong.androidnga.NgaClientApp
 import gov.anzong.androidnga.R
 import gov.anzong.androidnga.arouter.ARouterConstants
 import gov.anzong.androidnga.base.util.PermissionUtils
-import gov.anzong.androidnga.base.util.ThemeUtils
+import gov.anzong.androidnga.fragment.NavigationDrawerFragment
 import sp.phone.common.UserManagerImpl
 import sp.phone.param.ParamKey
 import sp.phone.theme.ThemeManager
-import gov.anzong.androidnga.fragment.NavigationDrawerFragment
-import nosc.utils.applyNavBarColor
 import sp.phone.util.ARouterUtils
 import sp.phone.util.ActivityUtils
 
@@ -27,7 +23,7 @@ class MainActivity : BaseActivity() {
         setToolbarEnabled(true)
         super.onCreate(savedInstanceState)
         setSwipeBackEnable(false)
-        ThemeUtils.init(this)
+//        ThemeUtils.init(this)
         checkPermission()
         initView()
         mIsNightMode = ThemeManager.getInstance().isNightMode

@@ -94,7 +94,7 @@ public class MessageDetailFragment extends BaseMvpFragment<MessageDetailPresente
 
     @Override
     public void hideLoadingView() {
-        mAdapter.hideLoadingView();
+//        mAdapter.hideLoadingView();
         mSwipeRefreshLayout.setEnabled(true);
     }
 

@@ -2,9 +2,10 @@ package sp.phone.ui.adapter;
 
 import android.content.Context;
 import android.content.res.Resources;
+
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.TextView;
@@ -15,7 +16,6 @@ import java.util.List;
 import gov.anzong.androidnga.R;
 import gov.anzong.androidnga.base.util.ToastUtils;
 import gov.anzong.androidnga.databinding.ListMessageContentBinding;
-import sp.phone.ui.adapter.beta.BaseAppendableAdapterEx;
 import nosc.api.bean.MessageArticlePageInfo;
 import nosc.api.bean.MessageDetailInfo;
 import sp.phone.theme.ThemeManager;
@@ -26,13 +26,18 @@ import sp.phone.view.RecyclerViewEx;
  * Created by Justwen on 2017/10/15.
  */
 
-public class MessageContentAdapter extends BaseAppendableAdapterEx<MessageDetailInfo, MessageContentAdapter.MessageViewHolder> implements RecyclerViewEx.IAppendableAdapter {
+public class MessageContentAdapter extends BaseAppendableAdapter<MessageDetailInfo, MessageContentAdapter.MessageViewHolder> implements RecyclerViewEx.IAppendableAdapter {
 
-    private List<MessageDetailInfo> mInfoList = new ArrayList<>();
+    private final List<MessageDetailInfo> mInfoList = new ArrayList<>();
 
     private boolean mPrompted;
 
     private int mTotalCount;
+
+    @Override
+    public int getItemCount() {
+        return mTotalCount;
+    }
 
     static class MessageViewHolder extends RecyclerView.ViewHolder {
 
@@ -57,8 +62,16 @@ public class MessageContentAdapter extends BaseAppendableAdapterEx<MessageDetail
         super(context);
     }
 
+    @NonNull
     @Override
-    protected void onBindItemViewHolder(MessageViewHolder holder, int position) {
+    public MessageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return new MessageViewHolder(ListMessageContentBinding.inflate(
+                LayoutInflater.from(parent.getContext())
+                , parent, false));
+    }
+
+    @Override
+    public void onBindViewHolder(MessageViewHolder holder, int position) {
         handleJsonList(holder, position);
         if (position + 1 == getItemCount()
                 && !hasNextPage()
@@ -66,11 +79,6 @@ public class MessageContentAdapter extends BaseAppendableAdapterEx<MessageDetail
             ToastUtils.info(R.string.last_page_prompt_message_detail);
             mPrompted = true;
         }
-    }
-
-    @Override
-    protected MessageViewHolder onCreateItemViewHolder(ViewGroup parent, LayoutInflater inflater) {
-        return new MessageViewHolder(ListMessageContentBinding.inflate(inflater, parent, false));
     }
 
     private MessageArticlePageInfo getEntry(int position) {
@@ -102,11 +110,12 @@ public class MessageContentAdapter extends BaseAppendableAdapterEx<MessageDetail
     }
 
     private void handleJsonList(MessageViewHolder holder, int position) {
+        Context context = holder.itemView.getContext();
         final MessageArticlePageInfo entry = getEntry(position);
         if (entry == null) {
             return;
         }
-        Resources res = mContext.getResources();
+        Resources res = holder.itemView.getContext().getResources();
         ThemeManager theme = ThemeManager.getInstance();
         holder.postTime.setText(entry.getTime());
         String floor = String.valueOf(entry.getLou());
@@ -116,20 +125,16 @@ public class MessageContentAdapter extends BaseAppendableAdapterEx<MessageDetail
         holder.floor.setTextColor(res.getColor(theme.getForegroundColor()));
 
 
-        FunctionUtils.handleNickName(entry, res.getColor(theme.getForegroundColor()), holder.nickName, mContext);
+        FunctionUtils.handleNickName(entry, res.getColor(theme.getForegroundColor()), holder.nickName, context);
 
         int colorId = theme.getBackgroundColor(position + 1);
         final int bgColor = res.getColor(colorId);
         int fgColorId = theme.getForegroundColor();
         final int fgColor = res.getColor(fgColorId);
         holder.itemView.setBackgroundResource(colorId);
-        FunctionUtils.handleContentTV(holder.content, entry, bgColor, fgColor, mContext);
+        FunctionUtils.handleContentTV(holder.content, entry, bgColor, fgColor, context);
 
     }
 
-    @Override
-    protected int getItemViewCount() {
-        return mTotalCount;
-    }
 
 }

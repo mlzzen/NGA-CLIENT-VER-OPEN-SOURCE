@@ -21,13 +21,13 @@ import java.util.List;
 
 import gov.anzong.androidnga.R;
 import nosc.api.callbacks.OnHttpCallBack;
+import nosc.ui.view.ComposeEmptyView;
 import sp.phone.mvp.model.entity.RecentReplyInfo;
 import sp.phone.ui.adapter.RecentNotificationAdapter;
 import sp.phone.common.PhoneConfiguration;
 import gov.anzong.androidnga.common.PreferenceKey;
 import sp.phone.param.ParamKey;
 import sp.phone.task.ForumNotificationTask;
-import sp.phone.view.EmptyLayout;
 import sp.phone.view.LoadingLayout;
 import sp.phone.view.RecyclerViewEx;
 
@@ -41,7 +41,7 @@ public class RecentNotificationFragment extends BaseRxFragment implements OnHttp
 
     private LoadingLayout mLoadingLayout;
 
-    private EmptyLayout mEmptyLayout;
+    private ComposeEmptyView mEmptyLayout;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -95,12 +95,10 @@ public class RecentNotificationFragment extends BaseRxFragment implements OnHttp
             case R.id.delete_all:
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setMessage(this.getString(R.string.delete_recentreply_confirm_text))
-                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                mNotificationTask.clearAllNotification();
-                                mNotificationAdapter.setRecentReplyList(null);
-                            }
+                        .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                            mNotificationTask.clearAllNotification();
+                            mNotificationAdapter.setRecentReplyList(null);
+                            mEmptyLayout.setText("没有最近被喷内容");
                         })
                         .setNegativeButton(android.R.string.cancel, null);
                 builder.create().show();
@@ -119,7 +117,7 @@ public class RecentNotificationFragment extends BaseRxFragment implements OnHttp
     @Override
     public void onError(String text) {
         setRefreshing(false);
-        mEmptyLayout.setEmptyText(text);
+        mEmptyLayout.setText(text);
         showToast(text);
     }
 
@@ -134,8 +132,7 @@ public class RecentNotificationFragment extends BaseRxFragment implements OnHttp
     @Override
     public void onSuccess(List<RecentReplyInfo> data) {
         if (data.isEmpty()) {
-            showToast("没有最近被喷内容");
-            mEmptyLayout.setEmptyText("没有最近被喷内容");
+            mEmptyLayout.setText("没有最近被喷内容");
             setRefreshing(false);
         } else {
             if (data.get(0).isUnread()) {

@@ -12,9 +12,6 @@ import es.dmoral.toasty.Toasty;
  */
 public class ToastUtils {
 
-
-
-
     public static void flat(String text) {
         ThreadUtils.runOnMainThread(() -> Toast.makeText(ContextUtils.getContext(), text, Toast.LENGTH_SHORT).show());
     }
@@ -35,9 +32,7 @@ public class ToastUtils {
         if (!ThreadUtils.isMainThread()) {
             ThreadUtils.runOnMainThread(() -> ToastUtils.success(text));
         } else {
-            Toasty.custom(ContextUtils.getContext(), text, ContextUtils.getDrawable(es.dmoral.toasty.R.drawable.ic_check_white_24dp),
-                    ThemeUtils.getAccentColor(), Color.WHITE, Toast.LENGTH_SHORT, true, true)
-                    .show();
+            Toasty.success(ContextUtils.getContext(), text).show();
         }
     }
 
@@ -46,12 +41,7 @@ public class ToastUtils {
     }
 
     public static void info(String text) {
-        if (!ThreadUtils.isMainThread()) {
-            ThreadUtils.runOnMainThread(() -> ToastUtils.info(text));
-        } else {
-            Toasty.custom(ContextUtils.getContext(), text, null, ThemeUtils.getAccentColor(), Color.WHITE, Toast.LENGTH_SHORT, false, false)
-                    .show();
-        }
+        Toasty.info(ContextUtils.getContext(), text).show();
     }
 
     public static void warn(String text) {

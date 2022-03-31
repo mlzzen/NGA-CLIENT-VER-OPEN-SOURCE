@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.database.DataSetObserver
 import android.util.AttributeSet
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -60,8 +61,8 @@ class ComposePageSelector @JvmOverloads constructor(
     @Composable
     override fun Content() {
         NOSCTheme {
-            Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center){
-                Text(text = "$currentPage/$totalPage", color = MaterialTheme.colors.onBackground, fontSize = 22.sp)
+            Box(modifier = Modifier.fillMaxWidth().background(MaterialTheme.colors.primary), contentAlignment = Alignment.Center){
+                Text(text = "$currentPage/$totalPage", color = MaterialTheme.colors.onPrimary, fontSize = 22.sp)
             }
         }
     }

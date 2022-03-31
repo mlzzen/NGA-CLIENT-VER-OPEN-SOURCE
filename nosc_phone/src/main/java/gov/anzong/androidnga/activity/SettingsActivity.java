@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 
-import gov.anzong.androidnga.base.util.ThemeUtils;
 import gov.anzong.androidnga.fragment.SettingsFragment;
 
 public class SettingsActivity extends BaseActivity {
@@ -22,7 +21,6 @@ public class SettingsActivity extends BaseActivity {
         if (sRecreated) {
             getWindow().setWindowAnimations(android.R.style.Animation_Toast);
             sRecreated = false;
-            ThemeUtils.init(this);
             setResult(Activity.RESULT_OK);
             findViewById(android.R.id.content).post(() -> startAnimation(findViewById(android.R.id.content)));
         }

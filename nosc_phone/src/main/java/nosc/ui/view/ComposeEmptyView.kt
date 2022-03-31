@@ -7,6 +7,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.AbstractComposeView
@@ -23,12 +26,13 @@ class ComposeEmptyView @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     defStyle: Int = 0
 ) : AbstractComposeView(context, attrs, defStyle) {
+    var text by mutableStateOf(context.getString(R.string.error_load_failed))
 
     @Composable
     override fun Content() {
         NOSCTheme {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text(stringResource(R.string.error_load_failed), color = MaterialTheme.colors.onBackground)
+                Text(text, color = MaterialTheme.colors.onBackground)
             }
         }
     }

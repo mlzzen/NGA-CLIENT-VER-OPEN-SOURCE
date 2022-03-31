@@ -1,7 +1,6 @@
 package gov.anzong.androidnga.base.util;
 
 import android.os.Handler;
-import android.os.HandlerThread;
 import android.os.Looper;
 
 import java.util.concurrent.LinkedBlockingDeque;

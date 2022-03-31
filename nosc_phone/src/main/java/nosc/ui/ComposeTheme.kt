@@ -8,39 +8,23 @@ import androidx.compose.material.Typography
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import gov.anzong.androidnga.base.util.ThemeUtils
+import nosc.utils.accentColor
+import nosc.utils.primaryColor
 
 /**
  * @author Yricky
  * @date 2022/3/31
  */
-
-private val DarkColorPalette get() = darkColors(
-    primary = Color(ThemeUtils.getPrimaryColor()),
-    primaryVariant = Color(ThemeUtils.getPrimaryColor()),
-    secondary = Color(ThemeUtils.getAccentColor()),
-)
-
-private val LightColorPalette = lightColors(
-    primary = Color(ThemeUtils.getPrimaryColor()),
-    primaryVariant = Color(ThemeUtils.getPrimaryColor()),
-    secondary = Color(ThemeUtils.getAccentColor())
-
-    /* Other default colors to override
-    background = Color.White,
-    surface = Color.White,
-    onPrimary = Color.White,
-    onSecondary = Color.Black,
-    onBackground = Color.Black,
-    onSurface = Color.Black,
-    */
-)
 
 val Shapes = Shapes(
     small = RoundedCornerShape(4.dp),
@@ -70,10 +54,33 @@ val Typography = Typography(
 
 @Composable
 fun NOSCTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
+    val context = LocalContext.current
+
+    val darkColorPalette by remember {
+        mutableStateOf(
+            darkColors(
+                primary = Color(context.primaryColor()),
+                primaryVariant = Color(context.primaryColor()),
+                secondary = Color(context.accentColor()),
+                onPrimary = Color.White
+            )
+        )
+    }
+
+    val lightColorPalette by remember {
+        mutableStateOf(
+            lightColors(
+                primary = Color(context.primaryColor()),
+                primaryVariant = Color(context.primaryColor()),
+                secondary = Color(context.accentColor()),
+            )
+        )
+    }
+
     val colors = if (darkTheme) {
-        DarkColorPalette
+        darkColorPalette
     } else {
-        LightColorPalette
+        lightColorPalette
     }
 
     MaterialTheme(
