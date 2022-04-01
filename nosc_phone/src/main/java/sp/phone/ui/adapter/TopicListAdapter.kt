@@ -1,14 +1,8 @@
 package sp.phone.ui.adapter
 
 import android.content.Context
-import android.util.TypedValue
-import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
@@ -23,15 +17,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
-import androidx.core.text.buildSpannedString
-import androidx.core.text.toSpannable
-import sp.phone.ui.adapter.BaseAppendableAdapter
-import sp.phone.mvp.model.entity.ThreadPageInfo
 import sp.phone.ui.adapter.TopicListAdapter.TopicViewHolder
 import sp.phone.common.PhoneConfiguration
 import sp.phone.rxjava.RxUtils
@@ -40,6 +29,7 @@ import sp.phone.param.TopicTitleHelper
 import androidx.recyclerview.widget.RecyclerView
 import gov.anzong.androidnga.R
 import nosc.ui.NOSCTheme
+import sp.phone.mvp.model.entity.ThreadPageInfo
 
 class TopicListAdapter(context: Context) :
     BaseAppendableAdapter<ThreadPageInfo, TopicViewHolder>(context) {

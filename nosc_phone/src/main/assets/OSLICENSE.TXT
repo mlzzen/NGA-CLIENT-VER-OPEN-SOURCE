@@ -41,43 +41,8 @@
 
   Copyright 2011-2014 Sergey Tarasevich
 
-  Android-Universal-Image-Loader is Licensed under the Apache License, Version 2.0 (the "License"); http://www.apache.org/licenses/LICENSE-2.0 
-  
+  Android-Universal-Image-Loader is Licensed under the Apache License, Version 2.0 (the "License"); http://www.apache.org/licenses/LICENSE-2.0
 
-------------------------------
- Android-ViewBadger 1.0
-------------------------------
-  com.readystatesoftware.viewbadger
-
-  https://github.com/jgilfelt/android-viewbadger
-
-  Copyright 2011 readyState Software Ltd.
-
-  Android-ViewBadger is Licensed under the Apache License, Version 2.0 (the "License"); http://www.apache.org/licenses/LICENSE-2.0 
-  
-
-------------------------------
- PagerSlidingTabStrip ?.?.?
-------------------------------
-  com.astuetz
-
-  https://github.com/astuetz/PagerSlidingTabStrip
-
-  Copyright 2013 Andreas Stuetz
-
-  PagerSlidingTabStrip is Licensed under the Apache License, Version 2.0 (the "License"); http://www.apache.org/licenses/LICENSE-2.0 
-  
-
-------------------------------
- PinterestLikeAdapterView 1.0
-------------------------------
-  com.huewu.pla.lib
-
-  https://github.com/GDG-Korea/PinterestLikeAdapterView
-
-  Copyright 2012 PinterestLikeAdapterView authors
-
-  PinterestLikeAdapterView is Licensed under the Apache License, Version 2.0 (the "License"); http://www.apache.org/licenses/LICENSE-2.0 
   
 
 ------------------------------
@@ -101,31 +66,7 @@
 
   Copyright 2012-2014 Alibaba Group
 
-  FastJSON is Licensed under the Apache License, Version 2.0 (the "License"); http://www.apache.org/licenses/LICENSE-2.0 
-  
-
-------------------------------
- GSON 2.2.4
-------------------------------
-  libs/gson-2.2.4.jar
-
-  https://code.google.com/p/google-gson/
-
-  Copyright 2008-2009 Google Inc. 
-
-  GSON is Licensed under the Apache License, Version 2.0 (the "License"); http://www.apache.org/licenses/LICENSE-2.0 
-  
-
-------------------------------
- JSOUP 1.7.3
-------------------------------
-  libs/jsoup-1.7.3.jar
-
-  http://jsoup.org/
-
-  Copyright 2009-2013 Jonathan Hedley
-
-  JSOUP is Licensed under the MIT License; http://opensource.org/licenses/MIT
+  FastJSON is Licensed under the Apache License, Version 2.0 (the "License"); http://www.apache.org/licenses/LICENSE-2.0
   
 
 

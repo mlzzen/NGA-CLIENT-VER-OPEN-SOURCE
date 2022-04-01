@@ -3,7 +3,6 @@ package nosc.viewmodel
 import android.Manifest
 import sp.phone.mvp.model.entity.TopicListInfo
 import sp.phone.param.TopicListParam
-import sp.phone.mvp.model.entity.ThreadPageInfo
 import sp.phone.mvp.model.TopicListModel
 import nosc.api.callbacks.OnHttpCallBack
 import gov.anzong.androidnga.base.util.ToastUtils
@@ -21,6 +20,7 @@ import gov.anzong.androidnga.BuildConfig
 import gov.anzong.androidnga.base.util.ContextUtils
 import gov.anzong.androidnga.common.util.FileUtils
 import gov.anzong.androidnga.common.util.LogUtils
+import sp.phone.mvp.model.entity.ThreadPageInfo
 import sp.phone.rxjava.BaseSubscriber
 import java.io.File
 import java.lang.Exception

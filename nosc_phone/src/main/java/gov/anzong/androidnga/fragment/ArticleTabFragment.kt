@@ -58,7 +58,7 @@ class ArticleTabFragment : BaseRxFragment() {
         val viewModel = activityViewModel
         viewModel.replyCount.observe(this) { replyCount: Int ->
             mReplyCount = replyCount
-            val count = ceil((mReplyCount / 20.0f).toDouble()).toInt()
+            val count = ceil(mReplyCount / 20.0).toInt()
             if (count != mPagerAdapter!!.count) {
                 mPagerAdapter!!.count = count
             }
@@ -92,18 +92,9 @@ class ArticleTabFragment : BaseRxFragment() {
         updateFloatingMenu()
         mPagerAdapter = ArticlePagerAdapter(childFragmentManager, mRequestParam!!)
         mViewPager?.adapter = mPagerAdapter
-        mViewPager?.addOnPageChangeListener(object : SimpleOnPageChangeListener() {
-            override fun onPageSelected(position: Int) {
-                mBehavior!!.animateIn(mFam)
-                super.onPageSelected(position)
-            }
-        })
-        mTabLayout!!.bindViewPager(mViewPager)
-        mTabLayout!!.setOnClickListener { v: View? -> createGotoDialog() }
-        mFam!!.addFloatingActionButton.setOnLongClickListener { v: View? ->
-            mBehavior!!.animateOut(mFam)
-            true
-        }
+        mViewPager?.addOnPageChangeListener(object : SimpleOnPageChangeListener() {})
+        mTabLayout?.bindViewPager(mViewPager)
+        mTabLayout?.onClick =  { createGotoDialog() }
         super.onViewCreated(view, savedInstanceState)
     }
 
@@ -195,14 +186,6 @@ class ArticleTabFragment : BaseRxFragment() {
     }
 
     private fun openByBrowser() {
-        /*
-        Intent intent = new Intent(getActivity(), WebViewActivity.class);
-        intent.putExtra("path", getUrl());
-        intent.putExtra("title",getActivity().getTitle());
-        intent.putExtra("needJump",false);
-        startActivity(intent);
-
-         */
         FunctionUtils.openUrlByDefaultBrowser(activity, url)
     }
 

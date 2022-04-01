@@ -4,9 +4,9 @@ import android.content.Context
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import sp.phone.mvp.model.entity.ThreadPageInfo
 import androidx.recyclerview.widget.RecyclerView
 import gov.anzong.androidnga.R
+import sp.phone.mvp.model.entity.ThreadPageInfo
 import sp.phone.util.StringUtils
 
 /**

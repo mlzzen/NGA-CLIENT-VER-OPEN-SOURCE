@@ -27,7 +27,7 @@ abstract class BaseAdapter<E, T : RecyclerView.ViewHolder>(protected val mContex
         notifyDataSetChanged()
     }
 
-    fun removeItem(position: Int) {
+    fun removeItemAt(position: Int) {
         mDataList.getOrNull(position)?.let{
             mDataList = mDataList.minus(it)
         }

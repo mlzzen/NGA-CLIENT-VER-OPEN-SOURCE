@@ -93,7 +93,7 @@ class TopicListFragment : TopicSearchFragment() {
         super.onResume()
     }
 
-    fun refresh() {
+    private fun refresh() {
         mFam!!.collapse()
         viewModel.loadPage(1, mRequestParam)
     }

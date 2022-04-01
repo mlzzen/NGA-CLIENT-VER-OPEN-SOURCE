@@ -12,7 +12,6 @@ import gov.anzong.androidnga.base.widget.DividerItemDecorationEx
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import sp.phone.mvp.model.entity.ThreadPageInfo
 import sp.phone.mvp.model.entity.TopicListInfo
 import sp.phone.param.ArticleListParam
 import com.alibaba.fastjson.JSON
@@ -20,6 +19,7 @@ import gov.anzong.androidnga.R
 import gov.anzong.androidnga.base.util.ContextUtils
 import sp.phone.param.ParamKey
 import sp.phone.common.PhoneConfiguration
+import sp.phone.mvp.model.entity.ThreadPageInfo
 
 /**
  * Created by Justwen on 2018/1/17.
@@ -72,7 +72,7 @@ class TopicHistoryFragment : BaseFragment(), View.OnClickListener {
                     val position = viewHolder.adapterPosition
                     if (position >= 0) {
                         mTopicHistoryManager!!.removeTopicHistory(position)
-                        mTopicListAdapter!!.removeItem(position)
+                        mTopicListAdapter?.removeItemAt(position)
                     }
                 }
             })

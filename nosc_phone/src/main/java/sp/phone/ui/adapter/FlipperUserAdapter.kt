@@ -40,7 +40,7 @@ class FlipperUserAdapter(private val onNextUserCallback:(List<User>)->Unit) :
                 viewHolder.loginState.visibility = View.GONE
             } else {
                 viewHolder.loginState.visibility = View.VISIBLE
-                viewHolder.loginState.text = String.format("已登录%s", size.toString() + "个账户,点击切换")
+                viewHolder.loginState.text = String.format("已登录%s", size.toString() + "个账户")
             }
             val user = mUserManager.userList[i]
             viewHolder.loginId.text = String.format("%s(%s)", user.nickName, user.userId)

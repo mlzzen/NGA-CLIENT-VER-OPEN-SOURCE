@@ -2,7 +2,6 @@ package gov.anzong.androidnga.fragment
 
 import android.os.Bundle
 import android.view.View
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -10,13 +9,13 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import gov.anzong.androidnga.R
 import gov.anzong.androidnga.base.util.ToastUtils
 import gov.anzong.androidnga.base.widget.DividerItemDecorationEx
-import sp.phone.mvp.model.entity.ThreadPageInfo
 import nosc.viewmodel.TopicListViewModel
 import sp.phone.param.ParamKey
 import sp.phone.param.TopicListParam
 import sp.phone.ui.adapter.BaseAppendableAdapter
 import sp.phone.ui.adapter.TopicListAdapter
 import gov.anzong.androidnga.fragment.TopicSearchFragment.handleClickEvent
+import sp.phone.mvp.model.entity.ThreadPageInfo
 import sp.phone.view.RecyclerViewEx
 
 /**

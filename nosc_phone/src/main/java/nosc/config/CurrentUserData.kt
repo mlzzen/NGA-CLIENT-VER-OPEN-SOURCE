@@ -2,7 +2,7 @@ package nosc.config
 
 import com.alibaba.fastjson.JSON
 import gov.anzong.androidnga.base.util.ContextUtils
-import nosc.utils.parseArray
+import nosc.utils.JsonUtils
 import sp.phone.common.User
 import sp.phone.common.UserManagerImpl
 import sp.phone.mvp.model.entity.Board
@@ -27,10 +27,7 @@ object CurrentUserData{
         }
     var favouriteBoard:List<Board>
     get() = try {
-        parseArray(
-            File(externalDir, FILE_BOOKMARK).readText(),
-            Board::class.java
-        )
+        JsonUtils.parseArray(File(externalDir, FILE_BOOKMARK).readText(),)
     }catch (e:Throwable){
         listOf()
     }
@@ -40,10 +37,7 @@ object CurrentUserData{
         )
     }
     var recentBoard:List<Board> get() = try {
-        parseArray(
-            File(externalDir, FILE_RECENT).readText(),
-            Board::class.java
-        )
+        JsonUtils.parseArray(File(externalDir, FILE_RECENT).readText())
     }catch (e:Throwable){
         listOf()
     }

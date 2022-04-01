@@ -83,10 +83,6 @@ public class ContextUtils {
         return sApplication;
     }
 
-    public static Drawable getDrawable(@DrawableRes int id) {
-        return ContextCompat.getDrawable(getContext(), id);
-    }
-
     @ColorInt
     public static int getColor(@ColorRes int id) {
         return ContextCompat.getColor(getContext(), id);

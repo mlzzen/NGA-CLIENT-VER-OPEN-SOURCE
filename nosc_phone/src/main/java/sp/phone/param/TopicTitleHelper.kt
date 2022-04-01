@@ -1,12 +1,6 @@
 package sp.phone.param
 
-import android.graphics.Typeface
-import android.text.Spannable
-import android.text.SpannableStringBuilder
 import android.text.TextUtils
-import android.text.style.ForegroundColorSpan
-import android.text.style.StyleSpan
-import android.text.style.UnderlineSpan
 import android.util.Base64
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
@@ -19,7 +13,6 @@ import gov.anzong.androidnga.R
 import gov.anzong.androidnga.base.util.ContextUtils
 import nosc.api.constants.ApiConstants
 import sp.phone.mvp.model.entity.ThreadPageInfo
-import sp.phone.param.TopicTitleHelper
 import sp.phone.util.StringUtils
 import java.math.BigInteger
 import java.util.*
