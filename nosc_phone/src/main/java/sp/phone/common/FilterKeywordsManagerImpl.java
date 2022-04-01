@@ -10,7 +10,7 @@ import com.alibaba.fastjson.JSON;
 import java.util.ArrayList;
 import java.util.List;
 
-import gov.anzong.androidnga.common.PreferenceKey;
+import nosc.utils.PreferenceKey;
 
 public class FilterKeywordsManagerImpl implements FilterKeywordsManager {
 

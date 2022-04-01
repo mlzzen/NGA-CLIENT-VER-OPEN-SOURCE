@@ -1,7 +1,7 @@
 package nosc.config
 
 import com.alibaba.fastjson.JSON
-import gov.anzong.androidnga.base.util.ContextUtils
+import nosc.utils.ContextUtils
 import nosc.utils.JsonUtils
 import sp.phone.common.User
 import sp.phone.common.UserManagerImpl

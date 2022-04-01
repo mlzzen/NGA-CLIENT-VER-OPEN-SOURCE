@@ -9,9 +9,8 @@ import androidx.fragment.app.FragmentManager;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 
-import gov.anzong.androidnga.Utils;
 import gov.anzong.androidnga.arouter.ARouterConstants;
-import gov.anzong.androidnga.common.PreferenceKey;
+import nosc.utils.PreferenceKey;
 import sp.phone.param.ArticleListParam;
 import sp.phone.param.ParamKey;
 import gov.anzong.androidnga.fragment.ArticleTabFragment;

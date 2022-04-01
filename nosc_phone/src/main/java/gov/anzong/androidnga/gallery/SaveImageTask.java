@@ -13,11 +13,11 @@ import org.reactivestreams.Subscription;
 import java.io.File;
 
 import gov.anzong.androidnga.R;
-import gov.anzong.androidnga.base.util.ToastUtils;
+import nosc.utils.uxUtils.ToastUtils;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import gov.anzong.androidnga.base.util.ContextUtils;;
+import nosc.utils.ContextUtils;;
 import nosc.api.callbacks.OnSimpleHttpCallBack;
 import sp.phone.rxjava.BaseSubscriber;
 

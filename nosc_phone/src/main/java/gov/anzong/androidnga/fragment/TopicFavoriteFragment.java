@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import gov.anzong.androidnga.R;
-import gov.anzong.androidnga.base.util.ToastUtils;
+import nosc.utils.uxUtils.ToastUtils;
 import sp.phone.mvp.model.entity.ThreadPageInfo;
 
 /**

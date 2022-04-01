@@ -12,8 +12,8 @@ import java.util.Map;
 
 import gov.anzong.androidnga.R;
 import gov.anzong.androidnga.Utils;
-import gov.anzong.androidnga.base.util.ContextUtils;
-import gov.anzong.androidnga.common.PreferenceKey;
+import nosc.utils.ContextUtils;
+import nosc.utils.PreferenceKey;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.schedulers.Schedulers;

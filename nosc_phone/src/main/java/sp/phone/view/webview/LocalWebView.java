@@ -12,7 +12,7 @@ import android.webkit.WebView;
 
 import androidx.annotation.Nullable;
 
-import gov.anzong.androidnga.common.util.LogUtils;
+import gov.anzong.androidnga.debug.LogUtils;
 import sp.phone.common.PhoneConfiguration;
 
 /**

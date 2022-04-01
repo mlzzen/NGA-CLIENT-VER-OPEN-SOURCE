@@ -13,7 +13,7 @@ import android.view.MenuItem;
 import android.widget.EditText;
 
 import gov.anzong.androidnga.R;
-import gov.anzong.androidnga.base.util.ToastUtils;
+import nosc.utils.uxUtils.ToastUtils;
 import sp.phone.common.UserManagerImpl;
 import sp.phone.param.SignPostParam;
 import nosc.api.callbacks.OnHttpCallBack;

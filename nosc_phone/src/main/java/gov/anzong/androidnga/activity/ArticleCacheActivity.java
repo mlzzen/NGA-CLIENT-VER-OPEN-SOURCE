@@ -11,9 +11,9 @@ import java.util.Collections;
 import java.util.List;
 
 import gov.anzong.androidnga.R;
-import gov.anzong.androidnga.base.util.ContextUtils;
-import gov.anzong.androidnga.base.util.ToastUtils;
-import nosc.ui.view.ComposePageSelector;
+import nosc.utils.ContextUtils;
+import nosc.utils.uxUtils.ToastUtils;
+import nosc.ui.view.PageSelector;
 import sp.phone.param.ArticleListParam;
 import sp.phone.param.ParamKey;
 import sp.phone.ui.adapter.ArticlePagerAdapter;
@@ -58,7 +58,7 @@ public class ArticleCacheActivity extends BaseActivity {
         ViewPager viewPager = findViewById(R.id.pager);
         viewPager.setAdapter(mPagerAdapter);
 
-        ComposePageSelector tabLayout = findViewById(R.id.tabs);
+        PageSelector tabLayout = findViewById(R.id.tabs);
         tabLayout.bindViewPager(viewPager);
     }
 

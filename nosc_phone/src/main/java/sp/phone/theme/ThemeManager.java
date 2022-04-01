@@ -11,9 +11,9 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.ContextCompat;
 
 import gov.anzong.androidnga.R;
-import gov.anzong.androidnga.base.util.ContextUtils;
-import gov.anzong.androidnga.base.util.ThreadUtils;
-import gov.anzong.androidnga.common.PreferenceKey;
+import nosc.utils.ContextUtils;
+import nosc.utils.ThreadUtils;
+import nosc.utils.PreferenceKey;
 
 public class ThemeManager implements SharedPreferences.OnSharedPreferenceChangeListener {
 

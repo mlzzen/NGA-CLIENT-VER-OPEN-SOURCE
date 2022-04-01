@@ -18,7 +18,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 
 import gov.anzong.androidnga.R;
-import gov.anzong.androidnga.base.util.ToastUtils;
+import nosc.utils.uxUtils.ToastUtils;
 import sp.phone.param.ParamKey;
 import sp.phone.mvp.contract.TopicPostContract;
 import sp.phone.mvp.presenter.TopicPostPresenter;

@@ -6,7 +6,6 @@ import android.graphics.Color
 import android.util.TypedValue
 import androidx.core.content.ContextCompat
 import gov.anzong.androidnga.R
-import gov.anzong.androidnga.base.util.ContextUtils
 import sp.phone.theme.ThemeManager
 import sp.phone.util.NLog
 
@@ -38,4 +37,8 @@ fun Context.accentColor():Int{
     val typedValue = TypedValue()
     theme.resolveAttribute(android.R.attr.colorAccent, typedValue, true)
     return ContextCompat.getColor(this, typedValue.resourceId)
+}
+
+fun Context.backgroundColor():Int{
+    return ContextCompat.getColor(this, R.color.background_color)
 }

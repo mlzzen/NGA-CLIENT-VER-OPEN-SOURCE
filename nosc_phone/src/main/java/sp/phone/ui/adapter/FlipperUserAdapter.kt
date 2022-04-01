@@ -5,10 +5,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import sp.phone.mvp.contract.BoardContract
 import androidx.recyclerview.widget.RecyclerView
 import gov.anzong.androidnga.R
-import gov.anzong.androidnga.base.util.ToastUtils
 import nosc.utils.getActivity
 import nosc.utils.jumpToLogin
 import nosc.utils.startUserProfile

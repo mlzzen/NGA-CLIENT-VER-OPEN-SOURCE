@@ -1,15 +1,12 @@
 package nosc.utils
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.view.View
 import com.alibaba.android.arouter.launcher.ARouter
 import gov.anzong.androidnga.arouter.ARouterConstants
-import gov.anzong.androidnga.base.util.ContextUtils
-import gov.anzong.androidnga.base.util.ToastUtils
+import nosc.utils.uxUtils.ToastUtils
 import sp.phone.common.PhoneConfiguration
-import sp.phone.common.User
 import sp.phone.mvp.model.entity.Board
 import sp.phone.param.ParamKey
 import sp.phone.util.*

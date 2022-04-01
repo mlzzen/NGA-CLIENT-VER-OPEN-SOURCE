@@ -1,20 +1,21 @@
 package sp.phone.util;
 
 import android.annotation.SuppressLint;
-import android.content.res.AssetManager;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Random;
+import java.util.WeakHashMap;
 import java.util.regex.Pattern;
 
 import gov.anzong.androidnga.R;
-import gov.anzong.androidnga.base.util.ContextUtils;
+import nosc.utils.ContextUtils;
 import nosc.api.bean.StringFindResult;
+import okhttp3.RequestBody;
+import okio.Buffer;
 ;
 
 @SuppressLint("SimpleDateFormat")
@@ -34,6 +35,33 @@ public class StringUtils {
 //        Matcher mat = pattern.matcher(email);
 //        return mat.find();
 //    }
+
+    private static Map<String, Pattern> sPatternMap = new WeakHashMap<>();
+
+    public static String replaceAll(String content, String regex, String replacement) {
+        return getPattern(regex).matcher(content).replaceAll(replacement);
+    }
+
+    public static Pattern getPattern(String regex) {
+        Pattern pattern = sPatternMap.get(regex);
+        if (pattern == null) {
+            pattern = Pattern.compile(regex);
+            sPatternMap.put(regex, pattern);
+        }
+        return pattern;
+    }
+    public static String requestBody2String(final RequestBody request) {
+        try {
+            final Buffer buffer = new Buffer();
+            if (request != null) {
+                request.writeTo(buffer);
+                return buffer.readUtf8();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
 
     /**
      * 判断是否是 "" 或者 null

@@ -8,13 +8,12 @@ import nosc.api.bean.MessageThreadPageInfo
 import android.view.ViewGroup
 import android.view.LayoutInflater
 import gov.anzong.androidnga.R
-import gov.anzong.androidnga.base.util.ToastUtils
+import nosc.utils.uxUtils.ToastUtils
 import sp.phone.theme.ThemeManager
 import sp.phone.common.PhoneConfiguration
-import android.text.TextPaint
 import android.view.View
 import android.widget.TextView
-import gov.anzong.androidnga.base.util.ContextUtils
+import nosc.utils.ContextUtils
 import gov.anzong.androidnga.databinding.ListMessageBinding
 import sp.phone.util.StringUtils
 import java.util.ArrayList

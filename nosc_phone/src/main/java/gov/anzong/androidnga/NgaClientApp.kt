@@ -3,11 +3,11 @@ package gov.anzong.androidnga
 import android.app.Application
 import sp.phone.util.NLog
 import sp.phone.common.VersionUpgradeHelper
-import gov.anzong.androidnga.base.util.PreferenceUtils
-import gov.anzong.androidnga.common.PreferenceKey
+import nosc.utils.PreferenceUtils
+import nosc.utils.PreferenceKey
 import android.webkit.WebView
 import com.alibaba.android.arouter.launcher.ARouter
-import gov.anzong.androidnga.base.util.ContextUtils
+import nosc.utils.ContextUtils
 import sp.phone.common.UserManagerImpl
 import sp.phone.common.FilterKeywordsManagerImpl
 

@@ -14,7 +14,7 @@ import com.bumptech.glide.request.RequestOptions;
 
 import org.jetbrains.annotations.NotNull;
 
-import gov.anzong.androidnga.base.util.ContextUtils;
+import nosc.utils.ContextUtils;
 
 /**
  * @author Yricky

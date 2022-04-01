@@ -10,12 +10,11 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import gov.anzong.androidnga.R
-import gov.anzong.androidnga.base.util.ContextUtils
+import nosc.utils.ContextUtils
 import nosc.api.constants.ApiConstants
 import sp.phone.mvp.model.entity.ThreadPageInfo
 import sp.phone.util.StringUtils
 import java.math.BigInteger
-import java.util.*
 
 object TopicTitleHelper {
     private fun AnnotatedString.Builder.handleOldFormat(misc: String, titleLength: Int) {
@@ -61,11 +60,16 @@ object TopicTitleHelper {
                     val miscStr = StringUtils.toBinaryArray(bytes).substring(8)
                     val miscValue = BigInteger(miscStr, 2).toInt()
                     when {
-                        miscValue and ApiConstants.MASK_FONT_GREEN == ApiConstants.MASK_FONT_GREEN -> SpanStyle(color = Color(ContextUtils.getColor(R.color.title_green)))
-                        miscValue and ApiConstants.MASK_FONT_BLUE == ApiConstants.MASK_FONT_BLUE -> SpanStyle(color = Color(ContextUtils.getColor(R.color.title_blue)))
-                        miscValue and ApiConstants.MASK_FONT_RED == ApiConstants.MASK_FONT_RED -> SpanStyle(color = Color(ContextUtils.getColor(R.color.title_red)))
-                        miscValue and ApiConstants.MASK_FONT_ORANGE == ApiConstants.MASK_FONT_ORANGE -> SpanStyle(color = Color(ContextUtils.getColor(R.color.title_orange)))
-                        miscValue and ApiConstants.MASK_FONT_SILVER == ApiConstants.MASK_FONT_SILVER -> SpanStyle(color = Color(ContextUtils.getColor(R.color.silver)))
+                        miscValue and ApiConstants.MASK_FONT_GREEN == ApiConstants.MASK_FONT_GREEN -> SpanStyle(color = Color(
+                            ContextUtils.getColor(R.color.title_green)))
+                        miscValue and ApiConstants.MASK_FONT_BLUE == ApiConstants.MASK_FONT_BLUE -> SpanStyle(color = Color(
+                            ContextUtils.getColor(R.color.title_blue)))
+                        miscValue and ApiConstants.MASK_FONT_RED == ApiConstants.MASK_FONT_RED -> SpanStyle(color = Color(
+                            ContextUtils.getColor(R.color.title_red)))
+                        miscValue and ApiConstants.MASK_FONT_ORANGE == ApiConstants.MASK_FONT_ORANGE -> SpanStyle(color = Color(
+                            ContextUtils.getColor(R.color.title_orange)))
+                        miscValue and ApiConstants.MASK_FONT_SILVER == ApiConstants.MASK_FONT_SILVER -> SpanStyle(color = Color(
+                            ContextUtils.getColor(R.color.silver)))
                         else -> null
                     }?.let {
                         addStyle(

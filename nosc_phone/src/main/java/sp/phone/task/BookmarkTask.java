@@ -2,7 +2,7 @@ package sp.phone.task;
 
 import gov.anzong.androidnga.Utils;
 
-import gov.anzong.androidnga.base.util.ToastUtils;
+import nosc.utils.uxUtils.ToastUtils;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import nosc.api.retrofit.RetrofitHelper;

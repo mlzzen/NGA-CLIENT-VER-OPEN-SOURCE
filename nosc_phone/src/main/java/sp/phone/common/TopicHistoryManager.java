@@ -8,8 +8,8 @@ import com.alibaba.fastjson.JSON;
 import java.util.ArrayList;
 import java.util.List;
 
-import gov.anzong.androidnga.base.util.ContextUtils;
-import gov.anzong.androidnga.common.PreferenceKey;
+import nosc.utils.ContextUtils;
+import nosc.utils.PreferenceKey;
 import sp.phone.mvp.model.entity.ThreadPageInfo;
 
 /**

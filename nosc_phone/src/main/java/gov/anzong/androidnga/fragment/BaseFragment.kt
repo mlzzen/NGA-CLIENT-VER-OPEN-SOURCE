@@ -8,7 +8,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import gov.anzong.androidnga.R
 import gov.anzong.androidnga.activity.BaseActivity
-import gov.anzong.androidnga.base.util.ToastUtils
+import nosc.utils.uxUtils.ToastUtils
 import sp.phone.common.PhoneConfiguration
 
 open class BaseFragment : Fragment {

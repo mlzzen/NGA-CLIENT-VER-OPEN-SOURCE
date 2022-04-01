@@ -49,34 +49,14 @@ public class ActivityUtils {
 
     }
 
-    static public String getSaying() {
-        String str = StringUtils.getSaying();
-        if (str.contains(";")) {
-            str = str.replace(";", "-----");
-        }
-
-        return str;
-
-    }
-
     public void noticeSaying(Context context) {
-
         String str = StringUtils.getSaying();
-        if (str.contains(";")) {
-            notice("", str.replace(";", "-----"), context);
-        } else {
-            notice("", str, context);
-        }
+        notice("", str, context);
     }
 
     public void noticeSayingWithProgressBar(Context context) {
-
         String str = StringUtils.getSaying();
-        if (str.contains(";")) {
-            noticebar("", str.replace(";", "-----"), context);
-        } else {
-            noticebar("", str, context);
-        }
+        noticebar("", str, context);
     }
 
     private void notice(String title, String content, Context c) {
@@ -150,7 +130,7 @@ public class ActivityUtils {
     }
 
     public void noticebarsetprogress(int i) {
-        NLog.d(TAG, "trying setprocess" + String.valueOf(i));
+        NLog.d(TAG, "trying setprocess" + i);
         if (df != null && df.getActivity() != null) {
             if (df instanceof SayingDialogFragmentWithProgressBar) {
                 ((SayingDialogFragmentWithProgressBar) df).setProgress(i);
@@ -213,7 +193,7 @@ public class ActivityUtils {
                 String content = b.getString("content");
                 dialog.setTitle(title);
                 if (StringUtils.isEmpty(content))
-                    content = ActivityUtils.getSaying();
+                    content = StringUtils.getSaying();
                 dialog.setMessage(content);
             }
 
@@ -250,7 +230,7 @@ public class ActivityUtils {
                 String content = b.getString("content");
                 dialog.setTitle(title);
                 if (StringUtils.isEmpty(content))
-                    content = ActivityUtils.getSaying();
+                    content = StringUtils.getSaying();
                 dialog.setMessage(content);
             }
 
@@ -299,27 +279,6 @@ public class ActivityUtils {
         } else {
             intent.setClass(context, PhoneConfiguration.getInstance().topicActivityClass);
             context.startActivity(intent);
-        }
-    }
-
-    public static void startSearchDialog(AppCompatActivity activity, Bundle bundle) {
-        if (UserManagerImpl.getInstance().getActiveUser() == null) {
-            startLoginActivity(activity);
-            return;
-        }
-        DialogFragment df = new SearchDialogFragment();
-        df.setArguments(bundle);
-        final String dialogTag = SearchDialogFragment.class.getSimpleName();
-        FragmentManager fm = activity.getSupportFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        Fragment prev = fm.findFragmentByTag(dialogTag);
-        if (prev != null) {
-            ft.remove(prev);
-        }
-        try {
-            df.show(ft, dialogTag);
-        } catch (Exception e) {
-
         }
     }
 

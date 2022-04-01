@@ -29,7 +29,6 @@ public class PostCommentTask extends AsyncTask<String, Integer, String> {
     private final int tid;
     private final int fid;
     private final String prefix;
-    final private FragmentActivity fragmentActivity;
     int anonymode;
     boolean success;
     OnPostCommentFinishedListener notifier;
@@ -41,7 +40,6 @@ public class PostCommentTask extends AsyncTask<String, Integer, String> {
         this.pid = pid;
         this.tid = tid;
         this.prefix = prefix;
-        this.fragmentActivity = fragmentActivity;
         this.notifier = notifier;
         this.anonymode = anonymode;
     }

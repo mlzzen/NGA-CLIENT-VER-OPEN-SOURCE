@@ -2,9 +2,9 @@ package sp.phone.common;
 
 import android.content.SharedPreferences;
 
-import gov.anzong.androidnga.base.util.ContextUtils;
-import gov.anzong.androidnga.base.util.PreferenceUtils;
-import gov.anzong.androidnga.common.PreferenceKey;
+import nosc.utils.ContextUtils;
+import nosc.utils.PreferenceUtils;
+import nosc.utils.PreferenceKey;
 
 public class VersionUpgradeHelper {
 

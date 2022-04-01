@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 
-import gov.anzong.androidnga.common.util.EmoticonUtils;
+import nosc.utils.EmoticonUtils;
 
 /**
  * Created by Justwen on 2018/6/8.

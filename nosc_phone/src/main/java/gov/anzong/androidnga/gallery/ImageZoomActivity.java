@@ -14,7 +14,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 //import com.justwen.androidnga.cloud.CloudServerManager;
 import com.tbruyelle.rxpermissions2.RxPermissions;
@@ -25,9 +24,9 @@ import java.util.Arrays;
 import gov.anzong.androidnga.BuildConfig;
 import gov.anzong.androidnga.R;
 import gov.anzong.androidnga.activity.BaseActivity;
-import gov.anzong.androidnga.base.util.ToastUtils;
+import nosc.utils.uxUtils.ToastUtils;
 import nosc.api.callbacks.OnSimpleHttpCallBack;
-import gov.anzong.androidnga.base.util.DeviceUtils;
+import nosc.utils.DeviceUtils;
 
 /**
  * 显示图片

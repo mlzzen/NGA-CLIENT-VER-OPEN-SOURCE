@@ -1,10 +1,9 @@
 package sp.phone.mvp.presenter;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import gov.anzong.androidnga.R;
-import gov.anzong.androidnga.base.util.ToastUtils;
+import nosc.utils.uxUtils.ToastUtils;
 import sp.phone.common.UserManager;
 import sp.phone.common.UserManagerImpl;
 import nosc.api.callbacks.OnHttpCallBack;

@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import gov.anzong.androidnga.common.PreferenceKey;
+import nosc.utils.PreferenceKey;
 import nosc.api.bean.ThreadData;
 import nosc.api.bean.ThreadRowInfo;
 

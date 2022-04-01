@@ -20,7 +20,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
 
-            <nosc.ui.view.ComposeEmptyView
+            <nosc.ui.view.EmptyView
                 android:id="@+id/empty_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
@@ -28,7 +28,7 @@
         </FrameLayout>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-    <sp.phone.view.LoadingLayout
+    <nosc.ui.view.LoadingView
         android:id="@+id/loading_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>

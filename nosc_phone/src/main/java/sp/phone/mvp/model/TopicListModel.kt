@@ -1,11 +1,10 @@
 package sp.phone.mvp.model
 
 import com.alibaba.fastjson.JSON
-import gov.anzong.androidnga.base.util.ContextUtils
-import gov.anzong.androidnga.base.util.ThreadUtils
+import nosc.utils.ContextUtils
+import nosc.utils.ThreadUtils
 import io.reactivex.Observable
 import io.reactivex.ObservableEmitter
-import io.reactivex.ObservableOnSubscribe
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import nosc.api.callbacks.OnHttpCallBack
@@ -42,7 +41,7 @@ class TopicListModel : BaseModel() {
     }
 
     fun loadCache(callBack: OnHttpCallBack<TopicListInfo>) {
-        Observable.create(ObservableOnSubscribe { emitter: ObservableEmitter<TopicListInfo?> ->
+        Observable.create { emitter: ObservableEmitter<TopicListInfo?> ->
             val path = ContextUtils.getExternalDir("articleCache")
             val cacheDirs = File(path).listFiles()
             if (cacheDirs == null) {
@@ -70,7 +69,7 @@ class TopicListModel : BaseModel() {
                 emitter.onNext(listInfo)
             }
             emitter.onComplete()
-        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+        }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
             .subscribe(object : BaseSubscriber<TopicListInfo?>() {
                 override fun onNext(topicListInfo: TopicListInfo) {
                     callBack.onSuccess(topicListInfo)

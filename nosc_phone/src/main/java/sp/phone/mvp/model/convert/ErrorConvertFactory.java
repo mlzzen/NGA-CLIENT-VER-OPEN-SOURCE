@@ -6,8 +6,8 @@ import com.alibaba.fastjson.JSONObject;
 import java.net.UnknownHostException;
 
 import gov.anzong.androidnga.R;
-import gov.anzong.androidnga.base.util.ContextUtils;
-import gov.anzong.androidnga.base.util.ContextUtils;;
+import nosc.utils.ContextUtils;
+;
 
 /**
  * Created by Justwen on 2017/11/23.

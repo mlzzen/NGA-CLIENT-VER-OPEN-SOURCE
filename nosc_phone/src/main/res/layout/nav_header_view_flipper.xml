@@ -5,7 +5,7 @@
     android:layout_height="160dp"
     android:background="?colorPrimary">
 
-    <gov.anzong.androidnga.base.widget.ViewFlipperEx
+    <nosc.ui.view.RecyclerViewFlipper
         android:id="@+id/viewFlipper"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>

@@ -1,10 +1,7 @@
 package gov.anzong.androidnga.fragment
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.*
-import android.widget.Button
-import android.widget.LinearLayout
 import android.widget.PopupMenu
 import android.widget.TextView
 import androidx.compose.material.Button
@@ -14,17 +11,15 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.alibaba.android.arouter.launcher.ARouter
 import gov.anzong.androidnga.R
 import gov.anzong.androidnga.activity.BaseActivity
-import gov.anzong.androidnga.activity.WebViewActivity
 import gov.anzong.androidnga.arouter.ARouterConstants
-import gov.anzong.androidnga.base.util.ToastUtils
+import nosc.utils.uxUtils.ToastUtils
 import gov.anzong.androidnga.databinding.FragmentArticleListBinding
 import gov.anzong.androidnga.fragment.dialog.BaseDialogFragment
 import gov.anzong.androidnga.fragment.dialog.PostCommentDialogFragment
 import nosc.api.bean.ThreadData
 import nosc.api.bean.ThreadRowInfo
-import nosc.ui.view.ComposeEmptyView
+import nosc.ui.view.EmptyView
 import nosc.utils.toUrl
-import sp.phone.common.PhoneConfiguration
 import sp.phone.common.UserManagerImpl
 import sp.phone.mvp.contract.ArticleListContract
 import sp.phone.mvp.presenter.ArticleListPresenter
@@ -49,7 +44,7 @@ open class ArticleListFragment : BaseMvpFragment<ArticleListPresenter?>(),
 
     val mListView: RecyclerViewEx? get() = binding?.list
 
-    val mLoadingView: View? get() = binding?.loading?.loadingView
+    val mLoadingView: View? get() = binding?.loadingView
 
     val mSwipeRefreshLayout: SwipeRefreshLayout? get() = binding?.swipeRefresh
     private var mArticleAdapter: ArticleListAdapter? = null
@@ -204,15 +199,13 @@ open class ArticleListFragment : BaseMvpFragment<ArticleListPresenter?>(),
         mListView!!.layoutManager = LinearLayoutManager(context)
         mListView!!.setItemViewCacheSize(20)
         mListView!!.adapter = mArticleAdapter
-        mListView!!.setEmptyView(view.findViewById<ComposeEmptyView>(R.id.empty_view).also {
+        mListView!!.setEmptyView(view.findViewById<EmptyView>(R.id.empty_view).also {
             it.extraContent = {
                 Button(onClick = { FunctionUtils.openUrlByDefaultBrowser(activity, mRequestParam?.toUrl()) }) {
                     Text(text = "使用浏览器打开")
                 }
             }
         })
-        val sayingView = mLoadingView!!.findViewById<View>(R.id.saying) as TextView
-        sayingView.text = ActivityUtils.getSaying()
         mSwipeRefreshLayout!!.setOnRefreshListener { loadPage() }
         super.onViewCreated(view, savedInstanceState)
     }

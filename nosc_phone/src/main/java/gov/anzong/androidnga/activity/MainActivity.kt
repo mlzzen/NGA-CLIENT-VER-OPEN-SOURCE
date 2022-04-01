@@ -8,7 +8,7 @@ import android.view.MenuItem
 import com.alibaba.android.arouter.launcher.ARouter
 import gov.anzong.androidnga.R
 import gov.anzong.androidnga.arouter.ARouterConstants
-import gov.anzong.androidnga.base.util.PermissionUtils
+import nosc.utils.PermissionUtils
 import gov.anzong.androidnga.fragment.NavigationDrawerFragment
 import sp.phone.common.UserManagerImpl
 import sp.phone.param.ParamKey

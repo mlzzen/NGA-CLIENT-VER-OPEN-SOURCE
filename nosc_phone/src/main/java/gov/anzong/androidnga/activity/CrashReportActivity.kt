@@ -9,8 +9,8 @@ import com.danielstone.materialaboutlibrary.items.MaterialAboutActionItem
 import gov.anzong.androidnga.R
 import android.content.Context
 import gov.anzong.androidnga.BuildConfig
-import gov.anzong.androidnga.base.util.ContextUtils
-import gov.anzong.androidnga.base.util.ToastUtils
+import nosc.utils.ContextUtils
+import nosc.utils.uxUtils.ToastUtils
 import java.nio.charset.Charset
 
 class CrashReportActivity : MaterialAboutActivity() {

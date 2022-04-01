@@ -1,7 +1,7 @@
 package gov.anzong.androidnga.fragment
 
 import android.widget.AdapterView.OnItemClickListener
-import gov.anzong.androidnga.base.widget.ViewFlipperEx
+import nosc.ui.view.RecyclerViewFlipper
 import android.widget.TextView
 import sp.phone.ui.adapter.BoardPagerAdapter
 import android.os.Bundle
@@ -10,7 +10,6 @@ import sp.phone.mvp.model.entity.Board
 import gov.anzong.androidnga.R
 import com.google.android.material.tabs.TabLayout
 import androidx.drawerlayout.widget.DrawerLayout
-import com.google.android.material.navigation.NavigationView
 import com.google.android.material.internal.NavigationMenuView
 import sp.phone.ui.adapter.FlipperUserAdapter
 import sp.phone.common.UserManagerImpl
@@ -22,15 +21,14 @@ import android.preference.PreferenceManager
 import android.text.TextUtils
 import android.view.*
 import android.view.animation.AnimationUtils
-import gov.anzong.androidnga.common.PreferenceKey
+import nosc.utils.PreferenceKey
 import android.widget.AdapterView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProvider
-import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
-import gov.anzong.androidnga.base.util.ToastUtils
+import nosc.utils.uxUtils.ToastUtils
 import gov.anzong.androidnga.databinding.FragmentNavigationDrawerBinding
 import nosc.utils.jumpToLogin
 import nosc.utils.showTopicList
@@ -48,7 +46,7 @@ import java.lang.NumberFormatException
 class NavigationDrawerFragment : BaseRxFragment(),
     OnItemClickListener {
     private var binding:FragmentNavigationDrawerBinding? = null
-    private var mHeaderView: ViewFlipperEx? = null
+    private var mHeaderView: RecyclerViewFlipper<FlipperUserAdapter.UserViewHolder>? = null
     private var mReplyCountView: TextView? = null
     private var mBoardPagerAdapter: BoardPagerAdapter? = null
     private var tabLayoutMediator:TabLayoutMediator? = null

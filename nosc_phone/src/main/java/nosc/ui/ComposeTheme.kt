@@ -19,6 +19,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import nosc.utils.accentColor
+import nosc.utils.backgroundColor
 import nosc.utils.primaryColor
 
 /**
@@ -63,7 +64,8 @@ fun NOSCTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable (
                 primaryVariant = Color(context.primaryColor()),
                 secondary = Color(context.accentColor()),
                 onPrimary = Color.White,
-                onBackground = Color.Gray
+                onBackground = Color.Gray,
+                background = Color(context.backgroundColor())
 
             )
         )
@@ -75,6 +77,7 @@ fun NOSCTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable (
                 primary = Color(context.primaryColor()),
                 primaryVariant = Color(context.primaryColor()),
                 secondary = Color(context.accentColor()),
+                background = Color(context.backgroundColor())
             )
         )
     }

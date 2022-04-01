@@ -7,7 +7,7 @@ import android.view.LayoutInflater
 import sp.phone.theme.ThemeManager
 import sp.phone.view.webview.LocalWebView
 import nosc.api.bean.ThreadRowInfo
-import gov.anzong.androidnga.base.util.ToastUtils
+import nosc.utils.uxUtils.ToastUtils
 import android.content.Intent
 import sp.phone.common.UserManagerImpl
 import sp.phone.common.PhoneConfiguration
@@ -30,8 +30,8 @@ import android.widget.ImageView
 import sp.phone.rxjava.RxUtils
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.FragmentManager
-import gov.anzong.androidnga.base.util.ContextUtils
-import gov.anzong.androidnga.base.util.DeviceUtils
+import nosc.utils.ContextUtils
+import nosc.utils.DeviceUtils
 import io.reactivex.Observable
 import sp.phone.rxjava.BaseSubscriber
 import sp.phone.util.*
@@ -47,7 +47,7 @@ class ArticleListAdapter(
     private val mFragmentManager: FragmentManager
 ) : RecyclerView.Adapter<ArticleViewHolder>() {
     private var mData: ThreadData? = null
-    private val mLayoutInflater: LayoutInflater
+    private val mLayoutInflater: LayoutInflater = LayoutInflater.from(mContext)
     private val mThemeManager = ThemeManager.getInstance()
     private val mLocalWebViews: Array<LocalWebView?> = arrayOfNulls(20)
     private var mTopicOwner: String? = null
@@ -402,9 +402,6 @@ class ArticleListAdapter(
             holder.contentTV!!.webViewClientEx.setImgUrls(row.imageUrls)
             holder.contentTV!!.loadDataWithBaseURL(null, html, "text/html", "utf-8", null)
         }
-//        else {
-//            //holder.contentTextView.setText(row.getContent());
-//        }
     }
 
     private fun onBindDeviceType(clientBtn: ImageView?, row: ThreadRowInfo) {
@@ -447,10 +444,4 @@ class ArticleListAdapter(
         private const val VIEW_TYPE_NATIVE_VIEW = 1
     }
 
-    init {
-        if (HtmlUtils.hide == null) {
-            HtmlUtils.initStaticStrings(mContext)
-        }
-        mLayoutInflater = LayoutInflater.from(mContext)
-    }
 }

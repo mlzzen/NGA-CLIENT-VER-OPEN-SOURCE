@@ -11,7 +11,7 @@ import gov.anzong.androidnga.core.data.HtmlData;
 import gov.anzong.androidnga.core.decode.ForumDecoder;
 import nosc.api.bean.MessageArticlePageInfo;
 import nosc.api.bean.MessageDetailInfo;
-import gov.anzong.androidnga.base.util.ContextUtils;;
+import nosc.utils.ContextUtils;;
 import sp.phone.theme.ThemeManager;
 
 /**

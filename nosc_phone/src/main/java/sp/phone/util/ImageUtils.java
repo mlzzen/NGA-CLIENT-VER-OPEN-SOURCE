@@ -9,7 +9,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.graphics.PixelFormat;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
@@ -25,15 +24,13 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import org.apache.commons.io.FilenameUtils;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import gov.anzong.androidnga.R;
-import gov.anzong.androidnga.base.util.PermissionUtils;
+import nosc.utils.PermissionUtils;
 import gov.anzong.androidnga.GlideApp;
-import gov.anzong.androidnga.base.util.ContextUtils;;
+import nosc.utils.ContextUtils;;
 import sp.phone.common.PhoneConfiguration;
 
 public class ImageUtils {

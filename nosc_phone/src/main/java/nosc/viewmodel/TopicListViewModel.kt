@@ -5,9 +5,9 @@ import sp.phone.mvp.model.entity.TopicListInfo
 import sp.phone.param.TopicListParam
 import sp.phone.mvp.model.TopicListModel
 import nosc.api.callbacks.OnHttpCallBack
-import gov.anzong.androidnga.base.util.ToastUtils
-import gov.anzong.androidnga.base.util.DeviceUtils
-import gov.anzong.androidnga.base.util.PermissionUtils
+import nosc.utils.uxUtils.ToastUtils
+import nosc.utils.DeviceUtils
+import nosc.utils.PermissionUtils
 import android.os.Environment
 import android.content.Intent
 import gov.anzong.androidnga.fragment.TopicCacheFragment
@@ -17,9 +17,9 @@ import android.net.Uri
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.*
 import gov.anzong.androidnga.BuildConfig
-import gov.anzong.androidnga.base.util.ContextUtils
-import gov.anzong.androidnga.common.util.FileUtils
-import gov.anzong.androidnga.common.util.LogUtils
+import nosc.utils.ContextUtils
+import nosc.utils.FileUtils
+import gov.anzong.androidnga.debug.LogUtils
 import sp.phone.mvp.model.entity.ThreadPageInfo
 import sp.phone.rxjava.BaseSubscriber
 import java.io.File

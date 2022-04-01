@@ -2,7 +2,6 @@ package sp.phone.view.webview;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -19,7 +18,7 @@ import gov.anzong.androidnga.activity.ArticleListActivity;
 import gov.anzong.androidnga.activity.TopicListActivity;
 import gov.anzong.androidnga.arouter.ARouterConstants;
 import gov.anzong.androidnga.gallery.ImageZoomActivity;
-import gov.anzong.androidnga.base.util.ContextUtils;;
+import nosc.utils.ContextUtils;;
 import sp.phone.util.StringUtils;
 
 public class WebViewClientEx extends WebViewClient {

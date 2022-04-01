@@ -1,7 +1,6 @@
 package sp.phone.mvp.model
 
 import android.text.TextUtils
-import sp.phone.mvp.model.BaseModel
 import sp.phone.mvp.contract.ArticleListContract
 import nosc.api.retrofit.RetrofitService
 import sp.phone.param.ArticleListParam
@@ -10,18 +9,15 @@ import nosc.api.callbacks.OnHttpCallBack
 import nosc.api.bean.ThreadData
 import io.reactivex.schedulers.Schedulers
 import com.trello.rxlifecycle2.android.FragmentEvent
-import gov.anzong.androidnga.base.util.ContextUtils
-import kotlin.Throws
+import nosc.utils.ContextUtils
 import sp.phone.mvp.model.convert.ArticleConvertFactory
 import sp.phone.util.NLog
-import sp.phone.mvp.model.ArticleListModel
 import sp.phone.mvp.model.convert.ErrorConvertFactory
 import io.reactivex.android.schedulers.AndroidSchedulers
 import sp.phone.common.UserManagerImpl
-import gov.anzong.androidnga.base.util.ToastUtils
-import gov.anzong.androidnga.base.util.ThreadUtils
+import nosc.utils.uxUtils.ToastUtils
+import nosc.utils.ThreadUtils
 import io.reactivex.Observable
-import io.reactivex.ObservableOnSubscribe
 import io.reactivex.ObservableEmitter
 import nosc.api.retrofit.RetrofitHelper
 import org.apache.commons.io.FileUtils

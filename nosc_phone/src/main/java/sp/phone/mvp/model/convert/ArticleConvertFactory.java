@@ -14,12 +14,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import gov.anzong.androidnga.Utils;
-import gov.anzong.androidnga.base.util.DeviceUtils;
+import nosc.utils.DeviceUtils;
 import gov.anzong.androidnga.core.HtmlConvertFactory;
 import gov.anzong.androidnga.core.data.AttachmentData;
 import gov.anzong.androidnga.core.data.CommentData;
 import gov.anzong.androidnga.core.data.HtmlData;
-import gov.anzong.androidnga.base.util.ContextUtils;
+import nosc.utils.ContextUtils;
 import sp.phone.common.PhoneConfiguration;
 import nosc.api.bean.Attachment;
 import nosc.api.pojo.DiceData;

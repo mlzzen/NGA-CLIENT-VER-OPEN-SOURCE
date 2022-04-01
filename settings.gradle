@@ -6,9 +6,5 @@ pluginManagement {
     }
 }
 
-//include ':lib_cloud'
-include ':lib_common'
 include ':nosc_phone'
-include ':lib_core'
-//include ':lib_http'
-//include ':lib_nosc_ui'
+

@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import gov.anzong.androidnga.R;
-import gov.anzong.androidnga.base.util.ToastUtils;
+import nosc.utils.uxUtils.ToastUtils;
 import nosc.api.callbacks.OnHttpCallBack;
 import sp.phone.task.ReportTask;
 

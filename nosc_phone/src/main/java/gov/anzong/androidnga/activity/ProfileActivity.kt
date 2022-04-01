@@ -16,8 +16,8 @@ import com.google.android.material.appbar.AppBarLayout
 import gov.anzong.androidnga.R
 import gov.anzong.androidnga.Utils
 import gov.anzong.androidnga.arouter.ARouterConstants
-import gov.anzong.androidnga.base.util.DeviceUtils
-import gov.anzong.androidnga.base.util.ToastUtils
+import nosc.utils.DeviceUtils
+import nosc.utils.uxUtils.ToastUtils
 import gov.anzong.androidnga.core.data.HtmlData
 import gov.anzong.androidnga.core.decode.ForumDecoder
 import gov.anzong.androidnga.databinding.ActivityUserProfileBinding

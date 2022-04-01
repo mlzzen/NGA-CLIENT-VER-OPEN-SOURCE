@@ -10,7 +10,7 @@ import gov.anzong.androidnga.R;
 import nosc.api.bean.MessageDetailInfo;
 import nosc.api.bean.MessageListInfo;
 import nosc.api.bean.MessageThreadPageInfo;
-import gov.anzong.androidnga.base.util.ContextUtils;;
+import nosc.utils.ContextUtils;;
 import sp.phone.util.MessageUtil;
 import sp.phone.util.NLog;
 import sp.phone.util.StringUtils;

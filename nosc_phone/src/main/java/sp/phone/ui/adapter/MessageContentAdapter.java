@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import gov.anzong.androidnga.R;
-import gov.anzong.androidnga.base.util.ToastUtils;
+import nosc.utils.uxUtils.ToastUtils;
 import gov.anzong.androidnga.databinding.ListMessageContentBinding;
 import nosc.api.bean.MessageArticlePageInfo;
 import nosc.api.bean.MessageDetailInfo;

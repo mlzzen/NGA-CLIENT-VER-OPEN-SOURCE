@@ -11,8 +11,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import gov.anzong.androidnga.R;
-import gov.anzong.androidnga.base.common.SwipeBackHelper;
-import gov.anzong.androidnga.common.PreferenceKey;
+import nosc.utils.uxUtils.SwipeBackHelper;
+import nosc.utils.PreferenceKey;
 import nosc.utils.ThemeUtilsKt;
 import sp.phone.common.NotificationController;
 import sp.phone.common.PhoneConfiguration;

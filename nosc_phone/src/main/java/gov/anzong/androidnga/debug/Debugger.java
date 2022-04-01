@@ -9,8 +9,8 @@ import org.apache.commons.io.FileUtils;
 import java.io.File;
 import java.io.IOException;
 
-import gov.anzong.androidnga.base.util.ContextUtils;
-import gov.anzong.androidnga.base.util.ToastUtils;
+import nosc.utils.ContextUtils;
+import nosc.utils.uxUtils.ToastUtils;
 import okhttp3.Request;
 
 /**

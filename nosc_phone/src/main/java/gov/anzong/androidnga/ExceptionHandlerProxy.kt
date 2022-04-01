@@ -2,9 +2,9 @@ package gov.anzong.androidnga
 
 import android.os.DeadSystemException
 import android.os.Process
-import gov.anzong.androidnga.base.util.ContextUtils
-import gov.anzong.androidnga.base.util.PreferenceUtils
-import gov.anzong.androidnga.common.PreferenceKey
+import nosc.utils.ContextUtils
+import nosc.utils.PreferenceUtils
+import nosc.utils.PreferenceKey
 import java.io.File
 import java.lang.IllegalStateException
 import java.lang.RuntimeException

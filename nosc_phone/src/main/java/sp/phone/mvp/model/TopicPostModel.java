@@ -24,8 +24,8 @@ import java.util.concurrent.TimeUnit;
 
 import gov.anzong.androidnga.R;
 import gov.anzong.androidnga.Utils;
-import gov.anzong.androidnga.base.util.ContextUtils;
-import gov.anzong.androidnga.base.util.ToastUtils;
+import nosc.utils.ContextUtils;
+import nosc.utils.uxUtils.ToastUtils;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Function;

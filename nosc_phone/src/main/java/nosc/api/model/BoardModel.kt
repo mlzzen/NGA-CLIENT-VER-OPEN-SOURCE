@@ -6,9 +6,9 @@ import sp.phone.mvp.model.entity.Board
 import sp.phone.mvp.model.entity.Board.BoardKey
 import nosc.api.bean.CategoryBean
 import com.alibaba.fastjson.JSON
-import gov.anzong.androidnga.base.util.ContextUtils
-import gov.anzong.androidnga.base.util.PreferenceUtils
-import gov.anzong.androidnga.common.PreferenceKey
+import nosc.utils.ContextUtils
+import nosc.utils.PreferenceUtils
+import nosc.utils.PreferenceKey
 import nosc.config.CurrentUserData
 
 import okhttp3.*

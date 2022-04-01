@@ -10,7 +10,7 @@ import com.alibaba.android.arouter.launcher.ARouter
 import gov.anzong.androidnga.arouter.ARouterConstants
 import sp.phone.param.ParamKey
 import sp.phone.mvp.model.entity.Board
-import gov.anzong.androidnga.base.util.ToastUtils
+import nosc.utils.uxUtils.ToastUtils
 import android.content.Intent
 import gov.anzong.androidnga.activity.LauncherSubActivity
 import sp.phone.util.ActivityUtils

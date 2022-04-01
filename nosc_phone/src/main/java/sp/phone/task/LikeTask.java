@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import gov.anzong.androidnga.R;
-import gov.anzong.androidnga.base.util.ContextUtils;
+import nosc.utils.ContextUtils;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import nosc.api.callbacks.OnSimpleHttpCallBack;

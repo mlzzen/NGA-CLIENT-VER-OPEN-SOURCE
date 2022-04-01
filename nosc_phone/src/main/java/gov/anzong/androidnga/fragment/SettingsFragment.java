@@ -8,7 +8,6 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceGroup;
 import android.preference.PreferenceScreen;
-import android.view.WindowManager;
 
 import androidx.annotation.Nullable;
 
@@ -22,10 +21,10 @@ import gov.anzong.androidnga.R;
 import gov.anzong.androidnga.activity.BaseActivity;
 import gov.anzong.androidnga.activity.LauncherSubActivity;
 import gov.anzong.androidnga.activity.SettingsActivity;
-import gov.anzong.androidnga.base.util.ContextUtils;
-import gov.anzong.androidnga.base.util.ThreadUtils;
-import gov.anzong.androidnga.base.util.ToastUtils;
-import gov.anzong.androidnga.common.PreferenceKey;
+import nosc.utils.ContextUtils;
+import nosc.utils.ThreadUtils;
+import nosc.utils.uxUtils.ToastUtils;
+import nosc.utils.PreferenceKey;
 import gov.anzong.androidnga.fragment.dialog.AlertDialogFragment;
 import sp.phone.common.UserManagerImpl;
 import sp.phone.theme.ThemeManager;

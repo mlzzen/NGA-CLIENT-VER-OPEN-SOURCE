@@ -18,13 +18,11 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.alibaba.fastjson.JSON;
 
-import java.util.Collections;
-
 import gov.anzong.androidnga.R;
 import gov.anzong.androidnga.activity.BaseActivity;
 import gov.anzong.androidnga.arouter.ARouterConstants;
-import gov.anzong.androidnga.base.util.ContextUtils;
-import gov.anzong.androidnga.base.widget.DividerItemDecorationEx;
+import nosc.utils.ContextUtils;
+import nosc.ui.view.DividerItemDecorationEx;
 import nosc.api.constants.ApiConstants;
 import sp.phone.common.PhoneConfiguration;
 import sp.phone.common.TopicHistoryManager;
@@ -152,8 +150,6 @@ public class TopicSearchFragment extends BaseFragment implements View.OnClickLis
         mSwipeRefreshLayout.setVisibility(View.GONE);
         mSwipeRefreshLayout.setOnRefreshListener(() -> viewModel.loadPage(1, mRequestParam));
 
-        TextView sayingView = (TextView) mLoadingView.findViewById(R.id.saying);
-        sayingView.setText(ActivityUtils.getSaying());
 
         super.onViewCreated(view, savedInstanceState);
 

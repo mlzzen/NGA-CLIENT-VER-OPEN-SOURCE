@@ -27,11 +27,6 @@ public class HttpUtil {
 
     public static String HOST = "";
     public static String HOST_PORT = "";
-    //软件名/版本 (硬件信息; 操作系统信息)
-    //AndroidNga/571 (Xiaomi MI 2S; Android 4.1.1)
-    public static String MODEL = android.os.Build.MODEL.toUpperCase(Locale.US);
-    public static String MANUFACTURER = android.os.Build.MANUFACTURER.toUpperCase(Locale.US);
-
 
     public static void downImage(String uri, String fileName) {
         try {

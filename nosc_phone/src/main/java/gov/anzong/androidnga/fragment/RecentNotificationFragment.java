@@ -1,7 +1,6 @@
 package gov.anzong.androidnga.fragment;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -21,14 +20,14 @@ import java.util.List;
 
 import gov.anzong.androidnga.R;
 import nosc.api.callbacks.OnHttpCallBack;
-import nosc.ui.view.ComposeEmptyView;
+import nosc.ui.view.EmptyView;
+import nosc.ui.view.LoadingView;
 import sp.phone.mvp.model.entity.RecentReplyInfo;
 import sp.phone.ui.adapter.RecentNotificationAdapter;
 import sp.phone.common.PhoneConfiguration;
-import gov.anzong.androidnga.common.PreferenceKey;
+import nosc.utils.PreferenceKey;
 import sp.phone.param.ParamKey;
 import sp.phone.task.ForumNotificationTask;
-import sp.phone.view.LoadingLayout;
 import sp.phone.view.RecyclerViewEx;
 
 public class RecentNotificationFragment extends BaseRxFragment implements OnHttpCallBack<List<RecentReplyInfo>>, View.OnClickListener {
@@ -39,9 +38,9 @@ public class RecentNotificationFragment extends BaseRxFragment implements OnHttp
 
     private SwipeRefreshLayout mRefreshLayout;
 
-    private LoadingLayout mLoadingLayout;
+    private LoadingView loadingView;
 
-    private ComposeEmptyView mEmptyLayout;
+    private EmptyView mEmptyLayout;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -76,7 +75,7 @@ public class RecentNotificationFragment extends BaseRxFragment implements OnHttp
         });
         mRefreshLayout.setVisibility(View.GONE);
 
-        mLoadingLayout = view.findViewById(R.id.loading_view);
+        loadingView = view.findViewById(R.id.loading_view);
         mEmptyLayout = view.findViewById(R.id.empty_view);
 
         RecyclerViewEx listView = view.findViewById(R.id.list);
@@ -125,7 +124,7 @@ public class RecentNotificationFragment extends BaseRxFragment implements OnHttp
         if (!refreshing) {
             mRefreshLayout.setVisibility(View.VISIBLE);
             mRefreshLayout.setRefreshing(false);
-            mLoadingLayout.setVisibility(View.GONE);
+            loadingView.setVisibility(View.GONE);
         }
     }
 
@@ -141,7 +140,7 @@ public class RecentNotificationFragment extends BaseRxFragment implements OnHttp
             } else {
                 mNotificationAdapter.setRecentReplyList(data);
                 mRefreshLayout.setRefreshing(false);
-                mLoadingLayout.setVisibility(View.GONE);
+                loadingView.setVisibility(View.GONE);
                 mRefreshLayout.setVisibility(View.VISIBLE);
             }
         }

@@ -5,9 +5,8 @@ import android.content.SharedPreferences;
 
 import java.net.URLDecoder;
 
-import gov.anzong.androidnga.base.util.ContextUtils;
-import gov.anzong.androidnga.base.util.StringUtils;
-import gov.anzong.androidnga.common.PreferenceKey;
+import nosc.utils.ContextUtils;
+import nosc.utils.PreferenceKey;
 import gov.anzong.androidnga.debug.Debugger;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -19,6 +18,7 @@ import sp.phone.common.UserManagerImpl;
 import nosc.api.retrofit.converter.JsonStringConvertFactory;
 import sp.phone.util.ForumUtils;
 import sp.phone.util.NLog;
+import sp.phone.util.StringUtils;
 
 /**
  * Created by Justwen on 2017/10/10.
@@ -27,8 +27,6 @@ import sp.phone.util.NLog;
 public class RetrofitHelper {
 
     private Retrofit mRetrofit;
-
-    private static final String URL_NGA_BASE_CC = "https://bbs.ngacn.cc/";
 
     private String mBaseUrl;
 
@@ -110,23 +108,6 @@ public class RetrofitHelper {
 
     public RetrofitService getService() {
         return mRetrofit.create(RetrofitService.class);
-    }
-
-    public static RetrofitService getAuthCodeService() {
-        return new Retrofit.Builder()
-                .baseUrl(URL_NGA_BASE_CC)
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .build()
-                .create(RetrofitService.class);
-    }
-
-    public static RetrofitService getDefault() {
-        return new Retrofit.Builder()
-                .baseUrl(URL_NGA_BASE_CC)
-                .addConverterFactory(JsonStringConvertFactory.create())
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .build()
-                .create(RetrofitService.class);
     }
 
     private static class SingleTonHolder {

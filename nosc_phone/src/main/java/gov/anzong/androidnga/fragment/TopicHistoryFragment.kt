@@ -3,12 +3,11 @@ package gov.anzong.androidnga.fragment
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
-import gov.anzong.androidnga.common.ui.dialog.ConfirmDialog.Companion.showConfirmDialog
 import sp.phone.ui.adapter.TopicListAdapter
 import sp.phone.view.RecyclerViewEx
 import sp.phone.common.TopicHistoryManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import gov.anzong.androidnga.base.widget.DividerItemDecorationEx
+import nosc.ui.view.DividerItemDecorationEx
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -16,7 +15,8 @@ import sp.phone.mvp.model.entity.TopicListInfo
 import sp.phone.param.ArticleListParam
 import com.alibaba.fastjson.JSON
 import gov.anzong.androidnga.R
-import gov.anzong.androidnga.base.util.ContextUtils
+import nosc.utils.ContextUtils
+import nosc.utils.uxUtils.showConfirmDialog
 import sp.phone.param.ParamKey
 import sp.phone.common.PhoneConfiguration
 import sp.phone.mvp.model.entity.ThreadPageInfo

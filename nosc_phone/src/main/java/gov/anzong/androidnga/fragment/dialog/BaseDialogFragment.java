@@ -11,7 +11,7 @@ import android.view.View;
 import android.widget.Button;
 
 
-import gov.anzong.androidnga.base.util.ToastUtils;
+import nosc.utils.uxUtils.ToastUtils;
 import sp.phone.util.NLog;
 
 /**

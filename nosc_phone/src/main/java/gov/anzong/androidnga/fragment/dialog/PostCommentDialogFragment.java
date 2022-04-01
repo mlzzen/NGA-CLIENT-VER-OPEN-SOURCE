@@ -10,7 +10,7 @@ import android.widget.EditText;
 import java.lang.reflect.Field;
 
 import gov.anzong.androidnga.R;
-import gov.anzong.androidnga.base.util.ToastUtils;
+import nosc.utils.uxUtils.ToastUtils;
 import sp.phone.task.PostCommentTask;
 import sp.phone.util.NLog;
 

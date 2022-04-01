@@ -13,17 +13,18 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import gov.anzong.androidnga.R;
-import gov.anzong.androidnga.base.util.ToastUtils;
+import nosc.utils.uxUtils.ToastUtils;
 import gov.anzong.androidnga.mvvm.viewmodel.MessageListViewModel;
 import sp.phone.ui.adapter.MessageListAdapter;
 import sp.phone.util.ActivityUtils;
+import sp.phone.util.StringUtils;
 import sp.phone.view.RecyclerViewEx;
 
 public class MessageListFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
-    private ViewGroup mLoadView;
+    private View mLoadView;
 
     private View.OnClickListener mClickListener;
 
@@ -64,9 +65,6 @@ public class MessageListFragment extends BaseFragment implements SwipeRefreshLay
         listView.setOnNextPageLoadListener(mNextPageLoadListener);
 
         mSwipeRefreshLayout.setOnRefreshListener(this);
-
-        TextView sayView = (TextView) view.findViewById(R.id.saying);
-        sayView.setText(ActivityUtils.getSaying());
 
         return view;
     }

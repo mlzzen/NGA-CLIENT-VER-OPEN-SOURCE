@@ -5,7 +5,7 @@ import android.content.Context;
 import com.alibaba.android.arouter.facade.Postcard;
 import com.alibaba.android.arouter.launcher.ARouter;
 
-import gov.anzong.androidnga.base.util.ContextUtils;
+import nosc.utils.ContextUtils;
 
 /**
  * Created by Justwen on 2019/3/12.

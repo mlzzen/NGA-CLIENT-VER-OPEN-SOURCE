@@ -14,13 +14,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 <!--            <include layout="@layout/list_empty_view" />-->
-            <nosc.ui.view.ComposeEmptyView
+            <nosc.ui.view.EmptyView
                 android:id="@+id/empty_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
         </FrameLayout>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-    <include
-        android:id="@+id/loading"
-        layout="@layout/list_loading_view" />
+    <nosc.ui.view.LoadingView
+        android:id="@+id/loading_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 </FrameLayout>

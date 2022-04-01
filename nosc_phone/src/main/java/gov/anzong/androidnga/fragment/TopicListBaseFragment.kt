@@ -7,8 +7,8 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import gov.anzong.androidnga.R
-import gov.anzong.androidnga.base.util.ToastUtils
-import gov.anzong.androidnga.base.widget.DividerItemDecorationEx
+import nosc.utils.uxUtils.ToastUtils
+import nosc.ui.view.DividerItemDecorationEx
 import nosc.viewmodel.TopicListViewModel
 import sp.phone.param.ParamKey
 import sp.phone.param.TopicListParam
@@ -88,7 +88,13 @@ open class TopicListBaseFragment : BaseFragment(R.layout.fragment_topic_list_bas
         mListView.layoutManager = LinearLayoutManager(context)
         mListView.adapter = mAdapter
         val padding = resources.getDimension(R.dimen.topic_list_item_padding)
-        mListView.addItemDecoration(DividerItemDecorationEx(view.context, padding.toInt(), DividerItemDecoration.VERTICAL))
+        mListView.addItemDecoration(
+            DividerItemDecorationEx(
+                view.context,
+                padding.toInt(),
+                DividerItemDecoration.VERTICAL
+            )
+        )
         mListView.setOnNextPageLoadListener {
             mRequestParam.let{
                 if (!mRefreshLayout.isRefreshing) {
