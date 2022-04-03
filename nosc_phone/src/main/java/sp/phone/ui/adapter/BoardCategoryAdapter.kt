@@ -16,7 +16,12 @@ import sp.phone.rxjava.RxEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
+import android.widget.PopupWindow
+import androidx.appcompat.widget.PopupMenu
+import androidx.compose.ui.platform.ComposeView
 import nosc.api.model.BoardModel
+import nosc.utils.uxUtils.showConfirmDialog
+import nosc.utils.uxUtils.withClickCd
 import java.util.ArrayList
 
 /**
@@ -41,11 +46,32 @@ class BoardCategoryAdapter(private val mActivity: Activity, private val mCategor
     }
 
     class BoardViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
         val icon: ImageView = itemView.findViewById(R.id.icon_board_img)
+        val name: TextView = itemView.findViewById(R.id.text_board_name)
+        init {
+            itemView.setOnClickListener(
+                {
+                    onClickListener()
+                }.withClickCd(800)
+            )
+        }
+        var onClickListener = {}
 
-        var name: TextView = itemView.findViewById(R.id.text_board_name)
-
+        fun onBindBoard(board:Board){
+            //设置版面图标
+            val url: String = if (board.stid != 0) {
+                String.format(ApiConstants.URL_BOARD_ICON_STID, board.stid)
+            } else {
+                String.format(ApiConstants.URL_BOARD_ICON, board.fid)
+            }
+            GlideApp.with(itemView.context)
+                .load(url)
+                .placeholder(R.drawable.default_board_icon)
+                .useAnimationPool(false)
+                .into(icon)
+            itemView.tag = board
+            name.text = board.name
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BoardViewHolder {
@@ -73,35 +99,22 @@ class BoardCategoryAdapter(private val mActivity: Activity, private val mCategor
                 mCategory.getBoard(position)
             }
 
-
-            //设置版面图标
-            val url: String = if (board.stid != 0) {
-                String.format(ApiConstants.URL_BOARD_ICON_STID, board.stid)
-            } else {
-                String.format(ApiConstants.URL_BOARD_ICON, board.fid)
-            }
-            GlideApp.with(mActivity)
-                .load(url)
-                .placeholder(R.drawable.default_board_icon)
-                .useAnimationPool(false)
-                .into(holder.icon)
-            holder.itemView.tag = board
-            holder.name.text = board.name
+            holder.onBindBoard(board)
 
             if(mCategory.isBookmarkCategory){
                 holder.itemView.setOnLongClickListener {
-                    BoardModel.removeBookmark(board.fid,board.stid)
-                    notifyDataSetChanged()
+                    it.context.showConfirmDialog("确定要删除吗？"){
+                        BoardModel.removeBookmark(board.fid,board.stid)
+                        notifyDataSetChanged()
+                    }
                     true
                 }
             }
-            RxUtils.clicks(holder.itemView) {
+            holder.onClickListener = {
                 BoardModel.addRecentBoard(board)
                 RxBus.getInstance().post(RxEvent(RxEvent.EVENT_SHOW_TOPIC_LIST, board))
                 notifyDataSetChanged()
             }
-
-
         } else {
             val subCategoryIndex = mTitlePositions.indexOf(position)
             val subCategory = mCategory.getSubCategory(subCategoryIndex)

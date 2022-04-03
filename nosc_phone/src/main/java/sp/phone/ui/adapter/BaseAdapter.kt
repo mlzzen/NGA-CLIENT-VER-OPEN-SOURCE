@@ -23,24 +23,32 @@ abstract class BaseAdapter<E, T : RecyclerView.ViewHolder>(protected val mContex
     }
 
     open fun setData(dataList: List<E>) {
+        val preCount = mDataList.size
         mDataList = dataList
-        notifyDataSetChanged()
+        val count = dataList.size
+        if(preCount>count){
+            notifyItemRangeRemoved(count,preCount-count)
+        }else if(preCount < count){
+            notifyItemRangeInserted(preCount,count-preCount)
+        }
+        notifyItemRangeChanged(0,count)
     }
 
     fun removeItemAt(position: Int) {
         mDataList.getOrNull(position)?.let{
             mDataList = mDataList.minus(it)
         }
-        notifyDataSetChanged()
+        notifyItemRemoved(position)
     }
 
     fun removeItem(data: E) {
-        mDataList = mDataList.minus(data)
+        removeItemAt(mDataList.indexOf(data))
     }
 
     fun clear() {
+        val preCount = mDataList.size
         mDataList = emptyList()
-        notifyDataSetChanged()
+        notifyItemRangeRemoved(0,preCount)
     }
 
     override fun getItemCount(): Int = mDataList.size

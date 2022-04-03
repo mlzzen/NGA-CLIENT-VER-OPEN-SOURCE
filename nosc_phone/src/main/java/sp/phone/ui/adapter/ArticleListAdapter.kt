@@ -30,9 +30,12 @@ import android.widget.ImageView
 import sp.phone.rxjava.RxUtils
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.FragmentManager
+import gov.anzong.androidnga.fragment.dialog.AvatarDialogFragment
+import gov.anzong.androidnga.fragment.dialog.BaseDialogFragment
 import nosc.utils.ContextUtils
 import nosc.utils.DeviceUtils
 import io.reactivex.Observable
+import nosc.utils.uxUtils.createLocalWebView
 import sp.phone.rxjava.BaseSubscriber
 import sp.phone.util.*
 import java.lang.Exception
@@ -49,7 +52,7 @@ class ArticleListAdapter(
     private var mData: ThreadData? = null
     private val mLayoutInflater: LayoutInflater = LayoutInflater.from(mContext)
     private val mThemeManager = ThemeManager.getInstance()
-    private val mLocalWebViews: Array<LocalWebView?> = arrayOfNulls(20)
+    private val contentViews: Array<View?> = arrayOfNulls(20)
     private var mTopicOwner: String? = null
     private val mOnClientClickListener = View.OnClickListener { v ->
         val row = v.tag as ThreadRowInfo
@@ -250,10 +253,10 @@ class ArticleListAdapter(
             val bundle = Bundle()
             bundle.putString("name", row.author)
             bundle.putString("url", FunctionUtils.parseAvatarUrl(row.js_escap_avatar))
-            gov.anzong.androidnga.fragment.dialog.BaseDialogFragment.show(mFragmentManager, bundle, gov.anzong.androidnga.fragment.dialog.AvatarDialogFragment::class.java)
-            //FunctionUtils.Create_Avatar_Dialog(row, view.getContext(), null);
+            BaseDialogFragment.show(mFragmentManager, bundle, AvatarDialogFragment::class.java)
         }
     }
+
     private var mMenuTogglerListener: View.OnClickListener? = null
     private var mSupportListener: View.OnClickListener? = null
     private var mOpposeListener: View.OnClickListener? = null
@@ -261,7 +264,7 @@ class ArticleListAdapter(
     class ArticleViewHolder
         (itemView: View) : RecyclerView.ViewHolder(itemView) {
         val nickNameTV: TextView? = itemView.findViewById(R.id.tv_nickName)
-        var contentTV: LocalWebView? = null
+        var contentTV: View? = null
 
         val contentContainer: FrameLayout? = itemView.findViewById(R.id.wv_container)
 
@@ -294,6 +297,7 @@ class ArticleListAdapter(
 
     fun setData(data: ThreadData?) {
         mData = data
+        notifyDataSetChanged()
     }
 
     fun setMenuTogglerListener(menuTogglerListener: View.OnClickListener?) {
@@ -308,24 +312,12 @@ class ArticleListAdapter(
         mOpposeListener = listener
     }
 
-    override fun getItemViewType(position: Int): Int {
-        val row = mData!!.rowList[position]
-        return if (TextUtils.isEmpty(row.formattedHtmlData)) VIEW_TYPE_NATIVE_VIEW else VIEW_TYPE_WEB_VIEW
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArticleViewHolder {
         val view = mLayoutInflater.inflate(R.layout.fragment_article_list_item, parent, false)
         val viewHolder = ArticleViewHolder(view)
         val lp = viewHolder.avatarIv!!.layoutParams
         lp.height = PhoneConfiguration.getInstance().avatarSize
         lp.width = lp.height
-        //        if (viewType == VIEW_TYPE_WEB_VIEW) {
-//            viewHolder.contentTextView.setVisibility(View.GONE);
-//            // viewHolder.contentTV.setVisibility(View.VISIBLE);
-//        } else {
-//            viewHolder.contentTextView.setVisibility(View.VISIBLE);
-//            //  viewHolder.contentTV.setVisibility(View.GONE);
-//        }
         RxUtils.clicks(viewHolder.nickNameTV, mOnProfileClickListener)
         RxUtils.clicks(viewHolder.replyBtn, mOnReplyClickListener)
         RxUtils.clicks(viewHolder.clientIv, mOnClientClickListener)
@@ -333,8 +325,6 @@ class ArticleListAdapter(
         RxUtils.clicks(viewHolder.avatarPanel, mOnAvatarClickListener)
         RxUtils.clicks(viewHolder.favourBtn, mSupportListener)
         RxUtils.clicks(viewHolder.treadBtn, mOpposeListener)
-        //viewHolder.contentTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, PhoneConfiguration.getInstance().getTopicContentSize());
-        // viewHolder.contentTV.setTextSize(PhoneConfiguration.getInstance().getTopicContentSize());
         return viewHolder
     }
 
@@ -369,38 +359,22 @@ class ArticleListAdapter(
         )
     }
 
-    private fun createLocalWebView(): LocalWebView {
-        val localWebView = LocalWebView(mContext)
-        val lp = FrameLayout.LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT
-        )
-        lp.marginStart = mContext.resources.getDimensionPixelSize(R.dimen.material_standard_half)
-        lp.marginEnd = mContext.resources.getDimensionPixelSize(R.dimen.material_standard_half)
-        localWebView.layoutParams = lp
-        localWebView.isVerticalScrollBarEnabled = false
-        localWebView.isHorizontalScrollBarEnabled = false
-        return localWebView
-    }
-
     private fun onBindContentView(holder: ArticleViewHolder, row: ThreadRowInfo, position: Int) {
         val html = row.formattedHtmlData
         if (html != null) {
-            var localWebView = mLocalWebViews[position]
-            if (localWebView == null) {
-                localWebView = createLocalWebView()
-                mLocalWebViews[position] = localWebView
+            val localWebView = contentViews[position] ?: mContext.createLocalWebView().also {
+                it.webViewClientEx.setImgUrls(row.imageUrls)
+                it.loadDataWithBaseURL(null, html, "text/html", "utf-8", null)
+                contentViews[position] = it
             }
             if (localWebView !== holder.contentTV) {
-                holder.contentContainer!!.removeView(holder.contentTV)
+                holder.contentContainer?.removeView(holder.contentTV)
                 if (localWebView.parent != null) {
                     (localWebView.parent as ViewGroup).removeView(localWebView)
                 }
                 holder.contentTV = localWebView
-                holder.contentContainer.addView(localWebView)
+                holder.contentContainer?.addView(localWebView)
             }
-            holder.contentTV!!.webViewClientEx.setImgUrls(row.imageUrls)
-            holder.contentTV!!.loadDataWithBaseURL(null, html, "text/html", "utf-8", null)
         }
     }
 
@@ -430,9 +404,7 @@ class ArticleListAdapter(
 
     private fun onBindAvatarView(avatarIv: ImageView?, row: ThreadRowInfo) {
         val avatarUrl = FunctionUtils.parseAvatarUrl(row.js_escap_avatar)
-        val downImg = (DeviceUtils.isWifiConnected(mContext)
-                || PhoneConfiguration.getInstance()
-            .isDownAvatarNoWifi)
+        val downImg = (DeviceUtils.isWifiConnected(mContext) || PhoneConfiguration.getInstance().isDownAvatarNoWifi)
         ImageUtils.loadRoundCornerAvatar(avatarIv, avatarUrl, !downImg)
     }
 
@@ -440,8 +412,6 @@ class ArticleListAdapter(
         private const val DEVICE_TYPE_IOS = "ios"
         private const val DEVICE_TYPE_ANDROID = "android"
         private const val DEVICE_TYPE_WP = "wp"
-        private const val VIEW_TYPE_WEB_VIEW = 0
-        private const val VIEW_TYPE_NATIVE_VIEW = 1
     }
 
 }

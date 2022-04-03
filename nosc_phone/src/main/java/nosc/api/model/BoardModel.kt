@@ -10,6 +10,7 @@ import nosc.utils.ContextUtils
 import nosc.utils.PreferenceUtils
 import nosc.utils.PreferenceKey
 import nosc.config.CurrentUserData
+import nosc.utils.JsonUtils
 
 import okhttp3.*
 import sp.phone.mvp.model.BaseModel
@@ -41,7 +42,7 @@ object BoardModel : BaseModel() {
         return null
     }
 
-    fun queryBoard(callback:(List<BoardCategory>)->Unit) {
+    fun requestBoard(callback:(List<BoardCategory>)->Unit) {
         updateSuggestBoardCategory()
         OkHttpClient.Builder().build()
             .newCall(Request.Builder().url("https://bbs.nga.cn/app_api.php?&__lib=home&__act=category").build())
@@ -121,10 +122,10 @@ object BoardModel : BaseModel() {
         upgradeBookmarkBoard(mBoardCategoryList)
 
         val beans = try{
-            JSON.parseArray(
-                JSON.parseObject(
-                    json
-                ).getJSONArray("result").toJSONString(), CategoryBean::class.java
+            JsonUtils.parseArray(
+                JSON.parseObject(json)
+                    .getJSONArray("result")
+                    .toJSONString()
             )
         } catch (e:Throwable){ listOf<CategoryBean>() }
 

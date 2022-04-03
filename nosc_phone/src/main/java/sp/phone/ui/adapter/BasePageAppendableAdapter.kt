@@ -2,17 +2,16 @@ package sp.phone.ui.adapter
 
 import android.content.Context
 import androidx.recyclerview.widget.RecyclerView
-import sp.phone.view.RecyclerViewEx.IAppendableAdapter
-import java.util.ArrayList
+import sp.phone.view.RecyclerViewEx.IPageAdapter
 
 /**
  * Created by Justwen on 2018/3/23.
  */
-abstract class BaseAppendableAdapter<E, T : RecyclerView.ViewHolder>(context: Context) :
-    BaseAdapter<E, T>(context), IAppendableAdapter {
+abstract class BasePageAppendableAdapter<E, T : RecyclerView.ViewHolder>(context: Context) :
+    BaseAdapter<E, T>(context), IPageAdapter {
     private var mHaveNextPage = true
     private var mTotalPage = 0
-    override fun getNextPage(): Int {
+    override fun nextPageIndex(): Int {
         return mTotalPage + 1
     }
 
@@ -27,15 +26,10 @@ abstract class BaseAppendableAdapter<E, T : RecyclerView.ViewHolder>(context: Co
     }
 
     fun appendData(dataList: List<E>) {
-        val mutableDataList = mDataList.toMutableList()
-        for (e in dataList) {
-            if (true) {
-                mutableDataList.add(e)
-            }
-        }
-        mDataList = mutableDataList
+        val preAppendCount = mDataList.size
+        mDataList = mDataList.plus(dataList)
         mTotalPage++
-        notifyDataSetChanged()
+        notifyItemRangeInserted(preAppendCount,dataList.size)
     }
 
     fun setNextPageEnabled(enabled: Boolean) {

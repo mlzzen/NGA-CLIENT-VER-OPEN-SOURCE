@@ -242,8 +242,8 @@ public class TopicListBean {
             private String authorid;
             private String subject;
             private int type;
-            private int postdate;
-            private int lastpost;
+            private long postdate;
+            private long lastpost;
             private String lastposter;
             private int replies;
             private int lastmodify;
@@ -332,19 +332,19 @@ public class TopicListBean {
                 this.type = type;
             }
 
-            public int getPostdate() {
+            public long getPostdate() {
                 return postdate;
             }
 
-            public void setPostdate(int postdate) {
+            public void setPostdate(long postdate) {
                 this.postdate = postdate;
             }
 
-            public int getLastpost() {
+            public long getLastpost() {
                 return lastpost;
             }
 
-            public void setLastpost(int lastpost) {
+            public void setLastpost(long lastpost) {
                 this.lastpost = lastpost;
             }
 

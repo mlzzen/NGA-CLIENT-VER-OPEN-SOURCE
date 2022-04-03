@@ -25,7 +25,6 @@ import org.apache.commons.io.FilenameUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-import java.util.zip.ZipFile;
 
 import gov.anzong.androidnga.R;
 import nosc.utils.PermissionUtils;
@@ -34,10 +33,8 @@ import nosc.utils.ContextUtils;;
 import sp.phone.common.PhoneConfiguration;
 
 public class ImageUtils {
-    static final String LOG_TAG = ImageUtils.class.getSimpleName();
     //final static int max_avatar_width = 200;
     final static int max_avatar_height = 255;
-    public static ZipFile zf;
 
     private static Drawable sDefaultAvatar;
 
@@ -65,9 +62,7 @@ public class ImageUtils {
 
         Matrix matrix = new Matrix();
         matrix.postScale(scaleWidth, scaleHeight);
-        Bitmap resizedBitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height,
-                matrix, true);
-        return resizedBitmap;
+        return Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
 
     }
 
@@ -118,21 +113,6 @@ public class ImageUtils {
             newName = HttpUtil.PATH_AVATAR + "/" + userId + ".jpg";
         }
         return newName;
-    }
-
-
-    static public String getImageName(String uri) {
-        if (StringUtils.isEmpty(uri))
-            return null;
-        String ret = FilenameUtils.getName(uri);
-        if (StringUtils.isEmpty(ret))
-            return null;
-        int pos = ret.indexOf("?");
-        if (pos != -1) {
-
-            ret = ret.substring(0, pos);
-        }
-        return ret;
     }
 
     private static int computeSampleSize(BitmapFactory.Options options,

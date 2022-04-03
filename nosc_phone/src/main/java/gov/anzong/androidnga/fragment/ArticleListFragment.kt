@@ -3,7 +3,6 @@ package gov.anzong.androidnga.fragment
 import android.os.Bundle
 import android.view.*
 import android.widget.PopupMenu
-import android.widget.TextView
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,6 +18,7 @@ import gov.anzong.androidnga.fragment.dialog.PostCommentDialogFragment
 import nosc.api.bean.ThreadData
 import nosc.api.bean.ThreadRowInfo
 import nosc.ui.view.EmptyView
+import nosc.ui.view.LoadingView
 import nosc.utils.toUrl
 import sp.phone.common.UserManagerImpl
 import sp.phone.mvp.contract.ArticleListContract
@@ -44,9 +44,10 @@ open class ArticleListFragment : BaseMvpFragment<ArticleListPresenter?>(),
 
     val mListView: RecyclerViewEx? get() = binding?.list
 
-    val mLoadingView: View? get() = binding?.loadingView
+    private val loadingView: LoadingView? get() = binding?.loadingView
+    private val emptyView:EmptyView? get() = binding?.emptyView
 
-    val mSwipeRefreshLayout: SwipeRefreshLayout? get() = binding?.swipeRefresh
+    private val mSwipeRefreshLayout: SwipeRefreshLayout? get() = binding?.swipeRefresh
     private var mArticleAdapter: ArticleListAdapter? = null
     @JvmField
     protected var mRequestParam: ArticleListParam? = null
@@ -93,10 +94,7 @@ open class ArticleListFragment : BaseMvpFragment<ArticleListPresenter?>(),
                     R.id.menu_signature -> if (row.isanonymous) {
                         ToastUtils.info("这白痴匿名了,神马都看不到")
                     } else {
-                        FunctionUtils.Create_Signature_Dialog(
-                            row, activity,
-                            mListView
-                        )
+                        FunctionUtils.createSignatureDialog(row, activity)
                     }
                     R.id.menu_ban_this_one -> mPresenter?.banThisSB(row)
                     R.id.menu_show_this_person_only -> ARouter.getInstance()
@@ -147,9 +145,7 @@ open class ArticleListFragment : BaseMvpFragment<ArticleListPresenter?>(),
     }
 
     private fun initData() {
-        val viewModel = getActivityViewModelProvider().get(
-            ArticleShareViewModel::class.java
-        )
+        val viewModel = getActivityViewModelProvider()[ArticleShareViewModel::class.java]
         viewModel.refreshPage.observe(this) { page: Int ->
             if (page == mRequestParam!!.page) {
                 loadPage()
@@ -199,7 +195,7 @@ open class ArticleListFragment : BaseMvpFragment<ArticleListPresenter?>(),
         mListView!!.layoutManager = LinearLayoutManager(context)
         mListView!!.setItemViewCacheSize(20)
         mListView!!.adapter = mArticleAdapter
-        mListView!!.setEmptyView(view.findViewById<EmptyView>(R.id.empty_view).also {
+        mListView!!.setEmptyView(emptyView?.also {
             it.extraContent = {
                 Button(onClick = { FunctionUtils.openUrlByDefaultBrowser(activity, mRequestParam?.toUrl()) }) {
                     Text(text = "使用浏览器打开")
@@ -234,17 +230,15 @@ open class ArticleListFragment : BaseMvpFragment<ArticleListPresenter?>(),
             mArticleAdapter!!.setTopicOwner(viewModel.topicOwner.value)
         }
         mArticleAdapter!!.setData(data)
-        mArticleAdapter!!.notifyDataSetChanged()
     }
 
-//    override fun startPostActivity(intent: Intent) {
-//        if (!StringUtils.isEmpty(UserManagerImpl.getInstance().userName)) { // 登入了才能发
-//            intent.setClass(requireActivity(), PhoneConfiguration.getInstance().postActivityClass)
-//        } else {
-//            intent.setClass(requireActivity(), PhoneConfiguration.getInstance().loginActivityClass)
-//        }
-//        startActivityForResult(intent, ActivityUtils.REQUEST_CODE_TOPIC_POST)
-//    }
+    fun onError(text:String){
+        hideLoadingView()
+        setRefreshing(false)
+        emptyView?.text = text
+        //showToast(text)
+    }
+
 
     override fun showPostCommentDialog(prefix: String, bundle: Bundle) {
         val df: BaseDialogFragment = PostCommentDialogFragment()
@@ -258,12 +252,8 @@ open class ArticleListFragment : BaseMvpFragment<ArticleListPresenter?>(),
         }
     }
 
-//    override fun isRefreshing(): Boolean {
-//        return if (mSwipeRefreshLayout!!.isShown) mSwipeRefreshLayout!!.isRefreshing else mLoadingView!!.isShown
-//    }
-
     override fun hideLoadingView() {
-        mLoadingView?.visibility = View.GONE
+        loadingView?.visibility = View.GONE
         mSwipeRefreshLayout?.visibility = View.VISIBLE
     }
 

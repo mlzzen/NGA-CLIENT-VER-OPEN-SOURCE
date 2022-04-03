@@ -83,7 +83,6 @@ public class ImageZoomActivity extends BaseActivity {
             public void onPageSelected(int position) {
                 mPageIndex = position;
                 setTitle((position + 1) + " / " + mGalleryUrls.length);
-                //  mTxtView.setText(String.valueOf(position + 1) + " / " + String.valueOf(mGalleryUrls.length));
             }
         });
     }
@@ -104,11 +103,6 @@ public class ImageZoomActivity extends BaseActivity {
     }
 
     private void initBottomView() {
-//        mTxtView = (TextView) findViewById(R.id.reader_image_desc);
-//        mTxtView.setMovementMethod(new ScrollingMovementMethod());11
-//        mTxtView.setText(String.valueOf(mPageIndex + 1) + " / " + String.valueOf(mGalleryUrls.length));
-//        ImageView download = (ImageView) findViewById(R.id.reader_image_download);
-//        download.setOnClickListener(v -> saveBitmap(mGalleryUrls[mPageIndex >= 0 ? mPageIndex : 0]));
         mProgressBar = (ProgressBar) findViewById(R.id.progress);
         mProgressBar.setVisibility(View.VISIBLE);
         setTitle((mPageIndex + 1) + " / " + mGalleryUrls.length);
@@ -173,9 +167,6 @@ public class ImageZoomActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_share:
-                if (mDownloadResults.length == 0) {
-                    //CloudServerManager.putCrashData(this, "mCurrentUrl", mCurrentUrl);
-                }
                 if (mDownloadResults[mPageIndex] != null) {
                     share(mDownloadResults[mPageIndex].file);
                 } else {
@@ -205,13 +196,7 @@ public class ImageZoomActivity extends BaseActivity {
     private void showDownloadAllDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("是否要下载全部图片 ？")
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        saveBitmap(mGalleryUrls);
-
-                    }
-                }).setNegativeButton(android.R.string.cancel, null).create().show();
+                .setPositiveButton(android.R.string.ok, (dialog, which) -> saveBitmap(mGalleryUrls)).setNegativeButton(android.R.string.cancel, null).create().show();
     }
 
     public void hideLoading() {

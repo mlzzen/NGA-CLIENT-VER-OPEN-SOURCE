@@ -32,7 +32,7 @@ class EmptyView @JvmOverloads constructor(
         NOSCTheme {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(text, color = MaterialTheme.colors.onBackground)
+                    Text(text, color = MaterialTheme.colors.onBackground, maxLines = 2)
                     extraContent(this)
                 }
             }

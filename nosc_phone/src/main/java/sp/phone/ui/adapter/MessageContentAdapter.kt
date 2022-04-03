@@ -1,140 +1,110 @@
-package sp.phone.ui.adapter;
+package sp.phone.ui.adapter
 
-import android.content.Context;
-import android.content.res.Resources;
-
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.ViewGroup;
-import android.webkit.WebView;
-import android.widget.TextView;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import gov.anzong.androidnga.R;
-import nosc.utils.uxUtils.ToastUtils;
-import gov.anzong.androidnga.databinding.ListMessageContentBinding;
-import nosc.api.bean.MessageArticlePageInfo;
-import nosc.api.bean.MessageDetailInfo;
-import sp.phone.theme.ThemeManager;
-import sp.phone.util.FunctionUtils;
-import sp.phone.view.RecyclerViewEx;
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import android.webkit.WebView
+import android.widget.TextView
+import androidx.cardview.widget.CardView
+import androidx.recyclerview.widget.RecyclerView
+import gov.anzong.androidnga.R
+import gov.anzong.androidnga.databinding.ListMessageContentBinding
+import nosc.api.bean.MessageArticlePageInfo
+import nosc.api.bean.MessageDetailInfo
+import nosc.utils.uxUtils.ToastUtils
+import sp.phone.theme.ThemeManager
+import sp.phone.util.FunctionUtils
+import sp.phone.view.RecyclerViewEx.IPageAdapter
 
 /**
  * Created by Justwen on 2017/10/15.
  */
-
-public class MessageContentAdapter extends BaseAppendableAdapter<MessageDetailInfo, MessageContentAdapter.MessageViewHolder> implements RecyclerViewEx.IAppendableAdapter {
-
-    private final List<MessageDetailInfo> mInfoList = new ArrayList<>();
-
-    private boolean mPrompted;
-
-    private int mTotalCount;
-
-    @Override
-    public int getItemCount() {
-        return mTotalCount;
+class MessageContentAdapter :RecyclerView.Adapter<MessageContentAdapter.MessageViewHolder>(),
+    IPageAdapter {
+    private val mInfoList: MutableList<MessageDetailInfo> = ArrayList()
+    private var mPrompted = false
+    private var mTotalCount = 0
+    private var hasNextPage:Boolean = false
+    override fun getItemCount(): Int {
+        return mTotalCount
     }
 
-    static class MessageViewHolder extends RecyclerView.ViewHolder {
+    class MessageViewHolder(binding: ListMessageContentBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        var nickName: TextView = binding.nickName
+        var floor: TextView = binding.floor
+        var postTime: TextView = binding.postTime
+        var content: WebView = binding.content
+    }
 
-        public TextView nickName;
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MessageViewHolder {
+        return MessageViewHolder(
+            ListMessageContentBinding.inflate(
+                LayoutInflater.from(parent.context), parent, false
+            )
+        )
+    }
 
-        public TextView floor;
-
-        public TextView postTime;
-
-        public WebView content;
-
-        public MessageViewHolder(ListMessageContentBinding binding) {
-            super(binding.getRoot());
-            nickName = binding.nickName;
-            floor = binding.floor;
-            postTime = binding.postTime;
-            content = binding.content;
+    override fun onBindViewHolder(holder: MessageViewHolder, position: Int) {
+        handleJsonList(holder, position)
+        if (position + 1 == itemCount && !hasNextPage()
+            && !mPrompted
+        ) {
+            ToastUtils.info(R.string.last_page_prompt_message_detail)
+            mPrompted = true
         }
     }
 
-    public MessageContentAdapter(Context context) {
-        super(context);
+    private fun getEntry(position: Int): MessageArticlePageInfo {
+        return mInfoList[position / 20].messageEntryList[position % 20]
     }
 
-    @NonNull
-    @Override
-    public MessageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new MessageViewHolder(ListMessageContentBinding.inflate(
-                LayoutInflater.from(parent.getContext())
-                , parent, false));
-    }
-
-    @Override
-    public void onBindViewHolder(MessageViewHolder holder, int position) {
-        handleJsonList(holder, position);
-        if (position + 1 == getItemCount()
-                && !hasNextPage()
-                && !mPrompted) {
-            ToastUtils.info(R.string.last_page_prompt_message_detail);
-            mPrompted = true;
-        }
-    }
-
-    private MessageArticlePageInfo getEntry(int position) {
-        return mInfoList.get(position / 20).getMessageEntryList().get(position % 20);
-    }
-
-    public void setData(MessageDetailInfo data) {
+    fun addDetailInfo(data: MessageDetailInfo?) {
         if (data != null) {
-            if (data.get__currentPage() == 1) {
-                reset();
+            if (data.__currentPage == 1) {
+                reset()
             }
-            mInfoList.add(data);
-            mTotalCount += data.getMessageEntryList().size();
-            setNextPageEnabled(data.get__nextPage() > 0);
+            mInfoList.add(data)
+            mTotalCount += data.messageEntryList.size
+            hasNextPage = data.__nextPage > 0
+            notifyDataSetChanged()
         }
-        notifyDataSetChanged();
     }
 
-    @Override
-    public int getNextPage() {
-        return mInfoList.size() + 1;
+    override fun nextPageIndex(): Int {
+        return mInfoList.size + 1
     }
 
-    private void reset() {
-        mTotalCount = 0;
-        mInfoList.clear();
-        mPrompted = false;
-        setNextPageEnabled(true);
+    override fun hasNextPage(): Boolean =hasNextPage
+
+    private fun reset() {
+        mTotalCount = 0
+        mInfoList.clear()
+        mPrompted = false
+        hasNextPage = true
     }
 
-    private void handleJsonList(MessageViewHolder holder, int position) {
-        Context context = holder.itemView.getContext();
-        final MessageArticlePageInfo entry = getEntry(position);
-        if (entry == null) {
-            return;
-        }
-        Resources res = holder.itemView.getContext().getResources();
-        ThemeManager theme = ThemeManager.getInstance();
-        holder.postTime.setText(entry.getTime());
-        String floor = String.valueOf(entry.getLou());
-        holder.floor.setText("#" + floor);
-        holder.nickName.setTextColor(res.getColor(theme.getForegroundColor()));
-        holder.postTime.setTextColor(res.getColor(theme.getForegroundColor()));
-        holder.floor.setTextColor(res.getColor(theme.getForegroundColor()));
-
-
-        FunctionUtils.handleNickName(entry, res.getColor(theme.getForegroundColor()), holder.nickName, context);
-
-        int colorId = theme.getBackgroundColor(position + 1);
-        final int bgColor = res.getColor(colorId);
-        int fgColorId = theme.getForegroundColor();
-        final int fgColor = res.getColor(fgColorId);
-        holder.itemView.setBackgroundResource(colorId);
-        FunctionUtils.handleContentTV(holder.content, entry, bgColor, fgColor, context);
-
+    private fun handleJsonList(holder: MessageViewHolder, position: Int) {
+        val context = holder.itemView.context
+        val entry = getEntry(position)
+        val res = holder.itemView.context.resources
+        val theme = ThemeManager.getInstance()
+        holder.postTime.text = entry.time
+        val floor = entry.lou.toString()
+        holder.floor.text = "#$floor"
+        holder.nickName.setTextColor(res.getColor(theme.foregroundColor))
+        holder.postTime.setTextColor(res.getColor(theme.foregroundColor))
+        holder.floor.setTextColor(res.getColor(theme.foregroundColor))
+        FunctionUtils.handleNickName(
+            entry,
+            res.getColor(theme.foregroundColor),
+            holder.nickName,
+            context
+        )
+        val colorId = theme.getBackgroundColor(position + 1)
+        val bgColor = res.getColor(colorId)
+        val fgColorId = theme.foregroundColor
+        val fgColor = res.getColor(fgColorId)
+        (holder.itemView as CardView).setCardBackgroundColor(bgColor)
+        FunctionUtils.handleContentTV(holder.content, entry, bgColor, fgColor, context)
     }
-
-
 }

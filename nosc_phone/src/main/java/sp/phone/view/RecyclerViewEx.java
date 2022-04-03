@@ -18,13 +18,13 @@ public class RecyclerViewEx extends RecyclerView {
 
     private OnNextPageLoadListener mNextPageLoadListener;
 
-    private IAppendableAdapter mAppendAbleAdapter;
+    private IPageAdapter pageAdapter;
 
     private int mLastVisibleItemPosition;
 
-    public interface IAppendableAdapter {
+    public interface IPageAdapter {
 
-        int getNextPage();
+        int nextPageIndex();
 
         boolean hasNextPage();
     }
@@ -82,8 +82,8 @@ public class RecyclerViewEx extends RecyclerView {
 
     @Override
     public void setAdapter(Adapter adapter) {
-        if (adapter instanceof IAppendableAdapter) {
-            mAppendAbleAdapter = (IAppendableAdapter) adapter;
+        if (adapter instanceof IPageAdapter) {
+            pageAdapter = (IPageAdapter) adapter;
         }
         Adapter oldAdapter = getAdapter();
         if (oldAdapter != null) {
@@ -101,9 +101,9 @@ public class RecyclerViewEx extends RecyclerView {
         super.onScrollStateChanged(state);
         int totalCount = getAdapter().getItemCount();
         if (mLastVisibleItemPosition + 1 == totalCount
-                && mAppendAbleAdapter != null
+                && pageAdapter != null
                 && mNextPageLoadListener != null
-                && mAppendAbleAdapter.hasNextPage()) {
+                && pageAdapter.hasNextPage()) {
             mNextPageLoadListener.loadNextPage();
         }
     }

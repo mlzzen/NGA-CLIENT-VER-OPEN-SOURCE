@@ -6,7 +6,6 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -16,8 +15,6 @@ import gov.anzong.androidnga.R;
 import nosc.utils.uxUtils.ToastUtils;
 import gov.anzong.androidnga.mvvm.viewmodel.MessageListViewModel;
 import sp.phone.ui.adapter.MessageListAdapter;
-import sp.phone.util.ActivityUtils;
-import sp.phone.util.StringUtils;
 import sp.phone.view.RecyclerViewEx;
 
 public class MessageListFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
@@ -37,7 +34,7 @@ public class MessageListFragment extends BaseFragment implements SwipeRefreshLay
         public void loadNextPage() {
             if (!isRefreshing()) {
                 setRefreshing(true);
-                mMessageViewModel.getMessageList(mAdapter.getNextPage());
+                mMessageViewModel.getMessageList(mAdapter.nextPageIndex());
             }
         }
     };

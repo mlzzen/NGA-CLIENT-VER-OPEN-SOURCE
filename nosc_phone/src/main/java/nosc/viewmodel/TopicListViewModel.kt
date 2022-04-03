@@ -167,7 +167,7 @@ class TopicListViewModel : ViewModel(),LifecycleObserver{
         }
     }
 
-    fun loadCachePage() {
+    private fun loadCachePage() {
         mBaseModel.loadCache(mCallBack)
     }
 

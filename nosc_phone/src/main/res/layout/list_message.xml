@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"    
-    android:paddingLeft="10.0dip"
-    android:paddingRight="10.0dip"
-    android:paddingTop="10.0dip" >
+    android:layout_height="wrap_content"
+	android:background="?attr/selectableItemBackground"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:paddingTop="10dp" >
 
     		<TextView
     		    android:id="@id/title"

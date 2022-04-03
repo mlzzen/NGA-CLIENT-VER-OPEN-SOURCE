@@ -80,7 +80,6 @@ public class FunctionUtils {
         }
     }
 
-    @SuppressWarnings("static-access")
     public static void handleContentTV(final WebView contentTV, final MessageArticlePageInfo row, int bgColor, int fgColor, Context context) {
         final WebViewClient client = new WebViewClientEx((FragmentActivity) context);
         contentTV.setBackgroundColor(0);
@@ -102,7 +101,7 @@ public class FunctionUtils {
     }
 
 
-    public static void Create_Signature_Dialog(ThreadRowInfo row, final Context context, final View scrollview) {
+    public static void createSignatureDialog(ThreadRowInfo row, final Context context) {
         LayoutInflater layoutInflater = ((Activity) context).getLayoutInflater();
         final View view = layoutInflater.inflate(R.layout.dialog_signature,
                 null);
@@ -223,21 +222,6 @@ public class FunctionUtils {
 
         return ngaHtml;
     }
-
-//    public static String VoteToHtmlText(final ThreadRowInfo row,  final String fgColorStr, final String bgcolorStr) {
-//        if (StringUtils.isEmpty(row.getVote()))
-//            return "本楼没有投票/投注内容";
-//        String ngaHtml = String.valueOf(row.getTid()) + ",'" + row.getVote()
-//                + "'";
-//        ngaHtml = "<!DOCTYPE html><html><head><meta http-equiv=Content-Type content=\"text/html;charset=utf-8\">"
-//                + "<script type=\"text/javascript\" src=\"file:///android_asset/vote/vote.js\"></script><link rel=\"stylesheet\" type=\"text/css\" href=\"file:///android_asset/vote/vote.css\" />"
-//                + " </head><body style=\"color:#" + fgColorStr + "\"bgcolor= '#"
-//                + bgcolorStr
-//                + "'><span id='votec'></span><script>vote("
-//                + ngaHtml
-//                + ")</script></body></html>";
-//        return ngaHtml;
-//    }
 
 
     public static String parseAvatarUrl(String js_escap_avatar) {
@@ -414,7 +398,7 @@ public class FunctionUtils {
             existquotetxt = bodyString.substring(0, bodyString.toLowerCase().indexOf("[/quote]")) + "[/quote]";
             bodyString = bodyString.substring(bodyString.toLowerCase().indexOf("[/quote]") + 8);
         }
-        int i, ia, ib, itmp = 0, bslenth, tmplenth;
+        int i, ia,  itmp, bslenth;
         bslenth = bodyString.length();
 
 
@@ -492,7 +476,6 @@ public class FunctionUtils {
                         while (quotetxt.endsWith(".")) {
                             quotetxt = quotetxt.substring(0, quotetxt.length() - 1);
                         }
-                        bslenth = bodyString.length();
                         txtsendout = new StringBuilder(txtsendout.substring(0, txtsendout.toString().toLowerCase().lastIndexOf("[color")));
                         quotetxt = "[quote]" + FunctionUtils.checkContent(quotetxt) + "[/quote]";
                         txtsendout.append(quotetxt).append(scolor[(int) (Math.random() * 23)]);
@@ -540,7 +523,7 @@ public class FunctionUtils {
             txtsendout = new StringBuilder(txtsendout.substring(0, txtsendout.toString().toLowerCase().lastIndexOf("[color")));
         }
         txtsendout = new StringBuilder(existquotetxt + txtsendout.toString().replaceAll("&nbsp;", " ").trim());
-        return txtsendout.toString().toString();
+        return txtsendout.toString();
     }
 
     public static String ColorTxtCheck(String text) {
@@ -577,7 +560,7 @@ public class FunctionUtils {
                 final String id = DocumentsContract.getDocumentId(uri);
                 final Uri contentUri = ContentUris.withAppendedId(
                         Uri.parse("content://downloads/public_downloads"),
-                        Long.valueOf(id));
+                        Long.parseLong(id));
 
                 return getDataColumn(context, contentUri, null, null);
             }

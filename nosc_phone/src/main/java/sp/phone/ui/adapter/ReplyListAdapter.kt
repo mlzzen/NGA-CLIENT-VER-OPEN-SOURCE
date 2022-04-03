@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import gov.anzong.androidnga.R
+import nosc.utils.dateStringOf
 import sp.phone.mvp.model.entity.ThreadPageInfo
 import sp.phone.util.StringUtils
 
@@ -13,7 +14,7 @@ import sp.phone.util.StringUtils
  * Created by Justwen on 2018/3/23.
  */
 class ReplyListAdapter(context: Context) :
-    BaseAppendableAdapter<ThreadPageInfo, ReplyListAdapter.ViewHolder>(context) {
+    BasePageAppendableAdapter<ThreadPageInfo, ReplyListAdapter.ViewHolder>(context) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(mLayoutInflater.inflate(R.layout.list_reply_ltem, parent, false))
     }
@@ -23,7 +24,7 @@ class ReplyListAdapter(context: Context) :
         val replyInfo = pageInfo.replyInfo
         holder.mContentTv.text = replyInfo.content
         holder.mSubjectTv.text = replyInfo.subject
-        holder.mPostDateTv.text = StringUtils.timeStamp2Date2(replyInfo.postDate)
+        holder.mPostDateTv.text = dateStringOf(replyInfo.postDate.toLong())
         holder.itemView.setOnClickListener(mOnClickListener)
         holder.itemView.tag = pageInfo
     }

@@ -12,6 +12,8 @@ public class ThreadPageInfo {
 
     private int mAuthorId;
 
+    public long lastPost;
+
     private String mLastPoster;
 
     private int mReplies;
@@ -32,7 +34,7 @@ public class ThreadPageInfo {
 
     private boolean mIsAnonymity;
 
-    private int mPostDate;
+    private long mPostDate;
 
     private ReplyInfo mReplyInfo;
 
@@ -47,11 +49,11 @@ public class ThreadPageInfo {
         return mMirrorBoard;
     }
 
-    public int getPostDate() {
+    public long getPostDate() {
         return mPostDate;
     }
 
-    public void setPostDate(int postDate) {
+    public void setPostDate(long postDate) {
         mPostDate = postDate;
     }
 

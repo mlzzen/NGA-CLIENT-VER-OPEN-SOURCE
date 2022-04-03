@@ -6,6 +6,7 @@ import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import nosc.utils.uxUtils.ViewUtilsKt;
 
 public class RxUtils {
 
@@ -14,17 +15,7 @@ public class RxUtils {
     }
 
     public static void clicks(View view, View.OnClickListener listener) {
-        view.setOnClickListener(new View.OnClickListener() {
-            long lastClickTime = 0;
-            @Override
-            public void onClick(View v) {
-                long now = System.currentTimeMillis();
-                if(now - lastClickTime > 800){
-                    lastClickTime = now;
-                    listener.onClick(v);
-                }
-            }
-        });
+        view.setOnClickListener(ViewUtilsKt.withClickCd(listener,800));
     }
 
     public static void post(Object obj) {

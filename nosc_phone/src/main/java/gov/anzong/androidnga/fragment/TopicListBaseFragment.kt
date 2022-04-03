@@ -12,7 +12,7 @@ import nosc.ui.view.DividerItemDecorationEx
 import nosc.viewmodel.TopicListViewModel
 import sp.phone.param.ParamKey
 import sp.phone.param.TopicListParam
-import sp.phone.ui.adapter.BaseAppendableAdapter
+import sp.phone.ui.adapter.BasePageAppendableAdapter
 import sp.phone.ui.adapter.TopicListAdapter
 import gov.anzong.androidnga.fragment.TopicSearchFragment.handleClickEvent
 import sp.phone.mvp.model.entity.ThreadPageInfo
@@ -31,7 +31,7 @@ open class TopicListBaseFragment : BaseFragment(R.layout.fragment_topic_list_bas
 
     protected lateinit var viewModel: TopicListViewModel
 
-    private lateinit var mAdapter: BaseAppendableAdapter<ThreadPageInfo, *>
+    private lateinit var mAdapter: BasePageAppendableAdapter<ThreadPageInfo, *>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -98,14 +98,14 @@ open class TopicListBaseFragment : BaseFragment(R.layout.fragment_topic_list_bas
         mListView.setOnNextPageLoadListener {
             mRequestParam.let{
                 if (!mRefreshLayout.isRefreshing) {
-                    viewModel.loadNextPage(mAdapter.nextPage, it)
+                    viewModel.loadNextPage(mAdapter.nextPageIndex(), it)
                 }
             }
 
         }
     }
 
-    open fun createAdapter(): BaseAppendableAdapter<ThreadPageInfo, *> {
+    open fun createAdapter(): BasePageAppendableAdapter<ThreadPageInfo, *> {
         return TopicListAdapter(requireContext())
     }
 

@@ -2,7 +2,7 @@ package sp.phone.ui.adapter
 
 import android.content.Context
 import androidx.recyclerview.widget.RecyclerView
-import sp.phone.view.RecyclerViewEx.IAppendableAdapter
+import sp.phone.view.RecyclerViewEx.IPageAdapter
 import nosc.api.bean.MessageListInfo
 import nosc.api.bean.MessageThreadPageInfo
 import android.view.ViewGroup
@@ -22,7 +22,8 @@ import java.util.ArrayList
  * Created by Justwen on 2017/10/1.
  */
 class MessageListAdapter(private val mContext: Context) :
-    RecyclerView.Adapter<MessageListAdapter.MessageViewHolder>(), IAppendableAdapter {
+    RecyclerView.Adapter<MessageListAdapter.MessageViewHolder>(),
+    IPageAdapter {
     private val mInfoList: MutableList<MessageListInfo> = ArrayList()
     private var mPrompted = false
     private var mEndOfList = false
@@ -39,7 +40,7 @@ class MessageListAdapter(private val mContext: Context) :
         return null
     }
 
-    override fun getNextPage(): Int {
+    override fun nextPageIndex(): Int {
         return mInfoList.size + 1
     }
 

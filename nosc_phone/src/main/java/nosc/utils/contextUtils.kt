@@ -1,13 +1,16 @@
 package nosc.utils
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.os.Bundle
 import android.view.View
 import com.alibaba.android.arouter.launcher.ARouter
 import gov.anzong.androidnga.arouter.ARouterConstants
 import nosc.utils.uxUtils.ToastUtils
 import sp.phone.common.PhoneConfiguration
 import sp.phone.mvp.model.entity.Board
+import sp.phone.param.ArticleListParam
 import sp.phone.param.ParamKey
 import sp.phone.util.*
 import java.lang.Exception
@@ -88,4 +91,13 @@ fun Activity.startArticleActivity(tid: String, title: String?) {
         .withInt(ParamKey.KEY_TID, tid.toInt())
         .withString(ParamKey.KEY_TITLE, title)
         .navigation(this)
+}
+
+fun Context.startArticleActivity(param:ArticleListParam) {
+    val intent = Intent()
+    val bundle = Bundle()
+    bundle.putParcelable(ParamKey.KEY_PARAM, param)
+    intent.putExtras(bundle)
+    intent.setClass(this, PhoneConfiguration.getInstance().articleActivityClass)
+    startActivity(intent)
 }

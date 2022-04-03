@@ -16,16 +16,13 @@ public class ForumBasicDecoder implements IForumDecoder {
     static final String endDiv = "</div>";
     static final String styleLeft = "<div style='float:left' >";
     static final String styleRight = "<div style='float:right' >";
-    static final String STYLE_QUOTE = "<div class='quote' >";
+    static final String styleQuote = "<div class='quote' >";
 
     @Override
     public String decode(String content, HtmlData htmlData) {
         if (StringUtils.isEmpty(content)) {
             return "";
         }
-
-        String quoteStyle = STYLE_QUOTE;
-
 
         content = StringUtils.replaceAll(content, ignoreCaseTag + "&amp;", "&");
         content = StringUtils.replaceAll(content, ignoreCaseTag + "\\[l\\]", styleLeft);
@@ -53,11 +50,11 @@ public class ForumBasicDecoder implements IForumDecoder {
                 ignoreCaseTag + "={3,}((^=){0,}(.*?){0,}(^=){0,})={3,}",
                 "<h4 style='font-weight: bold;border-bottom: 1px solid #AAA;clear: both;margin-bottom: 0px;'>$1</h4>");*/
 
-        content = StringUtils.replaceAll(content, ignoreCaseTag + "\\[quote\\]", quoteStyle);
+        content = StringUtils.replaceAll(content, ignoreCaseTag + "\\[quote\\]", styleQuote);
         content = StringUtils.replaceAll(content, ignoreCaseTag + "\\[/quote\\]", endDiv);
 
-        content = StringUtils.replaceAll(content, ignoreCaseTag + "\\[code\\]", quoteStyle + "Code:");
-        content = StringUtils.replaceAll(content, ignoreCaseTag + "\\[code(.+?)\\]", quoteStyle);
+        content = StringUtils.replaceAll(content, ignoreCaseTag + "\\[code\\]", styleQuote + "Code:");
+        content = StringUtils.replaceAll(content, ignoreCaseTag + "\\[code(.+?)\\]", styleQuote);
         content = StringUtils.replaceAll(content, ignoreCaseTag + "\\[/code\\]", endDiv);
         // reply
         // content = StringUtils.replaceAll(content, 
@@ -88,7 +85,7 @@ public class ForumBasicDecoder implements IForumDecoder {
 
         content = StringUtils.replaceAll(content, ignoreCaseTag + "\\[s:(\\d+)\\]",
                 "<img src='file:///android_asset/a$1.gif'>");
-        content = content.replace(ignoreCaseTag + "<br/><br/>", "<br/>");
+        content = content.replace(ignoreCaseTag + "<br/><br/>", " <br/> ");
         // [url][/url]
         content = StringUtils.replaceAll(content,
                 ignoreCaseTag + "\\[url\\]/([^\\[|\\]]+)\\[/url\\]",
@@ -218,7 +215,10 @@ public class ForumBasicDecoder implements IForumDecoder {
         content = StringUtils.replaceAll(content, IGNORE_CASE_TAG + "\\[\\*\\](.+?)<br/>", "<li>$1</li>");
 
         // [h][/h]
-        content = StringUtils.replaceAll(content, IGNORE_CASE_TAG + "\\[h](.+?)\\[/h]", "<b>$1</b>");
+        //content = StringUtils.replaceAll(content, IGNORE_CASE_TAG + "\\[h](.+?)\\[/h]", "<b>$1</b>");
+        content = StringUtils.replaceAll(content, IGNORE_CASE_TAG + "\\[h]", "<b>");
+        content = StringUtils.replaceAll(content, IGNORE_CASE_TAG + "\\[/h]", "</b>");
+
 
         // [collapse][/collapse]
         content = StringUtils.replaceAll(content, "\\[collapse=(.*?)](.*?)\\[/collapse]", "<div><button onclick='toggleCollapse(this,\"$1\")'>点击显示内容 : $1</button><div name='collapse' class='collapse' style='display:none'>$2</div></div>");

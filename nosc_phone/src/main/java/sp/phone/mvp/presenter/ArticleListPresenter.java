@@ -36,9 +36,7 @@ public class ArticleListPresenter extends BasePresenter<ArticleListFragment, Art
         @Override
         public void onError(String text) {
             if (mBaseView != null) {
-                mBaseView.hideLoadingView();
-                mBaseView.setRefreshing(false);
-                mBaseView.showToast(text);
+                mBaseView.onError(text);
             }
         }
 

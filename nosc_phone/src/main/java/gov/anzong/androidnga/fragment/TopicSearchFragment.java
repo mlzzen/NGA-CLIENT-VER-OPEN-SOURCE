@@ -7,7 +7,6 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModelProvider;
@@ -32,11 +31,10 @@ import nosc.viewmodel.TopicListViewModel;
 import sp.phone.param.ArticleListParam;
 import sp.phone.param.ParamKey;
 import sp.phone.param.TopicListParam;
-import sp.phone.ui.adapter.BaseAppendableAdapter;
+import sp.phone.ui.adapter.BasePageAppendableAdapter;
 import sp.phone.ui.adapter.ReplyListAdapter;
 import sp.phone.ui.adapter.TopicListAdapter;
 import sp.phone.util.ARouterUtils;
-import sp.phone.util.ActivityUtils;
 import sp.phone.util.StringUtils;
 import sp.phone.view.RecyclerViewEx;
 
@@ -48,7 +46,7 @@ public class TopicSearchFragment extends BaseFragment implements View.OnClickLis
 
     protected TopicListParam mRequestParam;
 
-    protected BaseAppendableAdapter mAdapter;
+    protected BasePageAppendableAdapter mAdapter;
 
     protected TopicListInfo mTopicListInfo;
 
@@ -137,7 +135,7 @@ public class TopicSearchFragment extends BaseFragment implements View.OnClickLis
         mListView.setLayoutManager(new LinearLayoutManager(getContext()));
         mListView.setOnNextPageLoadListener(() -> {
             if (!isRefreshing()) {
-                viewModel.loadNextPage(mAdapter.getNextPage(), mRequestParam);
+                viewModel.loadNextPage(mAdapter.nextPageIndex() + 1, mRequestParam);
             }
         });
         mListView.setEmptyView(view.findViewById(R.id.empty_view));

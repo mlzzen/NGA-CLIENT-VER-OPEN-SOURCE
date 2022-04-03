@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import gov.anzong.androidnga.R
 import sp.phone.mvp.model.entity.ThreadPageInfo
-import sp.phone.ui.adapter.BaseAppendableAdapter
+import sp.phone.ui.adapter.BasePageAppendableAdapter
 import sp.phone.ui.adapter.ReplyListAdapter
 import sp.phone.util.StringUtils
 
@@ -32,7 +32,7 @@ class TopicListSimpleFragment : TopicListBaseFragment() {
         initToolbar()
     }
 
-    override fun createAdapter(): BaseAppendableAdapter<ThreadPageInfo, *> {
+    override fun createAdapter(): BasePageAppendableAdapter<ThreadPageInfo, *> {
         return if (mRequestParam.searchPost > 0) {
             ReplyListAdapter(requireContext())
         } else {

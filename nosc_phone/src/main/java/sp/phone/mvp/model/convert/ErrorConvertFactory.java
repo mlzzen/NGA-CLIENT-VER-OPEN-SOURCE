@@ -1,6 +1,7 @@
 package sp.phone.mvp.model.convert;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 
 import java.net.UnknownHostException;
@@ -28,6 +29,9 @@ public abstract class ErrorConvertFactory {
                 obj = (JSONObject) obj.get("__MESSAGE");
                 return obj.getString("1");
             } catch (Exception e) {
+                if(e instanceof JSONException){
+                    return "Json解析出错："+e.getLocalizedMessage();
+                }
                 return "二哥玩坏了或者你需要重新登录";
             }
         }

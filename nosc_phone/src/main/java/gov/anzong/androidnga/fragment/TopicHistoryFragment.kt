@@ -16,6 +16,7 @@ import sp.phone.param.ArticleListParam
 import com.alibaba.fastjson.JSON
 import gov.anzong.androidnga.R
 import nosc.utils.ContextUtils
+import nosc.utils.startArticleActivity
 import nosc.utils.uxUtils.showConfirmDialog
 import sp.phone.param.ParamKey
 import sp.phone.common.PhoneConfiguration
@@ -24,7 +25,7 @@ import sp.phone.mvp.model.entity.ThreadPageInfo
 /**
  * Created by Justwen on 2018/1/17.
  */
-class TopicHistoryFragment : BaseFragment(), View.OnClickListener {
+class TopicHistoryFragment : BaseFragment() {
     private var mTopicListAdapter: TopicListAdapter? = null
     private var mListView: RecyclerViewEx? = null
     private var mTopicHistoryManager: TopicHistoryManager? = null
@@ -45,7 +46,15 @@ class TopicHistoryFragment : BaseFragment(), View.OnClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         mTopicListAdapter = TopicListAdapter(requireContext())
-        mTopicListAdapter!!.setOnClickListener(this)
+        mTopicListAdapter?.setOnClickListener{
+            val info = it.tag as ThreadPageInfo
+            val param = ArticleListParam()
+            param.tid = info.tid
+            param.page = info.page
+            param.title = info.subject
+            param.topicInfo = JSON.toJSONString(info)
+            context?.startArticleActivity(param)
+        }
         mListView = view.findViewById(R.id.list)
         mListView?.layoutManager = LinearLayoutManager(context)
         mListView?.setEmptyView(view.findViewById(R.id.empty_view))
@@ -93,7 +102,7 @@ class TopicHistoryFragment : BaseFragment(), View.OnClickListener {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return if (item.itemId == R.id.menu_delete_all) {
-            showConfirmDialog(requireActivity(), "确认删除所有浏览历史吗") {
+            requireActivity().showConfirmDialog( "确认删除所有浏览历史吗") {
                 mTopicHistoryManager?.removeAllTopicHistory()
                 mTopicListAdapter?.clear()
             }
@@ -101,20 +110,5 @@ class TopicHistoryFragment : BaseFragment(), View.OnClickListener {
         } else {
             super.onOptionsItemSelected(item)
         }
-    }
-
-    override fun onClick(view: View) {
-        val info = view.tag as ThreadPageInfo
-        val param = ArticleListParam()
-        param.tid = info.tid
-        param.page = info.page
-        param.title = info.subject
-        param.topicInfo = JSON.toJSONString(info)
-        val intent = Intent()
-        val bundle = Bundle()
-        bundle.putParcelable(ParamKey.KEY_PARAM, param)
-        intent.putExtras(bundle)
-        intent.setClass(requireContext(), PhoneConfiguration.getInstance().articleActivityClass)
-        startActivity(intent)
     }
 }

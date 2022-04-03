@@ -136,28 +136,28 @@ object TopicConvertFactory {
             val pageInfo = ThreadPageInfo()
             val author = tBean.author
             if (author.startsWith("#anony_")) {
-                pageInfo.setAnonymity(true)
-                pageInfo.setAuthor(getAnonymityName(tBean.author))
+                pageInfo.isAnonymity = true
+                pageInfo.author = getAnonymityName(tBean.author)
             } else {
-                pageInfo.setAuthorId(tBean.authorid.toInt())
-                pageInfo.setAuthor(tBean.author)
+                pageInfo.authorId = tBean.authorid.toInt()
+                pageInfo.author = tBean.author
             }
-            pageInfo.setLastPoster(tBean.lastposter)
-            pageInfo.setSubject(tBean.subject)
-            pageInfo.setReplies(tBean.replies)
-            pageInfo.setType(tBean.type)
-            pageInfo.setTopicMisc(tBean.topic_misc)
-            pageInfo.setTitleFont(tBean.titlefont)
+            pageInfo.lastPoster = tBean.lastposter
+            pageInfo.subject = tBean.subject
+            pageInfo.replies = tBean.replies
+            pageInfo.type = tBean.type
+            pageInfo.topicMisc = tBean.topic_misc
+            pageInfo.titleFont = tBean.titlefont
             var tid = tBean.tid
             val tpcUrl = tBean.tpcurl
             if (tpcUrl != null && tpcUrl.contains("tid")) {
                 tid = StringUtils.getUrlParameter(tpcUrl, "tid")
             }
-            pageInfo.setTid(tid)
-            pageInfo.setPage(page)
+            pageInfo.tid = tid
+            pageInfo.page = page
             val pBean = tBean.__P
             if (pBean != null) {
-                pageInfo.setPid(pBean.pid)
+                pageInfo.pid = pBean.pid
                 val replyInfo = ReplyInfo()
                 replyInfo.authorId = pBean.authorid
                 replyInfo.content = pBean.content
@@ -165,18 +165,19 @@ object TopicConvertFactory {
                 replyInfo.pidStr = pBean.pid.toString()
                 replyInfo.tidStr = pageInfo.tid.toString()
                 replyInfo.subject = pageInfo.subject
-                pageInfo.setReplyInfo(replyInfo)
+                pageInfo.replyInfo = replyInfo
             }
             val parent = tBean.parent
             if (parent != null) {
-                pageInfo.setBoard(parent["2"]!!)
+                pageInfo.board = parent["2"]
             }
-            pageInfo.setPostDate(tBean.postdate)
+            pageInfo.postDate = tBean.postdate
+            pageInfo.lastPost = tBean.lastpost
             val topicMiscVar = tBean.topic_misc_var
             if (topicMiscVar != null && pageInfo.isMirrorBoard) {
                 val obj: Any? = topicMiscVar["3"]
                 if (obj != null) {
-                    pageInfo.setFid(obj.toString().toInt())
+                    pageInfo.fid = obj.toString().toInt()
                 }
             }
             listInfo.addThreadPage(pageInfo)

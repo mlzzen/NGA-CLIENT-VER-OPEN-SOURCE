@@ -13,7 +13,7 @@ class BoardCategoryViewModel:ViewModel() {
         MutableLiveData()
     }
     fun query(){
-        BoardModel.queryBoard {
+        BoardModel.requestBoard {
             ThreadUtils.postOnMainThread {
                 boardCategoryList.value = it
             }

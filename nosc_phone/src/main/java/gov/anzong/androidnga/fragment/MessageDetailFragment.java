@@ -32,11 +32,11 @@ public class MessageDetailFragment extends BaseMvpFragment<MessageDetailPresente
 
     private MessageContentAdapter mAdapter;
 
-    private RecyclerViewEx.OnNextPageLoadListener mNextPageLoadListener = new RecyclerViewEx.OnNextPageLoadListener() {
+    private final RecyclerViewEx.OnNextPageLoadListener mNextPageLoadListener = new RecyclerViewEx.OnNextPageLoadListener() {
         @Override
         public void loadNextPage() {
             if (!isRefreshing()) {
-                mPresenter.loadPage(mAdapter.getNextPage(), mMid);
+                mPresenter.loadPage(mAdapter.nextPageIndex(), mMid);
             }
         }
     };
@@ -58,7 +58,7 @@ public class MessageDetailFragment extends BaseMvpFragment<MessageDetailPresente
         View view = inflater.inflate(R.layout.fragment_message_detail, container, false);
         mSwipeRefreshLayout = view.findViewById(R.id.swipe_refresh);
 
-        mAdapter = new MessageContentAdapter(getContext());
+        mAdapter = new MessageContentAdapter();
 
         RecyclerViewEx listView = (RecyclerViewEx) view.findViewById(R.id.list);
         listView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -66,20 +66,10 @@ public class MessageDetailFragment extends BaseMvpFragment<MessageDetailPresente
         listView.setItemViewCacheSize(20);
         listView.setOnNextPageLoadListener(mNextPageLoadListener);
 
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                mPresenter.loadPage(1, mMid);
-            }
-        });
+        mSwipeRefreshLayout.setOnRefreshListener(() -> mPresenter.loadPage(1, mMid));
 
         FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startMessagePost();
-            }
-        });
+        fab.setOnClickListener(v -> startMessagePost());
 
         mSwipeRefreshLayout.setEnabled(false);
 
@@ -94,7 +84,6 @@ public class MessageDetailFragment extends BaseMvpFragment<MessageDetailPresente
 
     @Override
     public void hideLoadingView() {
-//        mAdapter.hideLoadingView();
         mSwipeRefreshLayout.setEnabled(true);
     }
 
@@ -103,7 +92,7 @@ public class MessageDetailFragment extends BaseMvpFragment<MessageDetailPresente
     public void setData(MessageDetailInfo listInfo) {
         mTitle = listInfo.get_Title();
         mRecipient = listInfo.get_Alluser();
-        mAdapter.setData(listInfo);
+        mAdapter.addDetailInfo(listInfo);
     }
 
     @Override
