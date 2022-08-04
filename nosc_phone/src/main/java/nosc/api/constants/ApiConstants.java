@@ -2,6 +2,8 @@ package nosc.api.constants;
 
 public interface ApiConstants {
 
+    String clientUa = "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.125 Safari/537.36 NOSCAndroid/";
+
     String URL_BOARD_ICON = "http://img4.nga.178.com/ngabbs/nga_classic/f/app/%s.png";
 
     String URL_BOARD_ICON_STID = "https://img4.nga.178.com/proxy/cache_attach/ficon/%sv.png";

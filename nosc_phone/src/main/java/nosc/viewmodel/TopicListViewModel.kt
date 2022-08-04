@@ -32,13 +32,13 @@ import java.util.*
  * @author Justwen
  * @date 2017/6/3
  */
-class TopicListViewModel : ViewModel(),LifecycleObserver{
+open class TopicListViewModel : ViewModel(),LifecycleObserver{
     // Following variables are for the 24 hour hot topic feature
     // How many pages we query for twenty four hour hot topic
     private val twentyFourPageCount = 5
+    private val twentyFourTopicCount = 50
 
     // How many total topics we want to show
-    private val twentyFourTopicCount = 50
     private var pageQueriedCounter = 0
     private var twentyFourCurPos = 0
     private var twentyFourList = TopicListInfo()
@@ -121,10 +121,6 @@ class TopicListViewModel : ViewModel(),LifecycleObserver{
 
     fun setRequestParam(requestParam: TopicListParam?) {
         mRequestParam = requestParam
-    }
-
-    protected fun onCreateModel(): TopicListModel {
-        return TopicListModel()
     }
 
     fun removeTopic(info: ThreadPageInfo) {
@@ -269,7 +265,4 @@ class TopicListViewModel : ViewModel(),LifecycleObserver{
         return contentType != null && contentType.contains("zip")
     }
 
-    init {
-        mBaseModel = onCreateModel()
-    }
 }

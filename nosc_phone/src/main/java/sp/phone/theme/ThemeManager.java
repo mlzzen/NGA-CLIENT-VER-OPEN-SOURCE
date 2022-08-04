@@ -102,15 +102,15 @@ public class ThemeManager implements SharedPreferences.OnSharedPreferenceChangeL
         }
     }
 
-    public int getForegroundColor() {
+    public int getForegroundColorRes() {
         return R.color.foreground_color;
     }
 
-    public int getBackgroundColor() {
-        return getBackgroundColor(0);
+    public int getBackgroundColorRes() {
+        return getBackgroundColorRes(0);
     }
 
-    public int getBackgroundColor(int position) {
+    public int getBackgroundColorRes(int position) {
         return position % 2 == 1 ? R.color.background_color2 : R.color.background_color;
     }
 

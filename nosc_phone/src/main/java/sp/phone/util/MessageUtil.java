@@ -141,9 +141,9 @@ public class MessageUtil {
             row.setSubject(null);
         }
         int bgColor = context.getResources().getColor(
-                theme.getBackgroundColor(i));
+                theme.getBackgroundColorRes(i));
         int fgColor = context.getResources().getColor(
-                theme.getForegroundColor());
+                theme.getForegroundColorRes());
         bgColor = bgColor & 0xffffff;
         final String bgcolorStr = String.format("%06x", bgColor);
 

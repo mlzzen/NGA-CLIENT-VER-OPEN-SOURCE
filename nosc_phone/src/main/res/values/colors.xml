@@ -2,7 +2,7 @@
 <resources>
 
     <color name="text_color">#FF21201B</color>
-    <color name="text_color_disabled">#FFC4BEAE</color>
+    <color name="text_color_disabled">#FFA49E8E</color>
     <color name="window_background">@color/shit2</color>
     <color name="toolbar_text_color">#FFFFFF</color>
     <color name="background_color">@color/shit2</color>

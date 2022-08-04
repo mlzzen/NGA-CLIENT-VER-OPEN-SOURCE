@@ -26,7 +26,7 @@ public class MessageDetailPresenter extends BasePresenter<MessageDetailFragment,
             mBaseView.setRefreshing(false);
             mBaseView.hideLoadingView();
             if (TextUtils.isEmpty(text)) {
-                mBaseView.showToast(R.string.error_network);
+                mBaseView.showToast(R.string.network_error);
             } else {
                 mBaseView.showToast(text);
             }

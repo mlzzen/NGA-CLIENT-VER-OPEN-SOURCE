@@ -91,7 +91,7 @@ class MessageListAdapter(private val mContext: Context) :
         }
         holder.lastReply.text = lastPoster
         holder.num.text = entry.posts.toString()
-        holder.title.setTextColor(ContextUtils.getColor(theme.foregroundColor))
+        holder.title.setTextColor(ContextUtils.getColor(theme.foregroundColorRes))
         val size = PhoneConfiguration.getInstance().topicTitleSize
         var title = entry.subject
         if (StringUtils.isEmpty(title)) {
@@ -106,7 +106,7 @@ class MessageListAdapter(private val mContext: Context) :
         holder.title.textSize = size.toFloat()
         val tp = holder.title.paint
         tp.isFakeBoldText = false
-        val colorId = theme.getBackgroundColor(position)
+        val colorId = theme.getBackgroundColorRes(position)
         holder.itemView.setBackgroundResource(colorId)
     }
 

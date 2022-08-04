@@ -76,7 +76,7 @@ public class AvatarPostActivity extends BaseActivity implements
         super.onCreate(savedInstanceState);
         v = this.getLayoutInflater().inflate(R.layout.activity_change_avatar, null);
         v.setBackgroundColor(getResources().getColor(
-                ThemeManager.getInstance().getBackgroundColor()));
+                ThemeManager.getInstance().getBackgroundColorRes()));
         this.setContentView(v);
 
         act = new AvatarPostAction();
@@ -91,9 +91,9 @@ public class AvatarPostActivity extends BaseActivity implements
         titleText.setSelected(true);
         ThemeManager tm = ThemeManager.getInstance();
         if (tm.isNightMode()) {
-            titleText.setBackgroundResource(tm.getBackgroundColor());
+            titleText.setBackgroundResource(tm.getBackgroundColorRes());
             int textColor = this.getResources().getColor(
-                    tm.getForegroundColor());
+                    tm.getForegroundColorRes());
             add_title.setTextColor(textColor);
             avatarpreview.setTextColor(textColor);
             titleText.setTextColor(textColor);

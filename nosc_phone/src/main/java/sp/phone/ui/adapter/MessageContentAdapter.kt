@@ -91,18 +91,18 @@ class MessageContentAdapter :RecyclerView.Adapter<MessageContentAdapter.MessageV
         holder.postTime.text = entry.time
         val floor = entry.lou.toString()
         holder.floor.text = "#$floor"
-        holder.nickName.setTextColor(res.getColor(theme.foregroundColor))
-        holder.postTime.setTextColor(res.getColor(theme.foregroundColor))
-        holder.floor.setTextColor(res.getColor(theme.foregroundColor))
+        holder.nickName.setTextColor(res.getColor(theme.foregroundColorRes))
+        holder.postTime.setTextColor(res.getColor(theme.foregroundColorRes))
+        holder.floor.setTextColor(res.getColor(theme.foregroundColorRes))
         FunctionUtils.handleNickName(
             entry,
-            res.getColor(theme.foregroundColor),
+            res.getColor(theme.foregroundColorRes),
             holder.nickName,
             context
         )
-        val colorId = theme.getBackgroundColor(position + 1)
+        val colorId = theme.getBackgroundColorRes(position + 1)
         val bgColor = res.getColor(colorId)
-        val fgColorId = theme.foregroundColor
+        val fgColorId = theme.foregroundColorRes
         val fgColor = res.getColor(fgColorId)
         (holder.itemView as CardView).setCardBackgroundColor(bgColor)
         FunctionUtils.handleContentTV(holder.content, entry, bgColor, fgColor, context)

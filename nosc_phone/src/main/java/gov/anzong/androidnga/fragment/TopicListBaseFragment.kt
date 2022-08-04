@@ -71,10 +71,9 @@ open class TopicListBaseFragment : BaseFragment(R.layout.fragment_topic_list_bas
     }
 
     protected open fun onCreateViewModel(): TopicListViewModel {
-        val viewModelProvider = ViewModelProvider(this)
-        val topicListPresenter = viewModelProvider[TopicListViewModel::class.java]
-        topicListPresenter.setRequestParam(mRequestParam)
-        return topicListPresenter
+        val topicListViewModel = ViewModelProvider(this)[TopicListViewModel::class.java]
+        topicListViewModel.setRequestParam(mRequestParam)
+        return topicListViewModel
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

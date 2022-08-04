@@ -105,21 +105,6 @@
     <string name="delline">删除线</string>
     <string name="collapse">折叠</string>
     <string name="filter_keywords_hint">(输入关键字后按回车添加)</string>
-    <string name="clientua">Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.125 Safari/537.36 NOSCAndroid/</string>
-    <!-- string name="checksecret">4103ca8d364d2402e5e304ea07454a2a</string -->
-
-    <!-- d\o.jav 查System.currentTimeMillis()-->
-
-
-
-    <!-- 豆瓣妹子 -->
-
-    <!-- time format -->
-
-    <!-- topic layout strings -->
-
-    <!-- common widget -->
-
     <!-- common toast -->
 
     <string name="file_saved">图片已保存在：</string>
@@ -177,7 +162,6 @@
 
     <!-- error -->
     <string name="error_load_failed">加载失败，请重试</string>
-    <string name="error_network">网络错误</string>
 
     <string name="shortcut_label_daxuanwo">大漩涡</string>
     <string name="shortcut_label_yishiting">议事厅</string>

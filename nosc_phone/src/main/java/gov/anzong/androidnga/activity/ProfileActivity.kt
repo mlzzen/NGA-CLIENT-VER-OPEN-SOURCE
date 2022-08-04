@@ -355,9 +355,9 @@ class ProfileActivity : BaseActivity(),
 
     private fun handleSignWebView(contentTV: WebViewEx, ret: ProfileData) {
         val theme = ThemeManager.getInstance()
-        val fgColor = resources.getColor(theme.foregroundColor)
+        val fgColor = resources.getColor(theme.foregroundColorRes)
         var bgColor: Int = if (mThemeManager.isNightMode) {
-            resources.getColor(theme.getBackgroundColor(0))
+            resources.getColor(theme.getBackgroundColorRes(0))
         } else {
             resources.getColor(R.color.profilebgcolor)
         }
@@ -378,8 +378,8 @@ class ProfileActivity : BaseActivity(),
         val fgColor: Int
         val theme = ThemeManager.getInstance()
         if (mThemeManager.isNightMode) {
-            bgColor = resources.getColor(theme.getBackgroundColor(0))
-            fgColor = resources.getColor(theme.foregroundColor)
+            bgColor = resources.getColor(theme.getBackgroundColorRes(0))
+            fgColor = resources.getColor(theme.foregroundColorRes)
         } else {
             bgColor = resources.getColor(R.color.profilebgcolor)
             fgColor = resources.getColor(R.color.profilefcolor)
@@ -400,8 +400,8 @@ class ProfileActivity : BaseActivity(),
         val fgColor: Int
         val theme = ThemeManager.getInstance()
         if (mThemeManager.isNightMode) {
-            bgColor = resources.getColor(theme.getBackgroundColor(0))
-            fgColor = resources.getColor(theme.foregroundColor)
+            bgColor = resources.getColor(theme.getBackgroundColorRes(0))
+            fgColor = resources.getColor(theme.foregroundColorRes)
         } else {
             bgColor = resources.getColor(R.color.profilebgcolor)
             fgColor = resources.getColor(R.color.profilefcolor)

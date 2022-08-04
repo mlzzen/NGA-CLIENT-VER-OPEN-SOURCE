@@ -30,6 +30,7 @@ import java.util.Objects;
 
 import gov.anzong.androidnga.R;
 import gov.anzong.androidnga.Utils;
+import nosc.api.constants.ApiConstants;
 import nosc.utils.uxUtils.ToastUtils;
 import gov.anzong.androidnga.core.data.HtmlData;
 import gov.anzong.androidnga.core.decode.ForumDecoder;
@@ -89,7 +90,7 @@ public class FunctionUtils {
 
 
         WebSettings setting = contentTV.getSettings();
-        setting.setUserAgentString(context.getString(R.string.clientua));
+        setting.setUserAgentString(ApiConstants.clientUa);
         setting.setDefaultFontSize(PhoneConfiguration.getInstance()
                 .getWebSize());
         setting.setJavaScriptEnabled(false);
@@ -112,8 +113,8 @@ public class FunctionUtils {
         // COLOR
 
         ThemeManager theme = ThemeManager.getInstance();
-        int bgColor = context.getResources().getColor(theme.getBackgroundColor(0));
-        int fgColor = context.getResources().getColor(theme.getForegroundColor());
+        int bgColor = context.getResources().getColor(theme.getBackgroundColorRes(0));
+        int fgColor = context.getResources().getColor(theme.getForegroundColorRes());
         bgColor = bgColor & 0xffffff;
         final String bgcolorStr = String.format("%06x", bgColor);
 

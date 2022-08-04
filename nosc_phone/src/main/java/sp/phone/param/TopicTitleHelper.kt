@@ -96,25 +96,29 @@ object TopicTitleHelper {
         }
     }
 
-    fun handleTitleFormat(entry: ThreadPageInfo): AnnotatedString {
+    fun handleInfoFormat(entry: ThreadPageInfo): AnnotatedString{
         return buildAnnotatedString {
-            val title = StringUtils.removeBrTag(StringUtils.unEscapeHtml(entry.subject))
-            append(title)
             val type = entry.type
-            val titleLength = title.length
+            if (!TextUtils.isEmpty(entry.board)) {
+                append(buildAnnotatedString {
+                    val str = "[版面:${entry.board}]"
+                    append(str)
+                    addStyle(
+                        SpanStyle(Color(ContextUtils.getColor(R.color.text_color_disabled))),0, str.length,
+                    )
+                })
+            }
             if (type and ApiConstants.MASK_TYPE_ATTACHMENT == ApiConstants.MASK_TYPE_ATTACHMENT) {
-                val typeStr = " +"
+                val typeStr = "[有附件]"
                 append(buildAnnotatedString {
                     append(typeStr)
                     addStyle(
                         SpanStyle(Color(ContextUtils.getColor(R.color.title_orange))),0, typeStr.length,
                     )
                 })
-
-
             }
             if (type and ApiConstants.MASK_TYPE_LOCK == ApiConstants.MASK_TYPE_LOCK) {
-                val typeStr = " [锁定]"
+                val typeStr = "[锁定]"
                 append(buildAnnotatedString {
                     append(typeStr)
                     addStyle(
@@ -123,7 +127,7 @@ object TopicTitleHelper {
                 })
             }
             if (type and ApiConstants.MASK_TYPE_ASSEMBLE == ApiConstants.MASK_TYPE_ASSEMBLE) {
-                val typeStr = " [锁定]"
+                val typeStr = "[合集]"
                 append(buildAnnotatedString {
                     append(typeStr)
                     addStyle(
@@ -131,6 +135,14 @@ object TopicTitleHelper {
                     )
                 })
             }
+        }
+    }
+
+    fun handleTitleFormat(entry: ThreadPageInfo): AnnotatedString {
+        return buildAnnotatedString {
+            val title = StringUtils.removeBrTag(StringUtils.unEscapeHtml(entry.subject))
+            val titleLength = title.length
+            append(title)
             if (!TextUtils.isEmpty(entry.topicMisc)) {
                 val misc = entry.topicMisc
                 // ~ 开头的为旧格式
@@ -140,15 +152,7 @@ object TopicTitleHelper {
                     handleNewFormat( misc, titleLength)
                 }
             }
-            if (!TextUtils.isEmpty(entry.board)) {
-                append(buildAnnotatedString {
-                    val str = "  [${entry.board}]"
-                    append(str)
-                    addStyle(
-                        SpanStyle(Color(ContextUtils.getColor(R.color.text_color_disabled))),0, str.length,
-                    )
-                })
-            }
+
         }
 
     }

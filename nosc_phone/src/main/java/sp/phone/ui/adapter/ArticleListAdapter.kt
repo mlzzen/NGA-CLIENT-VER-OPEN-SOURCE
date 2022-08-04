@@ -5,7 +5,6 @@ import sp.phone.ui.adapter.ArticleListAdapter.ArticleViewHolder
 import nosc.api.bean.ThreadData
 import android.view.LayoutInflater
 import sp.phone.theme.ThemeManager
-import sp.phone.view.webview.LocalWebView
 import nosc.api.bean.ThreadRowInfo
 import nosc.utils.uxUtils.ToastUtils
 import android.content.Intent
@@ -331,7 +330,7 @@ class ArticleListAdapter(
     override fun onBindViewHolder(holder: ArticleViewHolder, position: Int) {
         val row = mData!!.rowList[position] ?: return
         val color = holder.itemView.context.getColor(
-            ThemeManager.getInstance().getBackgroundColor(
+            ThemeManager.getInstance().getBackgroundColorRes(
                 if (PhoneConfiguration.getInstance().useSolidColorBackground()) 1 else position
             )
         )
