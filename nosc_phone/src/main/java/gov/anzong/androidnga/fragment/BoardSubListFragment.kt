@@ -16,6 +16,7 @@ import nosc.api.callbacks.OnHttpCallBack
 import com.alibaba.android.arouter.launcher.ARouter
 import gov.anzong.androidnga.R
 import gov.anzong.androidnga.arouter.ARouterConstants
+import nosc.utils.uxUtils.ToastUtils
 
 /**
  * Created by Justwen on 2018/1/27.
@@ -46,12 +47,12 @@ class BoardSubListFragment : BaseRxFragment(){
             if (v.id == R.id.check) {
                 val callBack: OnHttpCallBack<String> = object : OnHttpCallBack<String> {
                     override fun onError(text: String) {
-                        showToast(text)
+                        ToastUtils.error(text)
                         (v as Checkable).isChecked = board.isChecked
                     }
 
                     override fun onSuccess(data: String) {
-                        showToast(data)
+                        ToastUtils.success(data)
                         board.isChecked = v.isClickable
                         setResult(Activity.RESULT_OK)
                     }

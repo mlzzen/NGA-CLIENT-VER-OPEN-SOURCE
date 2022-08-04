@@ -250,7 +250,7 @@ public class ActivityUtils {
     }
 
     public static void startLoginActivity(Context context) {
-        Intent intent = new Intent(context, PhoneConfiguration.getInstance().loginActivityClass);
+        Intent intent = new Intent(context, PhoneConfiguration.loginActivityClass);
         context.startActivity(intent);
     }
 
@@ -258,7 +258,7 @@ public class ActivityUtils {
         if (UserManagerImpl.getInstance().getActiveUser() == null) {
             startLoginActivity(context);
         } else {
-            Intent intent = new Intent(context, PhoneConfiguration.getInstance().topicActivityClass);
+            Intent intent = new Intent(context, PhoneConfiguration.topicActivityClass);
             intent.putExtra("favor", 1);
             context.startActivity(intent);
         }
@@ -268,7 +268,7 @@ public class ActivityUtils {
         if (UserManagerImpl.getInstance().getActiveUser() == null) {
             startLoginActivity(context);
         } else {
-            intent.setClass(context, PhoneConfiguration.getInstance().topicActivityClass);
+            intent.setClass(context, PhoneConfiguration.topicActivityClass);
             context.startActivity(intent);
         }
     }
@@ -277,7 +277,7 @@ public class ActivityUtils {
         if (UserManagerImpl.getInstance().getActiveUser() == null) {
             startLoginActivity(context);
         } else {
-            intent.setClass(context, PhoneConfiguration.getInstance().topicActivityClass);
+            intent.setClass(context, PhoneConfiguration.topicActivityClass);
             context.startActivity(intent);
         }
     }

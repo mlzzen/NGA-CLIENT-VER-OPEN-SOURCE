@@ -25,6 +25,10 @@ public class ToastUtils {
         error(ContextUtils.getString(id));
     }
 
+    public static void warn(@StringRes int id) {
+        warn(ContextUtils.getString(id));
+    }
+
     public static void info(@StringRes int id) {
         info(ContextUtils.getString(id));
     }

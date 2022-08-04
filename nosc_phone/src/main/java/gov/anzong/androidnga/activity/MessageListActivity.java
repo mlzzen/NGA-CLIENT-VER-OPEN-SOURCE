@@ -90,7 +90,7 @@ public class MessageListActivity extends BaseActivity
         int mid = StringUtils.getUrlParameter(midString, "mid");
         Intent intent = new Intent();
         intent.putExtra("mid", mid);
-        intent.setClass(this, PhoneConfiguration.getInstance().messageDetialActivity);
+        intent.setClass(this, PhoneConfiguration.messageDetialActivity);
         startActivity(intent);
     }
 }

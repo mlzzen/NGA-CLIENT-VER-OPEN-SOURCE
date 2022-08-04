@@ -35,6 +35,7 @@ import nosc.utils.ContextUtils
 import nosc.utils.DeviceUtils
 import io.reactivex.Observable
 import nosc.utils.uxUtils.createLocalWebView
+import sp.phone.common.appConfig
 import sp.phone.rxjava.BaseSubscriber
 import sp.phone.util.*
 import java.lang.Exception
@@ -200,12 +201,12 @@ class ArticleListAdapter(
             if (UserManagerImpl.getInstance().activeUser != null) { // 登入了才能发
                 intent.setClass(
                     ContextUtils.getContext(),
-                    PhoneConfiguration.getInstance().postActivityClass
+                    appConfig.postActivityClass
                 )
             } else {
                 intent.setClass(
                     ContextUtils.getContext(),
-                    PhoneConfiguration.getInstance().loginActivityClass
+                    appConfig.loginActivityClass
                 )
             }
             return intent
@@ -315,7 +316,7 @@ class ArticleListAdapter(
         val view = mLayoutInflater.inflate(R.layout.fragment_article_list_item, parent, false)
         val viewHolder = ArticleViewHolder(view)
         val lp = viewHolder.avatarIv!!.layoutParams
-        lp.height = PhoneConfiguration.getInstance().avatarSize
+        lp.height = appConfig.avatarSize
         lp.width = lp.height
         RxUtils.clicks(viewHolder.nickNameTV, mOnProfileClickListener)
         RxUtils.clicks(viewHolder.replyBtn, mOnReplyClickListener)
@@ -331,7 +332,7 @@ class ArticleListAdapter(
         val row = mData!!.rowList[position] ?: return
         val color = holder.itemView.context.getColor(
             ThemeManager.getInstance().getBackgroundColorRes(
-                if (PhoneConfiguration.getInstance().useSolidColorBackground()) 1 else position
+                if (appConfig.useSolidColorBackground()) 1 else position
             )
         )
         (holder.itemView as CardView).setCardBackgroundColor(color)
@@ -403,7 +404,7 @@ class ArticleListAdapter(
 
     private fun onBindAvatarView(avatarIv: ImageView?, row: ThreadRowInfo) {
         val avatarUrl = FunctionUtils.parseAvatarUrl(row.js_escap_avatar)
-        val downImg = (DeviceUtils.isWifiConnected(mContext) || PhoneConfiguration.getInstance().isDownAvatarNoWifi)
+        val downImg = (DeviceUtils.isWifiConnected(mContext) || appConfig.isDownAvatarNoWifi)
         ImageUtils.loadRoundCornerAvatar(avatarIv, avatarUrl, !downImg)
     }
 

@@ -91,8 +91,7 @@ public class FunctionUtils {
 
         WebSettings setting = contentTV.getSettings();
         setting.setUserAgentString(ApiConstants.clientUa);
-        setting.setDefaultFontSize(PhoneConfiguration.getInstance()
-                .getWebSize());
+        setting.setDefaultFontSize(PhoneConfiguration.INSTANCE.getWebSize());
         setting.setJavaScriptEnabled(false);
         contentTV.setWebViewClient(client);
 
@@ -129,7 +128,7 @@ public class FunctionUtils {
         contentTV.setLongClickable(false);
 
         WebSettings setting = contentTV.getSettings();
-        setting.setDefaultFontSize(PhoneConfiguration.getInstance()
+        setting.setDefaultFontSize(PhoneConfiguration.INSTANCE
                 .getWebSize());
         setting.setJavaScriptEnabled(true);
         contentTV.setWebViewClient(client);
@@ -529,7 +528,7 @@ public class FunctionUtils {
 
     public static String ColorTxtCheck(String text) {
         String xxtp = "";
-        if (PhoneConfiguration.getInstance().isShowColorText()) {
+        if (PhoneConfiguration.INSTANCE.isShowColorText()) {
             xxtp = FunctionUtils.ColorTxt(text.trim());
         } else {
             xxtp = text;

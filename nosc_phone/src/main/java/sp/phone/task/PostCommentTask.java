@@ -51,7 +51,7 @@ public class PostCommentTask extends AsyncTask<String, Integer, String> {
             comment = prefix + comment;
         }
         HttpPostClient c = new HttpPostClient(postCommentUri);
-        String cookie = PhoneConfiguration.getInstance().getCookie();
+        String cookie = PhoneConfiguration.INSTANCE.getCookie();
         c.setCookie(cookie);
         final String body = this.buildBody(comment);
         String ret = null;

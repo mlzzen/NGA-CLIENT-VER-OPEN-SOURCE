@@ -135,7 +135,7 @@ public class SearchDialogFragment extends DialogFragment {
     }
 
     private void searchUserTopic(String inputString) {
-        Intent intent = new Intent(getContext(), PhoneConfiguration.getInstance().topicActivityClass);
+        Intent intent = new Intent(getContext(), PhoneConfiguration.topicActivityClass);
         if (!StringUtils.isEmpty(inputString)) {
             intent.putExtra("fid", getArguments().getInt("fid", -7));
             intent.putExtra("author", inputString);
@@ -153,7 +153,7 @@ public class SearchDialogFragment extends DialogFragment {
     }
 
     private void searchUserReply(String inputString) {
-        Intent intent = new Intent(getContext(), PhoneConfiguration.getInstance().topicActivityClass);
+        Intent intent = new Intent(getContext(), PhoneConfiguration.topicActivityClass);
         if (!StringUtils.isEmpty(inputString)) {
             intent.putExtra("fid", getArguments().getInt("fid", -7));
             intent.putExtra("author", inputString + "&searchpost=1");
@@ -171,7 +171,7 @@ public class SearchDialogFragment extends DialogFragment {
     }
 
     private void searchTopic(String inputString) {
-        Intent intent = new Intent(getContext(), PhoneConfiguration.getInstance().topicActivityClass);
+        Intent intent = new Intent(getContext(), PhoneConfiguration.topicActivityClass);
         if (!StringUtils.isEmpty(inputString)) {
             if (mContentCheckBox.isChecked()) {
                 intent.putExtra("content", 1);
@@ -185,7 +185,7 @@ public class SearchDialogFragment extends DialogFragment {
     }
 
     private void searchAllTopic(String inputString) {
-        Intent intent = new Intent(getContext(), PhoneConfiguration.getInstance().topicActivityClass);
+        Intent intent = new Intent(getContext(), PhoneConfiguration.topicActivityClass);
         if (!StringUtils.isEmpty(inputString)) {
             if (mContentCheckBox.isChecked()) {
                 intent.putExtra("content", 1);

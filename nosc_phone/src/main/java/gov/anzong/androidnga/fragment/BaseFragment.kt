@@ -1,6 +1,5 @@
 package gov.anzong.androidnga.fragment
 
-import android.widget.Toast
 import androidx.annotation.LayoutRes
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
@@ -8,15 +7,12 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import gov.anzong.androidnga.R
 import gov.anzong.androidnga.activity.BaseActivity
-import nosc.utils.uxUtils.ToastUtils
-import sp.phone.common.PhoneConfiguration
 
 open class BaseFragment : Fragment {
 
     private val mActivityViewModelProvider: ViewModelProvider by lazy { ViewModelProvider(activity as FragmentActivity) }
 
     constructor(@LayoutRes contentLayoutId: Int) : super(contentLayoutId)
-
     constructor() : super()
 
     protected fun initToolbar() {
@@ -36,24 +32,6 @@ open class BaseFragment : Fragment {
 
     fun getActivityViewModelProvider(): ViewModelProvider {
         return mActivityViewModelProvider;
-    }
-
-    protected var mToast: Toast? = null
-
-    protected var mConfig = PhoneConfiguration.getInstance()
-
-    private var mTitleId = 0
-
-    private var mTitleStr: CharSequence? = null
-
-
-    open fun showToast(res: Int) {
-        val str = getString(res)
-        showToast(str)
-    }
-
-    open fun showToast(res: String?) {
-        ToastUtils.info(res)
     }
 
     open fun finish() {

@@ -208,7 +208,7 @@ class ProfileActivity : BaseActivity(),
     private fun startChangeSignActivity() {
         val intent = Intent()
         intent.putExtra("prefix", mProfileData!!.sign)
-        intent.setClass(this, PhoneConfiguration.getInstance().signPostActivityClass)
+        intent.setClass(this, PhoneConfiguration.signPostActivityClass)
         startActivityForResult(intent, 321)
     }
 
@@ -322,14 +322,14 @@ class ProfileActivity : BaseActivity(),
     }
 
     private fun searchPost() {
-        val intent = Intent(this, PhoneConfiguration.getInstance().topicActivityClass)
+        val intent = Intent(this, PhoneConfiguration.topicActivityClass)
         intent.putExtra(ParamKey.KEY_AUTHOR_ID, mProfileData!!.uid.toInt())
         intent.putExtra(ParamKey.KEY_AUTHOR, mProfileData!!.userName)
         startActivity(intent)
     }
 
     private fun searchReply() {
-        val intent = Intent(this, PhoneConfiguration.getInstance().topicActivityClass)
+        val intent = Intent(this, PhoneConfiguration.topicActivityClass)
         intent.putExtra(ParamKey.KEY_AUTHOR_ID, mProfileData!!.uid.toInt())
         intent.putExtra(ParamKey.KEY_SEARCH_POST, 1)
         intent.putExtra(ParamKey.KEY_AUTHOR, mProfileData!!.userName)

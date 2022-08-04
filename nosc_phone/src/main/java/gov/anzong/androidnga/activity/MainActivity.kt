@@ -54,9 +54,6 @@ class MainActivity : BaseActivity() {
             }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        return super.onCreateOptionsMenu(menu)
-    }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // Handle action buttons

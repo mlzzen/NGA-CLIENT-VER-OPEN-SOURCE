@@ -25,4 +25,7 @@ class BoardPagerAdapter(fm: Fragment, private val mBoardCategories: List<BoardCa
     override fun getItemCount(): Int {
         return mBoardCategories.size
     }
+
+
+
 }

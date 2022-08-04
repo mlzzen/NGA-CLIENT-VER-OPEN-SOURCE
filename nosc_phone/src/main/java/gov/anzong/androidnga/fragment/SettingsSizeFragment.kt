@@ -10,9 +10,9 @@ import android.view.View
 import gov.anzong.androidnga.R
 import android.widget.SeekBar
 import nosc.api.constants.Constants
+import sp.phone.common.appConfig
 
 class SettingsSizeFragment : BaseFragment(), OnSeekBarChangeListener {
-    private val mConfiguration = PhoneConfiguration.getInstance()
     private var mWebView: WebView? = null
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,7 +41,7 @@ class SettingsSizeFragment : BaseFragment(), OnSeekBarChangeListener {
         seekBar.apply {
             max = Constants.TOPIC_TITLE_SIZE_MAX
             min = Constants.TOPIC_CONTENT_SIZE_MIN
-            progress = mConfiguration.topicTitleSize
+            progress = appConfig.topicTitleSize
         }
         seekBar.setOnSeekBarChangeListener(this)
     }
@@ -52,7 +52,7 @@ class SettingsSizeFragment : BaseFragment(), OnSeekBarChangeListener {
         seekBar.apply {
             max = 100
             min = 1
-            progress = mConfiguration.webViewTextZoom
+            progress = appConfig.webViewTextZoom
         }
         seekBar.setOnSeekBarChangeListener(this)
         mWebView = rootView.findViewById(R.id.webview)
@@ -65,7 +65,7 @@ class SettingsSizeFragment : BaseFragment(), OnSeekBarChangeListener {
         seekBar.apply{
             max= Constants.AVATAR_SIZE_MAX
             min = Constants.AVATAR_SIZE_MIN
-            progress = mConfiguration.avatarSize
+            progress = appConfig.avatarSize
         }
         seekBar.setOnSeekBarChangeListener(this)
     }
@@ -76,7 +76,7 @@ class SettingsSizeFragment : BaseFragment(), OnSeekBarChangeListener {
         seekBar.apply {
             max = Constants.EMOTICON_SIZE_MAX
             min = Constants.EMOTICON_SIZE_MIN
-            progress = mConfiguration.emoticonSize
+            progress = appConfig.emoticonSize
         }
         seekBar.setOnSeekBarChangeListener(this)
     }
@@ -85,11 +85,11 @@ class SettingsSizeFragment : BaseFragment(), OnSeekBarChangeListener {
         when (signSeekBar.id) {
             R.id.seek_web_size -> {
                 mWebView!!.settings.textZoom = progress
-                mConfiguration.webViewTextZoom = progress
+                appConfig.webViewTextZoom = progress
             }
-            R.id.seek_topic_title -> mConfiguration.setTopicTitleSize(progress)
-            R.id.seek_avatar -> mConfiguration.avatarSize = progress
-            R.id.seek_emoticon -> mConfiguration.emoticonSize = progress
+            R.id.seek_topic_title -> appConfig.topicTitleSize = progress
+            R.id.seek_avatar -> appConfig.avatarSize = progress
+            R.id.seek_emoticon -> appConfig.emoticonSize = progress
             else -> {
             }
         }

@@ -129,6 +129,9 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.13.2'
     kapt 'com.github.bumptech.glide:compiler:4.13.2'
 
+    implementation("io.coil-kt:coil-compose:2.1.0")
+
+
 
     implementation 'io.reactivex.rxjava2:rxjava:2.2.6'
     implementation "io.reactivex.rxjava2:rxandroid:$project.rxAndroid"

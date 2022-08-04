@@ -22,6 +22,7 @@ import gov.anzong.androidnga.R;
 import nosc.api.callbacks.OnHttpCallBack;
 import nosc.ui.view.EmptyView;
 import nosc.ui.view.LoadingView;
+import nosc.utils.uxUtils.ToastUtils;
 import sp.phone.mvp.model.entity.RecentReplyInfo;
 import sp.phone.ui.adapter.RecentNotificationAdapter;
 import sp.phone.common.PhoneConfiguration;
@@ -117,7 +118,7 @@ public class RecentNotificationFragment extends BaseRxFragment implements OnHttp
     public void onError(String text) {
         setRefreshing(false);
         mEmptyLayout.setText(text);
-        showToast(text);
+        ToastUtils.error(text);
     }
 
     private void setRefreshing(boolean refreshing) {
@@ -151,7 +152,7 @@ public class RecentNotificationFragment extends BaseRxFragment implements OnHttp
     public void onClick(View v) {
         RecentReplyInfo info = (RecentReplyInfo) v.getTag();
 
-        Intent intent = new Intent(getContext(), PhoneConfiguration.getInstance().articleActivityClass);
+        Intent intent = new Intent(getContext(), PhoneConfiguration.articleActivityClass);
         intent.putExtra(ParamKey.KEY_TID, Integer.parseInt(info.getTidStr()));
         intent.putExtra(ParamKey.KEY_PID, Integer.parseInt(info.getPidStr()));
         intent.putExtra(ParamKey.KEY_TITLE, info.getTitle());

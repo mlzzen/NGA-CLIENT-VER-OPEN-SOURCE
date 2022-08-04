@@ -295,7 +295,7 @@ public class AvatarPostActivity extends BaseActivity implements
             String body = params[1];
 
             HttpPostClient c = new HttpPostClient(url);
-            String cookie = PhoneConfiguration.getInstance().getCookie();
+            String cookie = PhoneConfiguration.INSTANCE.getCookie();
             c.setCookie(cookie);
             try {
                 InputStream input = null;

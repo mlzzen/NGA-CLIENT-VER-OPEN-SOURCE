@@ -31,6 +31,7 @@ import androidx.recyclerview.widget.RecyclerView
 import gov.anzong.androidnga.R
 import nosc.ui.NOSCTheme
 import nosc.utils.dateStringOf
+import sp.phone.common.appConfig
 import sp.phone.mvp.model.entity.ThreadPageInfo
 
 class TopicListAdapter(context: Context) :
@@ -90,7 +91,7 @@ class TopicListAdapter(context: Context) :
                     Column(
                         Modifier
                             .background(
-                                color = if(!PhoneConfiguration.getInstance().useSolidColorBackground()){
+                                color = if(!appConfig.useSolidColorBackground()){
                                     colorResource(
                                         id = ThemeManager
                                             .getInstance()
@@ -104,7 +105,7 @@ class TopicListAdapter(context: Context) :
                             .padding(12.dp)) {
                         Text(
                             text = title,
-                            fontSize = PhoneConfiguration.getInstance().topicTitleSize.sp,
+                            fontSize = appConfig.topicTitleSize.sp,
                             color = MaterialTheme.colors.onBackground,
                         )
                         Text(

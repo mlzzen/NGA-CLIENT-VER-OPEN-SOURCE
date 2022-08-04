@@ -1,13 +1,11 @@
 package nosc.ui.view
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.database.DataSetObserver
 import android.util.AttributeSet
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text

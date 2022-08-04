@@ -29,6 +29,8 @@ import androidx.fragment.app.DialogFragment
 import gov.anzong.androidnga.Utils
 import nosc.ui.view.PageSelector
 import nosc.utils.startArticleActivity
+import nosc.utils.uxUtils.ToastUtils
+import sp.phone.common.appConfig
 import sp.phone.rxjava.RxBus
 import sp.phone.rxjava.RxEvent
 import sp.phone.util.StringUtils
@@ -70,7 +72,7 @@ class ArticleTabFragment : BaseRxFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return if (mConfig.isShowBottomTab) {
+        return if (appConfig.isShowBottomTab) {
             inflater.inflate(R.layout.fragment_article_tab_bottom, container, false)
         } else {
             inflater.inflate(R.layout.fragment_article_tab, container, false)
@@ -101,7 +103,7 @@ class ArticleTabFragment : BaseRxFragment() {
     private fun updateFloatingMenu() {
         val lp = mFam!!.layoutParams as CoordinatorLayout.LayoutParams
         mBehavior = lp.behavior as ScrollAwareFamBehavior?
-        if (mConfig.isLeftHandMode) {
+        if (appConfig.isLeftHandMode) {
             lp.gravity = Gravity.START or Gravity.BOTTOM
             mFam!!.setExpandDirection(
                 FloatingActionsMenu.EXPAND_UP,
@@ -128,12 +130,12 @@ class ArticleTabFragment : BaseRxFragment() {
         if (!StringUtils.isEmpty(UserManagerImpl.getInstance().userName)) { // 登入了才能发
             intent.setClass(
                 requireContext(),
-                PhoneConfiguration.getInstance().postActivityClass
+                PhoneConfiguration.postActivityClass
             )
         } else {
             intent.setClass(
                 requireContext(),
-                PhoneConfiguration.getInstance().loginActivityClass
+                PhoneConfiguration.loginActivityClass
             )
         }
         requireActivity().startActivityForResult(intent, ActivityUtils.REQUEST_CODE_TOPIC_POST)
@@ -182,7 +184,7 @@ class ArticleTabFragment : BaseRxFragment() {
             requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         val clipData = ClipData.newPlainText("text", url)
         clipboardManager.setPrimaryClip(clipData)
-        showToast("已经复制至粘贴板")
+        ToastUtils.info("已经复制至粘贴板")
     }
 
     private fun openByBrowser() {

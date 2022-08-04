@@ -51,8 +51,8 @@
     <string name="sample_user_level">级别:骷髅党</string>
     <string name="report">举报</string>
     <string name="reportdialog_description">不要仅仅因为意见不同而举报</string>
-    <string name="cannot_eidt_comment">不能编辑贴条</string>
-    <string name="cannot_add_to_blacklist_cause_anony">这傻逼匿名了,不能拉黑</string>
+    <string name="cannot_edit_comment">不能编辑贴条</string>
+    <string name="cannot_add_to_blacklist_cause_anony">用户匿名了,不能拉黑</string>
     <string name="remove_from_blacklist_success">解除屏蔽成功</string>
     <string name="add_to_blacklist_success">添加屏蔽成功</string>
     <string name="prompt">提示</string>

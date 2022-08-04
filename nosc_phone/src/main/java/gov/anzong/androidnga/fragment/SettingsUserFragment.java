@@ -26,11 +26,9 @@ import sp.phone.view.RecyclerViewEx;
  * Created by Justwen on 2017/12/17.
  */
 
-public class SettingsUserFragment extends BaseFragment implements View.OnClickListener {
+public class SettingsUserFragment extends BaseFragment {
 
     private UserListAdapter mListAdapter;
-
-    private RecyclerViewEx mListView;
 
     private UserManager mUserManager;
 
@@ -51,9 +49,21 @@ public class SettingsUserFragment extends BaseFragment implements View.OnClickLi
     public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
 
         mListAdapter = new UserListAdapter(getContext(),mUserManager.getUserList());
-        mListAdapter.setOnClickListener(this);
+        mListAdapter.setOnClickListener(v -> {
+            int position = (int) v.getTag();
 
-        mListView = view.findViewById(R.id.list);
+            if (v instanceof Checkable) {
+                if (((Checkable) v).isChecked()) {
+                    setActiveUser(position);
+                } else {
+                    ((Checkable) v).setChecked(true);
+                }
+            } else {
+                showUserProfile(position);
+            }
+        });
+
+        RecyclerViewEx mListView = view.findViewById(R.id.list);
         mListView.setLayoutManager(new LinearLayoutManager(getContext()));
         mListView.setAdapter(mListAdapter);
 
@@ -95,23 +105,6 @@ public class SettingsUserFragment extends BaseFragment implements View.OnClickLi
         }
     }
 
-    @Override
-    public void onClick(View v) {
-
-        int position = (int) v.getTag();
-
-        if (v instanceof Checkable) {
-            if (((Checkable) v).isChecked()) {
-                setActiveUser(position);
-            } else {
-                ((Checkable) v).setChecked(true);
-            }
-        } else {
-            showUserProfile(position);
-        }
-
-    }
-
     private void setActiveUser(int position) {
         mUserManager.setActiveUser(position);
         for (int i = 0; i < mListAdapter.getItemCount(); i++) {
@@ -121,9 +114,10 @@ public class SettingsUserFragment extends BaseFragment implements View.OnClickLi
         }
     }
 
+    //TODO 写的啥玩意
     private void showUserProfile(int position) {
         String userName = mUserManager.getUserList().get(position).getNickName();
-        Intent intent = new Intent(getContext(), PhoneConfiguration.getInstance().profileActivityClass);
+        Intent intent = new Intent(getContext(), PhoneConfiguration.profileActivityClass);
         intent.putExtra("mode", "username");
         intent.putExtra("username", userName);
         startActivity(intent);

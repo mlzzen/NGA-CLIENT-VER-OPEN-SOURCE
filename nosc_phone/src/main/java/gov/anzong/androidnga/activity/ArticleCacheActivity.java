@@ -14,6 +14,7 @@ import gov.anzong.androidnga.R;
 import nosc.utils.ContextUtils;
 import nosc.utils.uxUtils.ToastUtils;
 import nosc.ui.view.PageSelector;
+import sp.phone.common.PhoneConfiguration;
 import sp.phone.param.ArticleListParam;
 import sp.phone.param.ParamKey;
 import sp.phone.ui.adapter.ArticlePagerAdapter;
@@ -23,9 +24,7 @@ import sp.phone.ui.adapter.ArticlePagerAdapter;
  */
 public class ArticleCacheActivity extends BaseActivity {
 
-    private ArticlePagerAdapter mPagerAdapter;
-
-    private List<String> mCachePageList = new ArrayList<>();
+    private final List<String> mCachePageList = new ArrayList<>();
 
     private ArticleListParam mRequestParam;
 
@@ -45,13 +44,13 @@ public class ArticleCacheActivity extends BaseActivity {
             return;
         }
 
-        if (mConfig.isShowBottomTab()) {
+        if (PhoneConfiguration.INSTANCE.isShowBottomTab()) {
             setContentView(R.layout.fragment_article_tab_bottom);
         } else {
             setContentView(R.layout.fragment_article_tab);
         }
 
-        mPagerAdapter = new ArticlePagerAdapter(getSupportFragmentManager(), mRequestParam);
+        ArticlePagerAdapter mPagerAdapter = new ArticlePagerAdapter(getSupportFragmentManager(), mRequestParam);
         mPagerAdapter.setPageIndexList(mCachePageList);
 
         findViewById(R.id.fab_menu).setVisibility(View.GONE);

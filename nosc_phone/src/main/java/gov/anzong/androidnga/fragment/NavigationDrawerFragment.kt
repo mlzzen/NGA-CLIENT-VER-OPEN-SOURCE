@@ -17,6 +17,7 @@ import android.content.DialogInterface
 import android.content.Intent
 import sp.phone.util.ActivityUtils
 import android.app.Activity
+import android.content.res.Configuration
 import android.preference.PreferenceManager
 import android.text.TextUtils
 import android.view.*
@@ -61,11 +62,9 @@ class NavigationDrawerFragment : BaseRxFragment(),
         registerRxBus()
         setHasOptionsMenu(true)
         viewModel.boardCategoryList.observe(this){
-            mBoardPagerAdapter =
-                BoardPagerAdapter(this, it)
+            mBoardPagerAdapter = BoardPagerAdapter(this, it)
             binding?.apply {
                 pager.adapter = mBoardPagerAdapter
-
                 tabLayoutMediator = TabLayoutMediator(tabs,pager){ tab,position ->
                     tab.text = mBoardPagerAdapter?.getPageTitle(position)
                     pager.setCurrentItem(tab.position,true)
@@ -75,7 +74,7 @@ class NavigationDrawerFragment : BaseRxFragment(),
                         detach()
                     attach()
                 }
-                if(BoardModel.isBookMarkEmpty() && mBoardPagerAdapter?.itemCount?:0 > 1){
+                if(BoardModel.isBookMarkEmpty() && (mBoardPagerAdapter?.itemCount ?: 0) > 1){
                     pager.currentItem = 1
                 }
             }

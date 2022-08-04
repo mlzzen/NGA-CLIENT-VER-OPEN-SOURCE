@@ -77,17 +77,17 @@ public class ArticleListPresenter extends BasePresenter<ArticleListFragment, Art
     @Override
     public void banThisSB(ThreadRowInfo row) {
         if (row.getISANONYMOUS()) {
-            mBaseView.showToast(R.string.cannot_add_to_blacklist_cause_anony);
+            ToastUtils.warn(R.string.cannot_add_to_blacklist_cause_anony);
         } else {
             UserManager um = UserManagerImpl.getInstance();
             if (row.get_isInBlackList()) {
                 row.set_IsInBlackList(false);
                 um.removeFromBlackList(String.valueOf(row.getAuthorid()));
-                mBaseView.showToast(R.string.remove_from_blacklist_success);
+                ToastUtils.success(R.string.remove_from_blacklist_success);
             } else {
                 row.set_IsInBlackList(true);
                 um.addToBlackList(row.getAuthor(), String.valueOf(row.getAuthorid()));
-                mBaseView.showToast(R.string.add_to_blacklist_success);
+                ToastUtils.success(R.string.add_to_blacklist_success);
             }
         }
     }

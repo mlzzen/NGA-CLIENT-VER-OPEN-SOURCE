@@ -35,7 +35,7 @@ public class NotificationController {
 
     private final ForumNotificationTask mNotificationTask;
 
-    private final PhoneConfiguration mConfiguration;
+    private final PhoneConfiguration mConfiguration = PhoneConfiguration.INSTANCE;
 
     private static final int DELAY_TIME = 5 * 1000;
 
@@ -70,7 +70,6 @@ public class NotificationController {
 
     private NotificationController() {
         mNotificationTask = new ForumNotificationTask(null);
-        mConfiguration = PhoneConfiguration.getInstance();
         createNotificationChannel(ContextUtils.getContext());
     }
 

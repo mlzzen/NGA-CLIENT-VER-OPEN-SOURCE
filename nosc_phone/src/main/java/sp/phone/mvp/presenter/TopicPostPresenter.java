@@ -129,7 +129,7 @@ public class TopicPostPresenter extends BasePresenter<TopicPostFragment, TopicPo
     @Override
     public void post(String title, String body, boolean isAnony) {
         if (mLoading) {
-            mBaseView.showToast(R.string.avoidWindfury);
+            ToastUtils.warn(R.string.avoidWindfury);
             return;
         }
         mLoading = true;
@@ -243,7 +243,7 @@ public class TopicPostPresenter extends BasePresenter<TopicPostFragment, TopicPo
         ActivityUtils.getInstance().dismiss();
         if (mBaseView != null) {
             if (!StringUtils.isEmpty(result)) {
-                mBaseView.showToast(result);
+                ToastUtils.info(result);
             }
             if (isSuccess) {
                 mBaseView.setResult(Activity.RESULT_OK);

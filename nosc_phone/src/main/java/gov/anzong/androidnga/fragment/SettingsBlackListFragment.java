@@ -82,7 +82,7 @@ public class SettingsBlackListFragment extends BaseFragment implements View.OnCl
     }
 
     private void showUserProfile(String userName) {
-        Intent intent = new Intent(getContext(), PhoneConfiguration.getInstance().profileActivityClass);
+        Intent intent = new Intent(getContext(), PhoneConfiguration.profileActivityClass);
         intent.putExtra("mode", "username");
         intent.putExtra("username", userName);
         startActivity(intent);

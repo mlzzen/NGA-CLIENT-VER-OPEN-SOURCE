@@ -31,6 +31,4 @@ public class ActionBarUserListAdapter extends SpinnerUserListAdapter {
         ((TextView) convertView).setTextColor(ContextCompat.getColor(mContext,R.color.toolbar_text_color));
         return convertView;
     }
-
-
 }

@@ -38,7 +38,7 @@ import sp.phone.view.RecyclerViewEx
 /*
  * MD 帖子详情每一页
  */
-open class ArticleListFragment : BaseMvpFragment<ArticleListPresenter?>(),
+class ArticleListFragment : BaseMvpFragment<ArticleListPresenter?>(),
     ArticleListContract.View {
     private var binding: FragmentArticleListBinding? = null
 
@@ -49,8 +49,7 @@ open class ArticleListFragment : BaseMvpFragment<ArticleListPresenter?>(),
 
     private val mSwipeRefreshLayout: SwipeRefreshLayout? get() = binding?.swipeRefresh
     private var mArticleAdapter: ArticleListAdapter? = null
-    @JvmField
-    protected var mRequestParam: ArticleListParam? = null
+    private var mRequestParam: ArticleListParam? = null
     private val mMenuItemClickListener: OnTopicMenuItemClickListener =
         object : OnTopicMenuItemClickListener {
             private var mThreadRowInfo: ThreadRowInfo? = null
@@ -68,7 +67,7 @@ open class ArticleListFragment : BaseMvpFragment<ArticleListPresenter?>(),
                 val tid = row.tid
                 when (item.itemId) {
                     R.id.menu_edit -> if (FunctionUtils.isComment(row)) {
-                        showToast(R.string.cannot_eidt_comment)
+                        ToastUtils.warn(R.string.cannot_edit_comment)
                     } else {
                         ARouter.getInstance()
                             .build(ARouterConstants.ACTIVITY_POST)
@@ -89,7 +88,7 @@ open class ArticleListFragment : BaseMvpFragment<ArticleListPresenter?>(),
                     R.id.menu_report -> FunctionUtils.handleReport(
                         row,
                         mRequestParam!!.tid,
-                        fragmentManager
+                        parentFragmentManager
                     )
                     R.id.menu_signature -> if (row.isanonymous) {
                         ToastUtils.info("这白痴匿名了,神马都看不到")

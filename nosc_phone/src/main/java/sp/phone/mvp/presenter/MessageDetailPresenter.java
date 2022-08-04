@@ -6,6 +6,7 @@ import gov.anzong.androidnga.R;
 import nosc.api.bean.MessageDetailInfo;
 import gov.anzong.androidnga.fragment.MessageDetailFragment;
 import nosc.api.callbacks.OnHttpCallBack;
+import nosc.utils.uxUtils.ToastUtils;
 import sp.phone.mvp.model.MessageDetailModel;
 import sp.phone.mvp.contract.MessageDetailContract;
 
@@ -26,9 +27,9 @@ public class MessageDetailPresenter extends BasePresenter<MessageDetailFragment,
             mBaseView.setRefreshing(false);
             mBaseView.hideLoadingView();
             if (TextUtils.isEmpty(text)) {
-                mBaseView.showToast(R.string.network_error);
+                ToastUtils.error(R.string.network_error);
             } else {
-                mBaseView.showToast(text);
+                ToastUtils.error(text);
             }
         }
 

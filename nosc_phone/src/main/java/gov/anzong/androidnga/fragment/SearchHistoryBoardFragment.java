@@ -19,6 +19,7 @@ import java.util.List;
 
 import gov.anzong.androidnga.R;
 import gov.anzong.androidnga.arouter.ARouterConstants;
+import nosc.utils.uxUtils.ToastUtils;
 import sp.phone.ui.adapter.SearchHistoryAdapter;
 import nosc.utils.PreferenceKey;
 import sp.phone.param.ParamKey;
@@ -91,7 +92,7 @@ public class SearchHistoryBoardFragment extends BaseRxFragment {
             }
             ActivityUtils.getInstance().dismiss();
             if (data == null) {
-                showToast("没有找到符合条件的版面或者网络错误");
+                ToastUtils.error("没有找到符合条件的版面或者网络错误");
             } else {
                 ARouter.getInstance()
                         .build(ARouterConstants.ACTIVITY_TOPIC_LIST)

@@ -1,244 +1,156 @@
-package sp.phone.common;
+package sp.phone.common
 
-import android.content.Context;
-import android.content.SharedPreferences;
+import android.content.Context
+import nosc.utils.PreferenceUtils.getData
+import nosc.utils.PreferenceUtils.putData
+import nosc.utils.PreferenceKey
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener
+import gov.anzong.androidnga.activity.TopicListActivity
+import gov.anzong.androidnga.activity.ArticleListActivity
+import gov.anzong.androidnga.activity.PostActivity
+import gov.anzong.androidnga.activity.SignPostActivity
+import gov.anzong.androidnga.activity.ProfileActivity
+import gov.anzong.androidnga.activity.LoginActivity
+import gov.anzong.androidnga.activity.MessageDetailActivity
+import android.content.SharedPreferences
+import nosc.api.constants.Constants
+import nosc.utils.ContextUtils
+import java.lang.Exception
 
-import gov.anzong.androidnga.activity.ArticleListActivity;
-import gov.anzong.androidnga.activity.LoginActivity;
-import gov.anzong.androidnga.activity.MessageDetailActivity;
-import gov.anzong.androidnga.activity.PostActivity;
-import gov.anzong.androidnga.activity.ProfileActivity;
-import gov.anzong.androidnga.activity.SignPostActivity;
-import gov.anzong.androidnga.activity.TopicListActivity;
-import nosc.utils.ContextUtils;
-import nosc.utils.PreferenceUtils;
-import nosc.utils.PreferenceKey;
-import nosc.api.constants.Constants;
-
-public class PhoneConfiguration implements PreferenceKey, SharedPreferences.OnSharedPreferenceChangeListener {
-    public Class<?> topicActivityClass = TopicListActivity.class;
-    public Class<?> articleActivityClass = ArticleListActivity.class;
-    public Class<?> postActivityClass = PostActivity.class;
-    public Class<?> signPostActivityClass = SignPostActivity.class;
-    public Class<?> profileActivityClass = ProfileActivity.class;
-    public Class<?> loginActivityClass = LoginActivity.class;
-    public Class<?> messageDetialActivity = MessageDetailActivity.class;
-
-    private boolean mNotificationEnabled;
-
-    private boolean mNotificationSoundEnabled;
-
-    private boolean mDownAvatarNoWifi;
-
-    private boolean mDownImgNoWifi;
-
-    private boolean mShowSignature;
-
-    private boolean mShowColorText;
-
-    private boolean mUpdateAfterPost;
-
-    private boolean mShowClassicIcon;
-
-    private boolean mLeftHandMode;
-
-    private boolean mShowBottomTab;
-
-    private boolean mHardwareAcceleratedEnabled;
-
-    private boolean mFilterSubBoard;
-
-    private boolean mSortByPostOrder;
-
-    @Override
-    public void onSharedPreferenceChanged(SharedPreferences sp, String key) {
-        switch (key) {
-            case PreferenceKey.NOTIFIACTION_SOUND:
-                mNotificationSoundEnabled = sp.getBoolean(key, true);
-                break;
-            case PreferenceKey.ENABLE_NOTIFIACTION:
-                mNotificationEnabled = sp.getBoolean(key, true);
-                break;
-            case PreferenceKey.DOWNLOAD_AVATAR_NO_WIFI:
-                mDownAvatarNoWifi = sp.getBoolean(key, true);
-                break;
-            case PreferenceKey.DOWNLOAD_IMG_NO_WIFI:
-                mDownImgNoWifi = sp.getBoolean(key, true);
-                break;
-            case PreferenceKey.SHOW_SIGNATURE:
-                mShowSignature = sp.getBoolean(key, false);
-                break;
-            case PreferenceKey.SHOW_COLORTXT:
-                mShowColorText = sp.getBoolean(key, false);
-                break;
-            case PreferenceKey.REFRESH_AFTERPOST_SETTING_MODE:
-                mUpdateAfterPost = sp.getBoolean(key, true);
-                break;
-            case PreferenceKey.SHOW_ICON_MODE:
-                mShowClassicIcon = sp.getBoolean(key, false);
-                break;
-            case PreferenceKey.LEFT_HAND:
-                mLeftHandMode = sp.getBoolean(key, false);
-                break;
-            case PreferenceKey.BOTTOM_TAB:
-                mShowBottomTab = sp.getBoolean(key, false);
-                break;
-            case PreferenceKey.HARDWARE_ACCELERATED:
-                mHardwareAcceleratedEnabled = sp.getBoolean(key, true);
-                break;
-            case PreferenceKey.FILTER_SUB_BOARD:
-                mFilterSubBoard = sp.getBoolean(key, false);
-                break;
-            case PreferenceKey.SORT_BY_POST:
-                mSortByPostOrder = sp.getBoolean(key, false);
-                break;
-            default:
-                break;
-        }
-
-    }
-
-    private static class PhoneConfigurationHolder {
-
-        private static final PhoneConfiguration sInstance = new PhoneConfiguration();
-    }
-
-    public static PhoneConfiguration getInstance() {
-        return PhoneConfigurationHolder.sInstance;
-    }
-
-
-    private PhoneConfiguration() {
-        initialize();
-    }
-
-    private void initialize() {
-        SharedPreferences sp = ContextUtils.getContext().getSharedPreferences(PreferenceKey.PERFERENCE, Context.MODE_PRIVATE);
-        sp.registerOnSharedPreferenceChangeListener(this);
-        mNotificationSoundEnabled = sp.getBoolean(PreferenceKey.NOTIFIACTION_SOUND, true);
-        mNotificationEnabled = sp.getBoolean(PreferenceKey.ENABLE_NOTIFIACTION, true);
-        mDownAvatarNoWifi = sp.getBoolean(PreferenceKey.DOWNLOAD_AVATAR_NO_WIFI, true);
-        mDownImgNoWifi = sp.getBoolean(PreferenceKey.DOWNLOAD_IMG_NO_WIFI, true);
-        mShowSignature = sp.getBoolean(PreferenceKey.SHOW_SIGNATURE, false);
-        mShowColorText = sp.getBoolean(PreferenceKey.SHOW_COLORTXT, false);
-        mUpdateAfterPost = sp.getBoolean(PreferenceKey.REFRESH_AFTERPOST_SETTING_MODE, true);
-        mShowClassicIcon = sp.getBoolean(PreferenceKey.SHOW_ICON_MODE, false);
-        mLeftHandMode = sp.getBoolean(PreferenceKey.LEFT_HAND, false);
-        mShowBottomTab = sp.getBoolean(PreferenceKey.BOTTOM_TAB, false);
-        mHardwareAcceleratedEnabled = sp.getBoolean(PreferenceKey.HARDWARE_ACCELERATED, true);
-        mFilterSubBoard = sp.getBoolean(PreferenceKey.FILTER_SUB_BOARD, false);
-        mSortByPostOrder = sp.getBoolean(PreferenceKey.SORT_BY_POST, false);
-    }
-
-    public boolean needSortByPostOrder() {
-        return mSortByPostOrder;
-    }
-
-    public boolean isShowBottomTab() {
-        return mShowBottomTab;
-    }
-
-    public boolean needFilterSubBoard() {
-        return mFilterSubBoard;
-    }
-
-    public boolean isHardwareAcceleratedEnabled() {
-        return mHardwareAcceleratedEnabled;
-    }
-
-    public boolean isLeftHandMode() {
-        return mLeftHandMode;
-    }
-
-    public boolean needUpdateAfterPost() {
-        return mUpdateAfterPost;
-    }
-
-    public boolean isShowClassicIcon() {
-        return mShowClassicIcon;
-    }
-
-    public int getAvatarSize() {
-        try {
-            return PreferenceUtils.getData(PreferenceKey.KEY_AVATAR_SIZE, Constants.AVATAR_SIZE_DEFAULT);
-        } catch (Exception e) {
-            setAvatarSize(Constants.AVATAR_SIZE_DEFAULT);
-            return Constants.AVATAR_SIZE_DEFAULT;
+object PhoneConfiguration : PreferenceKey, OnSharedPreferenceChangeListener {
+    @JvmField
+    var topicActivityClass: Class<*> = TopicListActivity::class.java
+    @JvmField
+    var articleActivityClass: Class<*> = ArticleListActivity::class.java
+    var postActivityClass: Class<*> = PostActivity::class.java
+    var signPostActivityClass: Class<*> = SignPostActivity::class.java
+    @JvmField
+    var profileActivityClass: Class<*> = ProfileActivity::class.java
+    @JvmField
+    var loginActivityClass: Class<*> = LoginActivity::class.java
+    @JvmField
+    var messageDetialActivity: Class<*> = MessageDetailActivity::class.java
+    var isNotificationEnabled = false
+        private set
+    var isNotificationSoundEnabled = false
+        private set
+    var isDownAvatarNoWifi = false
+        private set
+    var isDownImgNoWifi = false
+        private set
+    var isShowSignature = false
+        private set
+    var isShowColorText = false
+        private set
+    private var mUpdateAfterPost = false
+    var isShowClassicIcon = false
+        private set
+    var isLeftHandMode = false
+        private set
+    var isShowBottomTab = false
+        private set
+    var isHardwareAcceleratedEnabled = false
+        private set
+    private var mFilterSubBoard = false
+    private var mSortByPostOrder = false
+    override fun onSharedPreferenceChanged(sp: SharedPreferences, key: String) {
+        when (key) {
+            PreferenceKey.NOTIFIACTION_SOUND -> isNotificationSoundEnabled =
+                sp.getBoolean(key, true)
+            PreferenceKey.ENABLE_NOTIFIACTION -> isNotificationEnabled = sp.getBoolean(key, true)
+            PreferenceKey.DOWNLOAD_AVATAR_NO_WIFI -> isDownAvatarNoWifi = sp.getBoolean(key, true)
+            PreferenceKey.DOWNLOAD_IMG_NO_WIFI -> isDownImgNoWifi = sp.getBoolean(key, true)
+            PreferenceKey.SHOW_SIGNATURE -> isShowSignature = sp.getBoolean(key, false)
+            PreferenceKey.SHOW_COLORTXT -> isShowColorText = sp.getBoolean(key, false)
+            PreferenceKey.REFRESH_AFTERPOST_SETTING_MODE -> mUpdateAfterPost =
+                sp.getBoolean(key, true)
+            PreferenceKey.SHOW_ICON_MODE -> isShowClassicIcon = sp.getBoolean(key, false)
+            PreferenceKey.LEFT_HAND -> isLeftHandMode = sp.getBoolean(key, false)
+            PreferenceKey.BOTTOM_TAB -> isShowBottomTab = sp.getBoolean(key, false)
+            PreferenceKey.HARDWARE_ACCELERATED -> isHardwareAcceleratedEnabled =
+                sp.getBoolean(key, true)
+            PreferenceKey.FILTER_SUB_BOARD -> mFilterSubBoard = sp.getBoolean(key, false)
+            PreferenceKey.SORT_BY_POST -> mSortByPostOrder = sp.getBoolean(key, false)
+            else -> {}
         }
     }
 
-    public void setAvatarSize(int value) {
-        PreferenceUtils.putData(PreferenceKey.KEY_AVATAR_SIZE, value);
+    private fun initialize() {
+        val sp = ContextUtils.getContext()
+            .getSharedPreferences(PreferenceKey.PERFERENCE, Context.MODE_PRIVATE)
+        sp.registerOnSharedPreferenceChangeListener(this)
+        isNotificationSoundEnabled = sp.getBoolean(PreferenceKey.NOTIFIACTION_SOUND, true)
+        isNotificationEnabled = sp.getBoolean(PreferenceKey.ENABLE_NOTIFIACTION, true)
+        isDownAvatarNoWifi = sp.getBoolean(PreferenceKey.DOWNLOAD_AVATAR_NO_WIFI, true)
+        isDownImgNoWifi = sp.getBoolean(PreferenceKey.DOWNLOAD_IMG_NO_WIFI, true)
+        isShowSignature = sp.getBoolean(PreferenceKey.SHOW_SIGNATURE, false)
+        isShowColorText = sp.getBoolean(PreferenceKey.SHOW_COLORTXT, false)
+        mUpdateAfterPost = sp.getBoolean(PreferenceKey.REFRESH_AFTERPOST_SETTING_MODE, true)
+        isShowClassicIcon = sp.getBoolean(PreferenceKey.SHOW_ICON_MODE, false)
+        isLeftHandMode = sp.getBoolean(PreferenceKey.LEFT_HAND, false)
+        isShowBottomTab = sp.getBoolean(PreferenceKey.BOTTOM_TAB, false)
+        isHardwareAcceleratedEnabled = sp.getBoolean(PreferenceKey.HARDWARE_ACCELERATED, true)
+        mFilterSubBoard = sp.getBoolean(PreferenceKey.FILTER_SUB_BOARD, false)
+        mSortByPostOrder = sp.getBoolean(PreferenceKey.SORT_BY_POST, false)
     }
 
-    public int getEmoticonSize() {
-        return PreferenceUtils.getData(PreferenceKey.KEY_EMOTICON_SIZE, Constants.EMOTICON_SIZE_DEFAULT);
+    fun needSortByPostOrder(): Boolean {
+        return mSortByPostOrder
     }
 
-    public void setEmoticonSize(int value) {
-        PreferenceUtils.putData(PreferenceKey.KEY_EMOTICON_SIZE, value);
+    fun needFilterSubBoard(): Boolean {
+        return mFilterSubBoard
     }
 
-    public int getTopicTitleSize() {
-        return PreferenceUtils.getData(PreferenceKey.KEY_TOPIC_TITLE_SIZE, Constants.TOPIC_TITLE_SIZE_DEFAULT);
+    fun needUpdateAfterPost(): Boolean {
+        return mUpdateAfterPost
     }
 
-    public void setTopicTitleSize(int size) {
-        PreferenceUtils.putData(PreferenceKey.KEY_TOPIC_TITLE_SIZE, size);
+    var avatarSize: Int
+        get() = try {
+            getData(PreferenceKey.KEY_AVATAR_SIZE, Constants.AVATAR_SIZE_DEFAULT)
+        } catch (e: Exception) {
+            avatarSize = Constants.AVATAR_SIZE_DEFAULT
+            Constants.AVATAR_SIZE_DEFAULT
+        }
+        set(value) {
+            putData(PreferenceKey.KEY_AVATAR_SIZE, value)
+        }
+    var emoticonSize: Int
+        get() = getData(PreferenceKey.KEY_EMOTICON_SIZE, Constants.EMOTICON_SIZE_DEFAULT)
+        set(value) {
+            putData(PreferenceKey.KEY_EMOTICON_SIZE, value)
+        }
+    var topicTitleSize: Int
+        get() = getData(PreferenceKey.KEY_TOPIC_TITLE_SIZE, Constants.TOPIC_TITLE_SIZE_DEFAULT)
+        set(size) {
+            putData(PreferenceKey.KEY_TOPIC_TITLE_SIZE, size)
+        }
+    var topicContentSize: Int
+        get() = getData(PreferenceKey.KEY_TOPIC_CONTENT_SIZE, Constants.TOPIC_CONTENT_SIZE_DEFAULT)
+        set(size) {
+            putData(PreferenceKey.KEY_TOPIC_CONTENT_SIZE, size)
+        }
+    var webViewTextZoom: Int
+        get() = getData(PreferenceKey.KEY_WEBVIEW_TEXT_ZOOM, Constants.WEBVIEW_DEFAULT_TEXT_ZOOM)
+        set(textRoom) {
+            putData(PreferenceKey.KEY_WEBVIEW_TEXT_ZOOM, textRoom)
+        }
+
+    fun useSolidColorBackground(): Boolean {
+        return ContextUtils.getSharedPreferences(PreferenceKey.PERFERENCE)
+            .getBoolean(PreferenceKey.KEY_USE_SOLID_COLOR_BG, true)
     }
 
-    public int getTopicContentSize() {
-        return PreferenceUtils.getData(PreferenceKey.KEY_TOPIC_CONTENT_SIZE, Constants.TOPIC_CONTENT_SIZE_DEFAULT);
-    }
+    @get:Deprecated("")
+    val webSize: Int
+        get() = topicContentSize
+    val cookie: String
+        get() = UserManagerImpl.getInstance().cookie
 
-    public void setTopicContentSize(int size) {
-        PreferenceUtils.putData(PreferenceKey.KEY_TOPIC_CONTENT_SIZE, size);
+    init {
+        initialize()
     }
-
-    public int getWebViewTextZoom() {
-        return PreferenceUtils.getData(PreferenceKey.KEY_WEBVIEW_TEXT_ZOOM, Constants.WEBVIEW_DEFAULT_TEXT_ZOOM);
-    }
-
-    public void setWebViewTextZoom(int textRoom) {
-        PreferenceUtils.putData(PreferenceKey.KEY_WEBVIEW_TEXT_ZOOM, textRoom);
-    }
-
-    public boolean useSolidColorBackground() {
-        return ContextUtils.getSharedPreferences(PreferenceKey.PERFERENCE).getBoolean(PreferenceKey.KEY_USE_SOLID_COLOR_BG, true);
-    }
-
-    public boolean isShowSignature() {
-        return mShowSignature;
-    }
-
-    public boolean isShowColorText() {
-        return mShowColorText;
-    }
-
-    public boolean isNotificationEnabled() {
-        return mNotificationEnabled;
-    }
-
-    public boolean isNotificationSoundEnabled() {
-        return mNotificationSoundEnabled;
-    }
-
-    public boolean isDownAvatarNoWifi() {
-        return mDownAvatarNoWifi;
-    }
-
-    public boolean isDownImgNoWifi() {
-        return mDownImgNoWifi;
-    }
-
-    @Deprecated
-    public int getWebSize() {
-        return getTopicContentSize();
-    }
-
-    public String getCookie() {
-        return UserManagerImpl.getInstance().getCookie();
-    }
-
 }
 
+val appConfig = PhoneConfiguration

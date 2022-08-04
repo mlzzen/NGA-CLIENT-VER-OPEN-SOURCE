@@ -1,26 +1,41 @@
 package gov.anzong.androidnga.fragment
 
-import android.content.Context
-import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.material.Text
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.GridLayoutManager.SpanSizeLookup
-import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.LayoutManager
+import coil.compose.AsyncImage
 import gov.anzong.androidnga.R
+import nosc.api.model.BoardModel
+import nosc.ui.NOSCTheme
+import nosc.utils.iconUrl
+import nosc.utils.uxUtils.showConfirmDialog
+import sp.phone.mvp.model.entity.Board
 import sp.phone.mvp.model.entity.BoardCategory
-import sp.phone.ui.adapter.BoardCategoryAdapter
+import sp.phone.rxjava.RxBus
+import sp.phone.rxjava.RxEvent
 
 /**
  * 版块分页
  */
 class BoardCategoryFragment : Fragment() {
-    private var mListView: RecyclerView? = null
-    private var mAdapter: BoardCategoryAdapter? = null
+    private var mListView: ComposeView? = null
     private var mBoardCategory: BoardCategory? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,74 +48,122 @@ class BoardCategoryFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_board_category, container, false)
+    ): View {
+        return ComposeView(inflater.context).also { cv ->
+            mListView = cv
+        }
     }
 
+    @OptIn(ExperimentalFoundationApi::class)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        mListView = view.findViewById(R.id.list)
-        mAdapter = BoardCategoryAdapter(requireActivity(), mBoardCategory!!)
-        mListView?.adapter = mAdapter
-        setLayoutManager()
-//        if (mBoardCategory?.isBookmarkCategory == true) {
-//            val touchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
-//                ItemTouchHelper.UP or ItemTouchHelper.DOWN or ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT,
-//                0
-//            ) {
-//                override fun onMove(
-//                    recyclerView: RecyclerView,
-//                    viewHolder: RecyclerView.ViewHolder,
-//                    target: RecyclerView.ViewHolder
-//                ): Boolean {
-//                    BoardModel
-//                        .swapBookmark(viewHolder.adapterPosition-1, target.adapterPosition-1)
-//                    mListView?.adapter?.notifyItemMoved(viewHolder.adapterPosition, target.adapterPosition)
-//                    return true
-//                }
-//
-//                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-//                    val board = mBoardCategory!!.getBoard(viewHolder.adapterPosition)
-//                    BoardModel.removeBookmark(board.fid, board.stid)
-//                    mListView?.adapter?.notifyItemRemoved(viewHolder.adapterPosition)
-//                }
-//            })
-//            touchHelper.attachToRecyclerView(mListView)
-//        }
-        mListView?.adapter = mAdapter
-    }
+        mListView?.setContent {
+            NOSCTheme {
+                var refresh by remember {
+                    mutableStateOf(false)
+                }
+                key(refresh) {
+                    val boardClickable = { b:Board ->
+                        BoardModel.addRecentBoard(b)
+                        RxBus
+                            .getInstance()
+                            .post(RxEvent(RxEvent.EVENT_SHOW_TOPIC_LIST, b))
+                        if(mBoardCategory?.isBookmarkCategory == true){
+                            refresh = !refresh
+                        }
+                    }
+                    LazyVerticalGrid(
+                        columns = GridCells.Adaptive(110.dp),
+                        modifier = Modifier.fillMaxSize()
+                    ){
+                        mBoardCategory?.let { cat ->
+                            items(
+                                cat.boardList,
+                                key = { it.name },
+                                span = {GridItemSpan(1)},
+                                contentType = { 0 }
+                            ){ b->
+                                BoardItemContent(
+                                    Modifier
+                                        .padding(8.dp)
+                                        .fillMaxWidth()
+                                        .combinedClickable(
+                                            onClick = {boardClickable(b)},
+                                            onLongClick = {
+                                                if(mBoardCategory?.isBookmarkCategory == true){
+                                                    requireActivity().showConfirmDialog("确定要删除吗？"){
+                                                        BoardModel.removeBookmark(b.fid,b.stid)
+                                                        refresh = !refresh
+                                                    }
+                                                }
+                                            }
+                                        ), board = b)
+                            }
+                            cat.subCategoryList.forEach { sCat ->
+                                item(
+                                    key = "c/${sCat.name}",
+                                    span = { GridItemSpan(maxLineSpan) },
+                                    contentType = 1
+                                ){
+                                    Row(
+                                        Modifier.padding(8.dp),
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ){
+                                        Image(
+                                            painter = painterResource(id = R.drawable.default_board_icon),
+                                            contentDescription = "",
+                                            Modifier.size(24.dp)
+                                        )
+                                        Text(text = sCat.name)
 
-    fun setLayoutManager(){
-        val layoutManager:GridLayoutManager = getDefaultLayoutManager(requireContext()) as GridLayoutManager
-        layoutManager.spanSizeLookup = object : SpanSizeLookup() {
-            override fun getSpanSize(position: Int): Int {
-                return if (mAdapter?.getItemViewType(position) == BoardCategoryAdapter.TITLE_ITEM) layoutManager.spanCount else 1
+                                    }
+                                }
+                                items(
+                                    sCat.boardList,
+                                    key = { "c/${sCat.name}/${it.name}" },
+                                    span = { GridItemSpan(1) },
+                                    contentType = { 0 }
+                                ){ b->
+                                    BoardItemContent(
+                                        Modifier
+                                            .padding(8.dp)
+                                            .fillMaxWidth()
+                                            .combinedClickable(
+                                                onClick = {boardClickable(b)},
+                                                onLongClick = {
+                                                    if(mBoardCategory?.isBookmarkCategory == true){
+                                                        requireActivity().showConfirmDialog("确定要删除吗？"){
+                                                            BoardModel.removeBookmark(b.fid,b.stid)
+                                                            refresh = !refresh
+                                                        }
+                                                    }
+                                                }
+                                            ), board = b)
+                                }
+                            }
+                        }
+                    }
+                }
+
             }
-        }
-        mListView?.layoutManager = layoutManager
-    }
 
-    override fun onConfigurationChanged(newConfig: Configuration) {
-        super.onConfigurationChanged(newConfig)
-        setLayoutManager()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        if(mBoardCategory?.isBookmarkCategory == true){
-            mAdapter?.notifyDataSetChanged()
         }
     }
 
-    companion object {
-        private val TAG = BoardCategoryFragment::class.java.simpleName
-
-        fun getDefaultLayoutManager(context: Context): LayoutManager {
-            val dm = context.resources.displayMetrics
-            val width = dm.widthPixels // 屏幕宽度（像素）
-            val density = dm.density // 屏幕密度（0.75 / 1.0 / 1.5）
-            // 屏幕宽度算法:屏幕宽度（像素）/屏幕密度
-            val screenWidth = (width / density).toInt() // 屏幕宽度(dp)
-            return GridLayoutManager(context,  (screenWidth / 110).coerceAtLeast(1))
+    @Composable
+    fun BoardItemContent(modifier: Modifier = Modifier,board:Board){
+        Column(
+            modifier = modifier,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            val placeholder = painterResource(id = R.drawable.default_board_icon)
+            AsyncImage(
+                modifier = Modifier.size(48.dp),
+                model = board.iconUrl(),
+                placeholder =placeholder ,
+                error = placeholder,
+                contentDescription = board.name
+            )
+            Text(text = board.name)
         }
     }
 }

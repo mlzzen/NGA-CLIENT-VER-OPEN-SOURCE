@@ -160,12 +160,12 @@ public abstract class ArticleConvertFactory {
         htmlData.setAlertInfo(row.getAlterinfo());
         htmlData.setDarkMode(ThemeManager.getInstance().isNightMode());
         htmlData.setInBackList(row.get_isInBlackList());
-        htmlData.setTextSize(PhoneConfiguration.getInstance().getTopicContentSize());
-        htmlData.setEmotionSize(PhoneConfiguration.getInstance().getEmoticonSize());
-        htmlData.setSignature(PhoneConfiguration.getInstance().isShowSignature() ? row.getSignature() : null);
+        htmlData.setTextSize(PhoneConfiguration.INSTANCE.getTopicContentSize());
+        htmlData.setEmotionSize(PhoneConfiguration.INSTANCE.getEmoticonSize());
+        htmlData.setSignature(PhoneConfiguration.INSTANCE.isShowSignature() ? row.getSignature() : null);
         htmlData.setVote(row.getVote());
         htmlData.setSubject(row.getSubject());
-        htmlData.setShowImage(PhoneConfiguration.getInstance().isDownImgNoWifi()
+        htmlData.setShowImage(PhoneConfiguration.INSTANCE.isDownImgNoWifi()
                 || DeviceUtils.isWifiConnected(ContextUtils.getContext()));
         htmlData.setNGAHost(Utils.getNGAHost());
         if (row.getAttachs() != null) {

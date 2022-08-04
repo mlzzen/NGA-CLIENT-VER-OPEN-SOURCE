@@ -1,6 +1,8 @@
 package nosc.utils
 
 import gov.anzong.androidnga.Utils
+import nosc.api.constants.ApiConstants
+import sp.phone.mvp.model.entity.Board
 import sp.phone.param.ArticleListParam
 
 /**
@@ -17,4 +19,12 @@ fun ArticleListParam.toUrl(): String {
         builder.append("tid=").append(tid)
     }
     return builder.toString()
+}
+
+fun Board.iconUrl():String{
+    return if (stid != 0) {
+        String.format(ApiConstants.URL_BOARD_ICON_STID, stid)
+    } else {
+        String.format(ApiConstants.URL_BOARD_ICON, fid)
+    }
 }

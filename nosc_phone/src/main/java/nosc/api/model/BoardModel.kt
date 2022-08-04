@@ -59,7 +59,7 @@ object BoardModel : BaseModel() {
 
                 override fun onResponse(call: Call, response: Response) {
                     try{
-                        buildCategory(response.body()?.string()?.also {
+                        buildCategory(response.body?.string()?.also {
                             File(ContextUtils.getApplication().getExternalFilesDir("categoryCache"),"category.json").writeText(it,
                                 Charset.defaultCharset())
                         } ?: "")

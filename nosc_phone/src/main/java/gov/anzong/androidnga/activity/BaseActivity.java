@@ -23,15 +23,12 @@ import sp.phone.theme.ThemeManager;
  */
 public abstract class BaseActivity extends AppCompatActivity {
 
-    protected PhoneConfiguration mConfig;
-
     private boolean mToolbarEnabled;
 
     private SwipeBackHelper mSwipeBackHelper;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        mConfig = PhoneConfiguration.getInstance();
         updateThemeUi();
         setSwipeBackEnable(getSharedPreferences(PreferenceKey.PREFERENCE_SETTINGS, Context.MODE_PRIVATE).getBoolean(PreferenceKey.KEY_SWIPE_BACK, false));
 

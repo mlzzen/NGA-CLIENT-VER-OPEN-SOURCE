@@ -42,7 +42,7 @@ public class LocalWebView extends WebView implements DownloadListener {
         } catch (Exception e) {
             // 某些机型的WebView不支持以上方法的调用
         }
-        mEmotionSize = PhoneConfiguration.getInstance().getEmoticonSize() + "px";
+        mEmotionSize = PhoneConfiguration.INSTANCE.getEmoticonSize() + "px";
     }
 
     private void downloadByBrowser(String url) {
@@ -59,7 +59,7 @@ public class LocalWebView extends WebView implements DownloadListener {
         WebSettings settings = getSettings();
         settings.setJavaScriptEnabled(true);
         addJavascriptInterface(this, "action");
-        settings.setTextZoom(PhoneConfiguration.getInstance().getWebViewTextZoom());
+        settings.setTextZoom(PhoneConfiguration.INSTANCE.getWebViewTextZoom());
         settings.setBlockNetworkImage(true);
 
         setFocusableInTouchMode(false);

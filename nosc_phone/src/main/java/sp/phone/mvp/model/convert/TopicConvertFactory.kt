@@ -11,6 +11,7 @@ import sp.phone.common.PhoneConfiguration
 import sp.phone.mvp.model.entity.SubBoard
 import sp.phone.util.ForumUtils
 import nosc.api.bean.TopicListBean.DataBean.TBean
+import sp.phone.common.appConfig
 import sp.phone.mvp.model.entity.ThreadPageInfo
 import sp.phone.mvp.model.entity.ThreadPageInfo.ReplyInfo
 import sp.phone.util.StringUtils
@@ -71,7 +72,7 @@ object TopicConvertFactory {
 
     private fun sort(listInfo: TopicListInfo) {
         val list = listInfo.threadPageList
-        if (PhoneConfiguration.getInstance().needSortByPostOrder()) {
+        if (appConfig.needSortByPostOrder()) {
             list.sortWith { o1: ThreadPageInfo, o2: ThreadPageInfo -> if (o1.postDate < o2.postDate) 1 else -1 }
         }
         val subBoards: MutableList<SubBoard> = listInfo.subBoardList
@@ -190,7 +191,7 @@ object TopicConvertFactory {
         topicListBean: TopicListBean,
         tBean: TBean
     ): Boolean {
-        return if (topicListBean.data.__F != null && PhoneConfiguration.getInstance()
+        return if (topicListBean.data.__F != null && appConfig
                 .needFilterSubBoard()
             && topicListBean.data.__F.fid == -7 && tBean.recommend > 9
         ) {

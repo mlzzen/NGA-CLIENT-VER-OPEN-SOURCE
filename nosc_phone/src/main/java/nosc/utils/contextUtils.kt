@@ -9,6 +9,7 @@ import com.alibaba.android.arouter.launcher.ARouter
 import gov.anzong.androidnga.arouter.ARouterConstants
 import nosc.utils.uxUtils.ToastUtils
 import sp.phone.common.PhoneConfiguration
+import sp.phone.common.appConfig
 import sp.phone.mvp.model.entity.Board
 import sp.phone.param.ArticleListParam
 import sp.phone.param.ParamKey
@@ -62,9 +63,8 @@ fun Activity.toTopicListPage(position: Int, fidString: String) {
     }
     NLog.i(this.javaClass.simpleName, "set host:" + HttpUtil.HOST)
     var url = ForumUtils.getAvailableDomain() + "/thread.php?fid=" + fidString + "&rss=1"
-    val config = PhoneConfiguration.getInstance()
-    if (!StringUtils.isEmpty(config.cookie)) {
-        url = url + "&" + config.cookie.replace("; ", "&")
+    if (!StringUtils.isEmpty(appConfig.cookie)) {
+        url = url + "&" + appConfig.cookie.replace("; ", "&")
     } else if (fid < 0) {
         jumpToLogin()
         return
@@ -73,7 +73,7 @@ fun Activity.toTopicListPage(position: Int, fidString: String) {
         val intent = Intent()
         intent.putExtra("tab", "1")
         intent.putExtra("fid", fid)
-        intent.setClass(this, config.topicActivityClass)
+        intent.setClass(this, appConfig.topicActivityClass)
         startActivity(intent)
     }
 }
@@ -98,6 +98,6 @@ fun Context.startArticleActivity(param:ArticleListParam) {
     val bundle = Bundle()
     bundle.putParcelable(ParamKey.KEY_PARAM, param)
     intent.putExtras(bundle)
-    intent.setClass(this, PhoneConfiguration.getInstance().articleActivityClass)
+    intent.setClass(this, appConfig.articleActivityClass)
     startActivity(intent)
 }

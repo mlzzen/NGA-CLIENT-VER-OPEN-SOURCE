@@ -15,6 +15,7 @@ import android.view.View
 import android.widget.TextView
 import nosc.utils.ContextUtils
 import gov.anzong.androidnga.databinding.ListMessageBinding
+import sp.phone.common.appConfig
 import sp.phone.util.StringUtils
 import java.util.ArrayList
 
@@ -92,7 +93,7 @@ class MessageListAdapter(private val mContext: Context) :
         holder.lastReply.text = lastPoster
         holder.num.text = entry.posts.toString()
         holder.title.setTextColor(ContextUtils.getColor(theme.foregroundColorRes))
-        val size = PhoneConfiguration.getInstance().topicTitleSize
+        val size = appConfig.topicTitleSize
         var title = entry.subject
         if (StringUtils.isEmpty(title)) {
             title = entry.subject

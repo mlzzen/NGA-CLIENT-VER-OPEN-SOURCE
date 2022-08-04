@@ -23,6 +23,7 @@ import gov.anzong.androidnga.arouter.ARouterConstants;
 import nosc.utils.ContextUtils;
 import nosc.ui.view.DividerItemDecorationEx;
 import nosc.api.constants.ApiConstants;
+import nosc.utils.uxUtils.ToastUtils;
 import sp.phone.common.PhoneConfiguration;
 import sp.phone.common.TopicHistoryManager;
 import sp.phone.mvp.model.entity.ThreadPageInfo;
@@ -140,8 +141,8 @@ public class TopicSearchFragment extends BaseFragment implements View.OnClickLis
         });
         mListView.setEmptyView(view.findViewById(R.id.empty_view));
         mListView.setAdapter(mAdapter);
-        if (PhoneConfiguration.getInstance().useSolidColorBackground()) {
-            int padding = PhoneConfiguration.getInstance().useSolidColorBackground() ? ContextUtils.getDimension(R.dimen.topic_list_item_padding) : 0;
+        if (PhoneConfiguration.INSTANCE.useSolidColorBackground()) {
+            int padding = PhoneConfiguration.INSTANCE.useSolidColorBackground() ? ContextUtils.getDimension(R.dimen.topic_list_item_padding) : 0;
             mListView.addItemDecoration(new DividerItemDecorationEx(view.getContext(), padding, DividerItemDecoration.VERTICAL));
         }
 
@@ -161,7 +162,7 @@ public class TopicSearchFragment extends BaseFragment implements View.OnClickLis
         viewModel.getNextTopicList().observe(getViewLifecycleOwner(), this::appendData);
 
         viewModel.getErrorMsg().observe(getViewLifecycleOwner(), res -> {
-            showToast(res);
+            ToastUtils.error(res);
             setNextPageEnabled(false);
         });
 
@@ -255,7 +256,7 @@ public class TopicSearchFragment extends BaseFragment implements View.OnClickLis
             Bundle bundle = new Bundle();
             bundle.putParcelable(ParamKey.KEY_PARAM, param);
             intent.putExtras(bundle);
-            intent.setClass(context, PhoneConfiguration.getInstance().articleActivityClass);
+            intent.setClass(context, PhoneConfiguration.articleActivityClass);
             context. startActivity(intent);
             TopicHistoryManager.getInstance().addTopicHistory(info);
         }

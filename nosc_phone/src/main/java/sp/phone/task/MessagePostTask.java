@@ -74,7 +74,7 @@ public class MessagePostTask extends AsyncTask<String, Integer, String> {
         String body = params[0];
 
         HttpPostClient c = new HttpPostClient(mReplyUrl);
-        String cookie = PhoneConfiguration.getInstance().getCookie();
+        String cookie = PhoneConfiguration.INSTANCE.getCookie();
         c.setCookie(cookie);
         try {
             InputStream input = null;

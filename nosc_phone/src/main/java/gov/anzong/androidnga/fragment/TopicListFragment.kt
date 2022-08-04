@@ -19,6 +19,7 @@ import android.view.*
 import androidx.appcompat.widget.Toolbar
 import nosc.utils.startArticleActivity
 import nosc.api.model.BoardModel
+import sp.phone.common.appConfig
 
 /**
  * Created by Justwen on 2017/11/19.
@@ -63,7 +64,7 @@ class TopicListFragment : TopicSearchFragment() {
     }
 
     private fun updateFloatingMenu() {
-        if (mConfig.isLeftHandMode) {
+        if (appConfig.isLeftHandMode) {
             val lp = mFam!!.layoutParams as CoordinatorLayout.LayoutParams
             lp.gravity = Gravity.START or Gravity.BOTTOM
             mFam!!.setExpandDirection(

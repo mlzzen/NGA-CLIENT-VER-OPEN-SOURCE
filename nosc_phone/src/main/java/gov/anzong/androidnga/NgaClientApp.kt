@@ -1,17 +1,23 @@
 package gov.anzong.androidnga
 
 import android.app.Application
+import android.os.Build
 import sp.phone.util.NLog
 import sp.phone.common.VersionUpgradeHelper
 import nosc.utils.PreferenceUtils
 import nosc.utils.PreferenceKey
 import android.webkit.WebView
+import coil.ComponentRegistry
+import coil.ImageLoader
+import coil.ImageLoaderFactory
+import coil.disk.DiskCache
+import coil.memory.MemoryCache
 import com.alibaba.android.arouter.launcher.ARouter
 import nosc.utils.ContextUtils
 import sp.phone.common.UserManagerImpl
 import sp.phone.common.FilterKeywordsManagerImpl
 
-class NgaClientApp : Application() {
+class NgaClientApp : Application(),ImageLoaderFactory {
     override fun onCreate() {
         NLog.w(TAG, "app nga android start")
         inst = this
@@ -48,6 +54,23 @@ class NgaClientApp : Application() {
         private val TAG = NgaClientApp::class.java.simpleName
         lateinit var inst:NgaClientApp
             private set
+    }
+
+    override fun newImageLoader(): ImageLoader {
+        return ImageLoader.Builder(this)
+            .crossfade(300)
+            .memoryCache {
+                MemoryCache.Builder(this)
+                    .maxSizePercent(0.25)
+                    .build()
+            }
+            .diskCache {
+                DiskCache.Builder()
+                    .directory((externalCacheDir?: cacheDir).resolve("image_cache") )
+                    .maxSizePercent(0.02)
+                    .build()
+            }
+            .build()
     }
 }
 
