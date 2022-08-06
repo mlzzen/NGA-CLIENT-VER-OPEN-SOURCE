@@ -38,7 +38,9 @@ import sp.phone.view.webview.WebViewEx
 class ProfileActivity : BaseActivity(),
     OnHttpCallBack<ProfileData?> {
     private var mProfileData: ProfileData? = null
-    private var binding: ActivityUserProfileBinding? = null
+    private val binding: ActivityUserProfileBinding by lazy{
+        ActivityUserProfileBinding.inflate(layoutInflater)
+    }
     private val mThemeManager = ThemeManager.getInstance()
     private var mParams: String? = null
     private var mCurrentUser = false
@@ -76,7 +78,7 @@ class ProfileActivity : BaseActivity(),
         val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
         val lp = toolbar.layoutParams as FrameLayout.LayoutParams
         lp.setMargins(0, statusBarHeight, 0, 0)
-        val parentView = binding!!.ivAvatar.parent as View
+        val parentView = binding.ivAvatar.parent as View
         parentView.setPadding(0, statusBarHeight, 0, 0)
     }
 
@@ -98,11 +100,10 @@ class ProfileActivity : BaseActivity(),
                 "username=" + StringUtils.encodeUrl(userName, "gbk")
             }
         }
-        binding = ActivityUserProfileBinding.inflate(layoutInflater)
-        binding?.content?.btnModifySign?.setOnClickListener {
+        binding.content.btnModifySign.setOnClickListener {
             startChangeSignActivity()
         }
-        setContentView(binding!!.root)
+        setContentView(binding.root)
         setupActionBar()
         updateToolbarLayout()
         setupStatusBar()
@@ -130,7 +131,7 @@ class ProfileActivity : BaseActivity(),
     }
 
     private fun loadBasicProfile(profileInfo: ProfileData) {
-        binding?.apply {
+        binding.apply {
             toolbarLayout.title = profileInfo.userName
             tvUid.text = String.format("用户ID : %s", profileInfo.uid)
             content.apply{
@@ -153,7 +154,7 @@ class ProfileActivity : BaseActivity(),
     }
 
     private fun handleUserState(profileInfo: ProfileData) {
-        binding?.content?.let{
+        binding.content.let{
             if (profileInfo.isMuted) {
                 it.tvUserState.text = "已禁言"
                 it.tvUserState.setTextColor(ContextCompat.getColor(this, R.color.color_state_muted))
@@ -177,7 +178,7 @@ class ProfileActivity : BaseActivity(),
         val gold = money / 10000
         val silver = (money - gold * 10000) / 100
         val copper = money - gold * 10000 - silver * 100
-        binding?.content?.apply {
+        binding.content.apply {
             tvUserMoneyGold.text = gold.toString()
             tvUserMoneySilver.text = silver.toString()
             tvUserMoneyCopper.text = copper.toString()
@@ -476,9 +477,5 @@ class ProfileActivity : BaseActivity(),
         if (data != null) {
             loadProfileInfo(data)
         }
-    }
-
-    companion object {
-        private const val TAG = "ProfileActivity"
     }
 }
