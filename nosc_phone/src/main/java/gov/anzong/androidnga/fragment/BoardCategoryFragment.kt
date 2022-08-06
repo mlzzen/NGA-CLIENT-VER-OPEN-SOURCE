@@ -35,8 +35,17 @@ import sp.phone.rxjava.RxEvent
  * 版块分页
  */
 class BoardCategoryFragment : Fragment() {
-    private var mListView: ComposeView? = null
+    private var composeView: ComposeView? = null
     private var mBoardCategory: BoardCategory? = null
+    var refresh by mutableStateOf(false)
+    private val boardClickable = { b:Board ->
+        BoardModel.addRecentBoard(b)
+        RxBus.getInstance().post(RxEvent(RxEvent.EVENT_SHOW_TOPIC_LIST, b))
+        if(mBoardCategory?.isBookmarkCategory == true){
+            refresh = !refresh
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (arguments != null) {
@@ -50,27 +59,19 @@ class BoardCategoryFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         return ComposeView(inflater.context).also { cv ->
-            mListView = cv
+            cv.layoutParams = ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+            )
+            composeView = cv
         }
     }
 
     @OptIn(ExperimentalFoundationApi::class)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        mListView?.setContent {
+        composeView?.setContent {
             NOSCTheme {
-                var refresh by remember {
-                    mutableStateOf(false)
-                }
                 key(refresh) {
-                    val boardClickable = { b:Board ->
-                        BoardModel.addRecentBoard(b)
-                        RxBus
-                            .getInstance()
-                            .post(RxEvent(RxEvent.EVENT_SHOW_TOPIC_LIST, b))
-                        if(mBoardCategory?.isBookmarkCategory == true){
-                            refresh = !refresh
-                        }
-                    }
                     LazyVerticalGrid(
                         columns = GridCells.Adaptive(110.dp),
                         modifier = Modifier.fillMaxSize()
