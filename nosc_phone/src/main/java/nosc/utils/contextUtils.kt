@@ -25,7 +25,7 @@ fun View.getActivity():Activity?{
     return context as? Activity
 }
 
-fun Activity.showTopicList(board: Board) {
+fun Context.showTopicList(board: Board) {
     ARouterUtils.build(ARouterConstants.ACTIVITY_TOPIC_LIST)
         .withInt(ParamKey.KEY_FID, board.fid)
         .withInt(ParamKey.KEY_STID, board.stid)

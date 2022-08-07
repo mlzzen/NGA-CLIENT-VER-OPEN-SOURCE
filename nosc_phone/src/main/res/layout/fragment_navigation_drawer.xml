@@ -24,25 +24,20 @@
 
             </androidx.appcompat.widget.Toolbar>
 
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/tabs"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
         </com.google.android.material.appbar.AppBarLayout>
 
-        <FrameLayout
+        <androidx.compose.ui.platform.ComposeView
             android:id="@+id/container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-            <androidx.viewpager2.widget.ViewPager2
-                android:id="@+id/pager"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+<!--            <androidx.viewpager2.widget.ViewPager2-->
+<!--                android:id="@+id/pager"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"/>-->
 
-        </FrameLayout>
+        </androidx.compose.ui.platform.ComposeView>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

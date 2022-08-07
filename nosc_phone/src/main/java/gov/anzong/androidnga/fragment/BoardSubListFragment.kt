@@ -16,6 +16,7 @@ import nosc.api.callbacks.OnHttpCallBack
 import com.alibaba.android.arouter.launcher.ARouter
 import gov.anzong.androidnga.R
 import gov.anzong.androidnga.arouter.ARouterConstants
+import nosc.utils.showTopicList
 import nosc.utils.uxUtils.ToastUtils
 
 /**
@@ -63,12 +64,7 @@ class BoardSubListFragment : BaseRxFragment(){
                     mSubscribeTask!!.subscribe(board, callBack)
                 }
             } else {
-                ARouter.getInstance()
-                    .build(ARouterConstants.ACTIVITY_TOPIC_LIST)
-                    .withString(ParamKey.KEY_TITLE, board.name)
-                    .withInt(ParamKey.KEY_FID, board.fid)
-                    .withInt(ParamKey.KEY_STID, board.stid)
-                    .navigation(context)
+                context?.showTopicList(board)
             }
         }
         mListView?.adapter = mListAdapter

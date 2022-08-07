@@ -3,12 +3,10 @@ package gov.anzong.androidnga.fragment
 import android.widget.AdapterView.OnItemClickListener
 import nosc.ui.view.RecyclerViewFlipper
 import android.widget.TextView
-import sp.phone.ui.adapter.BoardPagerAdapter
 import android.os.Bundle
 import sp.phone.rxjava.RxEvent
 import sp.phone.mvp.model.entity.Board
 import gov.anzong.androidnga.R
-import com.google.android.material.tabs.TabLayout
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.internal.NavigationMenuView
 import sp.phone.ui.adapter.FlipperUserAdapter
@@ -17,7 +15,6 @@ import android.content.DialogInterface
 import android.content.Intent
 import sp.phone.util.ActivityUtils
 import android.app.Activity
-import android.content.res.Configuration
 import android.preference.PreferenceManager
 import android.text.TextUtils
 import android.view.*
@@ -27,6 +24,23 @@ import android.widget.AdapterView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.OutlinedTextField
+import androidx.compose.material.Tab
+import androidx.compose.material.TabRow
+import androidx.compose.material.Text
+import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.tabs.TabLayoutMediator
 import nosc.utils.uxUtils.ToastUtils
@@ -38,6 +52,9 @@ import nosc.viewmodel.BoardCategoryViewModel
 import sp.phone.common.User
 import nosc.api.model.BoardModel
 import nosc.api.model.BoardModel.addBookmark
+import nosc.ui.NOSCTheme
+import nosc.ui.view.boardCategoryList
+import sp.phone.rxjava.RxBus
 import java.lang.NumberFormatException
 
 /**
@@ -49,8 +66,7 @@ class NavigationDrawerFragment : BaseRxFragment(),
     private var binding:FragmentNavigationDrawerBinding? = null
     private var mHeaderView: RecyclerViewFlipper<FlipperUserAdapter.UserViewHolder>? = null
     private var mReplyCountView: TextView? = null
-    private var mBoardPagerAdapter: BoardPagerAdapter? = null
-    private var tabLayoutMediator:TabLayoutMediator? = null
+    private var tabLayoutMediator:TabLayoutMediator? =   null
 
     private val viewModel:BoardCategoryViewModel by lazy{
         ViewModelProvider(this)[BoardCategoryViewModel::class.java]
@@ -62,20 +78,42 @@ class NavigationDrawerFragment : BaseRxFragment(),
         registerRxBus()
         setHasOptionsMenu(true)
         viewModel.boardCategoryList.observe(this){
-            mBoardPagerAdapter = BoardPagerAdapter(this, it)
             binding?.apply {
-                pager.adapter = mBoardPagerAdapter
-                tabLayoutMediator = TabLayoutMediator(tabs,pager){ tab,position ->
-                    tab.text = mBoardPagerAdapter?.getPageTitle(position)
-                    pager.setCurrentItem(tab.position,true)
+                container.setContent {
+                    NOSCTheme {
+                        var refresh by remember {
+                            mutableStateOf(false)
+                        }
+                        val onChange = { refresh = !refresh }
+                        key(refresh) {
+                            Column {
+                                LazyVerticalGrid(columns = GridCells.Adaptive(110.dp)){
+                                    it.forEach{ cat ->
+                                        boardCategoryList(
+                                            cat,
+                                            boardClickable = { b:Board ->
+                                                BoardModel.addRecentBoard(b)
+                                                RxBus.getInstance().post(RxEvent(RxEvent.EVENT_SHOW_TOPIC_LIST, b))
+                                                if(cat.isBookmarkCategory){
+                                                    onChange()
+                                                }
+                                            },
+                                            onListChanged = onChange,
+//                                            onScrollToThis = {currCatName = it}
+                                        )
+                                    }
+                                }
+                            }
+                        }
+
+
+                    }
+
                 }
                 tabLayoutMediator?.apply {
                     if(isAttached)
                         detach()
                     attach()
-                }
-                if(BoardModel.isBookMarkEmpty() && (mBoardPagerAdapter?.itemCount ?: 0) > 1){
-                    pager.currentItem = 1
                 }
             }
 
@@ -106,8 +144,6 @@ class NavigationDrawerFragment : BaseRxFragment(),
         binding?.apply {
             setupToolbar(toolbar)
             initDrawerLayout(view, toolbar)
-            tabs.tabMode = TabLayout.MODE_SCROLLABLE
-
             navView.apply{
                 setNavigationItemSelectedListener { item: MenuItem ->
                     onOptionsItemSelected(item)
@@ -192,8 +228,7 @@ class NavigationDrawerFragment : BaseRxFragment(),
                 name,
                 stid
             )
-        }
-            .show(childFragmentManager)
+        }.show(childFragmentManager)
     }
 
     fun addBoard(fidStr: String, name: String, stidStr: String): Boolean {
