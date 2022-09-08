@@ -30,6 +30,7 @@ import java.util.Objects;
 
 import gov.anzong.androidnga.R;
 import gov.anzong.androidnga.Utils;
+import gov.anzong.androidnga.activity.WebViewActivity;
 import nosc.api.constants.ApiConstants;
 import nosc.utils.uxUtils.ToastUtils;
 import gov.anzong.androidnga.core.data.HtmlData;
@@ -69,6 +70,12 @@ public class FunctionUtils {
         Intent intent = new Intent();
         intent.setAction("android.intent.action.VIEW");
         intent.setData(Uri.parse(url));
+        context.startActivity(intent);
+    }
+
+    public static void openUrlByWebView(Context context, String url) {
+        Intent intent = new Intent(context, WebViewActivity.class);
+        intent.putExtra("path",url);
         context.startActivity(intent);
     }
 

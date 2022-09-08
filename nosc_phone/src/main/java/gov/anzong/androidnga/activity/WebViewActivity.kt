@@ -5,6 +5,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.webkit.*
 import gov.anzong.androidnga.R
+import sp.phone.common.appConfig
 import sp.phone.view.webview.WebViewClientEx
 
 open class WebViewActivity : BaseActivity() {
@@ -17,10 +18,8 @@ open class WebViewActivity : BaseActivity() {
         val client: WebViewClient = WebViewClientEx(this)
         mWebView?.webViewClient = client
         title = intent.getStringExtra("title")
-        intent.getStringExtra("cookie")?.let{ cookieStr ->
-            CookieManager.getInstance().apply {
-                setCookie(path,cookieStr)
-            }
+        CookieManager.getInstance().apply {
+            setCookie(path, appConfig.cookie)
         }
         load()
     }
