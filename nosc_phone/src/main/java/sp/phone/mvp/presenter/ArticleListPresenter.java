@@ -2,7 +2,12 @@ package sp.phone.mvp.presenter;
 
 import android.os.Bundle;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+
 import gov.anzong.androidnga.R;
+import nosc.api.callbacks.OnSimpleHttpCallBack;
+import nosc.utils.ContextUtils;
 import nosc.utils.uxUtils.ToastUtils;
 import sp.phone.common.UserManager;
 import sp.phone.common.UserManagerImpl;
@@ -146,11 +151,23 @@ public class ArticleListPresenter extends BasePresenter<ArticleListFragment, Art
     }
 
     @Override
-    public void postSupportTask(int tid, int pid) {
+    public void postSupportTask(int tid, int pid, OnSimpleHttpCallBack<Integer> callBack) {
         if (mLikeTask == null) {
             mLikeTask = new LikeTask();
         }
-        mLikeTask.execute(tid, pid, LikeTask.SUPPORT, ToastUtils::success);
+        mLikeTask.execute(tid, pid, LikeTask.SUPPORT,
+                result -> {
+                    if(result.isEmpty()) {
+                        // 无返回数据，网络请求失败
+                        ContextUtils.getString(R.string.network_error);
+                    } else {
+                        JSONObject obj = JSON.parseObject(result).getJSONObject("data");
+                        // 显示操作提示信息
+                        ToastUtils.success(obj.getString("0"));
+                        // 点赞/取消点赞操作
+                        callBack.onResult(obj.getInteger("1"));
+                    }
+                });
     }
 
     @Override
