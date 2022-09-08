@@ -3,6 +3,7 @@ package gov.anzong.androidnga.fragment
 import android.os.Bundle
 import android.view.*
 import android.widget.PopupMenu
+import androidx.appcompat.widget.AppCompatTextView
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -184,7 +185,11 @@ class ArticleListFragment : BaseMvpFragment<ArticleListPresenter?>(),
         mArticleAdapter!!.setSupportListener { v: View ->
             val row = v.tag as ThreadRowInfo
             val tid = row.tid
-            mPresenter!!.postSupportTask(tid, row.pid)
+            mPresenter!!.postSupportTask(tid, row.pid) { supportNumChange ->
+                // 就地修改ThreadRow数据并刷新页面
+                row.score += supportNumChange
+                (v.parent as View).findViewById<AppCompatTextView>(R.id.tv_score).text = row.score.toString()
+            }
         }
         mArticleAdapter!!.setOpposeListener { v: View ->
             val row = v.tag as ThreadRowInfo
