@@ -8,7 +8,7 @@ import nosc.api.callbacks.OnHttpCallBack;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import nosc.api.retrofit.RetrofitHelper;
-import nosc.api.retrofit.RetrofitService;
+import nosc.api.retrofit.Api;
 import sp.phone.rxjava.BaseSubscriber;
 
 public class ReportTask {
@@ -50,11 +50,11 @@ public class ReportTask {
         }
     }
 
-    private RetrofitService mService;
+    private Api mService;
 
     public void pos(Map<String, String> queryMap, Map<String, String> fieldMap, OnHttpCallBack<String> callBack) {
         if (mService == null) {
-            mService = RetrofitHelper.getInstance().getService();
+            mService = RetrofitHelper.getInstance().getApi();
         }
         mService.post(queryMap, fieldMap)
                 .subscribeOn(Schedulers.io())

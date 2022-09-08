@@ -1,18 +1,13 @@
 package sp.phone.task;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-
 import java.util.HashMap;
 import java.util.Map;
 
-import gov.anzong.androidnga.R;
-import nosc.utils.ContextUtils;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import nosc.api.callbacks.OnSimpleHttpCallBack;
 import nosc.api.retrofit.RetrofitHelper;
-import nosc.api.retrofit.RetrofitService;
+import nosc.api.retrofit.Api;
 import sp.phone.rxjava.BaseSubscriber;
 
 /**
@@ -26,12 +21,12 @@ public class LikeTask {
 
     public static final int OPPOSE = -1;
 
-    private RetrofitService mService;
+    private Api mService;
 
     private Map<String, String> mParamMap;
 
     public LikeTask() {
-        mService = RetrofitHelper.getInstance().getService();
+        mService = RetrofitHelper.getInstance().getApi();
         mParamMap = new HashMap<>();
         mParamMap.put("__lib", "topic_recommend");
         mParamMap.put("__act", "add");

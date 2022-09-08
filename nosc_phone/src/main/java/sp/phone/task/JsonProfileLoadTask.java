@@ -22,7 +22,7 @@ import nosc.api.pojo.AdminForumsData;
 import nosc.api.bean.ProfileData;
 import nosc.api.bean.ReputationData;
 import nosc.api.retrofit.RetrofitHelper;
-import nosc.api.retrofit.RetrofitService;
+import nosc.api.retrofit.Api;
 import sp.phone.rxjava.BaseSubscriber;
 import sp.phone.util.ActivityUtils;
 import sp.phone.util.NLog;
@@ -36,7 +36,7 @@ public class JsonProfileLoadTask {
 
     private String mErrorMsg;
 
-    private RetrofitService mService = RetrofitHelper.getInstance().getService();
+    private Api mService = RetrofitHelper.getInstance().getApi();
 
     private Subscription mSubscription;
 

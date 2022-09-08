@@ -18,7 +18,7 @@ object SearchBoardTask {
     @JvmStatic
     fun execute(boardName: String, callBack: OnSimpleHttpCallBack<Board?>) {
         RetrofitHelper.getInstance()
-            .service["http://bbs.nga.cn/forum.php?&__output=8&key=" + StringUtils.encodeUrl(
+            .api["http://bbs.nga.cn/forum.php?&__output=8&key=" + StringUtils.encodeUrl(
             boardName,
             "gbk"
         )]

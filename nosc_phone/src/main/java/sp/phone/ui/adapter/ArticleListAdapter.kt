@@ -300,6 +300,8 @@ class ArticleListAdapter(
         notifyDataSetChanged()
     }
 
+    fun getData() = mData
+
     fun setMenuTogglerListener(menuTogglerListener: View.OnClickListener?) {
         mMenuTogglerListener = menuTogglerListener
     }

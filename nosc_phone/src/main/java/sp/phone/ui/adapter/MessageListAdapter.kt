@@ -10,7 +10,6 @@ import android.view.LayoutInflater
 import gov.anzong.androidnga.R
 import nosc.utils.uxUtils.ToastUtils
 import sp.phone.theme.ThemeManager
-import sp.phone.common.PhoneConfiguration
 import android.view.View
 import android.widget.TextView
 import nosc.utils.ContextUtils

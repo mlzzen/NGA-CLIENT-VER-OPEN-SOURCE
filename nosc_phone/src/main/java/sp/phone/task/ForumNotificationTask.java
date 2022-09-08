@@ -16,13 +16,13 @@ import sp.phone.mvp.model.convert.ForumNotificationFactory;
 import sp.phone.mvp.model.entity.NotificationInfo;
 import sp.phone.mvp.model.entity.RecentReplyInfo;
 import nosc.api.retrofit.RetrofitHelper;
-import nosc.api.retrofit.RetrofitService;
+import nosc.api.retrofit.Api;
 import sp.phone.rxjava.BaseSubscriber;
 import sp.phone.util.NLog;
 
 public class ForumNotificationTask {
 
-    private RetrofitService mService;
+    private Api mService;
 
     private LifecycleProvider<FragmentEvent> mLifecycleProvider;
 
@@ -30,7 +30,7 @@ public class ForumNotificationTask {
 
     public ForumNotificationTask(LifecycleProvider<FragmentEvent> lifecycleProvider) {
         mLifecycleProvider = lifecycleProvider;
-        mService = RetrofitHelper.getInstance().getService();
+        mService = RetrofitHelper.getInstance().getApi();
     }
 
 

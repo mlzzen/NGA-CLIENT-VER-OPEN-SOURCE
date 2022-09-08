@@ -9,7 +9,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import nosc.api.callbacks.OnHttpCallBack
 import nosc.api.retrofit.RetrofitHelper
-import nosc.api.retrofit.RetrofitService
+import nosc.api.retrofit.Api
 import org.apache.commons.io.FileUtils
 import sp.phone.mvp.model.convert.ErrorConvertFactory
 import sp.phone.mvp.model.convert.TopicConvertFactory
@@ -27,17 +27,12 @@ import java.net.URLEncoder
 import java.util.*
 
 class TopicListModel : BaseModel() {
-    private val mService: RetrofitService = RetrofitHelper.getInstance().getService(RetrofitService::class.java) as RetrofitService
-    private var mFieldMap: MutableMap<String, String>? = null
-    private fun initFieldMap() {
-        if (mFieldMap == null) {
-            mFieldMap = HashMap<String,String>().also{
-                it["__lib"] = "topic_favor"
-                it["__act"] = "topic_favor"
-                it["__output"] = "8"
-                it["action"] = "del"
-            }
-        }
+    private val mService: Api = RetrofitHelper.getInstance().api
+    private val mFieldMap: MutableMap<String, String> = HashMap<String,String>().also{
+        it["__lib"] = "topic_favor"
+        it["__act"] = "topic_favor"
+        it["__output"] = "8"
+        it["action"] = "del"
     }
 
     fun loadCache(callBack: OnHttpCallBack<TopicListInfo>) {
@@ -82,13 +77,12 @@ class TopicListModel : BaseModel() {
     }
 
     fun removeTopic(info: ThreadPageInfo, callBack: OnHttpCallBack<String>) {
-        initFieldMap()
-        mFieldMap!!["page"] = info.page.toString()
+        mFieldMap["page"] = info.page.toString()
         var tidArray = info.tid.toString()
         if (info.pid != 0) {
             tidArray = tidArray + "_" + info.pid
         }
-        mFieldMap!!["tidarray"] = tidArray
+        mFieldMap["tidarray"] = tidArray
         mService.post(mFieldMap)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())

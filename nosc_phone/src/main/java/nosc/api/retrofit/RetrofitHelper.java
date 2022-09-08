@@ -102,12 +102,8 @@ public class RetrofitHelper {
         return SingleTonHolder.sInstance;
     }
 
-    public Object getService(Class<?> service) {
-        return mRetrofit.create(service);
-    }
-
-    public RetrofitService getService() {
-        return mRetrofit.create(RetrofitService.class);
+    public Api getApi() {
+        return mRetrofit.create(Api.class);
     }
 
     private static class SingleTonHolder {

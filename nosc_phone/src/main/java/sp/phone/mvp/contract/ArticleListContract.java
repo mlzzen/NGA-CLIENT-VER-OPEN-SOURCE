@@ -2,6 +2,9 @@ package sp.phone.mvp.contract;
 
 import android.os.Bundle;
 
+import kotlin.Pair;
+import kotlinx.coroutines.flow.Flow;
+import nosc.api.ApiResult;
 import nosc.api.bean.ThreadData;
 import nosc.api.bean.ThreadRowInfo;
 import nosc.api.callbacks.OnSimpleHttpCallBack;
@@ -15,21 +18,6 @@ import nosc.api.callbacks.OnHttpCallBack;
  */
 
 public interface ArticleListContract {
-
-    interface Presenter {
-
-        void loadPage(ArticleListParam param);
-
-        void banThisSB(ThreadRowInfo row);
-
-        void postComment(ArticleListParam param, ThreadRowInfo row);
-
-        void postSupportTask(int tid, int pid, OnSimpleHttpCallBack<Integer> callBack);
-
-        void postOpposeTask(int tid, int pid);
-
-        void cachePage();
-    }
 
     interface View {
 
@@ -45,10 +33,9 @@ public interface ArticleListContract {
 
     interface Model {
 
-        void loadPage(ArticleListParam param, OnHttpCallBack<ThreadData> callBack);
+        Flow<ApiResult<ThreadData>> loadPage(ArticleListParam param);
 
         void cachePage(ArticleListParam param, String rawData);
 
-        void loadCachePage(ArticleListParam param, OnHttpCallBack<ThreadData> callBack);
     }
 }

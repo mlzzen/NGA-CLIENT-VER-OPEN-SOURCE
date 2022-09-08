@@ -1,37 +1,35 @@
 package sp.phone.mvp.model
 
 import android.text.TextUtils
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
+import nosc.api.ApiResult
+import nosc.api.ERR
+import nosc.api.OK
+import nosc.api.bean.ThreadData
+import nosc.api.retrofit.Api
+import nosc.api.retrofit.RetrofitHelper
+import nosc.utils.ContextUtils
+import nosc.utils.ThreadUtils
+import nosc.utils.uxUtils.ToastUtils
+import org.apache.commons.io.FileUtils
 import sp.phone.mvp.contract.ArticleListContract
-import nosc.api.retrofit.RetrofitService
+import sp.phone.mvp.model.convert.ArticleConvertFactory
+import sp.phone.mvp.model.convert.ErrorConvertFactory
 import sp.phone.param.ArticleListParam
 import sp.phone.util.ForumUtils
-import nosc.api.callbacks.OnHttpCallBack
-import nosc.api.bean.ThreadData
-import io.reactivex.schedulers.Schedulers
-import com.trello.rxlifecycle2.android.FragmentEvent
-import nosc.utils.ContextUtils
-import sp.phone.mvp.model.convert.ArticleConvertFactory
-import sp.phone.util.NLog
-import sp.phone.mvp.model.convert.ErrorConvertFactory
-import io.reactivex.android.schedulers.AndroidSchedulers
-import sp.phone.common.UserManagerImpl
-import nosc.utils.uxUtils.ToastUtils
-import nosc.utils.ThreadUtils
-import io.reactivex.Observable
-import io.reactivex.ObservableEmitter
-import nosc.api.retrofit.RetrofitHelper
-import org.apache.commons.io.FileUtils
-import sp.phone.rxjava.BaseSubscriber
 import java.io.File
 import java.io.IOException
-import java.lang.Exception
 
 /**
  * 加载帖子内容
  * Created by Justwen on 2017/7/10.
  */
-class ArticleListModel : BaseModel(), ArticleListContract.Model {
-    private val mService: RetrofitService = RetrofitHelper.getInstance().getService(RetrofitService::class.java) as RetrofitService
+class ArticleListModel: ArticleListContract.Model {
+    private val api: Api = RetrofitHelper.getInstance().api
     private fun getUrl(param: ArticleListParam): String {
         val page = param.page
         val tid = param.tid
@@ -51,30 +49,18 @@ class ArticleListModel : BaseModel(), ArticleListContract.Model {
         return url
     }
 
-    override fun loadPage(param: ArticleListParam, callBack: OnHttpCallBack<ThreadData>) {
-        val url = getUrl(param)
-        mService[url]
-            .subscribeOn(Schedulers.io())
-            .observeOn(Schedulers.newThread())
-            .compose(lifecycleProvider.bindUntilEvent(FragmentEvent.DETACH))
-            .map { s ->
-                val time = System.currentTimeMillis()
-                val data = ArticleConvertFactory.getArticleInfo(s)
-                NLog.e(TAG, "time = " + (System.currentTimeMillis() - time))
-                data ?: throw Exception(ErrorConvertFactory.getErrorMessage(s))
+    override fun loadPage(param: ArticleListParam):Flow<ApiResult<ThreadData>> {
+        return flow {
+            emit(api.request(getUrl(param)))
+        }.map { s ->
+            val data = ArticleConvertFactory.getArticleInfo(s)
+            if(data == null){
+                ERR(ErrorConvertFactory.getErrorMessage(s))
+            }else{
+                OK(data)
             }
-            .observeOn(AndroidSchedulers.mainThread())
-            .compose(lifecycleProvider.bindUntilEvent(FragmentEvent.DETACH))
-            .subscribe(object : BaseSubscriber<ThreadData?>() {
-                override fun onNext(threadData: ThreadData) {
-                    callBack.onSuccess(threadData)
-                    UserManagerImpl.getInstance().putAvatarUrl(threadData)
-                }
+        }.flowOn(Dispatchers.IO)
 
-                override fun onError(throwable: Throwable) {
-                    callBack.onError(ErrorConvertFactory.getErrorMessage(throwable))
-                }
-            })
     }
 
     override fun cachePage(param: ArticleListParam, rawData: String) {
@@ -97,33 +83,18 @@ class ArticleListModel : BaseModel(), ArticleListContract.Model {
         }
     }
 
-    override fun loadCachePage(param: ArticleListParam, callBack: OnHttpCallBack<ThreadData>) {
-        Observable.create { emitter: ObservableEmitter<ThreadData?> ->
+    fun loadCachePage(param: ArticleListParam):Flow<ApiResult<ThreadData>> {
+        return flow {
             val cachePath =
                 ContextUtils.getExternalDir("articleCache") + param.tid + "/" + param.page + ".json"
             val cacheFile = File(cachePath)
             val rawData = FileUtils.readFileToString(cacheFile)
             val threadData = ArticleConvertFactory.getArticleInfo(rawData)
             if (threadData != null) {
-                emitter.onNext(threadData)
+                emit(OK(threadData))
             } else {
-                emitter.onError(Exception())
+                emit(ERR("读取缓存失败！"))
             }
-            emitter.onComplete()
-        }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object : BaseSubscriber<ThreadData?>() {
-                override fun onNext(threadData: ThreadData) {
-                    callBack.onSuccess(threadData)
-                }
-
-                override fun onError(throwable: Throwable) {
-                    callBack.onError("读取缓存失败！")
-                }
-            })
+        }.flowOn(Dispatchers.IO)
     }
-
-    companion object {
-        private val TAG = ArticleListModel::class.java.simpleName
-    }
-
 }

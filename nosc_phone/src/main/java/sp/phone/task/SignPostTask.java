@@ -11,7 +11,7 @@ import nosc.api.callbacks.OnHttpCallBack;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import nosc.api.retrofit.RetrofitHelper;
-import nosc.api.retrofit.RetrofitService;
+import nosc.api.retrofit.Api;
 import sp.phone.param.SignPostParam;
 import sp.phone.rxjava.BaseSubscriber;
 
@@ -20,14 +20,14 @@ import sp.phone.rxjava.BaseSubscriber;
  */
 public class SignPostTask {
 
-    private final RetrofitService mService;
+    private final Api mService;
 
     private final Map<String, String> mParamMap = new HashMap<>();
 
     private Subscription mSubscription;
 
     public SignPostTask() {
-        mService = RetrofitHelper.getInstance().getService();
+        mService = RetrofitHelper.getInstance().getApi();
         mParamMap.put("__lib", "set_sign");
         mParamMap.put("__act", "set");
         mParamMap.put("raw", "3");

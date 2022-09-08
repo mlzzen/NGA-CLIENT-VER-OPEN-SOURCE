@@ -38,7 +38,7 @@ import okhttp3.ResponseBody;
 import nosc.api.callbacks.OnHttpCallBack;
 import nosc.api.bean.TopicPostBean;
 import nosc.api.retrofit.RetrofitHelper;
-import nosc.api.retrofit.RetrofitService;
+import nosc.api.retrofit.Api;
 import sp.phone.mvp.contract.TopicPostContract;
 import sp.phone.param.ParamKey;
 import sp.phone.param.PostParam;
@@ -60,12 +60,12 @@ public class TopicPostModel extends BaseModel implements TopicPostContract.Model
 
     private static final String BASE_URL_ATTACHMENT_SERVER = "https://img.nga.178.com/attach.php?";
 
-    private final RetrofitService mRetrofitService;
+    private final Api mApi;
 
     public TopicPostModel() {
         OkHttpClient.Builder builder = RetrofitHelper.getInstance().createOkHttpClientBuilder();
         builder.connectTimeout(5, TimeUnit.MINUTES);
-        mRetrofitService = RetrofitHelper.getInstance().createRetrofit(builder).create(RetrofitService.class);
+        mApi = RetrofitHelper.getInstance().createRetrofit(builder).create(Api.class);
     }
 
     @Override
@@ -90,7 +90,7 @@ public class TopicPostModel extends BaseModel implements TopicPostContract.Model
             builder.append("&stid=").append(postParam.getStid());
         }
 
-        mRetrofitService.post(builder.toString())
+        mApi.post(builder.toString())
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .map((String s) -> {
@@ -122,7 +122,7 @@ public class TopicPostModel extends BaseModel implements TopicPostContract.Model
         map.put("__act", "get");
         map.put(ParamKey.KEY_FID, String.valueOf(postParam.getPostFid()));
         map.put("__output", "8");
-        mRetrofitService.get(map)
+        mApi.get(map)
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .map(s -> {
@@ -205,7 +205,7 @@ public class TopicPostModel extends BaseModel implements TopicPostContract.Model
         if (getLifecycleProvider() == null) {
             return;
         }
-        mRetrofitService.uploadFile(BASE_URL_ATTACHMENT_SERVER, multipartBody)
+        mApi.uploadFile(BASE_URL_ATTACHMENT_SERVER, multipartBody)
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .compose(getLifecycleProvider().<ResponseBody>bindUntilEvent(FragmentEvent.DETACH))

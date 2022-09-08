@@ -26,16 +26,6 @@ public abstract class BasePresenter<T extends BaseMvpFragment, E extends BaseMod
         mBaseModel = onCreateModel();
     }
 
-    public BasePresenter(T baseView) {
-        mBaseModel = onCreateModel();
-        attachView(baseView);
-    }
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
-    public final void performCreate() {
-        onCreate();
-    }
-
     protected void onCreate() {
         if (mBaseModel == null) {
             mBaseModel = onCreateModel();
@@ -46,21 +36,6 @@ public abstract class BasePresenter<T extends BaseMvpFragment, E extends BaseMod
 
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-    public final void performDestroy() {
-        detachView();
-        onDestroy();
-    }
-
-    protected void onDestroy() {
-
-    }
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-    public final void performResume() {
-        onResume();
-    }
-
     protected void onResume() {
 
     }
@@ -69,13 +44,6 @@ public abstract class BasePresenter<T extends BaseMvpFragment, E extends BaseMod
         mBaseView = view;
         if (mBaseModel != null) {
             mBaseModel.setLifecycleProvider(view.getLifecycleProvider());
-        }
-    }
-
-    public void detachView() {
-        mBaseView = null;
-        if (mBaseModel != null) {
-            mBaseModel.detach();
         }
     }
 

@@ -9,7 +9,7 @@ import io.reactivex.schedulers.Schedulers;
 import sp.phone.mvp.model.entity.SubBoard;
 import nosc.api.callbacks.OnHttpCallBack;
 import nosc.api.retrofit.RetrofitHelper;
-import nosc.api.retrofit.RetrofitService;
+import nosc.api.retrofit.Api;
 import sp.phone.rxjava.BaseSubscriber;
 
 /**
@@ -18,14 +18,14 @@ import sp.phone.rxjava.BaseSubscriber;
 
 public class SubscribeSubBoardTask {
 
-    private RetrofitService mService;
+    private Api mService;
 
 
     private LifecycleProvider<FragmentEvent> mLifecycleProvider;
 
     public SubscribeSubBoardTask(LifecycleProvider<FragmentEvent> lifecycleProvider) {
         mLifecycleProvider = lifecycleProvider;
-        mService = (RetrofitService) RetrofitHelper.getInstance().getService(RetrofitService.class);
+        mService = RetrofitHelper.getInstance().getApi();
     }
 
     public void subscribe(SubBoard subBoard, final OnHttpCallBack<String> callBack) {

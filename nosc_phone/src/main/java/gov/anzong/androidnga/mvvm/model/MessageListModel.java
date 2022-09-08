@@ -12,7 +12,7 @@ import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import nosc.api.bean.MessageListInfo;
 import nosc.api.retrofit.RetrofitHelper;
-import nosc.api.retrofit.RetrofitService;
+import nosc.api.retrofit.Api;
 import sp.phone.mvp.model.convert.MessageConvertFactory;
 
 /**
@@ -21,7 +21,7 @@ import sp.phone.mvp.model.convert.MessageConvertFactory;
 
 public class MessageListModel {
 
-    private final RetrofitService mService;
+    private final Api mService;
 
     private final Map<String,String> mParamMap = new HashMap<>();
 
@@ -29,7 +29,7 @@ public class MessageListModel {
      *  http://bbs.nga.cn/nuke.php?__lib=message&__act=message&act=list&page=1&lite=js
      */
     public MessageListModel() {
-        mService = (RetrofitService) RetrofitHelper.getInstance().getService(RetrofitService.class);
+        mService = RetrofitHelper.getInstance().getApi();
         mParamMap.put("__lib","message");
         mParamMap.put("__act","message");
         mParamMap.put("act","list");

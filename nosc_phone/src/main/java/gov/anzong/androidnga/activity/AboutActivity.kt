@@ -109,28 +109,6 @@ class AboutActivity : MaterialAboutActivity() {
             }
             .icon(R.drawable.ic_github)
             .build())
-//        builder.addItem(MaterialAboutActionItem.Builder()
-//            .text("客户端吐槽QQ群,欢迎加入捡肥皂")
-//            .subText("1065310118")
-//            .setOnClickAction {
-//                FunctionUtils.copyToClipboard(
-//                    this@AboutActivity,
-//                    "1065310118"
-//                )
-//            }
-//            .icon(R.drawable.ic_qq)
-//            .build())
-//        builder.addItem(MaterialAboutActionItem.Builder()
-//            .text("客户端问题反馈群，请勿开车！")
-//            .subText("1077054628")
-//            .setOnClickAction {
-//                FunctionUtils.copyToClipboard(
-//                    this@AboutActivity,
-//                    "1077054628"
-//                )
-//            }
-//            .icon(R.drawable.ic_qq)
-//            .build())
         return builder.build()
     }
 

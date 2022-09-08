@@ -14,7 +14,7 @@ import nosc.api.callbacks.OnHttpCallBack;
 import sp.phone.mvp.contract.MessageDetailContract;
 import sp.phone.mvp.model.convert.MessageConvertFactory;
 import nosc.api.retrofit.RetrofitHelper;
-import nosc.api.retrofit.RetrofitService;
+import nosc.api.retrofit.Api;
 
 /**
  * Created by Justwen on 2017/10/11.
@@ -22,15 +22,15 @@ import nosc.api.retrofit.RetrofitService;
 
 public class MessageDetailModel extends BaseModel implements MessageDetailContract.IMessageModel {
 
-    private RetrofitService mService;
+    private Api mService;
 
-    private Map<String,String> mParamMap = new HashMap<>();
+    private final Map<String,String> mParamMap = new HashMap<>();
 
     /**
      *  http://bbs.nga.cn/nuke.php?__lib=message&__act=message&act=read&page=1&mid=1&lite=js
      */
     public MessageDetailModel() {
-        mService = (RetrofitService) RetrofitHelper.getInstance().getService(RetrofitService.class);
+        mService = RetrofitHelper.getInstance().getApi();
         mParamMap.put("__lib","message");
         mParamMap.put("__act","message");
         mParamMap.put("act","read");

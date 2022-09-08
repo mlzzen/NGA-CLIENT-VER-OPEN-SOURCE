@@ -6,7 +6,7 @@ import nosc.utils.uxUtils.ToastUtils;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import nosc.api.retrofit.RetrofitHelper;
-import nosc.api.retrofit.RetrofitService;
+import nosc.api.retrofit.Api;
 import sp.phone.rxjava.BaseSubscriber;
 import sp.phone.util.StringUtils;
 
@@ -15,7 +15,7 @@ public class BookmarkTask {
     private static final String url = Utils.getNGAHost() + "nuke.php?__lib=topic_favor&lite=js&noprefix&__act=topic_favor&action=add&tid=";
 
     public static void execute(int tid) {
-        RetrofitService service = RetrofitHelper.getInstance().getService();
+        Api service = RetrofitHelper.getInstance().getApi();
         service.post(url + tid)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -31,7 +31,7 @@ public class BookmarkTask {
     }
 
     public static void execute(String tid, String pid) {
-        RetrofitService service = RetrofitHelper.getInstance().getService();
+        Api service = RetrofitHelper.getInstance().getApi();
         String postUrl = url + tid + "&pid=" + pid;
         service.post(postUrl)
                 .subscribeOn(Schedulers.io())

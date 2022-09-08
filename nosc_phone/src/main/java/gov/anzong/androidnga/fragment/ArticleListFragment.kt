@@ -6,25 +6,33 @@ import android.widget.PopupMenu
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.compose.material.Button
 import androidx.compose.material.Text
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.alibaba.android.arouter.launcher.ARouter
 import gov.anzong.androidnga.R
 import gov.anzong.androidnga.activity.BaseActivity
 import gov.anzong.androidnga.arouter.ARouterConstants
-import nosc.utils.uxUtils.ToastUtils
 import gov.anzong.androidnga.databinding.FragmentArticleListBinding
 import gov.anzong.androidnga.fragment.dialog.BaseDialogFragment
 import gov.anzong.androidnga.fragment.dialog.PostCommentDialogFragment
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
+import nosc.api.ApiResult
+import nosc.api.ERR
+import nosc.api.OK
 import nosc.api.bean.ThreadData
 import nosc.api.bean.ThreadRowInfo
 import nosc.ui.view.EmptyView
 import nosc.ui.view.LoadingView
 import nosc.utils.toUrl
+import nosc.utils.uxUtils.ToastUtils
+import nosc.viewmodel.ArticleShareViewModel
 import sp.phone.common.UserManagerImpl
 import sp.phone.mvp.contract.ArticleListContract
+import sp.phone.mvp.model.ArticleListModel
 import sp.phone.mvp.presenter.ArticleListPresenter
-import nosc.viewmodel.ArticleShareViewModel
 import sp.phone.param.ArticleListParam
 import sp.phone.param.ParamKey
 import sp.phone.rxjava.RxEvent
@@ -39,7 +47,7 @@ import sp.phone.view.RecyclerViewEx
 /*
  * MD 帖子详情每一页
  */
-class ArticleListFragment : BaseMvpFragment<ArticleListPresenter?>(),
+class ArticleListFragment : BaseRxFragment(),
     ArticleListContract.View {
     private var binding: FragmentArticleListBinding? = null
 
@@ -50,7 +58,9 @@ class ArticleListFragment : BaseMvpFragment<ArticleListPresenter?>(),
 
     private val mSwipeRefreshLayout: SwipeRefreshLayout? get() = binding?.swipeRefresh
     private var mArticleAdapter: ArticleListAdapter? = null
-    private var mRequestParam: ArticleListParam? = null
+    private val mRequestParam: ArticleListParam by lazy {
+        (requireArguments().getParcelable(ParamKey.KEY_PARAM) as? ArticleListParam)!!
+    }
     private val mMenuItemClickListener: OnTopicMenuItemClickListener =
         object : OnTopicMenuItemClickListener {
             private var mThreadRowInfo: ThreadRowInfo? = null
@@ -59,9 +69,9 @@ class ArticleListFragment : BaseMvpFragment<ArticleListPresenter?>(),
             }
 
             override fun onMenuItemClick(item: MenuItem): Boolean {
-                if (mPresenter == null) {
-                    return false
-                }
+//                if (mPresenter == null) {
+//                    return false
+//                }
                 val row = mThreadRowInfo
                 val pidStr = row!!.pid.toString()
                 val tidStr = row.tid.toString()
@@ -85,10 +95,12 @@ class ArticleListFragment : BaseMvpFragment<ArticleListPresenter?>(),
                             )
                             .navigation(activity, ActivityUtils.REQUEST_CODE_LOGIN)
                     }
-                    R.id.menu_post_comment -> mPresenter?.postComment(mRequestParam, row)
+                    R.id.menu_post_comment -> mPresenter?.postComment(mRequestParam, row)?.apply {
+                        showPostCommentDialog(first,second)
+                    }
                     R.id.menu_report -> FunctionUtils.handleReport(
                         row,
-                        mRequestParam!!.tid,
+                        mRequestParam.tid,
                         parentFragmentManager
                     )
                     R.id.menu_signature -> if (row.isanonymous) {
@@ -138,7 +150,6 @@ class ArticleListFragment : BaseMvpFragment<ArticleListPresenter?>(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         NLog.d(TAG, "onCreate")
-        mRequestParam = requireArguments().getParcelable(ParamKey.KEY_PARAM)
         registerRxBus()
         initData()
         super.onCreate(savedInstanceState)
@@ -147,32 +158,31 @@ class ArticleListFragment : BaseMvpFragment<ArticleListPresenter?>(),
     private fun initData() {
         val viewModel = getActivityViewModelProvider()[ArticleShareViewModel::class.java]
         viewModel.refreshPage.observe(this) { page: Int ->
-            if (page == mRequestParam!!.page) {
-                loadPage()
+            if (page == mRequestParam.page) {
+                loadPageFrom(requestFlow)
             }
         }
         viewModel.cachePage.observe(this) { page: Int ->
-            if (page == mRequestParam!!.page) {
-                mPresenter!!.cachePage()
+            if (page == mRequestParam.page) {
+                ArticleListModel().cachePage(mRequestParam, mArticleAdapter?.getData()?.rawData!!)
             }
         }
     }
 
     override fun accept(rxEvent: RxEvent) {
-        if (rxEvent.what == RxEvent.EVENT_ARTICLE_GO_FLOOR && rxEvent.arg + 1 == mRequestParam!!.page && rxEvent.obj != null) {
+        if (rxEvent.what == RxEvent.EVENT_ARTICLE_GO_FLOOR && rxEvent.arg + 1 == mRequestParam.page && rxEvent.obj != null) {
             mListView!!.scrollToPosition((rxEvent.obj as Int))
         }
     }
 
-    override fun onCreatePresenter(): ArticleListPresenter {
-        return ArticleListPresenter(mRequestParam)
-    }
+    private var mPresenter:ArticleListPresenter? = ArticleListPresenter()
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         return FragmentArticleListBinding.inflate(layoutInflater, container, false).also {
             binding = it
         }.root
@@ -201,27 +211,51 @@ class ArticleListFragment : BaseMvpFragment<ArticleListPresenter?>(),
         mListView!!.adapter = mArticleAdapter
         mListView!!.setEmptyView(emptyView?.also {
             it.extraContent = {
-                Button(onClick = { FunctionUtils.openUrlByDefaultBrowser(activity, mRequestParam?.toUrl()) }) {
+                Button(onClick = { FunctionUtils.openUrlByDefaultBrowser(activity, mRequestParam.toUrl()) }) {
                     Text(text = "使用浏览器打开")
                 }
             }
         })
-        mSwipeRefreshLayout!!.setOnRefreshListener { loadPage() }
+        mSwipeRefreshLayout!!.setOnRefreshListener { loadPageFrom(requestFlow) }
+        if (mRequestParam.loadCache) {
+            loadPageFrom(cacheFlow)
+        } else {
+            loadPageFrom(requestFlow)
+        }
         super.onViewCreated(view, savedInstanceState)
     }
 
-    fun loadPage() {
-        mPresenter!!.loadPage(mRequestParam)
+    private val requestFlow by lazy{
+        ArticleListModel().loadPage(mRequestParam)
+    }
+    private val cacheFlow by lazy{
+        ArticleListModel().loadCachePage(mRequestParam)
+    }
+
+    private fun loadPageFrom(flow:Flow<ApiResult<ThreadData>>) {
+        lifecycleScope.launch {
+            setRefreshing(true)
+            flow.collectLatest {
+                when(it){
+                    is OK ->{
+                        setData(it.result)
+                        setRefreshing(false)
+                        hideLoadingView()
+                    }
+                    is ERR ->{
+                        onError(it.msg)
+                    }
+                }
+            }
+        }
     }
 
     override fun setData(data: ThreadData?) {
-        val viewModel = getActivityViewModelProvider().get(
-            ArticleShareViewModel::class.java
-        )
+        val viewModel = getActivityViewModelProvider()[ArticleShareViewModel::class.java]
         if (activity != null && data != null) {
             viewModel.setReplyCount(data.__ROWS)
         }
-        if (data != null && activity != null && mRequestParam!!.title == null) {
+        if (data != null && activity != null && mRequestParam.title == null) {
             requireActivity().title = data.threadInfo.subject
         }
         if (data != null && data.rowList != null && !data.rowList.isEmpty()) {
@@ -230,7 +264,7 @@ class ArticleListFragment : BaseMvpFragment<ArticleListPresenter?>(),
                 viewModel.setTopicOwner(rowInfo.author)
             }
         }
-        if (mRequestParam!!.authorId == 0 && mRequestParam!!.searchPost == 0) {
+        if (mRequestParam.authorId == 0 && mRequestParam.searchPost == 0) {
             mArticleAdapter!!.setTopicOwner(viewModel.topicOwner.value)
         }
         mArticleAdapter!!.setData(data)
