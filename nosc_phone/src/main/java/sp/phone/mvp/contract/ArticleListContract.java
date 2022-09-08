@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import nosc.api.bean.ThreadData;
 import nosc.api.bean.ThreadRowInfo;
+import nosc.api.callbacks.OnSimpleHttpCallBack;
 import sp.phone.param.ArticleListParam;
 import nosc.api.callbacks.OnHttpCallBack;
 
@@ -23,7 +24,7 @@ public interface ArticleListContract {
 
         void postComment(ArticleListParam param, ThreadRowInfo row);
 
-        void postSupportTask(int tid, int pid);
+        void postSupportTask(int tid, int pid, OnSimpleHttpCallBack<Integer> callBack);
 
         void postOpposeTask(int tid, int pid);
 

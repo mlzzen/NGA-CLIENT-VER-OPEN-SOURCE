@@ -52,10 +52,11 @@ public class LikeTask {
                     @Override
                     public void onNext(String s) {
                         try {
-                            JSONObject obj = JSON.parseObject(s).getJSONObject("data");
-                            callBack.onResult(obj.getString("0"));
+                            // 请求成功
+                            callBack.onResult(s);
                         } catch (Exception e) {
-                            callBack.onResult(ContextUtils.getString(R.string.network_error));
+                            // 失败返回空
+                            callBack.onResult("");
                         }
                     }
                 });
