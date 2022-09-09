@@ -17,10 +17,6 @@ public abstract class BaseModel  {
 
     public BaseModel() { }
 
-    public void detach() {
-        mProvider = null;
-    }
-
     public void setLifecycleProvider(LifecycleProvider<FragmentEvent> provider) {
         mProvider = provider;
     }

@@ -8,7 +8,6 @@ import nosc.api.callbacks.OnSimpleHttpCallBack
 import nosc.utils.ContextUtils
 import nosc.utils.uxUtils.ToastUtils
 import sp.phone.common.UserManagerImpl
-import sp.phone.mvp.contract.ArticleListContract
 import sp.phone.param.ArticleListParam
 import sp.phone.task.LikeTask
 import sp.phone.util.FunctionUtils
