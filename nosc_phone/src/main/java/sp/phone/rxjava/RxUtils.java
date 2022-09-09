@@ -21,10 +21,5 @@ public class RxUtils {
     public static void post(Object obj) {
         RxBus.getInstance().post(obj);
     }
-
-    public static void postDelay(int delay, BaseSubscriber<Long> subscriber) {
-        Observable.timer(delay, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(subscriber);
-    }
 }
+

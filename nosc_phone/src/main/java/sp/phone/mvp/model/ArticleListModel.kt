@@ -2,10 +2,7 @@ package sp.phone.mvp.model
 
 import android.text.TextUtils
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.*
 import nosc.api.ApiResult
 import nosc.api.ERR
 import nosc.api.OK
@@ -59,6 +56,8 @@ class ArticleListModel: ArticleListContract.Model {
             }else{
                 OK(data)
             }
+        }.catch { e ->
+            emit(ERR(e.localizedMessage ?: ""))
         }.flowOn(Dispatchers.IO)
 
     }
@@ -95,6 +94,8 @@ class ArticleListModel: ArticleListContract.Model {
             } else {
                 emit(ERR("读取缓存失败！"))
             }
+        }.catch { e ->
+            emit(ERR(e.localizedMessage ?: ""))
         }.flowOn(Dispatchers.IO)
     }
 }

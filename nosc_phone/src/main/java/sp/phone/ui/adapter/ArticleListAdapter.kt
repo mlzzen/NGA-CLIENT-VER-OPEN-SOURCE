@@ -9,8 +9,6 @@ import nosc.api.bean.ThreadRowInfo
 import nosc.utils.uxUtils.ToastUtils
 import android.content.Intent
 import sp.phone.common.UserManagerImpl
-import sp.phone.common.PhoneConfiguration
-import io.reactivex.ObservableOnSubscribe
 import io.reactivex.ObservableEmitter
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -28,12 +26,15 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import sp.phone.rxjava.RxUtils
 import androidx.cardview.widget.CardView
+import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.FragmentManager
 import gov.anzong.androidnga.fragment.dialog.AvatarDialogFragment
 import gov.anzong.androidnga.fragment.dialog.BaseDialogFragment
 import nosc.utils.ContextUtils
 import nosc.utils.DeviceUtils
 import io.reactivex.Observable
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import nosc.utils.uxUtils.createLocalWebView
 import sp.phone.common.appConfig
 import sp.phone.rxjava.BaseSubscriber
@@ -214,10 +215,10 @@ class ArticleListAdapter(
 
         override fun onClick(view: View) {
             val row = view.tag as ThreadRowInfo
-            Observable.create(ObservableOnSubscribe { emitter: ObservableEmitter<Intent?> ->
+            Observable.create { emitter: ObservableEmitter<Intent?> ->
                 emitter.onNext(getReplyIntent(row))
                 emitter.onComplete()
-            }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+            }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(object : BaseSubscriber<Intent?>() {
                     override fun onNext(intent: Intent) {
                         try {
@@ -264,13 +265,17 @@ class ArticleListAdapter(
     class ArticleViewHolder
         (itemView: View) : RecyclerView.ViewHolder(itemView) {
         val nickNameTV: TextView? = itemView.findViewById(R.id.tv_nickName)
+        val floorTv: TextView? = itemView.findViewById(R.id.tv_floor)
+        val postTimeTv: TextView? = itemView.findViewById(R.id.tv_post_time)
+        val avatarPanel: FrameLayout? = itemView.findViewById(R.id.fl_avatar)
+        val detailTv: TextView? = itemView.findViewById(R.id.tv_detail)
+        val clientIv: ImageView? = itemView.findViewById(R.id.iv_client)
+
         var contentTV: View? = null
 
         val contentContainer: FrameLayout? = itemView.findViewById(R.id.wv_container)
 
-        val floorTv: TextView? = itemView.findViewById(R.id.tv_floor)
 
-        val postTimeTv: TextView? = itemView.findViewById(R.id.tv_post_time)
 
         val replyBtn: ImageView? = itemView.findViewById(R.id.iv_reply)
 
@@ -280,15 +285,12 @@ class ArticleListAdapter(
 
         val avatarIv: ImageView? = itemView.findViewById(R.id.iv_avatar)
 
-        val clientIv: ImageView? = itemView.findViewById(R.id.iv_client)
 
         val scoreTv: TextView? = itemView.findViewById(R.id.tv_score)
 
         val menuIv: ImageView? = itemView.findViewById(R.id.iv_more)
 
-        val avatarPanel: FrameLayout? = itemView.findViewById(R.id.fl_avatar)
 
-        val detailTv: TextView? = itemView.findViewById(R.id.tv_detail)
     }
 
     fun setTopicOwner(topicOwner: String?) {
@@ -361,9 +363,11 @@ class ArticleListAdapter(
         )
     }
 
+    private val loadWebScope  = CoroutineScope(Dispatchers.Default)
     private fun onBindContentView(holder: ArticleViewHolder, row: ThreadRowInfo, position: Int) {
         val html = row.formattedHtmlData
         if (html != null) {
+
             val localWebView = contentViews[position] ?: mContext.createLocalWebView().also {
                 it.webViewClientEx.setImgUrls(row.imageUrls)
                 it.loadDataWithBaseURL(null, html, "text/html", "utf-8", null)

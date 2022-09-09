@@ -7,7 +7,6 @@ import sp.phone.param.ArticleListParam
 import com.getbase.floatingactionbutton.FloatingActionsMenu
 import android.os.Bundle
 import sp.phone.param.ParamKey
-import nosc.viewmodel.ArticleShareViewModel
 import androidx.viewpager.widget.ViewPager.SimpleOnPageChangeListener
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.trello.rxlifecycle2.android.FragmentEvent
@@ -30,6 +29,7 @@ import gov.anzong.androidnga.Utils
 import nosc.ui.view.PageSelector
 import nosc.utils.startArticleActivity
 import nosc.utils.uxUtils.ToastUtils
+import nosc.viewmodel.ArticleShareViewModel
 import sp.phone.common.appConfig
 import sp.phone.rxjava.RxBus
 import sp.phone.rxjava.RxEvent
@@ -50,17 +50,17 @@ class ArticleTabFragment : BaseRxFragment() {
     var mTabLayout: PageSelector? = null
 
     var mFam: FloatingActionsMenu? = null
-    private var mReplyCount = 0
+    private val viewModel: ArticleShareViewModel by lazy {
+        getActivityViewModelProvider()[ArticleShareViewModel::class.java]
+    }
     private var mBehavior: ScrollAwareFamBehavior? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         mRequestParam = requireArguments().getParcelable(ParamKey.KEY_PARAM)
 
-        val viewModel = activityViewModel
         viewModel.replyCount.observe(this) { replyCount: Int ->
-            mReplyCount = replyCount
-            val count = ceil(mReplyCount / 20.0).toInt()
+            val count = ceil(replyCount / 20.0).toInt()
             if (count != mPagerAdapter!!.count) {
                 mPagerAdapter!!.count = count
             }
@@ -142,7 +142,7 @@ class ArticleTabFragment : BaseRxFragment() {
     }
 
     private fun refresh() {
-        activityViewModel.setRefreshPage(mViewPager!!.currentItem + 1)
+        viewModel.setRefreshPage(mViewPager!!.currentItem + 1)
         mRequestParam!!.page = mViewPager!!.currentItem + 1
         mFam!!.collapse()
     }
@@ -158,15 +158,14 @@ class ArticleTabFragment : BaseRxFragment() {
             R.id.menu_return -> requireActivity().startArticleActivity("${mRequestParam?.tid}",mRequestParam?.title)
             R.id.menu_download -> {
                 mRequestParam!!.page = mViewPager!!.currentItem + 1
-                activityViewModel.setCachePage(mRequestParam!!.page)
+                viewModel.setCachePage(mRequestParam!!.page)
             }
             else -> return super.onOptionsItemSelected(item)
         }
         return true
     }
 
-    private val activityViewModel: ArticleShareViewModel
-        get() = getActivityViewModelProvider()[ArticleShareViewModel::class.java]
+
     val url: String
         get() {
             val builder = StringBuilder()
@@ -234,7 +233,7 @@ class ArticleTabFragment : BaseRxFragment() {
     private fun createGotoDialog() {
         val args = Bundle()
         args.putInt("page", mPagerAdapter!!.count)
-        args.putInt("floor", mReplyCount)
+        args.putInt("floor", viewModel.replyCount.value ?: 0)
         args.putInt("currPage", mViewPager!!.currentItem)
         val df: DialogFragment = GotoDialogFragment()
         df.arguments = args
@@ -249,7 +248,7 @@ class ArticleTabFragment : BaseRxFragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == ActivityUtils.REQUEST_CODE_TOPIC_POST && resultCode == Activity.RESULT_OK) {
-            activityViewModel.setRefreshPage(mViewPager!!.currentItem + 1)
+            viewModel.setRefreshPage(mViewPager!!.currentItem + 1)
         } else if (requestCode == ActivityUtils.REQUEST_CODE_JUMP_PAGE) {
             if (data!!.hasExtra("page")) {
                 mViewPager!!.currentItem = data.getIntExtra("page", 0)

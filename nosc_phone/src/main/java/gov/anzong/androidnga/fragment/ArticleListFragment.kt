@@ -8,6 +8,7 @@ import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.alibaba.android.arouter.launcher.ARouter
 import gov.anzong.androidnga.R
@@ -32,11 +33,11 @@ import nosc.viewmodel.ArticleShareViewModel
 import sp.phone.common.UserManagerImpl
 import sp.phone.mvp.contract.ArticleListContract
 import sp.phone.mvp.model.ArticleListModel
-import sp.phone.mvp.presenter.ArticleListPresenter
 import sp.phone.param.ArticleListParam
 import sp.phone.param.ParamKey
 import sp.phone.rxjava.RxEvent
 import sp.phone.task.BookmarkTask
+import sp.phone.task.LikeTask
 import sp.phone.ui.adapter.ArticleListAdapter
 import sp.phone.util.ActivityUtils
 import sp.phone.util.FunctionUtils
@@ -44,14 +45,13 @@ import sp.phone.util.NLog
 import sp.phone.util.StringUtils
 import sp.phone.view.RecyclerViewEx
 
-/*
+/**
  * MD 帖子详情每一页
  */
-class ArticleListFragment : BaseRxFragment(),
-    ArticleListContract.View {
+class ArticleListFragment : BaseRxFragment(), ArticleListContract.View {
     private var binding: FragmentArticleListBinding? = null
 
-    val mListView: RecyclerViewEx? get() = binding?.list
+    val mListView: RecyclerView? get() = binding?.list
 
     private val loadingView: LoadingView? get() = binding?.loadingView
     private val emptyView:EmptyView? get() = binding?.emptyView
@@ -61,6 +61,9 @@ class ArticleListFragment : BaseRxFragment(),
     private val mRequestParam: ArticleListParam by lazy {
         (requireArguments().getParcelable(ParamKey.KEY_PARAM) as? ArticleListParam)!!
     }
+    private val viewModel by lazy {
+        getActivityViewModelProvider()[ArticleShareViewModel::class.java]
+    }
     private val mMenuItemClickListener: OnTopicMenuItemClickListener =
         object : OnTopicMenuItemClickListener {
             private var mThreadRowInfo: ThreadRowInfo? = null
@@ -69,9 +72,6 @@ class ArticleListFragment : BaseRxFragment(),
             }
 
             override fun onMenuItemClick(item: MenuItem): Boolean {
-//                if (mPresenter == null) {
-//                    return false
-//                }
                 val row = mThreadRowInfo
                 val pidStr = row!!.pid.toString()
                 val tidStr = row.tid.toString()
@@ -95,7 +95,7 @@ class ArticleListFragment : BaseRxFragment(),
                             )
                             .navigation(activity, ActivityUtils.REQUEST_CODE_LOGIN)
                     }
-                    R.id.menu_post_comment -> mPresenter?.postComment(mRequestParam, row)?.apply {
+                    R.id.menu_post_comment -> viewModel.postComment(mRequestParam, row).apply {
                         showPostCommentDialog(first,second)
                     }
                     R.id.menu_report -> FunctionUtils.handleReport(
@@ -108,7 +108,7 @@ class ArticleListFragment : BaseRxFragment(),
                     } else {
                         FunctionUtils.createSignatureDialog(row, activity)
                     }
-                    R.id.menu_ban_this_one -> mPresenter?.banThisSB(row)
+                    R.id.menu_ban_this_one -> viewModel.banThisSB(row)
                     R.id.menu_show_this_person_only -> ARouter.getInstance()
                         .build(ARouterConstants.ACTIVITY_TOPIC_CONTENT)
                         .withString("tab", "1")
@@ -156,7 +156,6 @@ class ArticleListFragment : BaseRxFragment(),
     }
 
     private fun initData() {
-        val viewModel = getActivityViewModelProvider()[ArticleShareViewModel::class.java]
         viewModel.refreshPage.observe(this) { page: Int ->
             if (page == mRequestParam.page) {
                 loadPageFrom(requestFlow)
@@ -175,9 +174,6 @@ class ArticleListFragment : BaseRxFragment(),
         }
     }
 
-    private var mPresenter:ArticleListPresenter? = ArticleListPresenter()
-
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -195,7 +191,7 @@ class ArticleListFragment : BaseRxFragment(),
         mArticleAdapter!!.setSupportListener { v: View ->
             val row = v.tag as ThreadRowInfo
             val tid = row.tid
-            mPresenter!!.postSupportTask(tid, row.pid) { supportNumChange ->
+            viewModel.postLikeTask(tid, row.pid,LikeTask.SUPPORT) { supportNumChange ->
                 // 就地修改ThreadRow数据并刷新页面
                 row.score += supportNumChange
                 (v.parent as View).findViewById<AppCompatTextView>(R.id.tv_score).text = row.score.toString()
@@ -204,18 +200,21 @@ class ArticleListFragment : BaseRxFragment(),
         mArticleAdapter!!.setOpposeListener { v: View ->
             val row = v.tag as ThreadRowInfo
             val tid = row.tid
-            mPresenter!!.postOpposeTask(tid, row.pid)
+            viewModel.postLikeTask(tid, row.pid,LikeTask.OPPOSE){ supportNumChange ->
+                // 就地修改ThreadRow数据并刷新页面
+                row.score += supportNumChange
+                (v.parent as View).findViewById<AppCompatTextView>(R.id.tv_score).text = row.score.toString()
+            }
         }
         mListView!!.layoutManager = LinearLayoutManager(context)
         mListView!!.setItemViewCacheSize(20)
         mListView!!.adapter = mArticleAdapter
-        mListView!!.setEmptyView(emptyView?.also {
-            it.extraContent = {
-                Button(onClick = { FunctionUtils.openUrlByDefaultBrowser(activity, mRequestParam.toUrl()) }) {
-                    Text(text = "使用浏览器打开")
-                }
+        emptyView?.extraContent = {
+            Button(onClick = { FunctionUtils.openUrlByDefaultBrowser(activity, mRequestParam.toUrl()) }) {
+                Text(text = "使用浏览器打开")
             }
-        })
+        }
+
         mSwipeRefreshLayout!!.setOnRefreshListener { loadPageFrom(requestFlow) }
         if (mRequestParam.loadCache) {
             loadPageFrom(cacheFlow)
@@ -238,6 +237,7 @@ class ArticleListFragment : BaseRxFragment(),
             flow.collectLatest {
                 when(it){
                     is OK ->{
+                        emptyView?.visibility = View.GONE
                         setData(it.result)
                         setRefreshing(false)
                         hideLoadingView()
@@ -251,7 +251,6 @@ class ArticleListFragment : BaseRxFragment(),
     }
 
     override fun setData(data: ThreadData?) {
-        val viewModel = getActivityViewModelProvider()[ArticleShareViewModel::class.java]
         if (activity != null && data != null) {
             viewModel.setReplyCount(data.__ROWS)
         }
@@ -274,7 +273,7 @@ class ArticleListFragment : BaseRxFragment(),
         hideLoadingView()
         setRefreshing(false)
         emptyView?.text = text
-        //showToast(text)
+        emptyView?.visibility = View.VISIBLE
     }
 
 

@@ -5,6 +5,9 @@ import java.util.Map;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import nosc.api.ApiResult;
+import nosc.api.ERR;
+import nosc.api.OK;
 import nosc.api.callbacks.OnSimpleHttpCallBack;
 import nosc.api.retrofit.RetrofitHelper;
 import nosc.api.retrofit.Api;
@@ -35,7 +38,7 @@ public class LikeTask {
         mParamMap.put("__output", "8");
     }
 
-    public void execute(int tid, int pid, int like, OnSimpleHttpCallBack<String> callBack) {
+    public void execute(int tid, int pid, int like, OnSimpleHttpCallBack<ApiResult<String>> callBack) {
         Map<String, String> map = new HashMap<>(mParamMap);
         map.put("value", String.valueOf(like));
         map.put("tid", String.valueOf(tid));
@@ -46,13 +49,12 @@ public class LikeTask {
                 .subscribe(new BaseSubscriber<String>() {
                     @Override
                     public void onNext(String s) {
-                        try {
-                            // 请求成功
-                            callBack.onResult(s);
-                        } catch (Exception e) {
-                            // 失败返回空
-                            callBack.onResult("");
-                        }
+                        callBack.onResult(new OK<>(s));
+                    }
+
+                    @Override
+                    public void onError(Throwable throwable) {
+                        callBack.onResult(new ERR<>(throwable.getMessage()+""));
                     }
                 });
 
