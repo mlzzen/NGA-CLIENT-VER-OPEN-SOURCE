@@ -8,13 +8,21 @@
     <color name="web_quote_background_color">#FF000000</color>
 
     <color name="window_background">#FF202020</color>
-    <color name="background_color">@color/night_bg_color</color>
+    <color name="background_color">@color/window_background</color>
     <color name="background_color2">@color/night_bg_color</color>
     <color name="foreground_color">#FF999999</color>
 
-    <color name="colorAccentBrown">#FF128F80</color>
-    <color name="colorPrimaryBrown">#FF1F2021</color>
-    <color name="colorPrimaryDarkBrown">#FF1F2021</color>
+    <color name="colorAccentBrown">#FF692814</color>
+    <color name="colorPrimaryBrown">#FF692814</color>
+    <color name="colorPrimaryDarkBrown">#FF692814</color>
+
+    <color name="colorAccentGreen">#FF128F80</color>
+    <color name="colorPrimaryGreen">#FF128F80</color>
+    <color name="colorPrimaryDarkGreen">#FF128F80</color>
+
+    <color name="colorAccentBlack">#FF666666</color>
+    <color name="colorPrimaryBlack">#FF666666</color>
+    <color name="colorPrimaryDarkBlack">@color/background_color</color>
 
     <color name="material_window_background">#FF080C10</color>
     <color name="material_card_background">#FF424242</color>

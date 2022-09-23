@@ -27,18 +27,21 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     private SwipeBackHelper mSwipeBackHelper;
 
+    private int themeVersionForThisActivity = 0;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         updateThemeUi();
+        ThemeManager.getInstance().initializeWebTheme(this);
+        ThemeUtilsKt.applyNavBarColor(this);
+        themeVersionForThisActivity = ThemeManager.getInstance().sessionThemeVersion;
         setSwipeBackEnable(getSharedPreferences(PreferenceKey.PREFERENCE_SETTINGS, Context.MODE_PRIVATE).getBoolean(PreferenceKey.KEY_SWIPE_BACK, false));
 
         super.onCreate(savedInstanceState);
-        ThemeManager.getInstance().initializeWebTheme(this);
 
         if (mSwipeBackHelper != null) {
             mSwipeBackHelper.onCreate(this);
         }
-        ThemeUtilsKt.applyNavBarColor(this);
     }
 
     protected void setSwipeBackEnable(boolean enable) {
@@ -118,6 +121,9 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         NotificationController.getInstance().checkNotificationDelay();
+        if(themeVersionForThisActivity != ThemeManager.getInstance().sessionThemeVersion){
+            recreate();
+        }
         super.onResume();
     }
 }

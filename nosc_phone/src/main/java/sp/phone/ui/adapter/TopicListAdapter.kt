@@ -23,14 +23,13 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import sp.phone.ui.adapter.TopicListAdapter.TopicViewHolder
-import sp.phone.common.PhoneConfiguration
 import sp.phone.rxjava.RxUtils
 import sp.phone.theme.ThemeManager
 import sp.phone.param.TopicTitleHelper
 import androidx.recyclerview.widget.RecyclerView
 import gov.anzong.androidnga.R
 import nosc.ui.NOSCTheme
-import nosc.utils.dateStringOf
+import nosc.utils.forumDateStringOf
 import sp.phone.common.appConfig
 import sp.phone.mvp.model.entity.ThreadPageInfo
 
@@ -146,11 +145,11 @@ class TopicListAdapter(context: Context) :
                             Modifier
                                 .fillMaxWidth()) {
                             Row(Modifier.wrapContentWidth()) {
-                                Text(text = dateStringOf(entry.postDate), fontSize = 12.sp, color = textColor)
+                                Text(text = forumDateStringOf(entry.postDate), fontSize = 12.sp, color = textColor)
                             }
                             Spacer(modifier = Modifier.weight(1f))
                             Row(Modifier.wrapContentWidth()) {
-                                Text(text = dateStringOf(entry.lastPost), fontSize = 12.sp, color = textColor)
+                                Text(text = forumDateStringOf(entry.lastPost), fontSize = 12.sp, color = textColor)
                             }
                         }
                     }

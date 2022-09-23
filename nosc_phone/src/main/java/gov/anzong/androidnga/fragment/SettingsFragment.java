@@ -54,7 +54,7 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
 
     private void configPreference() {
         findPreference(PreferenceKey.NIGHT_MODE).setEnabled(!ThemeManager.getInstance().isNightModeFollowSystem());
-        findPreference(PreferenceKey.MATERIAL_THEME).setEnabled(!ThemeManager.getInstance().isNightMode());
+        findPreference(PreferenceKey.MATERIAL_THEME);
 
         findPreference(PreferenceKey.KEY_CLEAR_CACHE).setOnPreferenceClickListener(preference -> {
             showClearCacheDialog();
@@ -77,7 +77,6 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
             // 清除之前的使用过的awp缓存数据
             try {
                 FileUtils.deleteDirectory(ContextUtils.getContext().getDir("awp", Context.MODE_PRIVATE));
-                FileUtils.deleteDirectory(ContextUtils.getContext().getDir("sogou_webview", Context.MODE_PRIVATE));
             } catch (IOException e) {
                 e.printStackTrace();
             }

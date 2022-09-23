@@ -16,12 +16,8 @@ import sp.phone.util.NLog
 
 fun Activity.applyNavBarColor(){
     try {
-        if (ThemeManager.getInstance().isNightMode) {
-            window.navigationBarColor = ContextUtils.getColor(R.color.background_color)
-        } else {
-            // Set Transparent as the default color to match the theme
-            window.navigationBarColor = Color.TRANSPARENT
-        }
+        window.navigationBarColor = Color.TRANSPARENT
+
     } catch (e: Exception) {
         NLog.e("set navigation bar color exception occur: $e")
     }
@@ -41,4 +37,8 @@ fun Context.accentColor():Int{
 
 fun Context.backgroundColor():Int{
     return ContextCompat.getColor(this, R.color.background_color)
+}
+
+fun Context.backgroundColor2():Int{
+    return ContextCompat.getColor(this, R.color.background_color2)
 }

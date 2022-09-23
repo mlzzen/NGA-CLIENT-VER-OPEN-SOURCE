@@ -1,5 +1,6 @@
 package nosc.ui.view
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -25,61 +26,6 @@ import sp.phone.mvp.model.entity.BoardCategory
  * @author Yricky
  * @date 2022/8/7
  */
-@OptIn(ExperimentalFoundationApi::class)
-fun LazyGridScope.boardCategoryList(
-    cat:BoardCategory,
-    boardClickable:(Board)->Unit = {},
-    onListChanged:()->Unit = {},
-    onScrollToThis:(String)->Unit = {}
-){
-    item {
-        LaunchedEffect(cat){
-            onScrollToThis(cat.name)
-        }
-    }
-    cat.subCategoryList.forEach { sCat ->
-        item(
-            key = "c/${sCat.name}",
-            span = { GridItemSpan(maxLineSpan) },
-            contentType = 1
-        ){
-            Row(
-                Modifier.padding(8.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ){
-                Image(
-                    painter = painterResource(id = R.drawable.default_board_icon),
-                    contentDescription = "",
-                    Modifier.size(24.dp)
-                )
-                Text(text = sCat.name)
-            }
-        }
-        items(
-            sCat.boardList,
-            key = { "c/${sCat.name}/${it.name}" },
-            span = { GridItemSpan(1) },
-            contentType = { 0 }
-        ){ b->
-            val context = LocalContext.current
-            BoardItemContent(
-                Modifier
-                    .padding(8.dp)
-                    .fillMaxWidth()
-                    .combinedClickable(
-                        onClick = { boardClickable(b) },
-                        onLongClick = {
-                            if (cat.isBookmarkCategory) {
-                                context.showConfirmDialog("确定要删除吗？") {
-                                    BoardModel.removeBookmark(b.fid, b.stid)
-                                    onListChanged()
-                                }
-                            }
-                        }
-                    ), board = b)
-        }
-    }
-}
 
 @Composable
 fun BoardItemContent(modifier: Modifier = Modifier,board: Board){

@@ -1,61 +1,64 @@
 package gov.anzong.androidnga.fragment
 
-import android.widget.AdapterView.OnItemClickListener
-import nosc.ui.view.RecyclerViewFlipper
-import android.widget.TextView
-import android.os.Bundle
-import sp.phone.rxjava.RxEvent
-import sp.phone.mvp.model.entity.Board
-import gov.anzong.androidnga.R
-import androidx.drawerlayout.widget.DrawerLayout
-import com.google.android.material.internal.NavigationMenuView
-import sp.phone.ui.adapter.FlipperUserAdapter
-import sp.phone.common.UserManagerImpl
+import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
-import sp.phone.util.ActivityUtils
-import android.app.Activity
+import android.os.Bundle
 import android.preference.PreferenceManager
 import android.text.TextUtils
 import android.view.*
 import android.view.animation.AnimationUtils
-import nosc.utils.PreferenceKey
 import android.widget.AdapterView
+import android.widget.AdapterView.OnItemClickListener
+import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
+import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Tab
-import androidx.compose.material.TabRow
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.internal.NavigationMenuView
 import com.google.android.material.tabs.TabLayoutMediator
-import nosc.utils.uxUtils.ToastUtils
+import gov.anzong.androidnga.R
 import gov.anzong.androidnga.databinding.FragmentNavigationDrawerBinding
-import nosc.utils.jumpToLogin
-import nosc.utils.showTopicList
-import nosc.utils.toTopicListPage
-import nosc.viewmodel.BoardCategoryViewModel
-import sp.phone.common.User
 import nosc.api.model.BoardModel
 import nosc.api.model.BoardModel.addBookmark
 import nosc.ui.NOSCTheme
-import nosc.ui.view.boardCategoryList
+import nosc.ui.view.BoardItemContent
+import nosc.ui.view.RecyclerViewFlipper
+import nosc.utils.PreferenceKey
+import nosc.utils.jumpToLogin
+import nosc.utils.showTopicList
+import nosc.utils.toTopicListPage
+import nosc.utils.uxUtils.ToastUtils
+import nosc.utils.uxUtils.showConfirmDialog
+import nosc.viewmodel.BoardCategoryViewModel
+import sp.phone.common.User
+import sp.phone.common.UserManagerImpl
+import sp.phone.mvp.model.entity.Board
 import sp.phone.rxjava.RxBus
-import java.lang.NumberFormatException
+import sp.phone.rxjava.RxEvent
+import sp.phone.ui.adapter.FlipperUserAdapter
+import sp.phone.util.ActivityUtils
 
 /**
  * 首页的容器
@@ -73,6 +76,7 @@ class NavigationDrawerFragment : BaseRxFragment(),
     }
 
 
+    @OptIn(ExperimentalFoundationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         registerRxBus()
@@ -84,23 +88,71 @@ class NavigationDrawerFragment : BaseRxFragment(),
                         var refresh by remember {
                             mutableStateOf(false)
                         }
+                        var filter by remember {
+                            mutableStateOf("")
+                        }
+
                         val onChange = { refresh = !refresh }
                         key(refresh) {
-                            Column {
-                                LazyVerticalGrid(columns = GridCells.Adaptive(110.dp)){
-                                    it.forEach{ cat ->
-                                        boardCategoryList(
-                                            cat,
-                                            boardClickable = { b:Board ->
-                                                BoardModel.addRecentBoard(b)
-                                                RxBus.getInstance().post(RxEvent(RxEvent.EVENT_SHOW_TOPIC_LIST, b))
-                                                if(cat.isBookmarkCategory){
-                                                    onChange()
-                                                }
-                                            },
-                                            onListChanged = onChange,
-//                                            onScrollToThis = {currCatName = it}
-                                        )
+                            LazyVerticalGrid(columns = GridCells.Adaptive(110.dp)){
+                                item(span = { GridItemSpan(maxLineSpan) }) {
+                                    OutlinedTextField(
+                                        value = filter,
+                                        onValueChange = {filter = it.trim()},
+                                        maxLines = 1,
+                                        label = { Text("快速检索版面") },
+                                        modifier = Modifier.padding(4.dp).fillMaxWidth()
+                                    )
+                                }
+                                it.forEach{ cat ->
+                                    cat.subCategoryList.forEach { sCat ->
+                                        item(
+                                            key = "c/${sCat.name}",
+                                            span = { GridItemSpan(maxLineSpan) },
+                                            contentType = 1
+                                        ){
+                                            Row(
+                                                Modifier.animateContentSize().padding(8.dp),
+                                                verticalAlignment = Alignment.CenterVertically
+                                            ){
+                                                Image(
+                                                    painter = painterResource(id = R.drawable.default_board_icon),
+                                                    contentDescription = "",
+                                                    Modifier.size(24.dp)
+                                                )
+                                                Text(text = sCat.name)
+                                            }
+                                        }
+                                        items(
+                                            sCat.boardList.filter { it.name.contains(filter) },
+                                            key = { "c/${sCat.name}/${it.name}" },
+                                            span = { GridItemSpan(1) },
+                                            contentType = { 0 }
+                                        ){ b->
+                                            val context = LocalContext.current
+                                            BoardItemContent(
+                                                Modifier
+                                                    .animateContentSize()
+                                                    .padding(8.dp)
+                                                    .fillMaxWidth()
+                                                    .combinedClickable(
+                                                        onClick = {
+                                                            BoardModel.addRecentBoard(b)
+                                                            RxBus.getInstance().post(RxEvent(RxEvent.EVENT_SHOW_TOPIC_LIST, b))
+                                                            if(cat.isBookmarkCategory){
+                                                                onChange()
+                                                            }
+                                                        },
+                                                        onLongClick = {
+                                                            if (cat.isBookmarkCategory) {
+                                                                context.showConfirmDialog("确定要删除吗？") {
+                                                                    BoardModel.removeBookmark(b.fid, b.stid)
+                                                                    onChange()
+                                                                }
+                                                            }
+                                                        }
+                                                    ), board = b)
+                                        }
                                     }
                                 }
                             }

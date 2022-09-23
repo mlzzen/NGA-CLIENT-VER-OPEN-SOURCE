@@ -17,6 +17,8 @@ import nosc.utils.PreferenceKey;
 
 public class ThemeManager implements SharedPreferences.OnSharedPreferenceChangeListener {
 
+    public int sessionThemeVersion = 0;
+
     private final int[] mAppThemes = {
             R.style.AppThemeDayNightBrown_NoActionBar,
             R.style.AppThemeDayNightGreen_NoActionBar,
@@ -55,6 +57,13 @@ public class ThemeManager implements SharedPreferences.OnSharedPreferenceChangeL
                 break;
         }
         mWebViewTheme = null;
+        sessionThemeVersion++;
+    }
+
+    public void setNightMode(boolean isNightMode) {
+        SharedPreferences sp = ContextUtils.getSharedPreferences(PreferenceKey.PERFERENCE);
+        sp.edit().putBoolean(PreferenceKey.NIGHT_MODE, isNightMode).apply();
+        sessionThemeVersion++;
     }
 
     private static class ThemeManagerHolder {
@@ -118,10 +127,7 @@ public class ThemeManager implements SharedPreferences.OnSharedPreferenceChangeL
         return mNightModeFollowSystem ? ContextUtils.getResources().getBoolean(R.bool.night_mode) : mNightMode;
     }
 
-    public void setNightMode(boolean isNightMode) {
-        SharedPreferences sp = ContextUtils.getSharedPreferences(PreferenceKey.PERFERENCE);
-        sp.edit().putBoolean(PreferenceKey.NIGHT_MODE, isNightMode).apply();
-    }
+
 
     @ColorInt
     public int getPrimaryColor(Context context) {
@@ -137,12 +143,12 @@ public class ThemeManager implements SharedPreferences.OnSharedPreferenceChangeL
 
     @StyleRes
     public int getTheme(boolean toolbarEnabled) {
-        int index = isNightMode() ? 0 : mThemeIndex;
+        int index = mThemeIndex;
         return toolbarEnabled ? mAppThemes[index] : mAppThemesActionBar[index];
     }
 
     public void applyAboutTheme(AppCompatActivity activity) {
-        activity.setTheme(ThemeConstants.THEME_ACTIVITY_ABOUT[isNightMode() ? 0 : mThemeIndex]);
+        activity.setTheme(ThemeConstants.THEME_ACTIVITY_ABOUT[mThemeIndex]);
         activity.getDelegate().setLocalNightMode(isNightMode() ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
     }
 }

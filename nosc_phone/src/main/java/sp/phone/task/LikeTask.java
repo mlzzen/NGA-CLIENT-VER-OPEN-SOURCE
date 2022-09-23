@@ -24,13 +24,11 @@ public class LikeTask {
 
     public static final int OPPOSE = -1;
 
-    private Api mService;
+    private final Api mService= RetrofitHelper.getInstance().getApi();
 
-    private Map<String, String> mParamMap;
+    private final Map<String, String> mParamMap = new HashMap<>();
 
     public LikeTask() {
-        mService = RetrofitHelper.getInstance().getApi();
-        mParamMap = new HashMap<>();
         mParamMap.put("__lib", "topic_recommend");
         mParamMap.put("__act", "add");
         mParamMap.put("raw", "3");

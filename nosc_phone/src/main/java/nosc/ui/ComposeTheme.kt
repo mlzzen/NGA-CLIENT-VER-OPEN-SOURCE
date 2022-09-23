@@ -3,20 +3,23 @@ package nosc.ui
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import gov.anzong.androidnga.R
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import nosc.utils.accentColor
 import nosc.utils.backgroundColor
+import nosc.utils.backgroundColor2
 import nosc.utils.primaryColor
+import kotlin.coroutines.CoroutineContext
 
 /**
  * @author Yricky
@@ -61,8 +64,10 @@ fun NOSCTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable (
                 secondary = Color(context.accentColor()),
                 onPrimary = Color.White,
                 onBackground = Color.Gray,
-                background = Color(context.backgroundColor())
-
+                onSurface = Color.Gray,
+                onSecondary = Color.Gray,
+                background = Color(context.backgroundColor()),
+                surface = Color(context.backgroundColor2())
             )
         )
     }
@@ -73,7 +78,8 @@ fun NOSCTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable (
                 primary = Color(context.primaryColor()),
                 primaryVariant = Color(context.primaryColor()),
                 secondary = Color(context.accentColor()),
-                background = Color(context.backgroundColor())
+                background = Color(context.backgroundColor()),
+                surface = Color(context.backgroundColor2())
             )
         )
     }
@@ -89,9 +95,27 @@ fun NOSCTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable (
         typography = Typography,
         shapes = Shapes,
         content = {
-            Surface {
+            Surface(color = MaterialTheme.colors.background) {
                 content()
             }
         }
     )
+}
+
+@Composable
+fun <T> loadState(
+    init:T,
+    key:Any? = null,
+    context:CoroutineContext = Dispatchers.Default,
+    loader:()->T
+): State<T> {
+    val _state = remember {
+        mutableStateOf(init)
+    }
+    LaunchedEffect(key){
+        _state.value = withContext(context){
+            loader()
+        }
+    }
+    return _state
 }

@@ -6,9 +6,8 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import gov.anzong.androidnga.R
-import nosc.utils.dateStringOf
+import nosc.utils.forumDateStringOf
 import sp.phone.mvp.model.entity.ThreadPageInfo
-import sp.phone.util.StringUtils
 
 /**
  * Created by Justwen on 2018/3/23.
@@ -24,7 +23,7 @@ class ReplyListAdapter(context: Context) :
         val replyInfo = pageInfo.replyInfo
         holder.mContentTv.text = replyInfo.content
         holder.mSubjectTv.text = replyInfo.subject
-        holder.mPostDateTv.text = dateStringOf(replyInfo.postDate.toLong())
+        holder.mPostDateTv.text = forumDateStringOf(replyInfo.postDate.toLong())
         holder.itemView.setOnClickListener(mOnClickListener)
         holder.itemView.tag = pageInfo
     }
