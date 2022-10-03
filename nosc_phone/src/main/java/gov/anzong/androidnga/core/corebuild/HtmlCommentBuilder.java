@@ -32,9 +32,6 @@ public class HtmlCommentBuilder implements IHtmlBuild {
         for (CommentData comment : htmlData.getCommentList()) {
             String author = comment.getAuthor();
             String avatarUrl = comment.getAvatarUrl(); //FunctionUtils.parseAvatarUrl(comment.getJs_escap_avatar());
-            if (TextUtils.isEmpty(avatarUrl)) {
-                avatarUrl = "file:///android_asset/default_avatar.png";
-            }
             String content = comment.getContent();
             int end = content.indexOf("[/b]");
             String time = '(' + comment.getPostTime() + ')';
@@ -46,6 +43,6 @@ public class HtmlCommentBuilder implements IHtmlBuild {
         }
 
         String htmlText = getFormattedHtml();
-        return String.format(htmlText, ret.toString());
+        return String.format(htmlText, ret);
     }
 }

@@ -1,72 +1,54 @@
-package sp.phone.ui.adapter;
+package sp.phone.ui.adapter
 
-import android.content.Context;
-import android.graphics.Bitmap;
-import androidx.recyclerview.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.content.Context
+import sp.phone.util.ImageUtils.sDefaultAvatar
+import androidx.recyclerview.widget.RecyclerView
+import android.widget.TextView
+import gov.anzong.androidnga.R
+import android.view.ViewGroup
+import android.view.LayoutInflater
+import android.view.View
+import android.widget.ImageView
+import coil.load
+import coil.transform.CircleCropTransformation
+import sp.phone.common.User
+import sp.phone.util.ImageUtils
 
-import java.util.List;
+class BlackListAdapter(private val mContext: Context, private val mUserList: List<User>) :
+    RecyclerView.Adapter<BlackListAdapter.UserViewHolder>() {
+    private var mOnClickListener: View.OnClickListener? = null
 
-import gov.anzong.androidnga.R;
-import sp.phone.util.ImageUtils;
-import sp.phone.common.User;
+    class UserViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        var userNameView: TextView
+        var avatarView: ImageView
 
-
-public class BlackListAdapter extends RecyclerView.Adapter<BlackListAdapter.UserViewHolder> {
-
-    private Context mContext;
-
-    private List<User> mUserList;
-
-    private View.OnClickListener mOnClickListener;
-
-    private Bitmap mDefaultAvatar;
-
-    public static class UserViewHolder extends RecyclerView.ViewHolder {
-
-        TextView userNameView;
-
-        ImageView avatarView;
-
-        public UserViewHolder(View itemView) {
-            super(itemView);
-            userNameView = itemView.findViewById(R.id.user_name);
-            avatarView = itemView.findViewById(R.id.avatar);
+        init {
+            userNameView = itemView.findViewById(R.id.user_name)
+            avatarView = itemView.findViewById(R.id.avatar)
         }
     }
 
-    public BlackListAdapter(Context context, List<User> userList) {
-        mContext = context;
-        mUserList = userList;
-        mDefaultAvatar = ImageUtils.loadDefaultAvatar();
+    fun setOnClickListener(listener: View.OnClickListener?) {
+        mOnClickListener = listener
     }
 
-    public void setOnClickListener(View.OnClickListener listener) {
-        mOnClickListener = listener;
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder {
+        val convertView = LayoutInflater.from(mContext)
+            .inflate(R.layout.fragment_settings_black_list_item, parent, false)
+        val holder = UserViewHolder(convertView)
+        holder.itemView.setOnClickListener(mOnClickListener)
+        holder.avatarView.load(sDefaultAvatar){
+            transformations(CircleCropTransformation())
+        }
+        return holder
     }
 
-    @Override
-    public UserViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View convertView = LayoutInflater.from(mContext).inflate(R.layout.fragment_settings_black_list_item, parent, false);
-        UserViewHolder holder = new UserViewHolder(convertView);
-        holder.itemView.setOnClickListener(mOnClickListener);
-        holder.avatarView.setImageBitmap(mDefaultAvatar);
-        return holder;
+    override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
+        holder.userNameView.text = mUserList[position].nickName
+        holder.itemView.tag = mUserList[position]
     }
 
-    @Override
-    public void onBindViewHolder(UserViewHolder holder, int position) {
-        holder.userNameView.setText(mUserList.get(position).getNickName());
-        holder.itemView.setTag(mUserList.get(position));
+    override fun getItemCount(): Int {
+        return mUserList.size
     }
-
-    @Override
-    public int getItemCount() {
-        return mUserList.size();
-    }
-
 }

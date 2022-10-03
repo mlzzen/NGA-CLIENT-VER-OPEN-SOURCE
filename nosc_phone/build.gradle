@@ -1,12 +1,12 @@
 plugins {
-    id 'com.android.application'
-    id 'org.jetbrains.kotlin.android'
-    id 'kotlin-kapt'
+    id "com.android.application"
+    id "org.jetbrains.kotlin.android"
+    id "kotlin-kapt"
 }
 
 def static getDate() {
     def date = new Date()
-    def formattedDate = date.format('yyyyMMddHHmm')
+    def formattedDate = date.format("yyyyMMddHHmm")
     return formattedDate
 
 }
@@ -20,7 +20,7 @@ android {
     compileSdkVersion project.compileSdkVersion
     packagingOptions {
         resources {
-            excludes += ['META-INF/LICENSE.txt', 'META-INF/NOTICE.txt', 'META-INF/MANIFEST.MF']
+            excludes += ["META-INF/LICENSE.txt", "META-INF/NOTICE.txt", "META-INF/MANIFEST.MF"]
         }
     }
 
@@ -30,7 +30,7 @@ android {
         minSdkVersion project.minSdkVersion
         targetSdkVersion project.targetSdkVersion
         multiDexEnabled true
-        resConfigs 'zh', 'en'
+        resConfigs "zh", "en"
 
         versionCode project.appVersionCode
         versionName project.appVersionName
@@ -69,15 +69,15 @@ android {
         compose true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion "1.3.0"
+        kotlinCompilerExtensionVersion "1.3.1"
     }
     lint {
         abortOnError false
-        disable 'MissingTranslation'
+        disable "MissingTranslation"
     }
     android.applicationVariants.all { variant ->
         variant.outputs.all {
-            if (outputFile != null && outputFileName.endsWith('.apk') && variant.buildType.name == "release") {
+            if (outputFile != null && outputFileName.endsWith(".apk") && variant.buildType.name == "release") {
                 outputFileName = "nga_phone_${defaultConfig.versionName}_${getDate()}.apk"
             }
         }
@@ -85,25 +85,27 @@ android {
 }
 
 dependencies {
-    implementation fileTree(include: '*.jar', dir: 'libs')
-    implementation(name: 'floatingactionmenu', ext: 'aar')
+    implementation fileTree(include: "*.jar", dir: "libs")
+    implementation(name: "floatingactionmenu", ext: "aar")
 
-    implementation 'me.imid.swipebacklayout.lib:library:1.1.0'
+    implementation "me.imid.swipebacklayout.lib:library:1.1.0"
 
 
     implementation "com.alibaba:fastjson:$project.fastJson"
 
-    api files('libs/commons-io-2.4.jar')
-    implementation("com.google.guava:guava:29.0-android")
+    api files("libs/commons-io-2.4.jar")
+//    implementation("com.google.guava:guava:31.1-android")
 
     //retrofit
-    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation "com.squareup.retrofit2:retrofit:2.9.0"
 
     implementation "com.google.android.material:material:$androidxMaterial"
-    implementation 'androidx.appcompat:appcompat:1.4.1'
+    implementation "androidx.appcompat:appcompat:1.4.1"
     implementation "androidx.cardview:cardview:1.0.0"
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
-    implementation 'androidx.core:core-ktx:1.7.0'
+    implementation "androidx.constraintlayout:constraintlayout:2.1.3"
+    implementation "androidx.core:core-ktx:1.8.0"
+    implementation "androidx.recyclerview:recyclerview:1.2.1"
+
 
     // lifecycle
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
@@ -113,38 +115,37 @@ dependencies {
     implementation "androidx.compose.ui:ui:$compose_version"
     implementation "androidx.compose.material:material:$compose_version"
     implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
-    implementation 'androidx.activity:activity-compose:1.4.0'
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+    implementation "androidx.activity:activity-compose:1.4.0"
+    testImplementation "junit:junit:4.13.2"
+    androidTestImplementation "androidx.test.ext:junit:1.1.3"
+    androidTestImplementation "androidx.test.espresso:espresso-core:3.4.0"
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
 
-    //glide
-    implementation 'com.github.bumptech.glide:glide:4.13.2'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.13.2'
-    kapt 'com.github.bumptech.glide:compiler:4.13.2'
+//    //glide
+//    implementation "com.github.bumptech.glide:glide:4.13.2"
+//    annotationProcessor "com.github.bumptech.glide:compiler:4.13.2"
+//    kapt "com.github.bumptech.glide:compiler:4.13.2"
 
-    implementation("io.coil-kt:coil-compose:2.1.0")
+    implementation("io.coil-kt:coil:2.2.1")
+    implementation("io.coil-kt:coil-compose:2.2.1")
 
-
-
-    implementation 'io.reactivex.rxjava2:rxjava:2.2.6'
+    implementation "io.reactivex.rxjava2:rxjava:2.2.6"
     implementation "io.reactivex.rxjava2:rxandroid:$project.rxAndroid"
-    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
-    implementation 'com.trello.rxlifecycle2:rxlifecycle-components:2.1.0'
-    implementation 'com.github.tbruyelle:rxpermissions:0.10.2'
+    implementation "com.squareup.retrofit2:adapter-rxjava2:2.3.0"
+    implementation "com.trello.rxlifecycle2:rxlifecycle-components:2.1.0"
+    implementation "com.github.tbruyelle:rxpermissions:0.10.2"
 
 
     //Arouter
-    implementation 'com.alibaba:arouter-api:1.2.4'
-    annotationProcessor 'com.alibaba:arouter-compiler:1.1.4'
-    kapt 'com.alibaba:arouter-compiler:1.1.4'
+    implementation "com.alibaba:arouter-api:1.2.4"
+    annotationProcessor "com.alibaba:arouter-compiler:1.1.4"
+    kapt "com.alibaba:arouter-compiler:1.1.4"
 
-    implementation 'com.github.GrenderG:Toasty:1.4.1'
-    implementation'com.github.daniel-stoneuk:material-about-library:2.3.0'
+    implementation "com.github.GrenderG:Toasty:1.4.1"
+    implementation"com.github.daniel-stoneuk:material-about-library:2.3.0"
 
-    implementation 'com.github.chrisbanes:photoview:2.1.4'
+    implementation "com.github.chrisbanes:photoview:2.1.4"
 
     // kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"

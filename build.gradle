@@ -3,10 +3,7 @@ buildscript {
     ext.compose_version = "1.2.1"
     repositories {
         maven { url 'https://maven.aliyun.com/nexus/content/groups/public/' }
-//        maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
         maven { url "https://jitpack.io" }
-//        maven { url 'https://repo1.maven.org/maven2/' }
-//        mavenCentral()
         maven{ url 'https://maven.aliyun.com/repository/google' }
         maven { url 'https://maven.aliyun.com/repository/central' }
     }
@@ -28,7 +25,6 @@ allprojects {
         maven{ url 'https://maven.aliyun.com/repository/google' }
         maven{ url 'https://maven.aliyun.com/repository/public' }
         maven { url "https://jitpack.io" }
-//        maven { url 'https://repo1.maven.org/maven2/' }
         flatDir {
             dirs 'libs'
         }
@@ -44,8 +40,8 @@ project.ext {
     minSdkVersion = 23
     targetSdkVersion = 29
     compileSdkVersion = 32
-    appVersionName = 'Y202209.1'
-    appVersionCode = 20220901
+    appVersionName = 'Y202210.1'
+    appVersionCode = 20221001
 
     fastJson = '1.1.72.android'
     rxAndroid = '2.1.1'

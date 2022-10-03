@@ -7,7 +7,6 @@ import sp.phone.common.VersionUpgradeHelper
 import nosc.utils.PreferenceUtils
 import nosc.utils.PreferenceKey
 import android.webkit.WebView
-import coil.ComponentRegistry
 import coil.ImageLoader
 import coil.ImageLoaderFactory
 import coil.disk.DiskCache

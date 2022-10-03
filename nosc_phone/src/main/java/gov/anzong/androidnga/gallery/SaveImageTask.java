@@ -4,14 +4,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.Target;
-
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.reactivestreams.Subscription;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.net.URL;
 
+import coil.Coil;
+import coil.request.ImageRequest;
+import gov.anzong.androidnga.NgaClientApp;
 import gov.anzong.androidnga.R;
 import nosc.utils.uxUtils.ToastUtils;
 import io.reactivex.Observable;
@@ -58,11 +61,12 @@ public class SaveImageTask {
         Observable.fromArray(urls)
                 .observeOn(Schedulers.io())
                 .map(url -> {
-                    File file = Glide
-                            .with(mContext)
-                            .load(url)
-                            .downloadOnly(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
-                            .get();
+
+                    File file = File.createTempFile(System.currentTimeMillis()+"","");
+                    IOUtils.copy(
+                            new URL(url).openConnection().getInputStream(),
+                            new FileOutputStream(file)
+                    );
                     return new DownloadResult(file, url);
                 })
                 .map(result -> {

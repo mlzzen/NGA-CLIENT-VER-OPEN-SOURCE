@@ -18,10 +18,7 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -76,35 +73,54 @@ class NavigationDrawerFragment : BaseRxFragment(),
     }
 
 
-    @OptIn(ExperimentalFoundationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         registerRxBus()
         setHasOptionsMenu(true)
-        viewModel.boardCategoryList.observe(this){
-            binding?.apply {
-                container.setContent {
+        viewModel.query()
+    }
+
+    override fun accept(rxEvent: RxEvent) {
+        if (rxEvent.what == RxEvent.EVENT_SHOW_TOPIC_LIST) {
+            requireActivity().showTopicList(rxEvent.obj as Board)
+        } else {
+            super.accept(rxEvent)
+        }
+    }
+
+    @OptIn(ExperimentalFoundationApi::class)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        return FragmentNavigationDrawerBinding.inflate(inflater,container,false).let{
+            binding = it.also {
+                it.container.setContent {
                     NOSCTheme {
-                        var refresh by remember {
-                            mutableStateOf(false)
-                        }
-                        var filter by remember {
-                            mutableStateOf("")
-                        }
+                        var refresh by remember { mutableStateOf(false) }
+                        var filter by remember { mutableStateOf("") }
 
                         val onChange = { refresh = !refresh }
                         key(refresh) {
-                            LazyVerticalGrid(columns = GridCells.Adaptive(110.dp)){
+                            val list by viewModel.boardCategoryList.collectAsState()
+                            LazyVerticalGrid(
+                                modifier = Modifier.fillMaxSize(),
+                                columns = GridCells.Adaptive(110.dp)
+                            ){
+                                item {  }
                                 item(span = { GridItemSpan(maxLineSpan) }) {
                                     OutlinedTextField(
                                         value = filter,
                                         onValueChange = {filter = it.trim()},
                                         maxLines = 1,
                                         label = { Text("快速检索版面") },
-                                        modifier = Modifier.padding(4.dp).fillMaxWidth()
+                                        modifier = Modifier
+                                            .padding(4.dp)
+                                            .fillMaxWidth()
                                     )
                                 }
-                                it.forEach{ cat ->
+                                list.forEach{ cat ->
                                     cat.subCategoryList.forEach { sCat ->
                                         item(
                                             key = "c/${sCat.name}",
@@ -112,7 +128,9 @@ class NavigationDrawerFragment : BaseRxFragment(),
                                             contentType = 1
                                         ){
                                             Row(
-                                                Modifier.animateContentSize().padding(8.dp),
+                                                Modifier
+                                                    .animateContentSize()
+                                                    .padding(8.dp),
                                                 verticalAlignment = Alignment.CenterVertically
                                             ){
                                                 Image(
@@ -138,15 +156,25 @@ class NavigationDrawerFragment : BaseRxFragment(),
                                                     .combinedClickable(
                                                         onClick = {
                                                             BoardModel.addRecentBoard(b)
-                                                            RxBus.getInstance().post(RxEvent(RxEvent.EVENT_SHOW_TOPIC_LIST, b))
-                                                            if(cat.isBookmarkCategory){
+                                                            RxBus
+                                                                .getInstance()
+                                                                .post(
+                                                                    RxEvent(
+                                                                        RxEvent.EVENT_SHOW_TOPIC_LIST,
+                                                                        b
+                                                                    )
+                                                                )
+                                                            if (cat.isBookmarkCategory) {
                                                                 onChange()
                                                             }
                                                         },
                                                         onLongClick = {
                                                             if (cat.isBookmarkCategory) {
                                                                 context.showConfirmDialog("确定要删除吗？") {
-                                                                    BoardModel.removeBookmark(b.fid, b.stid)
+                                                                    BoardModel.removeBookmark(
+                                                                        b.fid,
+                                                                        b.stid
+                                                                    )
                                                                     onChange()
                                                                 }
                                                             }
@@ -157,8 +185,6 @@ class NavigationDrawerFragment : BaseRxFragment(),
                                 }
                             }
                         }
-
-
                     }
 
                 }
@@ -168,26 +194,6 @@ class NavigationDrawerFragment : BaseRxFragment(),
                     attach()
                 }
             }
-
-        }
-        viewModel.query()
-    }
-
-    override fun accept(rxEvent: RxEvent) {
-        if (rxEvent.what == RxEvent.EVENT_SHOW_TOPIC_LIST) {
-            requireActivity().showTopicList(rxEvent.obj as Board)
-        } else {
-            super.accept(rxEvent)
-        }
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return FragmentNavigationDrawerBinding.inflate(inflater,container,false).let{
-            binding = it
             it.root
         }
     }

@@ -264,31 +264,31 @@ class ArticleListAdapter(
 
     class ArticleViewHolder
         (itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val nickNameTV: TextView? = itemView.findViewById(R.id.tv_nickName)
-        val floorTv: TextView? = itemView.findViewById(R.id.tv_floor)
-        val postTimeTv: TextView? = itemView.findViewById(R.id.tv_post_time)
-        val avatarPanel: FrameLayout? = itemView.findViewById(R.id.fl_avatar)
-        val detailTv: TextView? = itemView.findViewById(R.id.tv_detail)
-        val clientIv: ImageView? = itemView.findViewById(R.id.iv_client)
+        val nickNameTV: TextView = itemView.findViewById(R.id.tv_nickName)
+        val floorTv: TextView = itemView.findViewById(R.id.tv_floor)
+        val postTimeTv: TextView = itemView.findViewById(R.id.tv_post_time)
+        val avatarPanel: FrameLayout = itemView.findViewById(R.id.fl_avatar)
+        val detailTv: TextView = itemView.findViewById(R.id.tv_detail)
+        val clientIv: ImageView = itemView.findViewById(R.id.iv_client)
 
         var contentTV: View? = null
 
-        val contentContainer: FrameLayout? = itemView.findViewById(R.id.wv_container)
+        val contentContainer: FrameLayout = itemView.findViewById(R.id.wv_container)
 
 
 
-        val replyBtn: ImageView? = itemView.findViewById(R.id.iv_reply)
+        val replyBtn: ImageView = itemView.findViewById(R.id.iv_reply)
 
-        val favourBtn: ImageView? = itemView.findViewById(R.id.iv_favour)
+        val favourBtn: ImageView = itemView.findViewById(R.id.iv_favour)
 
-        val treadBtn: ImageView? = itemView.findViewById(R.id.iv_tread)
+        val treadBtn: ImageView = itemView.findViewById(R.id.iv_tread)
 
-        val avatarIv: ImageView? = itemView.findViewById(R.id.iv_avatar)
+        val avatarIv: ImageView = itemView.findViewById(R.id.iv_avatar)
 
 
-        val scoreTv: TextView? = itemView.findViewById(R.id.tv_score)
+        val scoreTv: TextView = itemView.findViewById(R.id.tv_score)
 
-        val menuIv: ImageView? = itemView.findViewById(R.id.iv_more)
+        val menuIv: ImageView = itemView.findViewById(R.id.iv_more)
 
 
     }
@@ -319,7 +319,7 @@ class ArticleListAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArticleViewHolder {
         val view = mLayoutInflater.inflate(R.layout.fragment_article_list_item, parent, false)
         val viewHolder = ArticleViewHolder(view)
-        val lp = viewHolder.avatarIv!!.layoutParams
+        val lp = viewHolder.avatarIv.layoutParams
         lp.height = appConfig.avatarSize
         lp.width = lp.height
         RxUtils.clicks(viewHolder.nickNameTV, mOnProfileClickListener)
@@ -340,22 +340,22 @@ class ArticleListAdapter(
             )
         )
         (holder.itemView as CardView).setCardBackgroundColor(color)
-        holder.replyBtn!!.tag = row
-        holder.nickNameTV!!.tag = row
-        holder.menuIv!!.tag = row
-        holder.avatarPanel!!.tag = row
-        holder.favourBtn!!.tag = row
-        holder.treadBtn!!.tag = row
+        holder.replyBtn.tag = row
+        holder.nickNameTV.tag = row
+        holder.menuIv.tag = row
+        holder.avatarPanel.tag = row
+        holder.favourBtn.tag = row
+        holder.treadBtn.tag = row
         onBindAvatarView(holder.avatarIv, row)
         onBindDeviceType(holder.clientIv, row)
         onBindContentView(holder, row, position)
         val fgColor = mThemeManager.getAccentColor(mContext)
         FunctionUtils.handleNickName(row, fgColor, holder.nickNameTV, mTopicOwner, mContext)
-        holder.floorTv!!.text = MessageFormat.format("#{0}", row.lou.toString())
-        holder.postTimeTv!!.text = row.postdate
-        holder.scoreTv!!.text = MessageFormat.format("{0}", row.score)
+        holder.floorTv.text = MessageFormat.format("#{0}", row.lou.toString())
+        holder.postTimeTv.text = row.postdate
+        holder.scoreTv.text = MessageFormat.format("{0}", row.score)
         //todo 赞多加粗
-        holder.detailTv!!.text = String.format(
+        holder.detailTv.text = String.format(
             "级别:%s   威望:%s   发帖:%s",
             row.memberGroup,
             row.reputation,
@@ -408,10 +408,9 @@ class ArticleListAdapter(
         return if (mData == null) 0 else mData!!.rowNum
     }
 
-    private fun onBindAvatarView(avatarIv: ImageView?, row: ThreadRowInfo) {
+    private fun onBindAvatarView(avatarIv: ImageView, row: ThreadRowInfo) {
         val avatarUrl = FunctionUtils.parseAvatarUrl(row.js_escap_avatar)
-        val downImg = (DeviceUtils.isWifiConnected(mContext) || appConfig.isDownAvatarNoWifi)
-        ImageUtils.loadRoundCornerAvatar(avatarIv, avatarUrl, !downImg)
+        ImageUtils.loadRoundCornerAvatar(avatarIv, avatarUrl)
     }
 
     companion object {

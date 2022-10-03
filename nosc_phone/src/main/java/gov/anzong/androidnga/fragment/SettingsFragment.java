@@ -11,7 +11,6 @@ import android.preference.PreferenceScreen;
 
 import androidx.annotation.Nullable;
 
-import com.bumptech.glide.Glide;
 
 import org.apache.commons.io.FileUtils;
 
@@ -70,8 +69,6 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
 
     private void clearCache() {
         ThreadUtils.postOnSubThread(() -> {
-            // 清除glide缓存
-            Glide.get(ContextUtils.getContext()).clearDiskCache();
             // 清除avatar数据
             UserManagerImpl.getInstance().clearAvatarUrl();
             // 清除之前的使用过的awp缓存数据

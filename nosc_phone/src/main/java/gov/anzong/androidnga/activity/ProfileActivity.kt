@@ -464,7 +464,7 @@ class ProfileActivity : BaseActivity(),
 
     private fun handleAvatar(row: ProfileData) {
         val avatarUrl = FunctionUtils.parseAvatarUrl(row.avatarUrl) //
-        ImageUtils.loadRoundCornerAvatar(binding?.ivAvatar, avatarUrl)
+        ImageUtils.loadRoundCornerAvatar(binding.ivAvatar, avatarUrl)
         ImageUtils.loadAvatar(findViewById<View>(R.id.iv_toolbar_layout_bg) as ImageView, avatarUrl)
     }
 

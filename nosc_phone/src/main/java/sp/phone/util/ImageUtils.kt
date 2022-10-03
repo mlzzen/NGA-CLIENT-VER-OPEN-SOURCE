@@ -1,364 +1,264 @@
-package sp.phone.util;
+package sp.phone.util
 
-import android.Manifest;
-import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.Bitmap.CompressFormat;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Matrix;
-import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
-import android.graphics.Rect;
-import android.graphics.RectF;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.util.DisplayMetrics;
-import android.util.TypedValue;
-import android.widget.ImageView;
+import android.graphics.*
+import android.graphics.Bitmap.CompressFormat
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
+import android.util.TypedValue
+import android.widget.ImageView
+import coil.load
+import coil.transform.CircleCropTransformation
+import gov.anzong.androidnga.R
+import gov.anzong.androidnga.app
+import nosc.utils.ContextUtils
+import org.apache.commons.io.FilenameUtils
+import sp.phone.common.PhoneConfiguration.avatarSize
+import java.io.ByteArrayOutputStream
+import java.io.InputStream
 
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-
-import org.apache.commons.io.FilenameUtils;
-
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-
-import gov.anzong.androidnga.R;
-import nosc.utils.PermissionUtils;
-import gov.anzong.androidnga.GlideApp;
-import nosc.utils.ContextUtils;;
-import sp.phone.common.PhoneConfiguration;
-
-public class ImageUtils {
+object ImageUtils {
     //final static int max_avatar_width = 200;
-    final static int max_avatar_height = 255;
-
-    private static Drawable sDefaultAvatar;
+    private const val max_avatar_height = 255
+    val sDefaultAvatar: Drawable by lazy {
+        BitmapDrawable(
+            app.resources,
+            BitmapFactory.decodeResource(app.resources, R.drawable.default_avatar)
+        )
+    }
 
     // Convert to pixels
-    public static int DtoP(int dValue) {
-        DisplayMetrics metrics = ContextUtils.getResources().getDisplayMetrics();
-        float ret = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dValue, metrics);
-        return (int) ret;
+    fun DtoP(dValue: Int): Int {
+        val metrics = ContextUtils.getResources().displayMetrics
+        val ret = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dValue.toFloat(), metrics)
+        return ret.toInt()
     }
 
-    public static Bitmap zoomImageByWidth(Bitmap bitmap, int bookWidth, boolean isDIP) {
-        if (bitmap == null)
-            return null;
-        int width = bitmap.getWidth();
-        int height = bitmap.getHeight();
-        int newWidth = isDIP ? DtoP(bookWidth) : bookWidth;
-
-        float newHeight = ((height * newWidth) / width);
-
-        if (newWidth < 2 || newHeight < 1.01f)
-            return null;
-
-        float scaleWidth = 1f * newWidth / width;
-        float scaleHeight = newHeight / height;
-
-        Matrix matrix = new Matrix();
-        matrix.postScale(scaleWidth, scaleHeight);
-        return Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
-
+    fun zoomImageByWidth(bitmap: Bitmap?, bookWidth: Int, isDIP: Boolean): Bitmap? {
+        if (bitmap == null) return null
+        val width = bitmap.width
+        val height = bitmap.height
+        val newWidth = if (isDIP) DtoP(bookWidth) else bookWidth
+        val newHeight = (height * newWidth / width).toFloat()
+        if (newWidth < 2 || newHeight < 1.01f) return null
+        val scaleWidth = 1f * newWidth / width
+        val scaleHeight = newHeight / height
+        val matrix = Matrix()
+        matrix.postScale(scaleWidth, scaleHeight)
+        return Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true)
     }
 
-    public static Bitmap zoomImageByHeight(Bitmap bitmap, int bookHeight) {
-        if (bitmap == null)
-            return null;
-        int width = bitmap.getWidth();
-        int height = bitmap.getHeight();
-
-
-        int newHeight = bookHeight;
-        float newWidth = ((width * newHeight) / height);
-
-
-        if (newWidth < 2 || newHeight < 1.01f)
-            return null;
-
-        float scaleWidth = 1f * newWidth / width;
-        float scaleHeight = 1f * newHeight / height;
-
-        Matrix matrix = new Matrix();
-        matrix.postScale(scaleWidth, scaleHeight);
-        Bitmap resizedBitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height,
-                matrix, true);
-        return resizedBitmap;
-
+    fun zoomImageByHeight(bitmap: Bitmap?, bookHeight: Int): Bitmap? {
+        if (bitmap == null) return null
+        val width = bitmap.width
+        val height = bitmap.height
+        val newWidth = (width * bookHeight / height).toFloat()
+        if (newWidth < 2 || bookHeight < 1.01f) return null
+        val scaleWidth = 1f * newWidth / width
+        val scaleHeight = 1f * bookHeight / height
+        val matrix = Matrix()
+        matrix.postScale(scaleWidth, scaleHeight)
+        return Bitmap.createBitmap(
+            bitmap, 0, 0, width, height,
+            matrix, true
+        )
     }
 
-    public static String newImage(String oldImage, String userId) {
-        String extension = FilenameUtils.getExtension(oldImage);
-        String path = FilenameUtils.getPath(oldImage);
-        String newName;
-        if (extension != null) {
-            if (path == null || "".equals(path)) {
-                return null;
-            } else if (extension.length() == 3) {
-                newName = HttpUtil.PATH_AVATAR + "/" + userId + "." + extension;
-
-            } else if (extension.length() >= 4
-                    && "?".equals(extension.substring(3, 4))) {
-                newName = HttpUtil.PATH_AVATAR + "/" + userId + "."
-                        + extension.substring(0, 3);
-
+    @JvmStatic
+    fun newImage(oldImage: String?, userId: String): String? {
+        val extension = FilenameUtils.getExtension(oldImage)
+        val path = FilenameUtils.getPath(oldImage)
+        val newName: String = if (extension != null) {
+            if (path == null || "" == path) {
+                return null
+            } else if (extension.length == 3) {
+                HttpUtil.PATH_AVATAR + "/" + userId + "." + extension
+            } else if (extension.length >= 4
+                && "?" == extension.substring(3, 4)
+            ) {
+                (HttpUtil.PATH_AVATAR + "/" + userId + "."
+                        + extension.substring(0, 3))
             } else {
-                newName = HttpUtil.PATH_AVATAR + "/" + userId + ".jpg";
+                HttpUtil.PATH_AVATAR + "/" + userId + ".jpg"
             }
         } else {
-            newName = HttpUtil.PATH_AVATAR + "/" + userId + ".jpg";
+            HttpUtil.PATH_AVATAR + "/" + userId + ".jpg"
         }
-        return newName;
+        return newName
     }
 
-    private static int computeSampleSize(BitmapFactory.Options options,
-                                         int minSideLength, int maxNumOfPixels) {
-        int initialSize = computeInitialSampleSize(options, minSideLength,
-                maxNumOfPixels);
-
-        int roundedSize;
+    private fun computeSampleSize(
+        options: BitmapFactory.Options,
+        minSideLength: Int, maxNumOfPixels: Int
+    ): Int {
+        val initialSize = computeInitialSampleSize(
+            options, minSideLength,
+            maxNumOfPixels
+        )
+        var roundedSize: Int
         if (initialSize <= 8) {
-            roundedSize = 1;
+            roundedSize = 1
             while (roundedSize < initialSize) {
-                roundedSize <<= 1;
+                roundedSize = roundedSize shl 1
             }
         } else {
-            roundedSize = (initialSize + 7) / 8 * 8;
+            roundedSize = (initialSize + 7) / 8 * 8
         }
-
-        return roundedSize;
+        return roundedSize
     }
 
-    private static int computeInitialSampleSize(BitmapFactory.Options options,
-                                                int minSideLength, int maxNumOfPixels) {
-        double w = options.outWidth;
-        double h = options.outHeight;
-
-        int lowerBound = (maxNumOfPixels == -1) ? 1 : (int) Math.ceil(Math
-                .sqrt(w * h / maxNumOfPixels));
-        int upperBound = (minSideLength == -1) ? 128 : (int) Math.min(Math
-                .floor(w / minSideLength), Math.floor(h / minSideLength));
-
+    private fun computeInitialSampleSize(
+        options: BitmapFactory.Options,
+        minSideLength: Int, maxNumOfPixels: Int
+    ): Int {
+        val w = options.outWidth.toDouble()
+        val h = options.outHeight.toDouble()
+        val lowerBound = if (maxNumOfPixels == -1) 1 else Math.ceil(
+            Math
+                .sqrt(w * h / maxNumOfPixels)
+        ).toInt()
+        val upperBound = if (minSideLength == -1) 128 else Math.min(
+            Math
+                .floor(w / minSideLength), Math.floor(h / minSideLength)
+        ).toInt()
         if (upperBound < lowerBound) {
             // return the larger one when there is no overlapping zone.
-            return lowerBound;
+            return lowerBound
         }
-
-        if ((maxNumOfPixels == -1) && (minSideLength == -1)) {
-            return 1;
+        return if (maxNumOfPixels == -1 && minSideLength == -1) {
+            1
         } else if (minSideLength == -1) {
-            return lowerBound;
+            lowerBound
         } else {
-            return upperBound;
+            upperBound
         }
     }
 
-    static public Bitmap loadAvatarFromSdcard(String avatarPath) {
-
-        return loadAvatarFromSdcard(avatarPath, max_avatar_height);
-    }
-
-    static public Bitmap loadAvatarFromSdcard(String avatarPath, int maxHeight) {
-
-        BitmapFactory.Options opts = new BitmapFactory.Options();
-        opts.inJustDecodeBounds = true;
-        final int avatarWidth = PhoneConfiguration.INSTANCE.getAvatarSize();
-
-        final int minSideLength = Math.min(avatarWidth, maxHeight);
-        opts.inSampleSize = ImageUtils.computeSampleSize(opts, minSideLength,
-                avatarWidth * maxHeight);
-        opts.inJustDecodeBounds = false;
-        opts.inInputShareable = true;
-        opts.inPurgeable = true;
-        Bitmap bitmap = BitmapFactory.decodeFile(avatarPath, opts);
-        if (bitmap != null && bitmap.getWidth() != avatarWidth) {
-            Bitmap tmp = bitmap;
-            bitmap = zoomImageByWidth(tmp, avatarWidth, false);
-            tmp.recycle();
+    @JvmOverloads
+    @JvmStatic
+    fun loadAvatarFromSdcard(avatarPath: String?, maxHeight: Int = max_avatar_height): Bitmap? {
+        val opts = BitmapFactory.Options()
+        opts.inJustDecodeBounds = true
+        val avatarWidth = avatarSize
+        val minSideLength = avatarWidth.coerceAtMost(maxHeight)
+        opts.inSampleSize = computeSampleSize(
+            opts, minSideLength,
+            avatarWidth * maxHeight
+        )
+        opts.inJustDecodeBounds = false
+        opts.inInputShareable = true
+        opts.inPurgeable = true
+        var bitmap = BitmapFactory.decodeFile(avatarPath, opts)
+        if (bitmap != null && bitmap.width != avatarWidth) {
+            val tmp = bitmap
+            bitmap = zoomImageByWidth(tmp, avatarWidth, false)
+            tmp.recycle()
         }
-
-        return bitmap;
+        return bitmap
     }
 
-    @SuppressWarnings("ResourceType")
-    public static Bitmap loadDefaultAvatar() {
-        Resources res = ContextUtils.getResources();
-        InputStream is = res.openRawResource(R.drawable.default_avatar);
-        InputStream is2 = res.openRawResource(R.drawable.default_avatar);
-        return loadAvatarFromStream(is, is2);
+    @JvmStatic
+    fun fitImageToUpload(`is`: InputStream?, is2: InputStream): ByteArray? {
+        if (`is` == null) return null
+        if (`is` === is2) return null
+        val opts = BitmapFactory.Options()
+        opts.inJustDecodeBounds = true
+        val minSideLength = 512
+        opts.inSampleSize = computeSampleSize(
+            opts, minSideLength,
+            1024 * 1024
+        )
+        opts.inJustDecodeBounds = false
+        opts.inInputShareable = true
+        opts.inPurgeable = true
+        val bitmap = BitmapFactory.decodeStream(is2, null, opts)
+        val stream = ByteArrayOutputStream()
+        bitmap!!.compress(CompressFormat.PNG, 100, stream)
+        return stream.toByteArray()
     }
 
-    static public Bitmap loadAvatarFromStream(InputStream is, InputStream is2) {
-        return loadAvatarFromStream(is, is2, max_avatar_height);
-    }
-
-    static public Bitmap loadAvatarFromStream(InputStream is, InputStream is2, int maxHeight) {
-        if (is == null)
-            return null;
-        if (is == is2)
-            return null;
-        BitmapFactory.Options opts = new BitmapFactory.Options();
-        opts.inJustDecodeBounds = true;
-        final int avatarWidth = PhoneConfiguration.INSTANCE.getAvatarSize();
-
-        final int minSideLength = Math.min(avatarWidth, maxHeight);
-        opts.inSampleSize = ImageUtils.computeSampleSize(opts, minSideLength,
-                avatarWidth * maxHeight);
-        opts.inJustDecodeBounds = false;
-        opts.inInputShareable = true;
-        opts.inPurgeable = true;
-        Bitmap bitmap = BitmapFactory.decodeStream(is2, null, opts);
-        if (bitmap != null && bitmap.getWidth() != avatarWidth) {
-            Bitmap tmp = bitmap;
-            bitmap = zoomImageByWidth(tmp, avatarWidth, false);
-            tmp.recycle();
-        }
-        return bitmap;
-    }
-
-    static public byte[] fitImageToUpload(InputStream is, InputStream is2) {
-        if (is == null)
-            return null;
-        if (is == is2)
-            return null;
-        BitmapFactory.Options opts = new BitmapFactory.Options();
-        opts.inJustDecodeBounds = true;
-        final int minSideLength = 512;
-        opts.inSampleSize = ImageUtils.computeSampleSize(opts, minSideLength,
-                1024 * 1024);
-        opts.inJustDecodeBounds = false;
-        opts.inInputShareable = true;
-        opts.inPurgeable = true;
-        Bitmap bitmap = BitmapFactory.decodeStream(is2, null, opts);
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(CompressFormat.PNG, 100, stream);
-        return stream.toByteArray();
-
-    }
-
-
-    static public byte[] fitNGAImageToUpload(InputStream is, BitmapFactory.Options opts) {
-        if (is == null)
-            return null;
-
-        int width = opts.outWidth;
-        int height = opts.outHeight;
-
+    @JvmStatic
+    fun fitNGAImageToUpload(`is`: InputStream?, opts: BitmapFactory.Options): ByteArray? {
+        if (`is` == null) return null
+        var width = opts.outWidth
+        var height = opts.outHeight
         if (height > 255) {
             if (width <= 180) {
-                width = (int) (255 * width / height);
-                height = 255;
+                width = (255 * width / height)
+                height = 255
             } else {
-                if (((float) (height / width)) > ((float) (255 / 180))) {
-                    width = (int) (255 * width / height);
-                    height = 255;
-                } else if (((float) (height / width)) < ((float) (255 / 180))) {
-                    height = (int) (180 * height / width);
-                    width = 180;
+                if ((height / width).toFloat() > (255 / 180).toFloat()) {
+                    width = (255 * width / height)
+                    height = 255
+                } else if ((height / width).toFloat() < (255 / 180).toFloat()) {
+                    height = (180 * height / width)
+                    width = 180
                 } else {
-                    height = 255;
-                    width = 180;
+                    height = 255
+                    width = 180
                 }
             }
         } else {
             if (width > 180) {
-                height = (int) (180 * height / width);
-                width = 180;
+                height = (180 * height / width)
+                width = 180
             }
         }
-
-        int widthchuli = 1, heightchuli = 1;
-        if (opts.outWidth % width == 0) {
-            widthchuli = opts.outWidth / width;
+        var widthchuli = 1
+        var heightchuli = 1
+        widthchuli = if (opts.outWidth % width == 0) {
+            opts.outWidth / width
         } else {
-            widthchuli = opts.outWidth / width + 1;
+            opts.outWidth / width + 1
         }
-        if (opts.outHeight % height == 0) {
-            heightchuli = opts.outHeight / height;
+        heightchuli = if (opts.outHeight % height == 0) {
+            opts.outHeight / height
         } else {
-            heightchuli = opts.outHeight / height + 1;
+            opts.outHeight / height + 1
         }
-        opts.inSampleSize = Math.max(widthchuli, heightchuli);
-        opts.inJustDecodeBounds = false;
-        opts.inPurgeable = true;
-        Bitmap bitmap = BitmapFactory.decodeStream(is, null, opts);
-        if (opts.outHeight > 255 || opts.outWidth > 180)
-            bitmap = Bitmap.createScaledBitmap(bitmap, width, height,
-                    true);
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(CompressFormat.PNG, 100, stream);
-        return stream.toByteArray();
+        opts.inSampleSize = Math.max(widthchuli, heightchuli)
+        opts.inJustDecodeBounds = false
+        opts.inPurgeable = true
+        var bitmap = BitmapFactory.decodeStream(`is`, null, opts)
+        if (opts.outHeight > 255 || opts.outWidth > 180) bitmap = Bitmap.createScaledBitmap(
+            bitmap!!, width, height,
+            true
+        )
+        val stream = ByteArrayOutputStream()
+        bitmap!!.compress(CompressFormat.PNG, 100, stream)
+        return stream.toByteArray()
     }
 
-    public static void recycleImageView(ImageView avatarIV) {
-
-        Drawable drawable = avatarIV.getDrawable();
-        if (drawable instanceof BitmapDrawable) {
-            BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
-            Bitmap bitmap = bitmapDrawable.getBitmap();
-            if (bitmap != null)
-                bitmap.recycle();
+    fun recycleImageView(avatarIV: ImageView) {
+        val drawable = avatarIV.drawable
+        if (drawable is BitmapDrawable) {
+            val bitmap = drawable.bitmap
+            bitmap?.recycle()
         }
     }
 
-    public static Bitmap toRoundCorner(Bitmap bitmap, float ratio) { // 绝无问题
-        int size = Math.min(bitmap.getWidth(), bitmap.getHeight());
-
-        bitmap = Bitmap.createBitmap(bitmap, (bitmap.getWidth() - size) / 2, (bitmap.getHeight() - size) / 2, size, size);
-        Bitmap output = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
-
-        Canvas canvas = new Canvas(output);
-        Paint paint = new Paint();
-        Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
-        RectF rectF = new RectF(rect);
-        paint.setAntiAlias(true);
-
-        canvas.drawARGB(0, 0, 0, 0);
-        canvas.drawRoundRect(rectF, ((float) bitmap.getWidth()) / ratio, ((float) bitmap.getHeight()) / ratio, paint);
-        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
-        canvas.drawBitmap(bitmap, rect, rect, paint);
-        return output;
-    }
-
-    public static void loadRoundCornerAvatar(ImageView imageView, String url, boolean onlyRetrieveFromCache) {
-        Context context = ContextUtils.getContext();
-        if (sDefaultAvatar == null) {
-            Bitmap defaultAvatar = BitmapFactory.decodeResource(context.getResources(), R.drawable.default_avatar);
-            sDefaultAvatar = new BitmapDrawable(context.getResources(), ImageUtils.toRoundCorner(defaultAvatar, 2));
+    @JvmStatic
+    fun loadRoundCornerAvatar(
+        imageView: ImageView,
+        url: String?,
+    ) {
+        imageView.load(
+            url
+        ){
+            transformations(CircleCropTransformation())
+            placeholder(sDefaultAvatar)
+            error(sDefaultAvatar)
+            crossfade(false)
         }
-        if (!PermissionUtils.hasPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-            imageView.setImageDrawable(sDefaultAvatar);
-            return;
+    }
+
+    @JvmStatic
+    fun loadAvatar(imageView: ImageView, url: String) {
+        imageView.load(
+            url
+        ){
+            placeholder(sDefaultAvatar)
+            error(sDefaultAvatar)
+            crossfade(false)
         }
-        GlideApp.with(ContextUtils.getContext())
-                .load(url)
-                .placeholder(sDefaultAvatar)
-                .circleCrop()
-                .onlyRetrieveFromCache(onlyRetrieveFromCache)
-                .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
-                .into(imageView);
     }
-
-    public static void loadRoundCornerAvatar(ImageView imageView, String url) {
-        loadRoundCornerAvatar(imageView, url, false);
-    }
-
-
-    public static void loadAvatar(ImageView imageView, String url) {
-        Context context = ContextUtils.getContext();
-        if (sDefaultAvatar == null) {
-            Bitmap defaultAvatar = BitmapFactory.decodeResource(context.getResources(), R.drawable.default_avatar);
-            sDefaultAvatar = new BitmapDrawable(context.getResources(), ImageUtils.toRoundCorner(defaultAvatar, 2));
-        }
-        GlideApp.with(ContextUtils.getContext())
-                .load(url)
-                .placeholder(sDefaultAvatar)
-                .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
-                .into(imageView);
-    }
-
 }

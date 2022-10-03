@@ -9,9 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.CheckBox
 import android.widget.ImageView
-import android.widget.Switch
-import gov.anzong.androidnga.GlideApp
-import com.bumptech.glide.load.engine.DiskCacheStrategy
+import coil.load
 import sp.phone.common.User
 import sp.phone.common.UserManager
 import sp.phone.common.UserManagerImpl
@@ -54,11 +52,7 @@ class UserListAdapter(private val mContext: Context, userList: List<User>) :
         holder.itemView.tag = position
         holder.checkView.tag = position
         val avatarUrl = user.avatarUrl
-        GlideApp.with(mContext)
-            .load(avatarUrl)
-            .placeholder(R.drawable.default_avatar)
-            .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
-            .into(holder.avatarView)
+        holder.avatarView.load(avatarUrl)
     }
 
     override fun getItemCount(): Int {
