@@ -8,7 +8,6 @@ import android.view.View
 import com.alibaba.android.arouter.launcher.ARouter
 import gov.anzong.androidnga.arouter.ARouterConstants
 import nosc.utils.uxUtils.ToastUtils
-import sp.phone.common.PhoneConfiguration
 import sp.phone.common.appConfig
 import sp.phone.mvp.model.entity.Board
 import sp.phone.param.ArticleListParam
@@ -62,7 +61,7 @@ fun Activity.toTopicListPage(position: Int, fidString: String) {
         return
     }
     NLog.i(this.javaClass.simpleName, "set host:" + HttpUtil.HOST)
-    var url = ForumUtils.getAvailableDomain() + "/thread.php?fid=" + fidString + "&rss=1"
+    var url = ForumUtils.getApiDomain() + "/thread.php?fid=" + fidString + "&rss=1"
     if (!StringUtils.isEmpty(appConfig.cookie)) {
         url = url + "&" + appConfig.cookie.replace("; ", "&")
     } else if (fid < 0) {

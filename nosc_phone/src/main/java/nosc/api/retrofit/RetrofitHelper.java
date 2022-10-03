@@ -32,12 +32,12 @@ public class RetrofitHelper {
 
     private RetrofitHelper() {
         SharedPreferences sp = ContextUtils.getContext().getSharedPreferences(PreferenceKey.PERFERENCE, Context.MODE_PRIVATE);
-        mBaseUrl = ForumUtils.getAvailableDomain();
+        mBaseUrl = ForumUtils.getApiDomain();
         mRetrofit = createRetrofit();
 
         sp.registerOnSharedPreferenceChangeListener((sp1, key) -> {
             if (key.equals(PreferenceKey.KEY_NGA_DOMAIN)) {
-                mBaseUrl = ForumUtils.getAvailableDomain();
+                mBaseUrl = ForumUtils.getApiDomain();
                 mRetrofit = createRetrofit();
             }
         });

@@ -9,10 +9,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.CheckBox
 import android.widget.ImageView
-import coil.load
 import sp.phone.common.User
 import sp.phone.common.UserManager
 import sp.phone.common.UserManagerImpl
+import sp.phone.util.ImageUtils
 
 class UserListAdapter(private val mContext: Context, userList: List<User>) :
     RecyclerView.Adapter<UserListAdapter.UserViewHolder>() {
@@ -52,7 +52,7 @@ class UserListAdapter(private val mContext: Context, userList: List<User>) :
         holder.itemView.tag = position
         holder.checkView.tag = position
         val avatarUrl = user.avatarUrl
-        holder.avatarView.load(avatarUrl)
+        ImageUtils.loadRoundCornerAvatar(holder.avatarView,avatarUrl)
     }
 
     override fun getItemCount(): Int {

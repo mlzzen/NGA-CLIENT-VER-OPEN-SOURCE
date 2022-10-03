@@ -16,6 +16,7 @@ class LoginActivity : BaseActivity() {
         supportActionBar?.let{ actionBar ->
             actionBar.setDisplayHomeAsUpEnabled(true)
             actionBar.setDisplayShowHomeEnabled(true)
+            actionBar.subtitle = LoginWebFragment.URL_LOGIN
         }
     }
 

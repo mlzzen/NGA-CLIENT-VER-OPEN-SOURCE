@@ -7,10 +7,7 @@ import sp.phone.util.ForumUtils;
  */
 public class Utils {
     public static String getNGAHost() {
-        return ForumUtils.getAvailableDomain() + "/";
+        return ForumUtils.getApiDomain() + "/";
     }
 
-    public static String getNGADomain() {
-        return ForumUtils.getAvailableDomain();
-    }
 }

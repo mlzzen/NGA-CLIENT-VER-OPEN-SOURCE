@@ -21,6 +21,7 @@ import java.net.URL;
 import gov.anzong.androidnga.R;
 import gov.anzong.androidnga.Utils;
 import nosc.utils.uxUtils.ToastUtils;
+import sp.phone.util.ForumUtils;
 import sp.phone.util.ImageUtils;
 import sp.phone.util.ActivityUtils;
 import sp.phone.util.NLog;
@@ -207,7 +208,7 @@ public class AvatarFileUploadTask extends AsyncTask<String, Integer, String> {
                 "attachment_file1_dscp", "attachment_file1_url_utf8_name",
                 "fid", "func", "attachment_file1_img", "origin_domain", "lite"};
         final String values[] = {"1", "", "", filename, "-7", "upload", "1",
-                Utils.getNGADomain(), "js"};
+                ForumUtils.getApiDomain(), "js"};
 
         for (int i = 0; i < keys.length; ++i) {
             sb = sb.append("--");

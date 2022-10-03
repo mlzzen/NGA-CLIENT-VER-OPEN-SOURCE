@@ -1,158 +1,140 @@
-package sp.phone.view.webview;
+package sp.phone.view.webview
 
-import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
+import android.content.Context
+import android.webkit.WebViewClient
+import sp.phone.view.webview.WebViewClientEx
+import com.alibaba.android.arouter.launcher.ARouter
+import gov.anzong.androidnga.arouter.ARouterConstants
+import android.webkit.WebView
+import android.content.Intent
+import android.net.Uri
+import android.webkit.WebResourceRequest
+import gov.anzong.androidnga.activity.TopicListActivity
+import gov.anzong.androidnga.gallery.ImageZoomActivity
+import gov.anzong.androidnga.activity.ArticleListActivity
+import gov.anzong.androidnga.R
+import nosc.utils.ContextUtils
+import sp.phone.util.ForumUtils
+import sp.phone.util.StringUtils
+import java.io.UnsupportedEncodingException
+import java.net.URLDecoder
+import java.util.ArrayList
 
-import com.alibaba.android.arouter.launcher.ARouter;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.util.ArrayList;
-import java.util.List;
-
-import gov.anzong.androidnga.R;
-import gov.anzong.androidnga.activity.ArticleListActivity;
-import gov.anzong.androidnga.activity.TopicListActivity;
-import gov.anzong.androidnga.arouter.ARouterConstants;
-import gov.anzong.androidnga.gallery.ImageZoomActivity;
-import nosc.utils.ContextUtils;;
-import sp.phone.util.StringUtils;
-
-public class WebViewClientEx extends WebViewClient {
-
-    private List<String> mImgUrlList;
-
-    private static final String[] NGA_USER_PROFILE_START = {
-            "http://bbs.ngacn.cc/nuke.php?func=ucp&username=",
-            "http://bbs.nga.cn/nuke.php?func=ucp&username=",
-    };
-
-    private static final String NGA_USER_PROFILE_END = "&";
-
-    private static final String[] SUFFIX_IMAGE = {
-            ".gif", ".jpg", ".png", ".jpeg", ".bmp"
-    };
-
-    private static final String NGA_READ = "/read.php?";
-
-    private static final String NGA_THREAD = "/thread.php?";
-
-    private static String[] sReadPrefix;
-
-    private static String[] sThreadPrefix;
-
-    static {
-        String[] domains = ContextUtils.getContext().getResources().getStringArray(R.array.nga_domain_no_http);
-        sThreadPrefix = new String[domains.length];
-        sReadPrefix = new String[domains.length];
-        for (int i = 0; i < domains.length; i++) {
-            sThreadPrefix[i] = domains[i] + NGA_THREAD;
-            sReadPrefix[i] = domains[i] + NGA_READ;
-        }
+class WebViewClientEx : WebViewClient() {
+    private var mImgUrlList: MutableList<String> = ArrayList()
+    private var fallbackRead = false
+    fun setImgUrls(list: List<String>) {
+        mImgUrlList.clear()
+        mImgUrlList.addAll(list)
     }
 
-    public WebViewClientEx(Context context) {
-        super();
+    fun setFallbackRead(fallbackRead: Boolean) {
+        this.fallbackRead = fallbackRead
     }
 
-    public WebViewClientEx() {
-        super();
-    }
-
-    public void setImgUrls(List<String> list) {
-        mImgUrlList = list;
-    }
-
-    private boolean overrideProfileUrlLoading(Context context, String url) {
-        for (String profileStart : NGA_USER_PROFILE_START)
-            if (url.startsWith(profileStart)) {
-                String data = StringUtils.getStringBetween(url, 0,
-                        profileStart, NGA_USER_PROFILE_END).result;
-                try {
-                    data = URLDecoder.decode(data, "utf-8");
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                }
-
-                if (!StringUtils.isEmpty(data)) {
-                    ARouter.getInstance()
-                            .build(ARouterConstants.ACTIVITY_PROFILE)
-                            .withString("mode", "username")
-                            .withString("username", data)
-                            .navigation(context);
-                }
-                return true;
+    private fun overrideProfileUrlLoading(context: Context, url: String): Boolean {
+        for (profileStart in NGA_USER_PROFILE_START) if (url.startsWith(profileStart)) {
+            var data = StringUtils.getStringBetween(
+                url, 0,
+                profileStart, NGA_USER_PROFILE_END
+            ).result
+            try {
+                data = URLDecoder.decode(data, "utf-8")
+            } catch (e: UnsupportedEncodingException) {
+                e.printStackTrace()
             }
-        return false;
+            if (!StringUtils.isEmpty(data)) {
+                ARouter.getInstance()
+                    .build(ARouterConstants.ACTIVITY_PROFILE)
+                    .withString("mode", "username")
+                    .withString("username", data)
+                    .navigation(context)
+            }
+            return true
+        }
+        return true
     }
 
-    @Override
-    public boolean shouldOverrideUrlLoading(WebView view, String url) {
-        Context context = view.getContext();
-
+    override fun shouldOverrideUrlLoading(view: WebView, webResourceRequest: WebResourceRequest): Boolean {
+        var url = webResourceRequest.url.toString()
+        val context = view.context
         if (!url.startsWith("http") && !url.startsWith("market")) {
-            url = "http://" + url;
+            url = "http://$url"
         }
-
-        for (String read : sReadPrefix) {
-            if (url.startsWith(read, "http://".length())
-                    || url.startsWith(read, "https://".length())) {
-                Intent intent = new Intent();
-                intent.setData(Uri.parse(url));
-                intent.putExtra("fromreplyactivity", 1);
-                intent.setClass(context, ArticleListActivity.class);
-                context.startActivity(intent);
-                return true;
+        for (thread in sThreadPrefix) {
+            if (url.startsWith(thread, "http://".length)
+                || url.startsWith(thread, "https://".length)
+            ) {
+                val intent = Intent()
+                intent.data = Uri.parse(url)
+                intent.setClass(context, TopicListActivity::class.java)
+                context.startActivity(intent)
+                return true
             }
         }
-
-        for (String thread : sThreadPrefix) {
-            if (url.startsWith(thread, "http://".length())
-                    || url.startsWith(thread, "https://".length())) {
-                Intent intent = new Intent();
-                intent.setData(Uri.parse(url));
-                intent.setClass(context, TopicListActivity.class);
-                context.startActivity(intent);
-                return true;
-            }
-        }
-
-        for (String suffix : SUFFIX_IMAGE) {
+        for (suffix in SUFFIX_IMAGE) {
             if (url.endsWith(suffix)) {
-                Intent intent = new Intent();
-                if (mImgUrlList == null) {
-                    mImgUrlList = new ArrayList<>();
-                    mImgUrlList.add(url);
-                } else if (mImgUrlList.isEmpty()) {
-                    mImgUrlList.add(url);
+                val intent = Intent()
+                if (mImgUrlList.isEmpty()) {
+                    mImgUrlList.add(url)
                 }
-                String[] urls = new String[mImgUrlList.size()];
-                mImgUrlList.toArray(urls);
-                intent.putExtra(ImageZoomActivity.KEY_GALLERY_URLS, urls);
-                intent.putExtra(ImageZoomActivity.KEY_GALLERY_CUR_URL, url);
-                intent.setClass(context, ImageZoomActivity.class);
-                context.startActivity(intent);
-                return true;
+                val urls = arrayOfNulls<String>(mImgUrlList.size)
+                intent.putExtra(ImageZoomActivity.KEY_GALLERY_URLS, urls)
+                intent.putExtra(ImageZoomActivity.KEY_GALLERY_CUR_URL, url)
+                intent.setClass(context, ImageZoomActivity::class.java)
+                context.startActivity(intent)
+                return true
             }
         }
-
         if (!overrideProfileUrlLoading(context, url)) {
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setData(Uri.parse(url));
-            boolean isSafeIntent = context.getPackageManager().queryIntentActivities(intent, 0).size() > 0;
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.data = Uri.parse(url)
+            val isSafeIntent = context.packageManager.queryIntentActivities(intent, 0).size > 0
             if (isSafeIntent) {
-                context.startActivity(intent);
+                context.startActivity(intent)
+            }
+            return true
+        }
+        if (fallbackRead) {
+            return false
+        } else {
+            for (read in sReadPrefix) {
+                if (url.startsWith(read, "http://".length)
+                    || url.startsWith(read, "https://".length)
+                ) {
+                    val intent = Intent()
+                    intent.data = Uri.parse(url)
+                    intent.putExtra("fromreplyactivity", 1)
+                    intent.setClass(context, ArticleListActivity::class.java)
+                    context.startActivity(intent)
+                    return true
+                }
             }
         }
-        return true;
+        return true
     }
 
-    @Override
-    public void onPageFinished(WebView view, String url) {
-        view.getSettings().setBlockNetworkImage(false);
-        super.onPageFinished(view, url);
+    override fun onPageFinished(view: WebView, url: String) {
+        view.settings.blockNetworkImage = false
+        super.onPageFinished(view, url)
+    }
+
+    companion object {
+        private val NGA_USER_PROFILE_START = ForumUtils.getAllDomains().flatMap {
+            listOf("$it/nuke.php?func=ucp&username=","$it/nuke.php?func=ucp&username=")
+        }
+        private const val NGA_USER_PROFILE_END = "&"
+        private val SUFFIX_IMAGE = arrayOf(".gif", ".jpg", ".png", ".jpeg", ".bmp")
+        private const val NGA_READ = "/read.php?"
+        private const val NGA_THREAD = "/thread.php?"
+        private val sReadPrefix: List<String>
+        private val sThreadPrefix: List<String>
+
+        init {
+            val domains =
+                ContextUtils.getContext().resources.getStringArray(R.array.nga_domain_no_http)
+            sThreadPrefix = domains.map { "$it$NGA_THREAD" }
+            sReadPrefix = domains.map { "$it$NGA_READ" }
+        }
     }
 }

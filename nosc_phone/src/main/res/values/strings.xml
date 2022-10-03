@@ -120,7 +120,8 @@
     <string name="setting_title_user">用户管理</string>
     <string name="setting_title_black_list">黑名单</string>
     <string name="setting_title_filter_sub_board">过滤版主固定的渣帖子</string>
-    <string name="setting_nga_domain">NGA域名</string>
+    <string name="setting_nga_domain">NGA域名(API)</string>
+    <string name="setting_nga_domain_browser">NGA域名(浏览器)</string>
     <string name="setting_avatar_network_title">载入头像</string>
     <string name="setting_avatar_network_summary">移动数据网络下载入头像</string>
     <string name="setting_image_network_title">载入帖子图片</string>
@@ -145,6 +146,7 @@
     <string name="menu_search_post">搜索发帖</string>
     <string name="menu_search_reply">搜索回复</string>
     <string name="menu_open_by_browser">通过浏览器打开</string>
+    <string name="menu_open_by_webview">通过浏览器页面打开</string>
     <string name="menu_download_all">下载全部图片</string>
     <string name="menu_oppose">反对</string>
     <string name="menu_support">支持</string>

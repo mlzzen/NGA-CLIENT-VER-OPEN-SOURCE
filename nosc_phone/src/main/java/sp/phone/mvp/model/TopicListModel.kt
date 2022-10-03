@@ -174,7 +174,7 @@ class TopicListModel : BaseModel() {
     }
 
     private fun getUrl(page: Int, requestInfo: TopicListParam): String {
-        val urlStr = StringBuilder(ForumUtils.getAvailableDomain() + "/thread.php?")
+        val urlStr = StringBuilder(ForumUtils.getApiDomain() + "/thread.php?")
         if (0 != requestInfo.authorId) {
             urlStr.append("authorid=").append(requestInfo.authorId).append("&")
         }

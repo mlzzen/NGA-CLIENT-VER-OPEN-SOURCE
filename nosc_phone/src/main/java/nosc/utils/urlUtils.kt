@@ -1,9 +1,9 @@
 package nosc.utils
 
-import gov.anzong.androidnga.Utils
 import nosc.api.constants.ApiConstants
 import sp.phone.mvp.model.entity.Board
 import sp.phone.param.ArticleListParam
+import sp.phone.util.ForumUtils
 
 /**
  * @author Yricky
@@ -12,7 +12,7 @@ import sp.phone.param.ArticleListParam
 
 fun ArticleListParam.toUrl(): String {
     val builder = StringBuilder()
-    builder.append(Utils.getNGAHost()).append("read.php?")
+    builder.append(ForumUtils.getBrowserDomain()).append("/read.php?")
     if (pid != 0) {
         builder.append("pid=").append(pid)
     } else {

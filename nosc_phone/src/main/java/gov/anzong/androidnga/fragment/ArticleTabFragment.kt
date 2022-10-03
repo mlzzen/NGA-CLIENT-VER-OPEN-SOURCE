@@ -33,6 +33,7 @@ import nosc.viewmodel.ArticleShareViewModel
 import sp.phone.common.appConfig
 import sp.phone.rxjava.RxBus
 import sp.phone.rxjava.RxEvent
+import sp.phone.util.ForumUtils
 import sp.phone.util.StringUtils
 import sp.phone.view.behavior.ScrollAwareFamBehavior
 import java.lang.StringBuilder
@@ -152,9 +153,8 @@ class ArticleTabFragment : BaseRxFragment() {
             R.id.menu_add_bookmark -> BookmarkTask.execute(mRequestParam!!.tid)
             R.id.menu_share -> share()
             R.id.menu_copy_url -> copyUrl()
-            R.id.menu_open_by_browser -> openByBrowser()
-            R.id.menu_nightmode -> ThemeManager.getInstance().isNightMode = true
-            R.id.menu_daymode -> ThemeManager.getInstance().isNightMode = false
+            R.id.menu_open_by_browser -> FunctionUtils.openUrlByDefaultBrowser(activity, url)
+            R.id.menu_open_by_webview -> FunctionUtils.openArticleByWebView(activity, url)
             R.id.menu_return -> requireActivity().startArticleActivity("${mRequestParam?.tid}",mRequestParam?.title)
             R.id.menu_download -> {
                 mRequestParam!!.page = mViewPager!!.currentItem + 1
@@ -169,7 +169,7 @@ class ArticleTabFragment : BaseRxFragment() {
     val url: String
         get() {
             val builder = StringBuilder()
-            builder.append(Utils.getNGAHost()).append("read.php?")
+            builder.append(ForumUtils.getBrowserDomain()).append("/read.php?")
             if (mRequestParam!!.pid != 0) {
                 builder.append("pid=").append(mRequestParam!!.pid)
             } else {
@@ -186,9 +186,6 @@ class ArticleTabFragment : BaseRxFragment() {
         ToastUtils.info("已经复制至粘贴板")
     }
 
-    private fun openByBrowser() {
-        FunctionUtils.openUrlByDefaultBrowser(activity, url)
-    }
 
     private fun share() {
         val title = getString(R.string.share)
@@ -211,16 +208,6 @@ class ArticleTabFragment : BaseRxFragment() {
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
-        if (ThemeManager.getInstance().isNightModeFollowSystem) {
-            menu.findItem(R.id.menu_nightmode).isVisible = false
-            menu.findItem(R.id.menu_daymode).isVisible = false
-        } else if (ThemeManager.getInstance().isNightMode) {
-            menu.findItem(R.id.menu_nightmode).isVisible = false
-            menu.findItem(R.id.menu_daymode).isVisible = true
-        } else {
-            menu.findItem(R.id.menu_nightmode).isVisible = true
-            menu.findItem(R.id.menu_daymode).isVisible = false
-        }
         if (mRequestParam?.pid != 0 || mRequestParam?.topicInfo == null) {
             menu.findItem(R.id.menu_download).isVisible = false
         }

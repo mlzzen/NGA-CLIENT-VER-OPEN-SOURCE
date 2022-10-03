@@ -33,7 +33,7 @@ class ArticleListModel: ArticleListContract.Model {
         val pid = param.pid
         val authorId = param.authorId
         var url =
-            ForumUtils.getAvailableDomain() + "/read.php?" + "&page=" + page + "&lite=js&noprefix&v2"
+            ForumUtils.getApiDomain() + "/read.php?" + "&page=" + page + "&lite=js&noprefix&v2"
         if (tid != 0) {
             url = "$url&tid=$tid"
         }

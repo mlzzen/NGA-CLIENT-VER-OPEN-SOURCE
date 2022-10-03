@@ -60,12 +60,6 @@ public class ThemeManager implements SharedPreferences.OnSharedPreferenceChangeL
         sessionThemeVersion++;
     }
 
-    public void setNightMode(boolean isNightMode) {
-        SharedPreferences sp = ContextUtils.getSharedPreferences(PreferenceKey.PERFERENCE);
-        sp.edit().putBoolean(PreferenceKey.NIGHT_MODE, isNightMode).apply();
-        sessionThemeVersion++;
-    }
-
     private static class ThemeManagerHolder {
 
         private static final ThemeManager sInstance = new ThemeManager();
@@ -145,6 +139,10 @@ public class ThemeManager implements SharedPreferences.OnSharedPreferenceChangeL
     public int getTheme(boolean toolbarEnabled) {
         int index = mThemeIndex;
         return toolbarEnabled ? mAppThemes[index] : mAppThemesActionBar[index];
+    }
+
+    public String getThemeName(){
+        return ContextUtils.getResources().getStringArray(R.array.material_theme)[mThemeIndex];
     }
 
     public void applyAboutTheme(AppCompatActivity activity) {

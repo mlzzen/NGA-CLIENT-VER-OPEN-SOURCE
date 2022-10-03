@@ -39,7 +39,7 @@ public class SearchActivity extends BaseActivity {
             actionBar.setDisplayShowHomeEnabled(true);
         }
 
-        FragmentTabHost tabHost = (FragmentTabHost) findViewById(android.R.id.tabhost);
+        FragmentTabHost tabHost = findViewById(android.R.id.tabhost);
         tabHost.setup(this, getSupportFragmentManager(), R.id.real_content);
         Bundle bundle = new Bundle();
         bundle.putString("mode", SEARCH_MODE_TOPIC);

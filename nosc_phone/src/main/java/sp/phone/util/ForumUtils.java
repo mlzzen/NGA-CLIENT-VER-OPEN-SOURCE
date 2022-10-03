@@ -12,11 +12,23 @@ import nosc.utils.PreferenceKey;
  */
 public class ForumUtils {
 
-    public static String getAvailableDomain() {
+    public static String getApiDomain() {
         Context context = ContextUtils.getContext();
         SharedPreferences sp = context.getSharedPreferences(PreferenceKey.PERFERENCE, Context.MODE_PRIVATE);
         int index = Integer.parseInt(sp.getString(PreferenceKey.KEY_NGA_DOMAIN, "1"));
-        return context.getResources().getStringArray(R.array.nga_domain)[index];
+        return getAllDomains()[index];
+    }
+
+    public static String getBrowserDomain() {
+        Context context = ContextUtils.getContext();
+        SharedPreferences sp = context.getSharedPreferences(PreferenceKey.PERFERENCE, Context.MODE_PRIVATE);
+        int index = Integer.parseInt(sp.getString(PreferenceKey.KEY_NGA_DOMAIN_BROWSER, "1"));
+        return getAllDomains()[index];
+    }
+
+    public static String[] getAllDomains(){
+        Context context = ContextUtils.getContext();
+        return context.getResources().getStringArray(R.array.nga_domain);
     }
 
 

@@ -1,140 +1,124 @@
-package gov.anzong.androidnga.fragment;
+package gov.anzong.androidnga.fragment
 
-import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
-import android.preference.ListPreference;
-import android.preference.Preference;
-import android.preference.PreferenceFragment;
-import android.preference.PreferenceGroup;
-import android.preference.PreferenceScreen;
+import android.content.Context
+import androidx.preference.PreferenceFragmentCompat
+import android.os.Bundle
+import nosc.utils.PreferenceKey
+import gov.anzong.androidnga.R
+import sp.phone.theme.ThemeManager
+import gov.anzong.androidnga.fragment.dialog.AlertDialogFragment
+import android.content.DialogInterface
+import gov.anzong.androidnga.activity.SettingsActivity
+import nosc.utils.ThreadUtils
+import android.content.Intent
+import android.os.Build
+import androidx.preference.ListPreference
+import androidx.preference.Preference
+import androidx.preference.PreferenceGroup
+import gov.anzong.androidnga.activity.LauncherSubActivity
+import nosc.utils.ContextUtils
+import sp.phone.common.UserManagerImpl
+import nosc.utils.uxUtils.ToastUtils
+import org.apache.commons.io.FileUtils
+import sp.phone.util.ForumUtils
+import java.io.IOException
 
-import androidx.annotation.Nullable;
-
-
-import org.apache.commons.io.FileUtils;
-
-import java.io.IOException;
-
-import gov.anzong.androidnga.R;
-import gov.anzong.androidnga.activity.BaseActivity;
-import gov.anzong.androidnga.activity.LauncherSubActivity;
-import gov.anzong.androidnga.activity.SettingsActivity;
-import nosc.utils.ContextUtils;
-import nosc.utils.ThreadUtils;
-import nosc.utils.uxUtils.ToastUtils;
-import nosc.utils.PreferenceKey;
-import gov.anzong.androidnga.fragment.dialog.AlertDialogFragment;
-import sp.phone.common.UserManagerImpl;
-import sp.phone.theme.ThemeManager;
-
-
-public class SettingsFragment extends PreferenceFragment implements Preference.OnPreferenceChangeListener {
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        getPreferenceManager().setSharedPreferencesName(PreferenceKey.PERFERENCE);
-        addPreferencesFromResource(R.xml.settings);
-        mapping(getPreferenceScreen());
-        configPreference();
+class SettingsFragment : PreferenceFragmentCompat(), Preference.OnPreferenceChangeListener {
+    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+        preferenceManager.sharedPreferencesName = PreferenceKey.PERFERENCE
+        setPreferencesFromResource(R.xml.settings, rootKey)
+        configPreference()
+        mapping(preferenceScreen)
     }
 
-    private void mapping(PreferenceGroup group) {
-        for (int i = 0; i < group.getPreferenceCount(); i++) {
-            Preference preference = group.getPreference(i);
-            if (preference instanceof PreferenceGroup) {
-                mapping((PreferenceGroup) preference);
+    private fun mapping(group: PreferenceGroup) {
+        for (i in 0 until group.preferenceCount) {
+            val preference = group.getPreference(i)
+            if (preference is PreferenceGroup) {
+                mapping(preference)
             } else {
-                preference.setOnPreferenceChangeListener(this);
+                preference.onPreferenceChangeListener = this
             }
         }
     }
 
-    private void configPreference() {
-        findPreference(PreferenceKey.NIGHT_MODE).setEnabled(!ThemeManager.getInstance().isNightModeFollowSystem());
-        findPreference(PreferenceKey.MATERIAL_THEME);
-
-        findPreference(PreferenceKey.KEY_CLEAR_CACHE).setOnPreferenceClickListener(preference -> {
-            showClearCacheDialog();
-            return true;
-        });
+    private fun configPreference() {
+        findPreference<ListPreference>(PreferenceKey.KEY_NGA_DOMAIN)?.setSummaryProvider {
+            ForumUtils.getApiDomain()
+        }
+        findPreference<ListPreference>(PreferenceKey.KEY_NGA_DOMAIN_BROWSER)?.setSummaryProvider {
+            ForumUtils.getBrowserDomain()
+        }
+        findPreference<ListPreference>(PreferenceKey.MATERIAL_THEME)?.setSummaryProvider {
+            ThemeManager.getInstance().themeName
+        }
+        findPreference<Preference>(PreferenceKey.NIGHT_MODE)?.isEnabled =
+            (!ThemeManager.getInstance().isNightModeFollowSystem) || Build.VERSION.SDK_INT < 29
+        findPreference<Preference>(PreferenceKey.KEY_NIGHT_MODE_FOLLOW_SYSTEM)?.isEnabled =
+            Build.VERSION.SDK_INT >=29
+        findPreference<Preference>(PreferenceKey.KEY_CLEAR_CACHE)?.onPreferenceClickListener =
+            Preference.OnPreferenceClickListener {
+                showClearCacheDialog()
+                true
+            }
     }
 
-    private void showClearCacheDialog() {
-        AlertDialogFragment dialogFragment = AlertDialogFragment.create("确认要清除缓存吗？");
-        dialogFragment.setPositiveClickListener((dialog, which) -> clearCache());
-        dialogFragment.show(((BaseActivity)getActivity()).getSupportFragmentManager(),"clear_cache");
+    private fun showClearCacheDialog() {
+        val dialogFragment = AlertDialogFragment.create("确认要清除缓存吗？")
+        dialogFragment.setPositiveClickListener { _: DialogInterface?, _: Int -> clearCache() }
+        dialogFragment.show(requireActivity().supportFragmentManager, "clear_cache")
     }
 
-    private void clearCache() {
-        ThreadUtils.postOnSubThread(() -> {
+    override fun onResume() {
+        requireActivity().setTitle(R.string.menu_setting)
+        super.onResume()
+    }
+
+    override fun onPreferenceChange(preference: Preference, newValue: Any): Boolean {
+        when (preference.key) {
+            PreferenceKey.NIGHT_MODE -> SettingsActivity.sRecreated = true
+            PreferenceKey.KEY_NIGHT_MODE_FOLLOW_SYSTEM -> {
+                findPreference<Preference>(PreferenceKey.NIGHT_MODE)!!.isEnabled =
+                    java.lang.Boolean.FALSE == newValue
+                SettingsActivity.sRecreated = true
+            }
+            PreferenceKey.MATERIAL_THEME -> {
+                SettingsActivity.sRecreated = true
+                ThreadUtils.postOnMainThreadDelay({
+                    requireActivity().recreate()
+                }, 200)
+            }
+            else -> {}
+        }
+        return true
+    }
+
+    override fun onPreferenceTreeClick(preference: Preference): Boolean {
+        when (preference.key) {
+            PreferenceKey.ADJUST_SIZE, PreferenceKey.PREF_USER, PreferenceKey.PREF_BLACK_LIST, "pref_keyword" -> {
+                val intent = Intent(activity, LauncherSubActivity::class.java)
+                intent.putExtra("fragment", preference.fragment)
+                startActivity(intent)
+            }
+            else -> return super.onPreferenceTreeClick(preference)
+        }
+        return true
+    }
+
+    private fun clearCache() {
+        ThreadUtils.postOnSubThread {
             // 清除avatar数据
-            UserManagerImpl.getInstance().clearAvatarUrl();
+            UserManagerImpl.getInstance().clearAvatarUrl()
             // 清除之前的使用过的awp缓存数据
             try {
-                FileUtils.deleteDirectory(ContextUtils.getContext().getDir("awp", Context.MODE_PRIVATE));
-            } catch (IOException e) {
-                e.printStackTrace();
+                FileUtils.deleteDirectory(
+                    ContextUtils.getContext().getDir("awp", Context.MODE_PRIVATE)
+                )
+                FileUtils.deleteDirectory(ContextUtils.getContext().externalCacheDir)
+            } catch (e: IOException) {
+                e.printStackTrace()
             }
-        });
-        ToastUtils.success("缓存清除成功");
-    }
-
-    @Override
-    public void onResume() {
-        getActivity().setTitle(R.string.menu_setting);
-        super.onResume();
-    }
-
-    @Override
-    public boolean onPreferenceChange(Preference preference, Object newValue) {
-
-        if (preference instanceof ListPreference) {
-            preference.setSummary(((ListPreference) preference).getEntry());
         }
-
-        String key = preference.getKey();
-        switch (key) {
-            case PreferenceKey.NIGHT_MODE:
-                SettingsActivity.sRecreated = true;
-                break;
-            case PreferenceKey.KEY_NIGHT_MODE_FOLLOW_SYSTEM:
-                findPreference(PreferenceKey.NIGHT_MODE).setEnabled(Boolean.FALSE.equals(newValue));
-                SettingsActivity.sRecreated = true;
-                break;
-            case PreferenceKey.MATERIAL_THEME:
-                SettingsActivity.sRecreated = true;
-                ThreadUtils.postOnMainThreadDelay(() -> {
-                    if (getActivity() != null) {
-                        getActivity().recreate();
-                    }
-                }, 200);
-                break;
-            default:
-                break;
-
-        }
-        return true;
+        ToastUtils.success("缓存清除成功")
     }
-
-
-    @Override
-    public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
-        switch (preference.getKey()) {
-            case PreferenceKey.ADJUST_SIZE:
-            case PreferenceKey.PREF_USER:
-            case PreferenceKey.PREF_BLACK_LIST:
-            case "pref_keyword":
-                Intent intent = new Intent(getActivity(), LauncherSubActivity.class);
-                intent.putExtra("fragment", preference.getFragment());
-                startActivity(intent);
-                break;
-            default:
-                return super.onPreferenceTreeClick(preferenceScreen, preference);
-
-        }
-        return true;
-    }
-
 }

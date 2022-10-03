@@ -27,8 +27,14 @@
         androidnga:showAsAction="never"/>
 
     <item
+        android:id="@+id/menu_open_by_webview"
+        android:icon="@drawable/btn_ic_share"
+        android:title="@string/menu_open_by_webview"
+        androidnga:showAsAction="never"/>
+
+    <item
         android:id="@+id/menu_download"
-        android:icon="@drawable/btn_ic_star_on"
+        android:icon="@drawable/ic_file_download"
         android:title="缓存本页"
         androidnga:showAsAction="never"/>
     <item
@@ -36,19 +42,5 @@
         android:icon="@drawable/btn_ic_star_on"
         android:title="@string/bookmark"
         androidnga:showAsAction="never"/>
-
-    <item
-        android:id="@+id/menu_nightmode"
-        android:icon="@drawable/btn_ic_star_on"
-        android:title="@string/nightmode"
-        android:visible="false"
-        androidnga:showAsAction="never" />
-
-    <item
-        android:id="@+id/menu_daymode"
-        android:icon="@drawable/btn_ic_star_on"
-        android:title="@string/daymode"
-        android:visible="false"
-        androidnga:showAsAction="never" />
 
 </menu>

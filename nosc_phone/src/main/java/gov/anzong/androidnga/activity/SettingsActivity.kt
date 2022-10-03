@@ -1,10 +1,10 @@
 package gov.anzong.androidnga.activity
 
-import android.R
 import android.os.Bundle
 import android.view.View
 import gov.anzong.androidnga.fragment.SettingsFragment
 import android.view.ViewAnimationUtils
+import kotlin.math.hypot
 
 class SettingsActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -12,20 +12,22 @@ class SettingsActivity : BaseActivity() {
         setupFragment()
         setupActionBar()
         if (sRecreated) {
-            window.setWindowAnimations(R.style.Animation_Toast)
+            window.setWindowAnimations(android.R.style.Animation_Toast)
             sRecreated = false
             setResult(RESULT_OK)
-            findViewById<View>(R.id.content).post { startAnimation(findViewById(R.id.content)) }
+            findViewById<View>(android.R.id.content).post {
+                startAnimation(findViewById(android.R.id.content))
+            }
         }
     }
 
     private fun setupFragment() {
-        val fm = fragmentManager
+        val fm = supportFragmentManager
         var settingsFragment = fm.findFragmentByTag(SettingsFragment::class.java.simpleName)
         if (settingsFragment == null) {
             settingsFragment = SettingsFragment()
             fm.beginTransaction()
-                .replace(R.id.content, settingsFragment, SettingsFragment::class.java.simpleName)
+                .replace(android.R.id.content, settingsFragment, SettingsFragment::class.java.simpleName)
                 .commit()
         }
     }
@@ -33,7 +35,7 @@ class SettingsActivity : BaseActivity() {
     private fun startAnimation(contentView: View) {
         val cx = contentView.width / 2
         val cy = contentView.height / 2
-        val finalRadius = Math.hypot(cx.toDouble(), cy.toDouble()).toFloat()
+        val finalRadius = hypot(cx.toDouble(), cy.toDouble()).toFloat()
         ViewAnimationUtils.createCircularReveal(contentView, cx, cy, 0f, finalRadius).start()
     }
 

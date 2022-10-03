@@ -11,6 +11,7 @@ import nosc.api.callbacks.OnHttpCallBack;
 import nosc.api.retrofit.RetrofitHelper;
 import nosc.api.retrofit.Api;
 import sp.phone.rxjava.BaseSubscriber;
+import sp.phone.util.ForumUtils;
 
 /**
  * Created by Justwen on 2018/1/27.
@@ -18,10 +19,10 @@ import sp.phone.rxjava.BaseSubscriber;
 
 public class SubscribeSubBoardTask {
 
-    private Api mService;
+    private final Api mService;
 
 
-    private LifecycleProvider<FragmentEvent> mLifecycleProvider;
+    private final LifecycleProvider<FragmentEvent> mLifecycleProvider;
 
     public SubscribeSubBoardTask(LifecycleProvider<FragmentEvent> lifecycleProvider) {
         mLifecycleProvider = lifecycleProvider;
@@ -85,9 +86,9 @@ public class SubscribeSubBoardTask {
         String fid = type == 1 ? subBoard.getTidStr() : String.valueOf(subBoard.getFid());
         String url;
         if (!isSubscribe) {
-            url = String.format("http://bbs.ngacn.cc/nuke.php?__lib=user_option&__act=set&raw=3&type=%s&__output=8&fid=%s&%s=%s", type, parentFid, action, fid);
+            url = String.format(ForumUtils.getApiDomain()+"/nuke.php?__lib=user_option&__act=set&raw=3&type=%s&__output=8&fid=%s&%s=%s", type, parentFid, action, fid);
         } else {
-            url = String.format("http://bbs.ngacn.cc/nuke.php?__lib=user_option&__act=set&raw=3&type=%s&__output=8&fid=%s&%s=%s", type, parentFid, action, fid);
+            url = String.format(ForumUtils.getApiDomain()+"/nuke.php?__lib=user_option&__act=set&raw=3&type=%s&__output=8&fid=%s&%s=%s", type, parentFid, action, fid);
         }
         return url;
     }

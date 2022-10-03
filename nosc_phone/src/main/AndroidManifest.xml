@@ -32,11 +32,6 @@
             android:launchMode="singleTop"
             android:theme="@style/AppTheme">
 
-            <!-- add static shortcut -->
-            <meta-data
-                android:name="android.app.shortcuts"
-                android:resource="@xml/static_shortcuts" />
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

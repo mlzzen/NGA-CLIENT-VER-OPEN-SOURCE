@@ -12,6 +12,7 @@ import android.widget.ProgressBar
 import gov.anzong.androidnga.R
 import nosc.utils.uxUtils.ToastUtils
 import sp.phone.common.UserManagerImpl
+import sp.phone.util.ForumUtils
 import sp.phone.util.StringUtils
 import java.io.UnsupportedEncodingException
 import java.net.URLDecoder
@@ -172,7 +173,7 @@ class LoginWebFragment : BaseFragment() {
     }
 
     companion object {
-        private const val URL_LOGIN = "https://ngabbs.com/nuke.php?__lib=login&__act=account&login"
+        val URL_LOGIN get() = "${ForumUtils.getApiDomain()}/nuke.php?__lib=login&__act=account&login"
         private const val TAG_UID = "ngaPassportUid"
         private const val TAG_CID = "ngaPassportCid"
         private const val TAG_USER_NAME = "ngaPassportUrlencodedUname"

@@ -6,6 +6,7 @@ import android.view.MenuItem
 import android.webkit.*
 import gov.anzong.androidnga.R
 import sp.phone.common.appConfig
+import sp.phone.util.ForumUtils
 import sp.phone.view.webview.WebViewClientEx
 
 open class WebViewActivity : BaseActivity() {
@@ -14,13 +15,25 @@ open class WebViewActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_webview_layout)
         setupActionBar()
-        mWebView = findViewById(R.id.webview)
-        val client: WebViewClient = WebViewClientEx(this)
-        mWebView?.webViewClient = client
+
         title = intent.getStringExtra("title")
-        CookieManager.getInstance().apply {
-            setCookie(path, appConfig.cookie)
+
+        mWebView = findViewById<WebView>(R.id.webview).apply {
+            val client = WebViewClientEx()
+            client.setFallbackRead(intent.getBooleanExtra("fallbackRead",false))
+            webViewClient = client
         }
+
+        CookieManager.getInstance().apply {
+            ForumUtils.getAllDomains().forEach {
+                setCookie(it, appConfig.cookie)
+            }
+            setAcceptCookie(true)
+            setCookie(path,appConfig.cookie)
+            flush()
+        }
+
+
         load()
     }
 
@@ -50,5 +63,10 @@ open class WebViewActivity : BaseActivity() {
             load()
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        CookieManager.getInstance().removeAllCookies(null)
     }
 }

@@ -231,7 +231,7 @@ public class UserManagerImpl implements UserManager {
         if (user != null
                 && !TextUtils.isEmpty(user.getCid())
                 && !TextUtils.isEmpty(user.getUserId())) {
-            return "ngaPassportUid=" + user.getUserId() + "; ngaPassportCid=" + user.getCid();
+            return "ngaPassportUid=" + user.getUserId() + ";ngaPassportCid=" + user.getCid();
         } else {
             return "";
         }

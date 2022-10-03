@@ -142,7 +142,6 @@ object PhoneConfiguration : PreferenceKey, OnSharedPreferenceChangeListener {
             .getBoolean(PreferenceKey.KEY_USE_SOLID_COLOR_BG, true)
     }
 
-    @get:Deprecated("")
     val webSize: Int
         get() = topicContentSize
     val cookie: String

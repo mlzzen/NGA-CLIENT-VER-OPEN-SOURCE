@@ -50,32 +50,34 @@ public interface PreferenceKey {
 
     String KEY_SWIPE_BACK = "swipe_back";
 
-    public static final String KEY_NGA_DOMAIN = "nga_domain";
+    String KEY_NGA_DOMAIN = "nga_domain";
 
-    public static final String KEY_SEARCH_HISTORY_TOPIC = "search_history_topic";
+    String KEY_NGA_DOMAIN_BROWSER = "nga_domain_browser";
 
-    public static final String KEY_SEARCH_HISTORY_BOARD = "search_history_board";
+    String KEY_SEARCH_HISTORY_TOPIC = "search_history_topic";
 
-    public static final String KEY_SEARCH_HISTORY_USER = "search_history_user";
+    String KEY_SEARCH_HISTORY_BOARD = "search_history_board";
 
-    public static final String KEY_TOPIC_TITLE_SIZE = "topic_title_size";
+    String KEY_SEARCH_HISTORY_USER = "search_history_user";
 
-    public static final String KEY_TOPIC_CONTENT_SIZE = "topic_content_size";
+    String KEY_TOPIC_TITLE_SIZE = "topic_title_size";
 
-    public static final String KEY_AVATAR_SIZE = "avatar_size";
+    String KEY_TOPIC_CONTENT_SIZE = "topic_content_size";
 
-    public static final String KEY_EMOTICON_SIZE = "emoticon_size";
+    String KEY_AVATAR_SIZE = "avatar_size";
 
-    public static final String KEY_USE_SOLID_COLOR_BG = "use_solid_color_bg";
+    String KEY_EMOTICON_SIZE = "emoticon_size";
 
-    public static final String KEY_NIGHT_MODE_FOLLOW_SYSTEM = "key_night_mode_follow_system";
+    String KEY_USE_SOLID_COLOR_BG = "use_solid_color_bg";
 
-    public static final String KEY_WEBVIEW_DATA_INDEX = "webview_data_index";
+    String KEY_NIGHT_MODE_FOLLOW_SYSTEM = "key_night_mode_follow_system";
 
-    public static final String KEY_CLEAR_CACHE = "key_clear_cache";
+    String KEY_WEBVIEW_DATA_INDEX = "webview_data_index";
 
-    public static final String KEY_WEBVIEW_TEXT_ZOOM = "key_webview_zoom_size";
+    String KEY_CLEAR_CACHE = "key_clear_cache";
 
-    public static final String KEY_PRELOAD_BOARD_VERSION = "key_preload_board_version";
+    String KEY_WEBVIEW_TEXT_ZOOM = "key_webview_zoom_size";
+
+    String KEY_PRELOAD_BOARD_VERSION = "key_preload_board_version";
 
 }

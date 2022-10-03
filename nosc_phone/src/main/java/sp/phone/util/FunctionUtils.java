@@ -73,9 +73,10 @@ public class FunctionUtils {
         context.startActivity(intent);
     }
 
-    public static void openUrlByWebView(Context context, String url) {
+    public static void openArticleByWebView(Context context, String url) {
         Intent intent = new Intent(context, WebViewActivity.class);
         intent.putExtra("path",url);
+        intent.putExtra("fallbackRead",true);
         context.startActivity(intent);
     }
 
@@ -89,7 +90,7 @@ public class FunctionUtils {
     }
 
     public static void handleContentTV(final WebView contentTV, final MessageArticlePageInfo row, int bgColor, int fgColor, Context context) {
-        final WebViewClient client = new WebViewClientEx((FragmentActivity) context);
+        final WebViewClient client = new WebViewClientEx();
         contentTV.setBackgroundColor(0);
         contentTV.setFocusableInTouchMode(false);
         contentTV.setFocusable(false);

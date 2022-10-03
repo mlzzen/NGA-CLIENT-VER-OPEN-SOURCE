@@ -363,7 +363,6 @@ class ArticleListAdapter(
         )
     }
 
-    private val loadWebScope  = CoroutineScope(Dispatchers.Default)
     private fun onBindContentView(holder: ArticleViewHolder, row: ThreadRowInfo, position: Int) {
         val html = row.formattedHtmlData
         if (html != null) {
@@ -374,12 +373,12 @@ class ArticleListAdapter(
                 contentViews[position] = it
             }
             if (localWebView !== holder.contentTV) {
-                holder.contentContainer?.removeView(holder.contentTV)
+                holder.contentContainer.removeView(holder.contentTV)
                 if (localWebView.parent != null) {
                     (localWebView.parent as ViewGroup).removeView(localWebView)
                 }
                 holder.contentTV = localWebView
-                holder.contentContainer?.addView(localWebView)
+                holder.contentContainer.addView(localWebView)
             }
         }
     }

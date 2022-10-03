@@ -6,6 +6,7 @@ import android.widget.PopupMenu
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.compose.material.Button
 import androidx.compose.material.Text
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -43,7 +44,6 @@ import sp.phone.util.ActivityUtils
 import sp.phone.util.FunctionUtils
 import sp.phone.util.NLog
 import sp.phone.util.StringUtils
-import sp.phone.view.RecyclerViewEx
 
 /**
  * MD 帖子详情每一页
@@ -210,8 +210,8 @@ class ArticleListFragment : BaseRxFragment(), ArticleListContract.View {
         mListView!!.setItemViewCacheSize(20)
         mListView!!.adapter = mArticleAdapter
         emptyView?.extraContent = {
-            Button(onClick = { FunctionUtils.openUrlByDefaultBrowser(activity, mRequestParam.toUrl()) }) {
-                Text(text = "使用浏览器打开")
+            Button(onClick = { FunctionUtils.openArticleByWebView(activity, mRequestParam.toUrl()) }) {
+                Text(text = stringResource(id = R.string.menu_open_by_webview))
             }
         }
 
