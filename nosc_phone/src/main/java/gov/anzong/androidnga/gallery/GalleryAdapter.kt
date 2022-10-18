@@ -12,7 +12,7 @@ import gov.anzong.androidnga.gallery.ImageZoomActivity
  * 浏览
  * Created by elrond on 2017/10/13.
  */
-class GalleryAdapter(private val mContext: Context, private val mGalleryUrls: Array<String>) :
+class GalleryAdapter(private val mContext: Context, private val mGalleryUrls: List<String>) :
     PagerAdapter() {
     override fun getCount(): Int {
         return mGalleryUrls.size
@@ -22,7 +22,19 @@ class GalleryAdapter(private val mContext: Context, private val mGalleryUrls: Ar
         val photoView = PhotoView(container.context)
         photoView.maximumScale = 10.0f
         val url = mGalleryUrls[position]
-        photoView.load(url)
+        photoView.load(url){
+            listener(
+                onSuccess = { _,_ ->
+                    callbackActivity()
+                },
+                onError = { _,_ ->
+                    callbackActivity()
+                },
+                onCancel = {
+                    callbackActivity()
+                }
+            )
+        }
         //        Glide.with(mContext)
 //                .load(url).listener(mRequestListener)
 //                .apply(RequestOptions.fitCenterTransform())

@@ -33,7 +33,7 @@ public class AvatarDialogFragment extends BaseDialogFragment {
         if (!TextUtils.isEmpty(url)) {
             avatarView.setOnClickListener(v -> {
                 Intent intent = new Intent();
-                intent.putExtra(ImageZoomActivity.KEY_GALLERY_CUR_URL, url);
+                intent.putExtra(ImageZoomActivity.KEY_GALLERY_URLS,new String[]{url});
                 intent.setClass(getContext(), ImageZoomActivity.class);
                 requireContext().startActivity(intent);
             });

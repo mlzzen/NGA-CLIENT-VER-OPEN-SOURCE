@@ -2,7 +2,6 @@ package sp.phone.view.webview
 
 import android.content.Context
 import android.webkit.WebViewClient
-import sp.phone.view.webview.WebViewClientEx
 import com.alibaba.android.arouter.launcher.ARouter
 import gov.anzong.androidnga.arouter.ARouterConstants
 import android.webkit.WebView
@@ -78,9 +77,8 @@ class WebViewClientEx : WebViewClient() {
                 if (mImgUrlList.isEmpty()) {
                     mImgUrlList.add(url)
                 }
-                val urls = arrayOfNulls<String>(mImgUrlList.size)
-                intent.putExtra(ImageZoomActivity.KEY_GALLERY_URLS, urls)
-                intent.putExtra(ImageZoomActivity.KEY_GALLERY_CUR_URL, url)
+                intent.putExtra(ImageZoomActivity.KEY_GALLERY_URLS, mImgUrlList.toTypedArray())
+                intent.putExtra(ImageZoomActivity.KEY_GALLERY_INDEX, mImgUrlList.indexOf(url))
                 intent.setClass(context, ImageZoomActivity::class.java)
                 context.startActivity(intent)
                 return true

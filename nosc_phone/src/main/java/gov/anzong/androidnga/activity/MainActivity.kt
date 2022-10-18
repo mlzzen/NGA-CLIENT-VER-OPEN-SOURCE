@@ -23,7 +23,6 @@ class MainActivity : BaseActivity() {
         setToolbarEnabled(true)
         super.onCreate(savedInstanceState)
         setSwipeBackEnable(false)
-//        ThemeUtils.init(this)
         checkPermission()
         initView()
         mIsNightMode = ThemeManager.getInstance().isNightMode
