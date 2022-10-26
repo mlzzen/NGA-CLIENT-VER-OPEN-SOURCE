@@ -24,14 +24,12 @@ import nosc.utils.DeviceUtils
 import nosc.utils.uxUtils.ToastUtils
 import java.io.File
 
-//import com.justwen.androidnga.cloud.CloudServerManager;
-/**
- * 显示图片
- * Created by Elrond on 2015/11/18.
- */
 class ImageZoomActivity : BaseActivity() {
     private val mGalleryUrls: List<String> by lazy {
         intent.getStringArrayExtra(KEY_GALLERY_URLS)?.asList() ?: emptyList()
+    }
+    private val mAdapter by lazy{
+        GalleryAdapter(this, mGalleryUrls)
     }
     private var mPageIndex = 0
     private var mProgressBar: ProgressBar? = null
@@ -57,8 +55,7 @@ class ImageZoomActivity : BaseActivity() {
 
     private fun initGallery() {
         mViewPager = findViewById<View>(R.id.gallery) as ViewPager
-        val adapter = GalleryAdapter(this, mGalleryUrls)
-        mViewPager!!.adapter = adapter
+        mViewPager!!.adapter = mAdapter
         mViewPager!!.currentItem = mPageIndex
         mViewPager!!.addOnPageChangeListener(object : SimpleOnPageChangeListener() {
             override fun onPageSelected(position: Int) {

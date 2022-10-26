@@ -41,22 +41,13 @@ import sp.phone.view.RecyclerViewEx;
 
 public class TopicSearchFragment extends BaseFragment implements View.OnClickListener {
 
-    private static final String TAG = TopicSearchFragment.class.getSimpleName();
-
     public static final int REQUEST_IMPORT_CACHE = 0;
-
     protected TopicListParam mRequestParam;
-
     protected BasePageAppendableAdapter mAdapter;
-
     protected TopicListInfo mTopicListInfo;
-
     public SwipeRefreshLayout mSwipeRefreshLayout;
-
     public RecyclerViewEx mListView;
-
     public View mLoadingView;
-
     protected TopicListViewModel viewModel;
 
     @Override

@@ -20,8 +20,8 @@ public class HttpUtil {
     public static String PATH = android.os.Environment.getExternalStorageDirectory().getPath() + "/nga_cache";
     public static String PATH_AVATAR = PATH + "/nga_cache";
 
-    public static String HOST = "";
-    public static String HOST_PORT = "";
+    public final static String HOST = "";
+    public final static String HOST_PORT = "";
 
     public static void downImage(String uri, String fileName) {
         try {

@@ -13,7 +13,6 @@ import okhttp3.Callback
 import okhttp3.Request
 import okhttp3.Response
 import org.apache.commons.io.IOUtils
-import org.reactivestreams.Subscription
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -21,15 +20,10 @@ import java.io.IOException
 class SaveImageTask {
     private val mContext: Context = ContextUtils.getContext()
     private var mDownloadCount = 0
-    private var mSubscription: Subscription? = null
 
     class DownloadResult(var file: File, var url: String)
 
     fun execute(callBack: OnSimpleHttpCallBack<DownloadResult>, urls: List<String>) {
-        if (isRunning) {
-            ToastUtils.info("图片正在下载，防止风怒！！")
-            return
-        }
         mDownloadCount = 0
         val client = RetrofitHelper.getInstance().createOkHttpClientBuilder().followRedirects(true).build()
         urls.forEach { url ->
@@ -67,9 +61,6 @@ class SaveImageTask {
             })
         }
     }
-
-    private val isRunning: Boolean get() = mSubscription != null
-
     companion object {
         private val PATH_IMAGES =
             Environment.getExternalStorageDirectory().absolutePath + "/Pictures/nga_open_source/"

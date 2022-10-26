@@ -1,6 +1,5 @@
 package gov.anzong.androidnga.fragment
 
-import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
@@ -8,8 +7,6 @@ import android.preference.PreferenceManager
 import android.text.TextUtils
 import android.view.*
 import android.view.animation.AnimationUtils
-import android.widget.AdapterView
-import android.widget.AdapterView.OnItemClickListener
 import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
@@ -34,7 +31,6 @@ import androidx.compose.ui.unit.dp
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.internal.NavigationMenuView
-import com.google.android.material.tabs.TabLayoutMediator
 import gov.anzong.androidnga.R
 import gov.anzong.androidnga.databinding.FragmentNavigationDrawerBinding
 import nosc.api.model.BoardModel
@@ -45,7 +41,6 @@ import nosc.ui.view.RecyclerViewFlipper
 import nosc.utils.PreferenceKey
 import nosc.utils.jumpToLogin
 import nosc.utils.showTopicList
-import nosc.utils.toTopicListPage
 import nosc.utils.uxUtils.ToastUtils
 import nosc.utils.uxUtils.showConfirmDialog
 import nosc.viewmodel.BoardCategoryViewModel
@@ -61,12 +56,10 @@ import sp.phone.util.ActivityUtils
  * 首页的容器
  * Created by Justwen on 2017/6/29.
  */
-class NavigationDrawerFragment : BaseRxFragment(),
-    OnItemClickListener {
+class NavigationDrawerFragment : BaseRxFragment(){
     private var binding:FragmentNavigationDrawerBinding? = null
     private var mHeaderView: RecyclerViewFlipper<FlipperUserAdapter.UserViewHolder>? = null
     private var mReplyCountView: TextView? = null
-    private var tabLayoutMediator:TabLayoutMediator? =   null
 
     private val viewModel:BoardCategoryViewModel by lazy{
         ViewModelProvider(this)[BoardCategoryViewModel::class.java]
@@ -188,11 +181,6 @@ class NavigationDrawerFragment : BaseRxFragment(),
                     }
 
                 }
-                tabLayoutMediator?.apply {
-                    if(isAttached)
-                        detach()
-                    attach()
-                }
             }
             it.root
         }
@@ -208,7 +196,7 @@ class NavigationDrawerFragment : BaseRxFragment(),
                 }
                 menu.findItem(R.id.menu_gun).apply {
                     actionView = layoutInflater.inflate(R.layout.nav_menu_action_view_gun, null)
-                    mReplyCountView = actionView.findViewById(R.id.reply_count)
+                    mReplyCountView = actionView?.findViewById(R.id.reply_count)
                 }
 
                 (getChildAt(0) as NavigationMenuView).apply{
@@ -319,7 +307,7 @@ class NavigationDrawerFragment : BaseRxFragment(),
 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == ActivityUtils.REQUEST_CODE_LOGIN && resultCode == Activity.RESULT_OK || requestCode == ActivityUtils.REQUEST_CODE_SETTING) {
+        if (requestCode == ActivityUtils.REQUEST_CODE_LOGIN) {
             mHeaderView?.adapter?.notifyDataSetChanged()
         }
     }
@@ -350,15 +338,5 @@ class NavigationDrawerFragment : BaseRxFragment(),
     private fun switchToNextUser(): Int {
         mHeaderView?.showPrevious()
         return mHeaderView?.displayedChild ?: 0
-    }
-
-    override fun onItemClick(parent: AdapterView<*>?, view: View, position: Int, id: Long) {
-        val fidString: String
-        if (parent != null) {
-            fidString = parent.getItemAtPosition(position) as String
-            requireActivity().toTopicListPage(position, fidString)
-        } else {
-            requireActivity().showTopicList(view.tag as Board)
-        }
     }
 }

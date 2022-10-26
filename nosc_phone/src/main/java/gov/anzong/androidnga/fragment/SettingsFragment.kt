@@ -1,25 +1,25 @@
 package gov.anzong.androidnga.fragment
 
 import android.content.Context
-import androidx.preference.PreferenceFragmentCompat
-import android.os.Bundle
-import nosc.utils.PreferenceKey
-import gov.anzong.androidnga.R
-import sp.phone.theme.ThemeManager
-import gov.anzong.androidnga.fragment.dialog.AlertDialogFragment
 import android.content.DialogInterface
-import gov.anzong.androidnga.activity.SettingsActivity
-import nosc.utils.ThreadUtils
 import android.content.Intent
 import android.os.Build
+import android.os.Bundle
 import androidx.preference.ListPreference
 import androidx.preference.Preference
+import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceGroup
+import gov.anzong.androidnga.R
 import gov.anzong.androidnga.activity.LauncherSubActivity
-import nosc.utils.ContextUtils
-import sp.phone.common.UserManagerImpl
+import gov.anzong.androidnga.activity.SettingsActivity
+import gov.anzong.androidnga.app
+import gov.anzong.androidnga.fragment.dialog.AlertDialogFragment
+import nosc.utils.PreferenceKey
+import nosc.utils.ThreadUtils
 import nosc.utils.uxUtils.ToastUtils
 import org.apache.commons.io.FileUtils
+import sp.phone.common.UserManagerImpl
+import sp.phone.theme.ThemeManager
 import sp.phone.util.ForumUtils
 import java.io.IOException
 
@@ -112,9 +112,9 @@ class SettingsFragment : PreferenceFragmentCompat(), Preference.OnPreferenceChan
             // 清除之前的使用过的awp缓存数据
             try {
                 FileUtils.deleteDirectory(
-                    ContextUtils.getContext().getDir("awp", Context.MODE_PRIVATE)
+                    app.getDir("awp", Context.MODE_PRIVATE)
                 )
-                FileUtils.deleteDirectory(ContextUtils.getContext().externalCacheDir)
+                FileUtils.deleteDirectory(app.externalCacheDir)
             } catch (e: IOException) {
                 e.printStackTrace()
             }

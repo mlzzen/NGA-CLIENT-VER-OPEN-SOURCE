@@ -2,11 +2,10 @@ package gov.anzong.androidnga.gallery
 
 import android.content.Context
 import android.view.View
-import androidx.viewpager.widget.PagerAdapter
 import android.view.ViewGroup
+import androidx.viewpager.widget.PagerAdapter
 import coil.load
 import com.github.chrisbanes.photoview.PhotoView
-import gov.anzong.androidnga.gallery.ImageZoomActivity
 
 /**
  * 浏览
@@ -35,30 +34,6 @@ class GalleryAdapter(private val mContext: Context, private val mGalleryUrls: Li
                 }
             )
         }
-        //        Glide.with(mContext)
-//                .load(url).listener(mRequestListener)
-//                .apply(RequestOptions.fitCenterTransform())
-//                .into(new CustomTarget<Drawable>() {
-//            @Override
-//            public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
-//                if (resource instanceof GifDrawable) {
-//                    if (!((GifDrawable) resource).isRunning()) {
-//                        try {
-//                            ((GifDrawable) resource).startFromFirstFrame();
-//                            ((GifDrawable) resource).setLoopCount(GifDrawable.LOOP_FOREVER);
-//                        } catch (IllegalArgumentException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                }
-//                photoView.setImageDrawable(resource);
-//            }
-//
-//            @Override
-//            public void onLoadCleared(@Nullable Drawable placeholder) {
-//
-//            }
-//        });
         container.addView(
             photoView,
             ViewGroup.LayoutParams.MATCH_PARENT,
