@@ -20,7 +20,7 @@ import nosc.utils.PreferenceKey;
 /**
  * Created by Justwen on 2018/10/12.
  */
-public class SearchHistoryTopicFragment extends SearchHistoryBoardFragment {
+public class SearchHistoryTopicFragment extends SearchHistoryFragment {
 
     private boolean mCurrentBoard = true;
 

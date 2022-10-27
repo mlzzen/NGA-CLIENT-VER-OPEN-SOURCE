@@ -12,7 +12,7 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 
 import gov.anzong.androidnga.R;
 import gov.anzong.androidnga.arouter.ARouterConstants;
-import gov.anzong.androidnga.fragment.SearchHistoryBoardFragment;
+import gov.anzong.androidnga.fragment.SearchHistoryFragment;
 import gov.anzong.androidnga.fragment.SearchHistoryTopicFragment;
 import gov.anzong.androidnga.fragment.SearchHistoryUserFragment;
 
@@ -20,10 +20,7 @@ import gov.anzong.androidnga.fragment.SearchHistoryUserFragment;
 public class SearchActivity extends BaseActivity {
 
     public static final String SEARCH_MODE_USER = "1";
-
     public static final String SEARCH_MODE_TOPIC = "2";
-
-    public static final String SEARCH_MODE_BOARD = "3";
 
     private String mCurrentMode;
 
@@ -45,10 +42,6 @@ public class SearchActivity extends BaseActivity {
         bundle.putString("mode", SEARCH_MODE_TOPIC);
         bundle.putInt("fid", getIntent().getIntExtra("fid", 0));
         tabHost.addTab(tabHost.newTabSpec(SEARCH_MODE_TOPIC).setIndicator("主题"), SearchHistoryTopicFragment.class, bundle);
-
-        bundle = new Bundle();
-        bundle.putString("mode", SEARCH_MODE_BOARD);
-        tabHost.addTab(tabHost.newTabSpec(SEARCH_MODE_BOARD).setIndicator("板块"), SearchHistoryBoardFragment.class, bundle);
 
         bundle = new Bundle();
         bundle.putString("mode", SEARCH_MODE_USER);
@@ -101,7 +94,7 @@ public class SearchActivity extends BaseActivity {
         if (query == null) {
             query = "";
         }
-        SearchHistoryBoardFragment fragment = (SearchHistoryBoardFragment) getSupportFragmentManager().findFragmentByTag(mCurrentMode);
+        SearchHistoryFragment fragment = (SearchHistoryFragment) getSupportFragmentManager().findFragmentByTag(mCurrentMode);
         if (fragment != null) {
             fragment.query(query.toString().trim().replaceAll("\\n", ""));
         }

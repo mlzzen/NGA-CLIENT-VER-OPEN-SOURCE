@@ -11,30 +11,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.alibaba.android.arouter.launcher.ARouter;
 import com.alibaba.fastjson.JSON;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import gov.anzong.androidnga.R;
-import gov.anzong.androidnga.arouter.ARouterConstants;
-import nosc.utils.uxUtils.ToastUtils;
 import sp.phone.ui.adapter.SearchHistoryAdapter;
-import nosc.utils.PreferenceKey;
-import sp.phone.param.ParamKey;
-import sp.phone.task.SearchBoardTask;
 import sp.phone.util.ActivityUtils;
 
 /**
  * Created by Justwen on 2018/10/12.
  */
-public class SearchHistoryBoardFragment extends BaseRxFragment {
+public abstract class SearchHistoryFragment extends BaseRxFragment {
 
     protected List<String> mKeyList;
-
     private SharedPreferences mPreferences;
-
     protected SearchHistoryAdapter mAdapter;
 
     @Override
@@ -77,33 +69,12 @@ public class SearchHistoryBoardFragment extends BaseRxFragment {
     }
 
     public void query(String query) {
-
         if (TextUtils.isEmpty(query) || mKeyList == null) {
             return;
         } else if (!mKeyList.contains(query)) {
             addHistory(query);
         }
-
         ActivityUtils.getInstance().noticeSaying(getContext());
-
-        SearchBoardTask.execute(query, data -> {
-            if (getContext() == null) {
-                return;
-            }
-            ActivityUtils.getInstance().dismiss();
-            if (data == null) {
-                ToastUtils.error("没有找到符合条件的版面或者网络错误");
-            } else {
-                ARouter.getInstance()
-                        .build(ARouterConstants.ACTIVITY_TOPIC_LIST)
-                        .withInt(ParamKey.KEY_FID, data.getFid())
-                        .withString(ParamKey.BOARD_HEAD, data.getBoardHead())
-                        .withString(ParamKey.KEY_TITLE, data.getName())
-                        .navigation(getContext());
-            }
-
-        });
-
     }
 
     protected void addHistory(String query) {
@@ -118,7 +89,5 @@ public class SearchHistoryBoardFragment extends BaseRxFragment {
                 .apply();
     }
 
-    protected String getPreferenceKey() {
-        return PreferenceKey.KEY_SEARCH_HISTORY_BOARD;
-    }
+    protected abstract String getPreferenceKey();
 }

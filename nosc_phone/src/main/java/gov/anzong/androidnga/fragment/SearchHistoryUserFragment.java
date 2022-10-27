@@ -20,7 +20,7 @@ import sp.phone.common.UserManagerImpl;
 /**
  * Created by Justwen on 2018/10/12.
  */
-public class SearchHistoryUserFragment extends SearchHistoryBoardFragment {
+public class SearchHistoryUserFragment extends SearchHistoryFragment {
 
     private boolean mUserNameMode = true;
 
