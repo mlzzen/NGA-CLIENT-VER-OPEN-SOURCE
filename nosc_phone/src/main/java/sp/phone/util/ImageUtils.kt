@@ -15,6 +15,9 @@ import org.apache.commons.io.FilenameUtils
 import sp.phone.common.PhoneConfiguration.avatarSize
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
+import kotlin.math.ceil
+import kotlin.math.floor
+import kotlin.math.sqrt
 
 object ImageUtils {
     //final static int max_avatar_width = 200;
@@ -26,18 +29,11 @@ object ImageUtils {
         )
     }
 
-    // Convert to pixels
-    fun DtoP(dValue: Int): Int {
-        val metrics = ContextUtils.getResources().displayMetrics
-        val ret = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dValue.toFloat(), metrics)
-        return ret.toInt()
-    }
-
-    fun zoomImageByWidth(bitmap: Bitmap?, bookWidth: Int, isDIP: Boolean): Bitmap? {
+    private fun zoomImageByWidth(bitmap: Bitmap?, bookWidth: Int): Bitmap? {
         if (bitmap == null) return null
         val width = bitmap.width
         val height = bitmap.height
-        val newWidth = if (isDIP) DtoP(bookWidth) else bookWidth
+        val newWidth = bookWidth
         val newHeight = (height * newWidth / width).toFloat()
         if (newWidth < 2 || newHeight < 1.01f) return null
         val scaleWidth = 1f * newWidth / width
@@ -112,13 +108,11 @@ object ImageUtils {
     ): Int {
         val w = options.outWidth.toDouble()
         val h = options.outHeight.toDouble()
-        val lowerBound = if (maxNumOfPixels == -1) 1 else Math.ceil(
-            Math
-                .sqrt(w * h / maxNumOfPixels)
+        val lowerBound = if (maxNumOfPixels == -1) 1 else ceil(
+            sqrt(w * h / maxNumOfPixels)
         ).toInt()
-        val upperBound = if (minSideLength == -1) 128 else Math.min(
-            Math
-                .floor(w / minSideLength), Math.floor(h / minSideLength)
+        val upperBound = if (minSideLength == -1) 128 else floor(w / minSideLength).coerceAtMost(
+            floor(h / minSideLength)
         ).toInt()
         if (upperBound < lowerBound) {
             // return the larger one when there is no overlapping zone.
@@ -150,7 +144,7 @@ object ImageUtils {
         var bitmap = BitmapFactory.decodeFile(avatarPath, opts)
         if (bitmap != null && bitmap.width != avatarWidth) {
             val tmp = bitmap
-            bitmap = zoomImageByWidth(tmp, avatarWidth, false)
+            bitmap = zoomImageByWidth(tmp, avatarWidth)
             tmp.recycle()
         }
         return bitmap

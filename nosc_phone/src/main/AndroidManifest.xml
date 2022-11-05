@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="gov.anzong.androidnga"
     android:configChanges="orientation|screenSize"
     android:installLocation="auto"
     android:largeHeap="true">
@@ -39,7 +38,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.LoginActivity"
+            android:name="nosc.activity.login.LoginActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/label_activity_login"
             android:launchMode="singleTop"
@@ -175,7 +174,7 @@
 
             </intent-filter>
         </activity>
-        <activity android:name=".gallery.ImageZoomActivity" />
+        <activity android:name="nosc.activity.gallery.GalleryActivity" />
         <activity android:name=".activity.WebViewActivity" />
         <activity android:name=".activity.FullScreenWebViewActivity" />
         <activity android:name=".activity.RecentNotificationActivity" />

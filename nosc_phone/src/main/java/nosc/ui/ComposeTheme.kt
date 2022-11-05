@@ -109,13 +109,13 @@ fun <T> loadState(
     context:CoroutineContext = Dispatchers.Default,
     loader:()->T
 ): State<T> {
-    val _state = remember {
+    val state = remember {
         mutableStateOf(init)
     }
     LaunchedEffect(key){
-        _state.value = withContext(context){
+        state.value = withContext(context){
             loader()
         }
     }
-    return _state
+    return state
 }

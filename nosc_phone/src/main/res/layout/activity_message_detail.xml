@@ -35,6 +35,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
         android:layout_margin="@dimen/fab_margin"
+        android:minWidth="48dp"
+        android:minHeight="48dp"
         app:srcCompat="@drawable/btn_ic_add"
         tools:ignore="VectorDrawableCompat" />
 

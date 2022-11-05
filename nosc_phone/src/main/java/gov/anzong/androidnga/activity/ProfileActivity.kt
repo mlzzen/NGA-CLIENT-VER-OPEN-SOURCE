@@ -47,9 +47,9 @@ class ProfileActivity : BaseActivity(),
     private var mProfileLoadTask: JsonProfileLoadTask? = null
     private var mOptionMenu: Menu? = null//获取状态栏高度的资源id
 
-    private val mSignWebView:WebViewEx get() = binding?.content?.wvSign!!
-    private val mAdminWebView:WebViewEx get() = binding?.content?.wvAdmin!!
-    private val mFameWebView:WebViewEx get() = binding?.content?.wvFame!!
+    private val mSignWebView:WebViewEx get() = binding.content.wvSign
+    private val mAdminWebView:WebViewEx get() = binding.content.wvAdmin
+    private val mFameWebView:WebViewEx get() = binding.content.wvFame
 
     /**
      * 利用反射获取状态栏高度

@@ -49,7 +49,7 @@ class ArticlePagerAdapter(fm: FragmentManager, private val mRequestParam: Articl
         count = pageIndexList.size
     }
 
-    override fun getPageTitle(position: Int): CharSequence? {
+    override fun getPageTitle(position: Int): CharSequence {
         return if (mPageIndexList == null) (position + 1).toString() else mPageIndexList!![position]
     }
 }

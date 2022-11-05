@@ -10,7 +10,7 @@ import gov.anzong.androidnga.activity.ArticleListActivity
 import gov.anzong.androidnga.activity.PostActivity
 import gov.anzong.androidnga.activity.SignPostActivity
 import gov.anzong.androidnga.activity.ProfileActivity
-import gov.anzong.androidnga.activity.LoginActivity
+import nosc.activity.login.LoginActivity
 import gov.anzong.androidnga.activity.MessageDetailActivity
 import android.content.SharedPreferences
 import nosc.api.constants.Constants

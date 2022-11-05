@@ -1,10 +1,10 @@
-package gov.anzong.androidnga.activity
+package nosc.activity.login
 
 import android.os.Bundle
 import com.alibaba.android.arouter.facade.annotation.Route
+import gov.anzong.androidnga.activity.BaseActivity
 import gov.anzong.androidnga.arouter.ARouterConstants
 import gov.anzong.androidnga.fragment.BaseFragment
-import gov.anzong.androidnga.fragment.LoginWebFragment
 
 @Route(path = ARouterConstants.ACTIVITY_LOGIN)
 class LoginActivity : BaseActivity() {

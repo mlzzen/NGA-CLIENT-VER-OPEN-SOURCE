@@ -9,6 +9,8 @@ import nosc.utils.PreferenceKey
 import android.webkit.WebView
 import coil.ImageLoader
 import coil.ImageLoaderFactory
+import coil.decode.GifDecoder
+import coil.decode.ImageDecoderDecoder
 import coil.disk.DiskCache
 import coil.memory.MemoryCache
 import com.alibaba.android.arouter.launcher.ARouter
@@ -68,8 +70,13 @@ class NgaClientApp : Application(),ImageLoaderFactory {
                     .directory((externalCacheDir?: cacheDir).resolve("image_cache") )
                     .maxSizePercent(0.02)
                     .build()
-            }
-            .build()
+            }.components {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                    add(ImageDecoderDecoder.Factory())
+                } else {
+                    add(GifDecoder.Factory())
+                }
+            }.build()
     }
 }
 

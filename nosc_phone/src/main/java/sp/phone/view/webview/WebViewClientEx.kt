@@ -9,7 +9,7 @@ import android.content.Intent
 import android.net.Uri
 import android.webkit.WebResourceRequest
 import gov.anzong.androidnga.activity.TopicListActivity
-import gov.anzong.androidnga.gallery.ImageZoomActivity
+import nosc.activity.gallery.GalleryActivity
 import gov.anzong.androidnga.activity.ArticleListActivity
 import gov.anzong.androidnga.R
 import nosc.utils.ContextUtils
@@ -77,9 +77,9 @@ class WebViewClientEx : WebViewClient() {
                 if (mImgUrlList.isEmpty()) {
                     mImgUrlList.add(url)
                 }
-                intent.putExtra(ImageZoomActivity.KEY_GALLERY_URLS, mImgUrlList.toTypedArray())
-                intent.putExtra(ImageZoomActivity.KEY_GALLERY_INDEX, mImgUrlList.indexOf(url))
-                intent.setClass(context, ImageZoomActivity::class.java)
+                intent.putExtra(GalleryActivity.KEY_GALLERY_URLS, mImgUrlList.toTypedArray())
+                intent.putExtra(GalleryActivity.KEY_GALLERY_INDEX, mImgUrlList.indexOf(url))
+                intent.setClass(context, GalleryActivity::class.java)
                 context.startActivity(intent)
                 return true
             }

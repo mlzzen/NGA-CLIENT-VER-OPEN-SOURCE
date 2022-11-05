@@ -105,9 +105,9 @@ open class TopicListViewModel : ViewModel(),LifecycleObserver{
                     if (threadPageList.size > twentyFourTopicCount) {
                         threadPageList.subList(twentyFourTopicCount, threadPageList.size)
                     }
-                    twentyFourList.threadPageList.sortWith(Comparator { o1: ThreadPageInfo, o2: ThreadPageInfo ->
+                    twentyFourList.threadPageList.sortWith { o1: ThreadPageInfo, o2: ThreadPageInfo ->
                         o2.replies.compareTo(o1.replies)
-                    })
+                    }
                     // We list 20 topics each time
                     val endPos = Math.min(twentyFourCurPos + 20, twentyFourList.threadPageList.size)
                     twentyFourCurList.threadPageList =

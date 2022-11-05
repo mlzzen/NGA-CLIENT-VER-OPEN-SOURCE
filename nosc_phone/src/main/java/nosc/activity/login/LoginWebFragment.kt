@@ -1,4 +1,4 @@
-package gov.anzong.androidnga.fragment
+package nosc.activity.login
 
 import android.app.Activity
 import android.os.Bundle
@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.webkit.*
 import android.widget.ProgressBar
 import gov.anzong.androidnga.R
+import gov.anzong.androidnga.fragment.BaseFragment
 import nosc.utils.uxUtils.ToastUtils
 import sp.phone.common.UserManagerImpl
 import sp.phone.util.ForumUtils

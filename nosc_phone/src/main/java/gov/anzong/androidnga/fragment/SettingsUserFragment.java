@@ -15,7 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Checkable;
 
 import gov.anzong.androidnga.R;
-import gov.anzong.androidnga.activity.LoginActivity;
+import nosc.activity.login.LoginActivity;
 import sp.phone.ui.adapter.UserListAdapter;
 import sp.phone.common.PhoneConfiguration;
 import sp.phone.common.UserManager;

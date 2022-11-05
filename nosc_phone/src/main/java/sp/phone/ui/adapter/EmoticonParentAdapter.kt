@@ -31,7 +31,7 @@ class EmoticonParentAdapter(private val mContext: Context, private val mHeight: 
         return recyclerView
     }
 
-    override fun getPageTitle(position: Int): CharSequence? {
+    override fun getPageTitle(position: Int): CharSequence {
         return EmoticonUtils.EMOTICON_LABEL[position][1]
     }
 

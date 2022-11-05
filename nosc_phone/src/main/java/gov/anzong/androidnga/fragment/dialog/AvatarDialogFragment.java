@@ -9,7 +9,7 @@ import android.text.TextUtils;
 import android.widget.ImageView;
 
 import gov.anzong.androidnga.R;
-import gov.anzong.androidnga.gallery.ImageZoomActivity;
+import nosc.activity.gallery.GalleryActivity;
 import sp.phone.util.ImageUtils;
 
 public class AvatarDialogFragment extends BaseDialogFragment {
@@ -33,8 +33,8 @@ public class AvatarDialogFragment extends BaseDialogFragment {
         if (!TextUtils.isEmpty(url)) {
             avatarView.setOnClickListener(v -> {
                 Intent intent = new Intent();
-                intent.putExtra(ImageZoomActivity.KEY_GALLERY_URLS,new String[]{url});
-                intent.setClass(getContext(), ImageZoomActivity.class);
+                intent.putExtra(GalleryActivity.KEY_GALLERY_URLS,new String[]{url});
+                intent.setClass(getContext(), GalleryActivity.class);
                 requireContext().startActivity(intent);
             });
         }

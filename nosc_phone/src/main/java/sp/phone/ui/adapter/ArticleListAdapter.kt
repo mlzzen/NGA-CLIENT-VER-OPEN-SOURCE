@@ -26,15 +26,11 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import sp.phone.rxjava.RxUtils
 import androidx.cardview.widget.CardView
-import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.FragmentManager
 import gov.anzong.androidnga.fragment.dialog.AvatarDialogFragment
 import gov.anzong.androidnga.fragment.dialog.BaseDialogFragment
 import nosc.utils.ContextUtils
-import nosc.utils.DeviceUtils
 import io.reactivex.Observable
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import nosc.utils.uxUtils.createLocalWebView
 import sp.phone.common.appConfig
 import sp.phone.rxjava.BaseSubscriber
@@ -149,15 +145,15 @@ class ArticleListAdapter(
             val intent = Intent()
             val postPrefix = StringBuilder()
             var mention: String? = null
-            val quote_regex = "\\[quote\\]([\\s\\S])*\\[/quote\\]"
-            val replay_regex =
+            val quoteRegex = "\\[quote\\]([\\s\\S])*\\[/quote\\]"
+            val replayRegex =
                 "\\[b\\]Reply to \\[pid=\\d+,\\d+,\\d+\\]Reply\\[/pid\\] Post by .+?\\[/b\\]"
             var content = row.content
             val name = row.author
             val uid = row.authorid.toString()
             val page = (row.lou + 20) / 20 // 以楼数计算page
-            content = content.replace(quote_regex.toRegex(), "")
-            content = content.replace(replay_regex.toRegex(), "")
+            content = content.replace(quoteRegex.toRegex(), "")
+            content = content.replace(replayRegex.toRegex(), "")
             val postTime = row.postdate
             val tidStr = row.tid.toString()
             content = FunctionUtils.checkContent(content)
