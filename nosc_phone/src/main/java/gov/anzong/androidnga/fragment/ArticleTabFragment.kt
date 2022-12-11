@@ -193,7 +193,7 @@ class ArticleTabFragment : BaseRxFragment() {
         if (!TextUtils.isEmpty(requireActivity().title)) {
             builder.append("《").append(requireActivity().title).append("》 - 艾泽拉斯国家地理论坛，地址：")
         }
-        builder.append(Utils.getNGAHost()).append("read.php?")
+        builder.append(ForumUtils.getBrowserDomain()).append("/read.php?")
         if (mRequestParam!!.pid != 0) {
             builder.append("pid=").append(mRequestParam!!.pid).append(" (分享自NGA安卓客户端开源版)")
         } else {

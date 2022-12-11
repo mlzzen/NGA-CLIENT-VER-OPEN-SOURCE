@@ -30,7 +30,7 @@ public abstract class ErrorConvertFactory {
                 return obj.getString("1");
             } catch (Exception e) {
                 if(e instanceof JSONException){
-                    return "Json解析出错："+e.getLocalizedMessage();
+                    return "服务端传回了坏的json数据";
                 }
                 return "二哥玩坏了或者你需要重新登录";
             }

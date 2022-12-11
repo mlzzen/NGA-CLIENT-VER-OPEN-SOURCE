@@ -100,7 +100,7 @@ class GalleryActivity : BaseActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_share -> saveBitmap(viewModel.currPageIndex.value){
-                it.file?.let { share(it) }
+                it.file?.let { f-> share(f) }
             }
             R.id.menu_download -> saveBitmap(viewModel.currPageIndex.value){
                 ToastUtils.success(getString(R.string.file_saved)+it.file?.path)

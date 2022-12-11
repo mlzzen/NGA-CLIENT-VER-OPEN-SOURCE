@@ -213,6 +213,9 @@ class ArticleListFragment : BaseRxFragment(), ArticleListContract.View {
             Button(onClick = { FunctionUtils.openArticleByWebView(activity, mRequestParam.toUrl()) }) {
                 Text(text = stringResource(id = R.string.menu_open_by_webview))
             }
+            Button(onClick = { FunctionUtils.openUrlByDefaultBrowser(activity, mRequestParam.toUrl()) }) {
+                Text(text = stringResource(id = R.string.menu_open_by_browser))
+            }
         }
 
         mSwipeRefreshLayout!!.setOnRefreshListener { loadPageFrom(requestFlow) }

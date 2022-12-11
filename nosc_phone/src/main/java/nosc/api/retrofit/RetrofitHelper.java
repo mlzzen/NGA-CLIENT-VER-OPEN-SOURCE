@@ -27,7 +27,6 @@ import sp.phone.util.StringUtils;
 public class RetrofitHelper {
 
     private Retrofit mRetrofit;
-
     private String mBaseUrl;
 
     private RetrofitHelper() {
@@ -43,7 +42,7 @@ public class RetrofitHelper {
         });
     }
 
-    public Retrofit createRetrofit() {
+    private Retrofit createRetrofit() {
         return createRetrofit(mBaseUrl, null);
     }
 
@@ -106,8 +105,10 @@ public class RetrofitHelper {
         return mRetrofit.create(Api.class);
     }
 
+    //todo 让设置的域名及时应用
+
     private static class SingleTonHolder {
 
-        static final RetrofitHelper sInstance = new RetrofitHelper();
+        static RetrofitHelper sInstance = new RetrofitHelper();
     }
 }
