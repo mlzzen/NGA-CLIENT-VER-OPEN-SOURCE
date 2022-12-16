@@ -253,6 +253,26 @@
                     android:text="N/A"
                     android:textColor="#808080"
                     android:textIsSelectable="false"/>
+                <TextView
+                    android:id="@+id/tv_ip_loc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignTop="@+id/tv_user_register_time"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:textColor="#808080"
+                    android:textIsSelectable="false"/>
+
+                <TextView
+                    android:id="@+id/tv_ip_loc_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/tv_ip_loc"
+                    android:layout_toStartOf="@+id/tv_ip_loc"
+                    android:text="IP属地 : "
+                    android:textColor="#121c46"
+                    android:textIsSelectable="false"/>
             </RelativeLayout>
         </androidx.cardview.widget.CardView>
 

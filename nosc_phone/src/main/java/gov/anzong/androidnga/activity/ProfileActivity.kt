@@ -145,6 +145,7 @@ class ProfileActivity : BaseActivity(),
                 } else {
                     btnModifySign.visibility = View.GONE
                 }
+                tvIpLoc.text = profileInfo.ipLoc
             }
         }
 

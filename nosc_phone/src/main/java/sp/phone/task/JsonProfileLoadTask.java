@@ -166,6 +166,9 @@ public class JsonProfileLoadTask {
         String group = obj.getString("group");
         ret.setMemberGroup(StringUtils.isEmpty(group) ? defaultValue : group);
 
+        String ipLoc = obj.getString("ipLoc");
+        ret.setIpLoc(StringUtils.isEmpty(ipLoc) ? "未知" : ipLoc);
+
         String verified = obj.getString("verified");
         if (!StringUtils.isEmpty(verified)) {
             int state = Integer.parseInt(verified);

@@ -36,6 +36,8 @@ public class ProfileData {
 
     private String mUid;
 
+    private String mIpLoc;
+
     private String mUserName;
 
     public String getFrame() {
@@ -164,5 +166,13 @@ public class ProfileData {
 
     public void setReputationEntryList(List<ReputationData> reputationEntryList) {
         mReputationEntryList = reputationEntryList;
+    }
+
+    public String getIpLoc() {
+        return mIpLoc;
+    }
+
+    public void setIpLoc(String mIpLoc) {
+        this.mIpLoc = mIpLoc;
     }
 }
