@@ -27,7 +27,7 @@ abstract class BasePageAppendableAdapter<E, T : RecyclerView.ViewHolder>(context
 
     fun appendData(dataList: List<E>) {
         val preAppendCount = mDataList.size
-        mDataList = mDataList.plus(dataList)
+        mDataList.addAll(dataList)
         mTotalPage++
         notifyItemRangeInserted(preAppendCount,dataList.size)
     }

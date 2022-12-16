@@ -3,6 +3,7 @@ package sp.phone.ui.adapter
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
+import androidx.compose.runtime.mutableStateListOf
 import androidx.recyclerview.widget.RecyclerView
 
 /**
@@ -11,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 abstract class BaseAdapter<E, T : RecyclerView.ViewHolder>(protected val mContext: Context) :
     RecyclerView.Adapter<T>() {
     @JvmField
-    protected var mDataList: List<E> = emptyList()
+    protected val mDataList: MutableList<E> = mutableStateListOf()
     @JvmField
     protected var mOnClickListener: View.OnClickListener? = null
     protected var mOnLongClickListener: View.OnLongClickListener? = null
@@ -24,7 +25,8 @@ abstract class BaseAdapter<E, T : RecyclerView.ViewHolder>(protected val mContex
 
     open fun setData(dataList: List<E>) {
         val preCount = mDataList.size
-        mDataList = dataList
+        mDataList.clear()
+        mDataList.addAll(dataList)
         val count = dataList.size
         if(preCount>count){
             notifyItemRangeRemoved(count,preCount-count)
@@ -35,9 +37,7 @@ abstract class BaseAdapter<E, T : RecyclerView.ViewHolder>(protected val mContex
     }
 
     fun removeItemAt(position: Int) {
-        mDataList.getOrNull(position)?.let{
-            mDataList = mDataList.minus(it)
-        }
+        mDataList.removeAt(position)
         notifyItemRemoved(position)
     }
 
@@ -47,7 +47,7 @@ abstract class BaseAdapter<E, T : RecyclerView.ViewHolder>(protected val mContex
 
     fun clear() {
         val preCount = mDataList.size
-        mDataList = emptyList()
+        mDataList.clear()
         notifyItemRangeRemoved(0,preCount)
     }
 

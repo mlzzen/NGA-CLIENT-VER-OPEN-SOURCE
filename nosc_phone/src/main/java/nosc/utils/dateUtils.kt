@@ -22,8 +22,8 @@ fun dateStringOf(l:Long):String{
     val ldt = LocalDateTime.ofInstant(Instant.ofEpochMilli(l), ZoneId.systemDefault())
     val now = LocalDateTime.now()
     return if(ldt.year != now.year){
-        "${ldt.year}-${ldt.month}-${ldt.dayOfMonth} ${ldt.hour}:${ldt.minute}"
+        "${ldt.year}-${ldt.month.value}-${ldt.dayOfMonth} ${ldt.hour}:${ldt.minute}"
     }else if(ldt.month != now.month || ldt.dayOfMonth != now.dayOfMonth){
-        "${ldt.month}-${ldt.dayOfMonth} ${ldt.hour}:${ldt.minute}"
+        "${ldt.month.value}-${ldt.dayOfMonth} ${ldt.hour}:${ldt.minute}"
     }else "${ldt.hour}:${ldt.minute}"
 }

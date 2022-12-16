@@ -15,6 +15,9 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+
+import androidx.browser.customtabs.CustomTabColorSchemeParams;
+import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
@@ -74,10 +77,15 @@ public class FunctionUtils {
     }
 
     public static void openArticleByWebView(Context context, String url) {
-        Intent intent = new Intent(context, WebViewActivity.class);
-        intent.putExtra("path",url);
-        intent.putExtra("fallbackRead",true);
-        context.startActivity(intent);
+        int primaryColor = ThemeManager.getInstance().getPrimaryColor(context);
+        int secondaryColor = ThemeManager.getInstance().getAccentColor(context);
+        new CustomTabsIntent.Builder().setDefaultColorSchemeParams(
+                new CustomTabColorSchemeParams.Builder()
+                        .setToolbarColor(primaryColor)
+                        .setNavigationBarColor(primaryColor)
+                        .setSecondaryToolbarColor(secondaryColor)
+                        .build()
+        ).build().launchUrl(context,Uri.parse(url));
     }
 
     public static void copyToClipboard(Context context, String text) {

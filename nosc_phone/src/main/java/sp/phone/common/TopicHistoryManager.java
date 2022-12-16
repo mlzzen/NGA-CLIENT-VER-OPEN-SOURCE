@@ -8,6 +8,7 @@ import com.alibaba.fastjson.JSON;
 import java.util.ArrayList;
 import java.util.List;
 
+import gov.anzong.androidnga.NgaClientApp;
 import nosc.utils.ContextUtils;
 import nosc.utils.PreferenceKey;
 import sp.phone.mvp.model.entity.ThreadPageInfo;
@@ -18,7 +19,6 @@ import sp.phone.mvp.model.entity.ThreadPageInfo;
 
 public class TopicHistoryManager {
 
-    private Context mContext;
 
     private List<ThreadPageInfo> mTopicList;
 
@@ -26,7 +26,7 @@ public class TopicHistoryManager {
 
     private static class SingleTonHolder {
 
-        private static TopicHistoryManager sInstance = new TopicHistoryManager();
+        private static final TopicHistoryManager sInstance = new TopicHistoryManager();
     }
 
     public static TopicHistoryManager getInstance() {
@@ -34,8 +34,7 @@ public class TopicHistoryManager {
     }
 
     private TopicHistoryManager() {
-        mContext = ContextUtils.getContext();
-        String topicStr = PreferenceManager.getDefaultSharedPreferences(mContext).getString(PreferenceKey.KEY_TOPIC_HISTORY, null);
+        String topicStr = PreferenceManager.getDefaultSharedPreferences(NgaClientApp.Companion.getInst()).getString(PreferenceKey.KEY_TOPIC_HISTORY, null);
         if (topicStr != null) {
             mTopicList = JSON.parseArray(topicStr, ThreadPageInfo.class);
         }
@@ -54,8 +53,8 @@ public class TopicHistoryManager {
         commit();
     }
 
-    public void removeTopicHistory(int index) {
-        mTopicList.remove(index);
+    public void removeTopicHistory(ThreadPageInfo item) {
+        mTopicList.remove(item);
         commit();
     }
 
@@ -70,7 +69,7 @@ public class TopicHistoryManager {
 
     private void commit() {
         String topicStr = JSON.toJSONString(mTopicList);
-        PreferenceManager.getDefaultSharedPreferences(mContext)
+        PreferenceManager.getDefaultSharedPreferences(NgaClientApp.Companion.getInst())
                 .edit()
                 .putString(PreferenceKey.KEY_TOPIC_HISTORY,topicStr)
                 .apply();

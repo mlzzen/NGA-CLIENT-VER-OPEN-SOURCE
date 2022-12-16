@@ -1,23 +1,20 @@
 package gov.anzong.androidnga.activity
 
-import nosc.api.model.BoardModel.getBoardName
-import gov.anzong.androidnga.arouter.ARouterConstants
-import gov.anzong.androidnga.activity.BaseActivity
-import sp.phone.param.TopicListParam
-import android.os.Bundle
-import sp.phone.param.ParamKey
-import nosc.api.model.BoardModel
-import gov.anzong.androidnga.fragment.TopicFavoriteFragment
-import gov.anzong.androidnga.fragment.TopicListFragment
-import gov.anzong.androidnga.fragment.TopicListSimpleFragment
-import gov.anzong.androidnga.R
-import sp.phone.util.ActivityUtils
-import com.alibaba.android.arouter.launcher.ARouter
 import android.content.Intent
+import android.os.Bundle
 import android.text.TextUtils
 import android.view.MenuItem
 import androidx.fragment.app.Fragment
 import com.alibaba.android.arouter.facade.annotation.Route
+import com.alibaba.android.arouter.launcher.ARouter
+import gov.anzong.androidnga.R
+import gov.anzong.androidnga.arouter.ARouterConstants
+import gov.anzong.androidnga.fragment.TopicFavoriteFragment
+import gov.anzong.androidnga.fragment.TopicListFragment
+import nosc.api.model.BoardModel.getBoardName
+import sp.phone.param.ParamKey
+import sp.phone.param.TopicListParam
+import sp.phone.util.ActivityUtils
 import sp.phone.util.StringUtils
 
 /**
@@ -84,10 +81,8 @@ class TopicListActivity : BaseActivity() {
         if (fm.findFragmentById(android.R.id.content) == null) {
             val fragment: Fragment = if (mRequestParam!!.favor != 0) {
                 TopicFavoriteFragment()
-            } else if (isBoardTopicList) {
-                TopicListFragment()
             } else {
-                TopicListSimpleFragment()
+                TopicListFragment()
             }
             val bundle = Bundle()
             bundle.putParcelable(ParamKey.KEY_PARAM, mRequestParam)
@@ -95,9 +90,6 @@ class TopicListActivity : BaseActivity() {
             fm.beginTransaction().replace(android.R.id.content, fragment).commit()
         }
     }
-
-    private val isBoardTopicList: Boolean
-        private get() = mRequestParam!!.recommend == 0 && mRequestParam!!.twentyfour == 0 && mRequestParam!!.key == null && mRequestParam!!.favor == 0 && mRequestParam!!.authorId == 0 && mRequestParam!!.author == null && mRequestParam!!.searchPost == 0
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {

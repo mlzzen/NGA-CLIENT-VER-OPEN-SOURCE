@@ -20,6 +20,7 @@ import gov.anzong.androidnga.BuildConfig
 import nosc.utils.ContextUtils
 import nosc.utils.FileUtils
 import gov.anzong.androidnga.debug.LogUtils
+import gov.anzong.androidnga.fragment.TopicFragment.Companion.REQUEST_IMPORT_CACHE
 import sp.phone.mvp.model.entity.ThreadPageInfo
 import sp.phone.rxjava.BaseSubscriber
 import java.io.File
@@ -222,7 +223,7 @@ open class TopicListViewModel : ViewModel(),LifecycleObserver{
                         intent.type = "*/*"
                         fragment.startActivityForResult(
                             intent,
-                            TopicCacheFragment.REQUEST_IMPORT_CACHE
+                            REQUEST_IMPORT_CACHE
                         )
                     } catch (e: ActivityNotFoundException) {
                         ToastUtils.warn("系统不支持导入")

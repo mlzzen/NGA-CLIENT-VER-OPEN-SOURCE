@@ -14,6 +14,8 @@ import androidx.annotation.Nullable;
 
 import gov.anzong.androidnga.R;
 import gov.anzong.androidnga.activity.ArticleCacheActivity;
+import kotlin.Unit;
+import kotlin.jvm.functions.Function1;
 import nosc.utils.uxUtils.ToastUtils;
 import sp.phone.mvp.model.entity.ThreadPageInfo;
 import sp.phone.mvp.model.entity.TopicListInfo;
@@ -24,13 +26,23 @@ import sp.phone.util.StringUtils;
 /**
  * @author Justwen
  */
-public class TopicCacheFragment extends TopicSearchFragment implements View.OnLongClickListener {
+public class TopicCacheFragment extends TopicFragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ToastUtils.success("长按可删除缓存的帖子");
-        mAdapter.setOnLongClickListener(this);
+        mAdapter.setOnItemLongClick((it) ->{
+            final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setMessage(this.getString(R.string.delete_favo_confirm_text))
+                    .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                        viewModel.removeCacheTopic(it);
+                    })
+                    .setNegativeButton(android.R.string.cancel, null)
+                    .create()
+                    .show();
+            return Unit.INSTANCE;
+        });
         viewModel.getRemovedTopic().observe(getViewLifecycleOwner(), this::removeTopic);
     }
 
@@ -38,27 +50,12 @@ public class TopicCacheFragment extends TopicSearchFragment implements View.OnLo
     public void setData(TopicListInfo result) {
         super.setData(result);
         mAdapter.setNextPageEnabled(false);
-        mSwipeRefreshLayout.setEnabled(false);
     }
 
 
     @Override
     public void removeTopic(ThreadPageInfo pageInfo) {
         mAdapter.removeItem(pageInfo);
-    }
-
-    @Override
-    public boolean onLongClick(final View view) {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setMessage(this.getString(R.string.delete_favo_confirm_text))
-                .setPositiveButton(android.R.string.ok, (dialog, which) -> {
-                    ThreadPageInfo info = (ThreadPageInfo) view.getTag();
-                    viewModel.removeCacheTopic(info);
-                })
-                .setNegativeButton(android.R.string.cancel, null)
-                .create()
-                .show();
-        return true;
     }
 
     @Override
@@ -82,19 +79,22 @@ public class TopicCacheFragment extends TopicSearchFragment implements View.OnLo
         return true;
     }
 
+    @NonNull
     @Override
-    public void onClick(View view) {
-        ThreadPageInfo info = (ThreadPageInfo) view.getTag();
-        ArticleListParam param = new ArticleListParam();
-        param.tid = info.getTid();
-        param.loadCache = true;
-        param.title = StringUtils.unEscapeHtml(info.getSubject());
-        Intent intent = new Intent();
-        Bundle bundle = new Bundle();
-        bundle.putParcelable(ParamKey.KEY_PARAM, param);
-        intent.putExtras(bundle);
-        intent.setClass(getContext(), ArticleCacheActivity.class);
-        startActivity(intent);
+    protected Function1<ThreadPageInfo, Unit> getOnItemClick() {
+        return (info)->{
+            ArticleListParam param = new ArticleListParam();
+            param.tid = info.getTid();
+            param.loadCache = true;
+            param.title = StringUtils.unEscapeHtml(info.getSubject());
+            Intent intent = new Intent();
+            Bundle bundle = new Bundle();
+            bundle.putParcelable(ParamKey.KEY_PARAM, param);
+            intent.putExtras(bundle);
+            intent.setClass(getContext(), ArticleCacheActivity.class);
+            startActivity(intent);
+            return Unit.INSTANCE;
+        };
     }
 
     @Override

@@ -126,8 +126,9 @@ class ArticleTabFragment : BaseRxFragment() {
         val intent = Intent()
         val tid = mRequestParam!!.tid.toString()
         intent.putExtra("prefix", "")
-        intent.putExtra("tid", tid)
-        intent.putExtra("action", "reply")
+        intent.putExtra(ParamKey.KEY_TID, tid)
+        intent.putExtra(ParamKey.KEY_ACTION, "reply")
+        intent.putExtra(ParamKey.KEY_TITLE,mRequestParam?.title)
         if (!StringUtils.isEmpty(UserManagerImpl.getInstance().userName)) { // 登入了才能发
             intent.setClass(
                 requireContext(),

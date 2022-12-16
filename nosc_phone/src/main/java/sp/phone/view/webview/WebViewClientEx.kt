@@ -8,12 +8,16 @@ import android.webkit.WebView
 import android.content.Intent
 import android.net.Uri
 import android.webkit.WebResourceRequest
+import androidx.browser.customtabs.CustomTabColorSchemeParams
+import androidx.browser.customtabs.CustomTabsIntent
 import gov.anzong.androidnga.activity.TopicListActivity
 import nosc.activity.gallery.GalleryActivity
 import gov.anzong.androidnga.activity.ArticleListActivity
 import gov.anzong.androidnga.R
 import nosc.utils.ContextUtils
+import sp.phone.theme.ThemeManager
 import sp.phone.util.ForumUtils
+import sp.phone.util.FunctionUtils
 import sp.phone.util.StringUtils
 import java.io.UnsupportedEncodingException
 import java.net.URLDecoder
@@ -109,6 +113,7 @@ class WebViewClientEx : WebViewClient() {
                 }
             }
         }
+        FunctionUtils.openArticleByWebView(context, url)
         return true
     }
 

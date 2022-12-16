@@ -3,9 +3,7 @@ package gov.anzong.androidnga.fragment
 
 import gov.anzong.androidnga.R
 import com.getbase.floatingactionbutton.FloatingActionsMenu
-import com.google.android.material.appbar.AppBarLayout
 import android.os.Bundle
-import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.alibaba.android.arouter.launcher.ARouter
 import gov.anzong.androidnga.arouter.ARouterConstants
 import sp.phone.param.ParamKey
@@ -19,74 +17,47 @@ import android.view.*
 import androidx.appcompat.widget.Toolbar
 import nosc.utils.startArticleActivity
 import nosc.api.model.BoardModel
-import sp.phone.common.appConfig
 
 /**
  * Created by Justwen on 2017/11/19.
  */
-class TopicListFragment : TopicSearchFragment() {
+class TopicListFragment : TopicFragment() {
     private var mOptionMenu: Menu? = null
 
     var mFam: FloatingActionsMenu? = null
 
-    var mAppBarLayout: AppBarLayout? = null
-
     var mToolbar: Toolbar? = null
-    override fun setTitle() {
-        if (mRequestParam.title != null) {
-            setTitle(mRequestParam.title)
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val layoutId = R.layout.fragment_topic_list_board
+        val layoutId = R.layout.fragment_topic_list
         return inflater.inflate(layoutId, container, false).apply {
             mFam = findViewById(R.id.fab_menu)
-            mAppBarLayout = findViewById(R.id.appbar)
             mToolbar = findViewById(R.id.toolbar)
-            findViewById<View>(R.id.fab_post).setOnClickListener {
-                startPostActivity()
+            if(mRequestParam.fid != 0){
+                mFam?.visibility = View.VISIBLE
+                findViewById<View>(R.id.fab_post).setOnClickListener {
+                    startPostActivity()
+                }
+                findViewById<View>(R.id.fab_refresh).setOnClickListener {
+                    refresh()
+                }
             }
 
-            findViewById<View>(R.id.fab_refresh).setOnClickListener {
-                refresh()
-            }
         }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        updateFloatingMenu()
-    }
-
-    private fun updateFloatingMenu() {
-        if (appConfig.isLeftHandMode) {
-            val lp = mFam!!.layoutParams as CoordinatorLayout.LayoutParams
-            lp.gravity = Gravity.START or Gravity.BOTTOM
-            mFam!!.setExpandDirection(
-                FloatingActionsMenu.EXPAND_UP,
-                FloatingActionsMenu.LABELS_ON_RIGHT_SIDE
-            )
-            mFam!!.layoutParams = lp
+        mAdapter?.onNextPage = {
+            viewModel?.loadNextPage((mAdapter?.nextPageIndex()?:0) + 1, mRequestParam)
         }
-    }
-
-    override fun hideLoadingView() {
-        val lp = mToolbar!!.layoutParams as AppBarLayout.LayoutParams
-        lp.scrollFlags =
-            AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL or AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS
-        super.hideLoadingView()
-    }
-
-    override fun scrollTo(position: Int) {
-        if (position == 0) {
-            mAppBarLayout!!.setExpanded(true, true)
+        mAdapter?.onRefresh = {
+            viewModel?.loadPage(1, mRequestParam)
         }
-        super.scrollTo(position)
     }
 
     override fun onResume() {
@@ -96,7 +67,7 @@ class TopicListFragment : TopicSearchFragment() {
 
     private fun refresh() {
         mFam!!.collapse()
-        viewModel.loadPage(1, mRequestParam)
+        viewModel?.loadPage(1, mRequestParam)
     }
 
     fun startPostActivity() {
@@ -107,6 +78,7 @@ class TopicListFragment : TopicSearchFragment() {
                 ParamKey.KEY_STID,
                 if (mRequestParam.stid != 0) mRequestParam.stid.toString() else null
             )
+            .withString(ParamKey.KEY_TITLE,mRequestParam.title)
             .withString(ParamKey.KEY_ACTION, "new")
             .navigation()
     }
@@ -120,7 +92,7 @@ class TopicListFragment : TopicSearchFragment() {
             menu.findItem(R.id.menu_remove_bookmark).isVisible = false
         }
         if (mTopicListInfo != null) {
-            menu.findItem(R.id.menu_sub_board).isVisible = !mTopicListInfo.subBoardList.isEmpty()
+            menu.findItem(R.id.menu_sub_board).isVisible = mTopicListInfo?.subBoardList?.isNotEmpty() ?: false
         } else {
             menu.findItem(R.id.menu_sub_board).isVisible = false
         }
@@ -167,15 +139,15 @@ class TopicListFragment : TopicSearchFragment() {
     private fun showSubBoardList() {
         val intent = Intent(context, LauncherSubActivity::class.java)
         intent.putExtra("fragment", BoardSubListFragment::class.java.name)
-        intent.putExtra(ParamKey.KEY_TITLE, mRequestParam.title)
-        intent.putExtra(ParamKey.KEY_FID, mRequestParam.fid)
-        intent.putParcelableArrayListExtra("subBoard", mTopicListInfo.subBoardList)
+        intent.putExtra(ParamKey.KEY_TITLE, mRequestParam?.title)
+        intent.putExtra(ParamKey.KEY_FID, mRequestParam?.fid)
+        intent.putParcelableArrayListExtra("subBoard", mTopicListInfo?.subBoardList)
         startActivityForResult(intent, ActivityUtils.REQUEST_CODE_SUB_BOARD)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == ActivityUtils.REQUEST_CODE_SUB_BOARD && resultCode == Activity.RESULT_OK) {
-            viewModel.loadPage(1, mRequestParam)
+            viewModel?.loadPage(1, mRequestParam)
         }
         super.onActivityResult(requestCode, resultCode, data)
     }

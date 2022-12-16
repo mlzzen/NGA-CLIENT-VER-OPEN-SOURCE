@@ -6,6 +6,7 @@ import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.BackgroundColorSpan
 import android.text.style.StyleSpan
+import androidx.appcompat.widget.Toolbar
 import com.alibaba.android.arouter.facade.annotation.Route
 import gov.anzong.androidnga.R
 import gov.anzong.androidnga.arouter.ARouterConstants
@@ -35,6 +36,7 @@ class PostActivity : BaseActivity() {
         if (savedInstanceState != null) {
             bundle.putBundle("savedInstanceState", savedInstanceState)
         }
+        findViewById<Toolbar>(R.id.toolbar).subtitle = intent.getStringExtra(ParamKey.KEY_TITLE)
         mPostFragment.arguments = bundle
         mPostFragment.setHasOptionsMenu(true)
         supportFragmentManager.beginTransaction().replace(R.id.content, mPostFragment).commit()
