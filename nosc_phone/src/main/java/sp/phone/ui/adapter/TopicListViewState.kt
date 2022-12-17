@@ -1,5 +1,6 @@
 package sp.phone.ui.adapter
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -114,7 +115,7 @@ class TopicListViewState{
             }
             LazyColumn(Modifier.fillMaxSize(), state = scrollState){
                 itemsIndexed(mDataList, key = { _, item -> id(item) }){ index,it ->
-                    Box(modifier = Modifier.animateItemPlacement()){
+                    Box(modifier = Modifier.animateItemPlacement().animateContentSize()){
                         TopicContent(it, backGroundColor = Color(if (appConfig.useSolidColorBackground() || (index%2 == 0)) color1 else color2), onLongClick = {
                             onItemLongClick(it)
                         }) {
