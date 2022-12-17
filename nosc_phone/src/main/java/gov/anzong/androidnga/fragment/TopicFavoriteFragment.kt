@@ -40,8 +40,4 @@ class TopicFavoriteFragment : TopicFragment() {
             viewModel?.loadPage(1, mRequestParam)
         }
     }
-
-    override fun removeTopic(pageInfo: ThreadPageInfo?) {
-        mAdapter?.removeItem(pageInfo?:return)
-    }
 }

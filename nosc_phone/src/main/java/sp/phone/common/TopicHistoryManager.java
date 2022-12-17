@@ -1,6 +1,5 @@
 package sp.phone.common;
 
-import android.content.Context;
 import android.preference.PreferenceManager;
 
 import com.alibaba.fastjson.JSON;
@@ -9,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import gov.anzong.androidnga.NgaClientApp;
-import nosc.utils.ContextUtils;
 import nosc.utils.PreferenceKey;
 import sp.phone.mvp.model.entity.ThreadPageInfo;
 
@@ -22,7 +20,7 @@ public class TopicHistoryManager {
 
     private List<ThreadPageInfo> mTopicList;
 
-    private static final int MAX_HISTORY_TOPIC_COUNT = 40;
+    private static final int MAX_HISTORY_TOPIC_COUNT = 100;
 
     private static class SingleTonHolder {
 

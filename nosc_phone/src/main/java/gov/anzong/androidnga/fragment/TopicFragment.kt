@@ -2,7 +2,7 @@ package gov.anzong.androidnga.fragment
 
 import android.content.Context
 import sp.phone.param.TopicListParam
-import sp.phone.ui.adapter.TopicListAdapter
+import sp.phone.ui.adapter.TopicListViewState
 import sp.phone.mvp.model.entity.TopicListInfo
 import androidx.compose.ui.platform.ComposeView
 import nosc.viewmodel.TopicListViewModel
@@ -35,7 +35,7 @@ open class TopicFragment : BaseFragment() {
         requireArguments().getParcelable<TopicListParam>(ParamKey.KEY_PARAM) as TopicListParam
     }
     @JvmField
-    protected var mAdapter: TopicListAdapter? = null
+    protected var mAdapter: TopicListViewState? = null
     protected var mTopicListInfo: TopicListInfo? = null
 
     private var mListView: ComposeView? = null
@@ -108,7 +108,7 @@ open class TopicFragment : BaseFragment() {
         mListView = view.findViewById(R.id.list)
         mLoadingView = view.findViewById(R.id.loading_view)
         (activity as BaseActivity?)!!.setupToolbar()
-        mAdapter = TopicListAdapter(requireContext())
+        mAdapter = TopicListViewState()
         mAdapter?.onItemClick = onItemClick
         mListView?.setContent {
             mAdapter?.Content()
@@ -143,7 +143,10 @@ open class TopicFragment : BaseFragment() {
         mAdapter!!.setNextPageEnabled(enabled)
     }
 
-    open fun removeTopic(pageInfo: ThreadPageInfo?) {}
+    fun removeTopic(pageInfo: ThreadPageInfo?) {
+        mAdapter?.removeItem(pageInfo?:return)
+    }
+
     open fun hideLoadingView() {
         if (mLoadingView!!.visibility == View.VISIBLE) {
             mLoadingView!!.visibility = View.GONE

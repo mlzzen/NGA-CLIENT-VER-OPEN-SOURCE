@@ -1,12 +1,9 @@
 package sp.phone.ui.adapter
 
-import android.content.Context
-import android.view.ViewGroup
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
@@ -23,7 +20,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.recyclerview.widget.RecyclerView
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshState
 import gov.anzong.androidnga.R
@@ -34,17 +30,56 @@ import sp.phone.mvp.model.entity.ThreadPageInfo
 import sp.phone.param.TopicTitleHelper
 import sp.phone.theme.ThemeManager
 
-class TopicListAdapter(context: Context) :
-    BasePageAppendableAdapter<ThreadPageInfo, RecyclerView.ViewHolder>(context) {
+class TopicListViewState{
 
-    @Deprecated("")
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return Unit as RecyclerView.ViewHolder
+    private val mDataList: MutableList<ThreadPageInfo> = mutableStateListOf()
+    private val keySet:MutableSet<String> = mutableSetOf()
+
+    private var mHaveNextPage = true
+    private var mTotalPage = 0
+    fun nextPageIndex(): Int {
+        return mTotalPage + 1
     }
 
-    @Deprecated("")
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+    fun hasNextPage(): Boolean {
+        return mHaveNextPage
     }
+
+    fun setData(dataList: List<ThreadPageInfo>) {
+        mDataList.clear()
+        keySet.clear()
+        dataList.forEach {
+            val id = id(it)
+            if(!keySet.contains(id)){
+                keySet.add(id)
+                mDataList.add(it)
+            }
+        }
+        mTotalPage = 0
+        mHaveNextPage = true
+    }
+
+    fun appendData(dataList: List<ThreadPageInfo>) {
+        dataList.forEach {
+            val id = id(it)
+            if(!keySet.contains(id)){
+                keySet.add(id)
+                mDataList.add(it)
+            }
+        }
+        mTotalPage++
+    }
+
+    fun setNextPageEnabled(enabled: Boolean) {
+        mHaveNextPage = enabled
+    }
+
+    fun removeItem(item:ThreadPageInfo){
+        mDataList.remove(item)
+        keySet.remove(id(item))
+    }
+
+
 
     var onItemClick:(ThreadPageInfo)->Unit = {}
     var onItemLongClick:(ThreadPageInfo)->Unit = {}
@@ -78,14 +113,14 @@ class TopicListAdapter(context: Context) :
                 )
             }
             LazyColumn(Modifier.fillMaxSize(), state = scrollState){
-                itemsIndexed(mDataList){ index,it ->
+                itemsIndexed(mDataList, key = { _, item -> id(item) }){ index,it ->
                     Box(modifier = Modifier.animateItemPlacement()){
                         TopicContent(it, backGroundColor = Color(if (appConfig.useSolidColorBackground() || (index%2 == 0)) color1 else color2), onLongClick = {
                             onItemLongClick(it)
                         }) {
                             onItemClick(it)
                         }
-                        if(mDataList.last() == it){
+                        if(mDataList.last() == it && hasNextPage()){
                             onNextPage()
                         }
                     }
@@ -96,6 +131,9 @@ class TopicListAdapter(context: Context) :
     }
 
     companion object{
+
+        fun id(info:ThreadPageInfo) = "${info.fid}/${info.tid}/${info.pid}"
+
         @OptIn(ExperimentalFoundationApi::class)
         @Composable
         fun TopicContent(

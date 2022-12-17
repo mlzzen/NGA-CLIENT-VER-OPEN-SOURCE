@@ -4,10 +4,12 @@ import androidx.annotation.NonNull;
 
 public class ThreadPageInfo {
 
+    //TopicId
     private int mTid;
 
     private String mAuthor;
 
+    //ForumId
     private int mFid;
 
     private int mAuthorId;
@@ -28,6 +30,7 @@ public class ThreadPageInfo {
 
     private int mPage;
 
+    //PostId
     private int mPid;
 
     private int mPosition;

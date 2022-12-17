@@ -45,12 +45,6 @@ abstract class BaseAdapter<E, T : RecyclerView.ViewHolder>(protected val mContex
         removeItemAt(mDataList.indexOf(data))
     }
 
-    fun clear() {
-        val preCount = mDataList.size
-        mDataList.clear()
-        notifyItemRangeRemoved(0,preCount)
-    }
-
     override fun getItemCount(): Int = mDataList.size
 
     fun setOnClickListener(onClickListener: View.OnClickListener?) {

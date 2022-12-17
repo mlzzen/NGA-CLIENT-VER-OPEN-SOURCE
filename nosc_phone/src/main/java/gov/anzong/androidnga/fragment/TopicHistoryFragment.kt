@@ -11,17 +11,16 @@ import sp.phone.common.TopicHistoryManager
 import sp.phone.mvp.model.entity.ThreadPageInfo
 import sp.phone.mvp.model.entity.TopicListInfo
 import sp.phone.param.ArticleListParam
-import sp.phone.ui.adapter.TopicListAdapter
+import sp.phone.ui.adapter.TopicListViewState
 
 /**
  * Created by Justwen on 2018/1/17.
  */
 class TopicHistoryFragment : BaseFragment() {
-    private var mTopicListAdapter: TopicListAdapter? = null
-    private var mTopicHistoryManager: TopicHistoryManager? = null
+    private var mTopicListViewState: TopicListViewState? = null
+    private val mTopicHistoryManager: TopicHistoryManager = TopicHistoryManager.getInstance()
     override fun onCreate(savedInstanceState: Bundle?) {
         setHasOptionsMenu(true)
-        mTopicHistoryManager = TopicHistoryManager.getInstance()
         setTitle(R.string.label_activity_topic_history)
         super.onCreate(savedInstanceState)
     }
@@ -35,8 +34,8 @@ class TopicHistoryFragment : BaseFragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        mTopicListAdapter = TopicListAdapter(requireContext())
-        mTopicListAdapter?.onItemClick = { info ->
+        mTopicListViewState = TopicListViewState()
+        mTopicListViewState?.onItemClick = { info ->
             val param = ArticleListParam()
             param.tid = info.tid
             param.page = info.page
@@ -46,19 +45,19 @@ class TopicHistoryFragment : BaseFragment() {
         }
         super.onViewCreated(view, savedInstanceState)
         (view as ComposeView).setContent {
-            mTopicListAdapter?.Content()
+            mTopicListViewState?.Content()
         }
-        mTopicListAdapter?.onItemLongClick = {
-            mTopicHistoryManager!!.removeTopicHistory(it)
-            setData(mTopicHistoryManager!!.topicHistoryList)
+        mTopicListViewState?.onItemLongClick = {
+            mTopicHistoryManager.removeTopicHistory(it)
+            setData(mTopicHistoryManager.topicHistoryList)
         }
-        setData(mTopicHistoryManager!!.topicHistoryList)
+        setData(mTopicHistoryManager.topicHistoryList)
     }
 
     private fun setData(topicLIst: List<ThreadPageInfo>) {
         val listInfo = TopicListInfo()
         listInfo.threadPageList = topicLIst
-        mTopicListAdapter?.setData(listInfo.threadPageList)
+        mTopicListViewState?.setData(listInfo.threadPageList)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -68,8 +67,8 @@ class TopicHistoryFragment : BaseFragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return if (item.itemId == R.id.menu_delete_all) {
             requireActivity().showConfirmDialog( "确认删除所有浏览历史吗") {
-                mTopicHistoryManager?.removeAllTopicHistory()
-                mTopicListAdapter?.clear()
+                mTopicHistoryManager.removeAllTopicHistory()
+                mTopicListViewState?.setData(mTopicHistoryManager.topicHistoryList)
             }
             true
         } else {

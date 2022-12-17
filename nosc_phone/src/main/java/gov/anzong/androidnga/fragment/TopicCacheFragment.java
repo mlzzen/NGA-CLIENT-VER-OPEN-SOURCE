@@ -52,12 +52,6 @@ public class TopicCacheFragment extends TopicFragment {
         mAdapter.setNextPageEnabled(false);
     }
 
-
-    @Override
-    public void removeTopic(ThreadPageInfo pageInfo) {
-        mAdapter.removeItem(pageInfo);
-    }
-
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.menu_cache_list, menu);
